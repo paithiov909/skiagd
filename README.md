@@ -23,10 +23,10 @@ graphics device for R 😓
 - [Painting \| React Native
   Skia](https://shopify.github.io/react-native-skia/docs/paint/overview)
 
-Design notes:
+**Design notes**:
 
 - This is not a graphics device. skiagd does not allow R’s session to
-  hold a reference to the Canvas object on Rust side.
+  hold a reference to a Canvas object on Rust side.
 - Drawing functions return a PNG image as a `raw` object every time it’s
   called. `add_*` puts those data onto canvas, actually ***adds*** some
   paintings to there, and then returns a `raw` object again.

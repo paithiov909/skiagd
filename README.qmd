@@ -25,9 +25,9 @@ Despite its name, this package is intended as a graphics library, not a graphics
 - [skia_safe - Rust](https://rust-skia.github.io/doc/skia_safe/)
 - [Painting | React Native Skia](https://shopify.github.io/react-native-skia/docs/paint/overview)
 
-Design notes:
+**Design notes**:
 
-- This is not a graphics device. skiagd does not allow R's session to hold a reference to the Canvas object on Rust side.
+- This is not a graphics device. skiagd does not allow R's session to hold a reference to a Canvas object on Rust side.
 - Drawing functions return a PNG image as a `raw` object every time it's called. `add_*` puts those data onto canvas, actually ***adds*** some paintings to there, and then returns a `raw` object again.
 - Uses [cxx](https://github.com/dtolnay/cxx) and cpp11 package. Not extendr or savvy.
   - I'm not sure if this is a good idea or not, because extendr supports conversion between `raw` and `&[u8]`.

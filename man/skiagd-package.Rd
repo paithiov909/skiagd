@@ -4,12 +4,12 @@
 \name{skiagd-package}
 \alias{skiagd}
 \alias{skiagd-package}
-\title{skiagd: What the Package Does (One Line, Title Case)}
+\title{skiagd: R wrapper for 'rust-skia'}
 \description{
-What the package does (one paragraph).
+A toy R wrapper for 'rust-skia' \url{https://github.com/rust-skia/rust-skia} (the rust crate 'skia_safe' \url{https://rust-skia.github.io/doc/skia_safe/}, a binding for 'Skia' \url{https://skia.org/}).
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com}
+\strong{Maintainer}: Akiru Kato \email{paithiov909@gmail.com}
 
 }
 \keyword{internal}
