@@ -1,0 +1,8 @@
+^skiagd\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^README\.Rmd$
+^cran-comments\.md$
+
+^src/rust/.cargo$
+^src/rust/target$
