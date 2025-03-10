@@ -6,7 +6,7 @@
 
 #include <vector>
 #include <cpp11.hpp>
-#include <R_ext/GraphicsEngine.h> // for R_RGBA
+#include <R_ext/GraphicsEngine.h>  // for R_RGBA
 #include "rust/target/cxxbridge/skiagd/src/lib.rs.h"
 
 #define BEGIN_RUST try {
@@ -47,6 +47,22 @@ inline uint32_t vec2color(const cpp11::integers& vec) {
 // lmiter: f32,
 // blend_mode: u32,
 struct PaintProps {
+ public:
+  PaintProps(uint32_t col = 0, uint32_t fill = 0, uint32_t ljoin = 0,
+             uint32_t lend = 0, uint32_t lty = 0, float lwd = 0,
+             float lmiter = 0, uint32_t blend_mode = 0)
+      : col(col),
+        fill(fill),
+        ljoin(ljoin),
+        lend(lend),
+        lty(lty),
+        lwd(lwd),
+        lmiter(lmiter),
+        blend_mode(blend_mode) {}
+  void apply(SkiaCanvas& canvas) {
+    canvas->set_paint_props(col, fill, ljoin, lend, lty, lwd, lmiter,
+                            blend_mode);
+  }
   uint32_t col;
   uint32_t fill;
   uint32_t ljoin;
@@ -58,14 +74,13 @@ struct PaintProps {
 };
 
 inline PaintProps parse_props(const cpp11::list& props) {
-  PaintProps p;
-  p.col = vec2color(props["col"]);
-  p.fill = vec2color(props["fill"]);
-  p.ljoin = cpp11::as_cpp<uint32_t>(props["ljoin"]);
-  p.lend = cpp11::as_cpp<uint32_t>(props["lend"]);
-  p.lty = cpp11::as_cpp<uint32_t>(props["lty"]);
-  p.lwd = cpp11::as_cpp<float>(props["lwd"]);
-  p.lmiter = cpp11::as_cpp<float>(props["lmiter"]);
-  p.blend_mode = cpp11::as_cpp<uint32_t>(props["blend_mode"]);
+  PaintProps p{vec2color(props["col"]),
+               cpp11::as_cpp<uint32_t>(props["fill"]),
+               cpp11::as_cpp<uint32_t>(props["ljoin"]),
+               cpp11::as_cpp<uint32_t>(props["lend"]),
+               cpp11::as_cpp<uint32_t>(props["lty"]),
+               cpp11::as_cpp<float>(props["lwd"]),
+               cpp11::as_cpp<float>(props["lmiter"]),
+               cpp11::as_cpp<uint32_t>(props["blend_mode"])};
   return p;
 }

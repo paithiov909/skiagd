@@ -3,18 +3,30 @@ use std::io::Write;
 
 use cxx::CxxVector;
 
-use skia_safe::{surfaces, AlphaType, Color, Data, EncodedImageFormat, Image, Paint, Surface};
+use skia_safe::{surfaces, Color, Data, EncodedImageFormat, Image, Paint, Surface};
 
 #[cxx::bridge]
 mod ffi {
     extern "Rust" {
         type Canvas;
+        /// Calls `surface.canvas().clear(Color::TRANSPARENT);`
         fn skia_canvas(width: i32, height: i32) -> Box<Canvas>;
+        /// Reads bytes and draws them to the canvas. Paint is not applied here.
         unsafe fn read_bytes(&mut self, bytes: &CxxVector<u8>, left: i32, top: i32) -> Result<()>;
+        /// Returns bytes from the canvas
         fn save_bytes(&mut self) -> Vec<u8>;
+        /// Save the canvas as png
         fn save_png(&mut self, filename: String) -> Result<()>;
+        /// Fills the canvas with `col`
         fn new_page(&mut self, col: u32);
+        fn points(&mut self, x: f32, y: f32, mode: u32);
+        fn line(&mut self, x1: f32, y1: f32, x2: f32, y2: f32);
         fn circle(&mut self, x: f32, y: f32, r: f32);
+        fn irect(&mut self, left: i32, top: i32, right: i32, bottom: i32);
+        fn svg_path(&mut self, svg: &str) -> Result<()>;
+        fn translate(&mut self, dx: f32, dy: f32);
+        fn scale(&mut self, sx: f32, sy: f32);
+        /// Applys properties to the paint
         fn set_paint_props(
             &mut self,
             col: u32,
@@ -35,25 +47,19 @@ fn skia_canvas(width: i32, height: i32) -> Box<Canvas> {
 }
 
 struct Canvas {
-    // filename: String,
     surface: Surface,
-    // path: Path,
     paint: Paint,
 }
 
+#[allow(dead_code)]
 impl Canvas {
     pub fn new(width: i32, height: i32) -> Canvas {
         let mut surface = surfaces::raster_n32_premul((width, height))
             .unwrap_or_else(|| surfaces::raster_n32_premul((720, 576)).unwrap());
-        // let path = Path::new();
         let mut paint = Paint::default();
         paint.set_anti_alias(true);
         surface.canvas().clear(Color::TRANSPARENT);
-        Canvas {
-            surface,
-            // path,
-            paint,
-        }
+        Canvas { surface, paint }
     }
 
     #[inline]
@@ -64,12 +70,9 @@ impl Canvas {
         top: i32,
     ) -> anyhow::Result<()> {
         let input = Data::new_bytes(bytes.as_slice());
-        let image = Image::from_encoded_with_alpha_type(input, AlphaType::Premul)
+        let image = Image::from_encoded_with_alpha_type(input, skia_safe::AlphaType::Premul)
             .ok_or_else(|| return anyhow::Error::msg("Bomb! failed to read bytes"))?;
-        self.surface
-            .canvas()
-            .clear(Color::TRANSPARENT)
-            .draw_image(&image, (left, top), None);
+        self.surface.canvas().draw_image(&image, (left, top), None);
         Ok(())
     }
 
@@ -95,17 +98,49 @@ impl Canvas {
         self.surface.canvas().clear(Color::from_argb(a, r, g, b));
     }
 
+    pub fn points(&mut self, x: f32, y: f32, mode: u32) {
+        let mode = match mode {
+            0 => skia_safe::canvas::PointMode::Points,
+            1 => skia_safe::canvas::PointMode::Lines,
+            2 => skia_safe::canvas::PointMode::Polygon,
+            _ => skia_safe::canvas::PointMode::Points,
+        };
+        self.surface
+            .canvas()
+            .draw_points(mode, &[skia_safe::Point::new(x, y)], &self.paint);
+    }
+
+    pub fn line(&mut self, x1: f32, y1: f32, x2: f32, y2: f32) {
+        self.surface
+            .canvas()
+            .draw_line((x1, y1), (x2, y2), &self.paint);
+    }
+
     pub fn circle(&mut self, x: f32, y: f32, r: f32) {
         self.surface.canvas().draw_circle((x, y), r, &self.paint);
     }
 
-    #[allow(dead_code)]
-    fn translate(&mut self, dx: f32, dy: f32) {
+    pub fn irect(&mut self, left: i32, top: i32, right: i32, bottom: i32) {
+        let rect = skia_safe::IRect::new(left, top, right, bottom);
+        self.surface.canvas().draw_irect(rect, &self.paint);
+    }
+
+    pub fn svg_path(&mut self, svg: &str) -> anyhow::Result<()> {
+        let path = skia_safe::utils::parse_path::from_svg(svg)
+            .ok_or_else(|| return anyhow::Error::msg("Bomb! failed to parse svg"))?;
+        self.surface.canvas().draw_path(&path, &self.paint);
+        Ok(())
+    }
+
+    pub fn test(&mut self) -> anyhow::Result<()> {
+        Ok(())
+    }
+
+    pub fn translate(&mut self, dx: f32, dy: f32) {
         self.canvas().translate((dx, dy));
     }
 
-    #[allow(dead_code)]
-    fn scale(&mut self, sx: f32, sy: f32) {
+    pub fn scale(&mut self, sx: f32, sy: f32) {
         self.canvas().scale((sx, sy));
     }
 
@@ -124,17 +159,13 @@ impl Canvas {
         self.surface.canvas()
     }
 
-    pub fn test(&mut self) -> anyhow::Result<()> {
-        Ok(())
-    }
-
     #[inline]
     fn fill_to_style(fill: u32) -> skia_safe::PaintStyle {
-        // TODO: support `Fill`
-        if fill == 0 {
-            skia_safe::PaintStyle::Stroke
-        } else {
-            skia_safe::PaintStyle::StrokeAndFill
+        match fill {
+            1 => skia_safe::PaintStyle::StrokeAndFill,
+            2 => skia_safe::PaintStyle::Stroke,
+            3 => skia_safe::PaintStyle::Fill,
+            _ => skia_safe::PaintStyle::StrokeAndFill,
         }
     }
     #[inline]

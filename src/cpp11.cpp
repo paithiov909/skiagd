@@ -6,17 +6,10 @@
 #include <R_ext/Visibility.h>
 
 // skiagd.cpp
-bool test1();
-extern "C" SEXP _skiagd_test1() {
+bool test(const cpp11::list& props);
+extern "C" SEXP _skiagd_test(SEXP props) {
   BEGIN_CPP11
-    return cpp11::as_sexp(test1());
-  END_CPP11
-}
-// skiagd.cpp
-uint32_t test2(const cpp11::integers& fill);
-extern "C" SEXP _skiagd_test2(SEXP fill) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(test2(cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(fill)));
+    return cpp11::as_sexp(test(cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(props)));
   END_CPP11
 }
 // skiagd.cpp
@@ -34,20 +27,51 @@ extern "C" SEXP _skiagd_sk_absolute_fill(SEXP size, SEXP fill) {
   END_CPP11
 }
 // skiagd.cpp
-cpp11::raws sk_circle(const cpp11::integers& size, const cpp11::raws& curr_bytes, double x, double y, double r, const cpp11::list& props);
-extern "C" SEXP _skiagd_sk_circle(SEXP size, SEXP curr_bytes, SEXP x, SEXP y, SEXP r, SEXP props) {
+cpp11::raws sk_points(const cpp11::integers& size, const cpp11::raws& curr_bytes, const cpp11::doubles_matrix<>& mat_pts, const cpp11::list& props, const cpp11::integers& mode);
+extern "C" SEXP _skiagd_sk_points(SEXP size, SEXP curr_bytes, SEXP mat_pts, SEXP props, SEXP mode) {
   BEGIN_CPP11
-    return cpp11::as_sexp(sk_circle(cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(size), cpp11::as_cpp<cpp11::decay_t<const cpp11::raws&>>(curr_bytes), cpp11::as_cpp<cpp11::decay_t<double>>(x), cpp11::as_cpp<cpp11::decay_t<double>>(y), cpp11::as_cpp<cpp11::decay_t<double>>(r), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(props)));
+    return cpp11::as_sexp(sk_points(cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(size), cpp11::as_cpp<cpp11::decay_t<const cpp11::raws&>>(curr_bytes), cpp11::as_cpp<cpp11::decay_t<const cpp11::doubles_matrix<>&>>(mat_pts), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(props), cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(mode)));
+  END_CPP11
+}
+// skiagd.cpp
+cpp11::raws sk_line(const cpp11::integers& size, const cpp11::raws& curr_bytes, const cpp11::doubles_matrix<>& mat_from, const cpp11::doubles_matrix<>& mat_to, const cpp11::list& props);
+extern "C" SEXP _skiagd_sk_line(SEXP size, SEXP curr_bytes, SEXP mat_from, SEXP mat_to, SEXP props) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(sk_line(cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(size), cpp11::as_cpp<cpp11::decay_t<const cpp11::raws&>>(curr_bytes), cpp11::as_cpp<cpp11::decay_t<const cpp11::doubles_matrix<>&>>(mat_from), cpp11::as_cpp<cpp11::decay_t<const cpp11::doubles_matrix<>&>>(mat_to), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(props)));
+  END_CPP11
+}
+// skiagd.cpp
+cpp11::raws sk_circle(const cpp11::integers& size, const cpp11::raws& curr_bytes, const cpp11::doubles_matrix<>& mat_center, const cpp11::doubles& vec_radius, const cpp11::list& props);
+extern "C" SEXP _skiagd_sk_circle(SEXP size, SEXP curr_bytes, SEXP mat_center, SEXP vec_radius, SEXP props) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(sk_circle(cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(size), cpp11::as_cpp<cpp11::decay_t<const cpp11::raws&>>(curr_bytes), cpp11::as_cpp<cpp11::decay_t<const cpp11::doubles_matrix<>&>>(mat_center), cpp11::as_cpp<cpp11::decay_t<const cpp11::doubles&>>(vec_radius), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(props)));
+  END_CPP11
+}
+// skiagd.cpp
+cpp11::raws sk_irect(const cpp11::integers& size, const cpp11::raws& curr_bytes, const cpp11::integers_matrix<>& mat_rect, const cpp11::list& props);
+extern "C" SEXP _skiagd_sk_irect(SEXP size, SEXP curr_bytes, SEXP mat_rect, SEXP props) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(sk_irect(cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(size), cpp11::as_cpp<cpp11::decay_t<const cpp11::raws&>>(curr_bytes), cpp11::as_cpp<cpp11::decay_t<const cpp11::integers_matrix<>&>>(mat_rect), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(props)));
+  END_CPP11
+}
+// skiagd.cpp
+cpp11::raws sk_svg_path(const cpp11::integers& size, const cpp11::raws& curr_bytes, const cpp11::strings& vec_svg, const cpp11::integers& translate, const cpp11::integers& scale, const cpp11::list& props);
+extern "C" SEXP _skiagd_sk_svg_path(SEXP size, SEXP curr_bytes, SEXP vec_svg, SEXP translate, SEXP scale, SEXP props) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(sk_svg_path(cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(size), cpp11::as_cpp<cpp11::decay_t<const cpp11::raws&>>(curr_bytes), cpp11::as_cpp<cpp11::decay_t<const cpp11::strings&>>(vec_svg), cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(translate), cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(scale), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(props)));
   END_CPP11
 }
 
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
     {"_skiagd_sk_absolute_fill", (DL_FUNC) &_skiagd_sk_absolute_fill, 2},
-    {"_skiagd_sk_circle",        (DL_FUNC) &_skiagd_sk_circle,        6},
+    {"_skiagd_sk_circle",        (DL_FUNC) &_skiagd_sk_circle,        5},
+    {"_skiagd_sk_irect",         (DL_FUNC) &_skiagd_sk_irect,         4},
+    {"_skiagd_sk_line",          (DL_FUNC) &_skiagd_sk_line,          5},
+    {"_skiagd_sk_points",        (DL_FUNC) &_skiagd_sk_points,        5},
     {"_skiagd_sk_save_png",      (DL_FUNC) &_skiagd_sk_save_png,      3},
-    {"_skiagd_test1",            (DL_FUNC) &_skiagd_test1,            0},
-    {"_skiagd_test2",            (DL_FUNC) &_skiagd_test2,            1},
+    {"_skiagd_sk_svg_path",      (DL_FUNC) &_skiagd_sk_svg_path,      6},
+    {"_skiagd_test",             (DL_FUNC) &_skiagd_test,             1},
     {NULL, NULL, 0}
 };
 }

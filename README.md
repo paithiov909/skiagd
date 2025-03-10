@@ -20,8 +20,10 @@ graphics device for R 😓
 ## Resources
 
 - [skia_safe - Rust](https://rust-skia.github.io/doc/skia_safe/)
-- [Painting \| React Native
-  Skia](https://shopify.github.io/react-native-skia/docs/paint/overview)
+- [Rust ❤️ C++](https://cxx.rs/)
+- [cxx_build - Rust](https://docs.rs/cxx-build/latest/cxx_build/)
+- [Get started with cpp11 •
+  cpp11](https://cpp11.r-lib.org/articles/cpp11.html)
 
 **Design notes**:
 
@@ -32,8 +34,46 @@ graphics device for R 😓
   paintings to there, and then returns a `raw` object again.
 - Uses [cxx](https://github.com/dtolnay/cxx) and cpp11 package. Not
   extendr or savvy.
-  - I’m not sure if this is a good idea or not, because extendr supports
-    conversion between `raw` and `&[u8]`.
+  - I’m not sure if this is a good idea or not, because both extendr and
+    savvy support `raw`.
+
+**Plans??**
+
+I’m planning to re-implement features such as [React Native
+Skia](https://shopify.github.io/react-native-skia/).
+
+- Shapes
+  - Path
+    - [x] SVG notation (path)
+    - [ ] trim
+    - [ ] fillType
+  - Polygons
+    - [x] Rect (irect)
+    - [ ] RoundedRect (round_rect)
+    - [ ] DiffRect (drrect)
+    - [x] Line
+    - [ ] Points (points; not point)
+  - Ellipses
+    - [x] Circle
+    - [ ] Oval (oval)
+    - [ ] Arc (arc)
+  - Atlas
+  - Vertices
+  - Patch
+  - Picture
+    - [ ] `draw_picture`, `from_data`, and `serialize`
+- Images
+- Text
+  - Paragraph
+  - Text
+  - Glyphs
+  - Text Path
+  - Text Blob
+- Mask
+- Other Paint props
+  - [ ] PathEffect
+  - [ ] Filters
+  - [ ] Shaders??
 
 ## Use Case?
 
@@ -47,14 +87,27 @@ pkgload::load_all(export_all = FALSE)
 img_data <-
   unigd::ugd_render_inline({
     size <- dev_size("px")
-    pos_x <- size[1] / 2
-    pos_y <- size[2] / 2
-    canvas("white") |>
-      add_circle(pos_x, pos_y, 120, props = paint(col = "skyblue")) |>
+    n_circles <- 250
+    canvas("snow") |>
+      # 'skyblue' with alpha channel, blend mode 'Exclusion'.
+      add_circle(
+        matrix(c(runif(n_circles,  0, size[1]), runif(n_circles, 0, size[2])), ncol = 2),
+        runif(n_circles, 6, 50),
+        props = paint(col = "#87ceeb66", blend_mode = 23)
+      ) |>
       # 'deeppink' with alpha channel, blend mode 'Overlay'.
-      add_circle(pos_x, pos_y, 200, props = paint(col = "#ff1493aa", blend_mode = 15)) |>
+      add_circle(
+        matrix(c(runif(n_circles, 0, size[1]), runif(n_circles, 0, size[2])), ncol = 2),
+        runif(n_circles, 20, 60),
+        props = paint(col = "#ff1493aa", blend_mode = 15)
+      ) |>
+      add_path(
+        "M 128 0 L 168 80 L 256 93 L 192 155 L 207 244 L 128 202 L 49 244 L 64 155 L 0 93 L 88 80 L 128 0 Z",
+        translate = size / 2 - c(128L, 128L),
+        props = paint(col = "#fff281ee")
+      ) |>
       draw_img()
-  }, as = "png", width = 720, height = 576)
+  }, as = "png", width = 1280, height = 720)
 
 img_data |>
   magick::image_read() |>
