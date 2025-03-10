@@ -1,8 +1,10 @@
 ^skiagd\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
-^README\.Rmd$
+^README\.qmd$
 ^cran-comments\.md$
+^.vscode$
 
 ^src/rust/.cargo$
-^src/rust/target$
+^src/rust/.vscode$
+^src/target$

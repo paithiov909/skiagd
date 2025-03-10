@@ -2,7 +2,9 @@ use cxx_build::CFG;
 
 fn main() {
   CFG.doxygen = true;
+
   cxx_build::bridge("src/lib.rs")
+    .cpp(true)
     .std("c++17")
     .compile("skiagd");
 

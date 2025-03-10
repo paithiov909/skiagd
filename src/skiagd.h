@@ -7,7 +7,7 @@
 #include <vector>
 #include <cpp11.hpp>
 #include <R_ext/GraphicsEngine.h>  // for R_RGBA
-#include "rust/target/cxxbridge/skiagd/src/lib.rs.h"
+#include "lib.rs.h" // "target/cxxbridge/skiagd/src/lib.rs.h"
 
 #define BEGIN_RUST try {
 #define END_RUST                  \
