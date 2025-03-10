@@ -25,7 +25,7 @@ graphics device for R 😓
 - [Get started with cpp11 •
   cpp11](https://cpp11.r-lib.org/articles/cpp11.html)
 
-**Design notes**:
+### Design notes
 
 - This is not a graphics device. skiagd does not allow R’s session to
   hold a reference to a Canvas object on Rust side.
@@ -37,9 +37,9 @@ graphics device for R 😓
   - I’m not sure if this is a good idea or not, because both extendr and
     savvy support `raw`.
 
-**Plans??**
+### Plans??
 
-I’m planning to re-implement features such as [React Native
+I’m planning to re-implement features such like [React Native
 Skia](https://shopify.github.io/react-native-skia/).
 
 - Shapes
@@ -86,9 +86,15 @@ pkgload::load_all(export_all = FALSE)
 
 img_data <-
   unigd::ugd_render_inline({
+    set.seed(1234)
     size <- dev_size("px")
     n_circles <- 250
     canvas("snow") |>
+      add_line(
+        matrix(c(runif(300, 0, size[1]), runif(300, 0, size[2])), ncol = 2),
+        matrix(c(runif(300, 0, size[1]), runif(300, 0, size[2])), ncol = 2),
+        props = paint(col = "#fff28166", lwd = 6)
+      ) |>
       # 'skyblue' with alpha channel, blend mode 'Exclusion'.
       add_circle(
         matrix(c(runif(n_circles,  0, size[1]), runif(n_circles, 0, size[2])), ncol = 2),
