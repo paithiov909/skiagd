@@ -4,21 +4,19 @@
 \alias{add_circle}
 \title{Add circles}
 \usage{
-add_circle(img, center, radius, props = paint(), .size = dev_size())
+add_circle(img, center, radius, props = paint())
 }
 \arguments{
-\item{img}{A raw vector.}
+\item{img}{A raw vector of picture.}
 
 \item{center}{A double matrix where each row is circle center.}
 
 \item{radius}{A double vector of circle radius.}
 
 \item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
-
-\item{.size}{An integer vector.}
 }
 \value{
-A raw vector.
+A raw vector picture.
 }
 \description{
 Add circles

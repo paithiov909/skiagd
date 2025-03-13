@@ -4,30 +4,17 @@
 \alias{add_path}
 \title{Add paths}
 \usage{
-add_path(
-  img,
-  path,
-  translate = c(0L, 0L),
-  scale = c(1L, 1L),
-  props = paint(),
-  .size = dev_size()
-)
+add_path(img, path, props = paint())
 }
 \arguments{
-\item{img}{A raw vector.}
+\item{img}{A raw vector of picture.}
 
 \item{path}{A character vector of SVG strings.}
 
-\item{translate}{An integer vector length 2.}
-
-\item{scale}{A double vector length 2.}
-
 \item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
-
-\item{.size}{An integer vector.}
 }
 \value{
-A raw vector.
+A raw vector of picture.
 }
 \description{
 Add paths

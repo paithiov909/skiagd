@@ -8,3 +8,5 @@
 ^src/rust/.cargo$
 ^src/rust/.vscode$
 ^src/target$
+
+^src/rust/target$

@@ -2,18 +2,15 @@
 name = "skiagd"
 version = "0.1.0"
 edition = "2021"
-build = "build.rs"
+# build = "build.rs"
 
 [lib]
 crate-type = ["staticlib", "lib"]
 
 [dependencies]
 anyhow = "1.0.97"
-cxx = "1.0"
+savvy = "0.8.6"
 skia-safe = "0.82.0"
-
-[build-dependencies]
-cxx-build = "1.0"
 
 [profile.release]
 # By default, on release build, savvy terminates the R session when a panic
@@ -25,4 +22,4 @@ cxx-build = "1.0"
 # However, it's possible that the panic is thrown by some of the dependency
 # crate and there's little you can do. In such cases, you can change the
 # following line to `panic = "unwind"` to always catch a panic.
-panic = "abort"
+panic = "unwind"

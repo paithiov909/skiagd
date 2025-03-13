@@ -2,13 +2,15 @@
 % Please edit documentation in R/drawing.R
 \name{draw_img}
 \alias{draw_img}
-\title{Plot image}
+\title{Plot picture as PNG image}
 \usage{
-draw_img(img)
+draw_img(img, props = paint())
 }
 \arguments{
-\item{img}{A raw vector.}
+\item{img}{A raw vector of picture.}
+
+\item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
 }
 \description{
-Plot image
+Plot picture as PNG image
 }

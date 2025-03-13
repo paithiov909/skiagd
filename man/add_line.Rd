@@ -4,21 +4,19 @@
 \alias{add_line}
 \title{Add lines}
 \usage{
-add_line(img, from, to, props = paint(), .size = dev_size())
+add_line(img, from, to, props = paint())
 }
 \arguments{
-\item{img}{A raw vector.}
+\item{img}{A raw vector of picture.}
 
 \item{from}{A double matrix where each row is a start point.}
 
 \item{to}{A double matrix where each row is an end point.}
 
 \item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
-
-\item{.size}{An integer vector.}
 }
 \value{
-a raw vector.
+A raw vector of picture.
 }
 \description{
 Add lines

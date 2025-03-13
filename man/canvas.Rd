@@ -4,15 +4,15 @@
 \alias{canvas}
 \title{Create a canvas}
 \usage{
-canvas(fill = paint()[["fill"]], .size = dev_size())
+canvas(fill = paint()[["color"]], size = paint()[["canvas_size"]])
 }
 \arguments{
 \item{fill}{A string; color name.}
 
-\item{.size}{An integer vector.}
+\item{size}{An integer; canvas size.}
 }
 \value{
-A raw vector.
+A raw vector of picture.
 }
 \description{
 Creates a new canvas filled with specified color.

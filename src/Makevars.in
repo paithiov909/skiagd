@@ -5,24 +5,17 @@ PROFILE = @PROFILE@
 # Add flags if necessary
 RUSTFLAGS =
 
-# cxx_build creates symbolic links to whole Rust project in `TARGET_DIR`.
-# Placing this inside the project creates recursive symbolic links, which we must avoid.
-TARGET_DIR = $(CURDIR)/target
-CXXDIR = $(TARGET_DIR)/cxxbridge
-
+TARGET_DIR = $(CURDIR)/rust/target
 LIBDIR = $(TARGET_DIR)/$(TARGET)/$(subst dev,debug,$(PROFILE))
 STATLIB = $(LIBDIR)/libskiagd.a
 # TODO: configure for libfontconfig
 PKG_LIBS = -L$(LIBDIR) -lskiagd -lfontconfig
-PKG_CXXFLAGS = -I$(CXXDIR)/skiagd/src
 
-SOURCES = $(wildcard *.cpp)
-OBJECTS = lib.rs.o $(SOURCES:.cpp=.o)
 CARGO_BUILD_ARGS = --lib --profile $(PROFILE) --manifest-path=./rust/Cargo.toml --target-dir $(TARGET_DIR)
 
 all: C_clean
 
-$(OBJECTS): $(STATLIB)
+$(SHLIB): $(STATLIB)
 
 $(STATLIB):
 	# In some environments, ~/.cargo/bin might not be included in PATH, so we need
@@ -38,8 +31,7 @@ $(STATLIB):
 	    export CARGO_PROFILE_DEV_PANIC="abort" && \
 	    export CARGO_PROFILE_RELEASE_PANIC="abort" && \
 	    cargo +nightly build $(CARGO_BUILD_ARGS) --target $(TARGET) -Zbuild-std=panic_abort,std; \
-	  fi && \
-		$(CXX) $(CPICFLAGS) $(CXXFLAGS) -c $(CXXDIR)/skiagd/src/lib.rs.cc
+	  fi
 
 C_clean:
 	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS)

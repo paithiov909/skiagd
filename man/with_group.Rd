@@ -12,5 +12,5 @@ with_group(expr, ...)
 \item{...}{Any other arguments are passed to \code{\link[=paint]{paint()}}.}
 }
 \description{
-Evaluates \code{expr} with \code{paint(...)}.
+Evaluates \code{expr} with \link{paint(...)}.
 }

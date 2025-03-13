@@ -3,34 +3,35 @@
 #' Creates a new canvas filled with specified color.
 #'
 #' @param fill A string; color name.
-#' @inheritParams param-dot-size
-#' @returns A raw vector.
+#' @param size An integer; canvas size.
+#' @returns A raw vector of picture.
 #' @export
-canvas <- function(fill = paint()[["fill"]], .size = dev_size()) {
-  sk_absolute_fill(.size, col2rgba(fill))
+canvas <- function(fill = paint()[["color"]], size = paint()[["canvas_size"]]) {
+  sk_absolute_fill(size, col2rgba(fill))
 }
 
 #' Add points
 #'
 #' @param point A double matrix where each row is a point.
 #' @inheritParams param-img-and-props
-#' @inheritParams param-dot-size
-#' @returns A raw vector.
+#' @returns A raw vector of picture.
 #' @export
-add_point <- function(img, point, mode = c("points", "lines", "polygon"), props = paint(), .size = dev_size()) {
+add_point <- function(img, point, props = paint()) {
   if (any(!is.finite(point))) {
     rlang::abort("point must be finite values")
   }
   if (!is.null(paint_group <- getOption(".skiagd_paint_group"))) {
     props <- paint_group
   }
-  mode <- rlang::arg_match(mode)
-  mode <- switch(mode,
-    "points" = 0L,
-    "lines" = 1L,
-    "polygon" = 2L
+  sk_draw_points(
+    props[["canvas_size"]],
+    img,
+    props[["transform"]],
+    as_paint_props(props),
+    point[, 1],
+    point[, 2],
+    props[["point_mode"]]
   )
-  sk_points(.size, img, point, props, mode)
 }
 
 #' Add lines
@@ -38,17 +39,25 @@ add_point <- function(img, point, mode = c("points", "lines", "polygon"), props 
 #' @param from A double matrix where each row is a start point.
 #' @param to A double matrix where each row is an end point.
 #' @inheritParams param-img-and-props
-#' @inheritParams param-dot-size
-#' @returns a raw vector.
+#' @returns A raw vector of picture.
 #' @export
-add_line <- function(img, from, to, props = paint(), .size = dev_size()) {
+add_line <- function(img, from, to, props = paint()) {
   if (any(!is.finite(c(from, to)))) {
     rlang::abort("from and to must be finite values")
   }
   if (!is.null(paint_group <- getOption(".skiagd_paint_group"))) {
     props <- paint_group
   }
-  sk_line(.size, img, from, to, props)
+  sk_draw_line(
+    props[["canvas_size"]],
+    img,
+    props[["transform"]],
+    as_paint_props(props),
+    from[, 1],
+    from[, 2],
+    to[, 1],
+    to[, 2]
+  )
 }
 
 #' Add circles
@@ -56,25 +65,31 @@ add_line <- function(img, from, to, props = paint(), .size = dev_size()) {
 #' @param center A double matrix where each row is circle center.
 #' @param radius A double vector of circle radius.
 #' @inheritParams param-img-and-props
-#' @inheritParams param-dot-size
-#' @returns A raw vector.
+#' @returns A raw vector picture.
 #' @export
-add_circle <- function(img, center, radius, props = paint(), .size = dev_size()) {
+add_circle <- function(img, center, radius, props = paint()) {
   if (any(!is.finite(c(center, radius)))) {
     rlang::abort("x, y, and r must be finite values")
   }
   if (!is.null(paint_group <- getOption(".skiagd_paint_group"))) {
     props <- paint_group
   }
-  sk_circle(.size, img, center, radius, props)
+  sk_draw_circle(
+    props[["canvas_size"]],
+    img,
+    props[["transform"]],
+    as_paint_props(props),
+    center[, 1],
+    center[, 2],
+    radius
+  )
 }
 
 #' Add rectangles
 #'
 #' @param rect A double matrix where each row is a rectangle corner.
 #' @inheritParams param-img-and-props
-#' @inheritParams param-dot-size
-#' @returns A raw vector.
+#' @returns A raw vector of picture.
 #' @export
 add_rect <- function(img, rect, props = paint(), .size = dev_size()) {
   if (any(!is.finite(rect))) {
@@ -83,45 +98,56 @@ add_rect <- function(img, rect, props = paint(), .size = dev_size()) {
   if (!is.null(paint_group <- getOption(".skiagd_paint_group"))) {
     props <- paint_group
   }
-  sk_irect(.size, img, rect, props)
+  sk_draw_irect(
+    props[["canvas_size"]],
+    img,
+    props[["transform"]],
+    as_paint_props(props),
+    rect[, 1],
+    rect[, 2],
+    rect[, 3],
+    rect[, 4]
+  )
 }
 
 #' Add paths
 #'
 #' @param path A character vector of SVG strings.
-#' @param translate An integer vector length 2.
-#' @param scale A double vector length 2.
 #' @inheritParams param-img-and-props
-#' @inheritParams param-dot-size
-#' @returns A raw vector.
+#' @returns A raw vector of picture.
 #' @export
-add_path <- function(img, path, translate = c(0L, 0L), scale = c(1L, 1L), props = paint(), .size = dev_size()) {
+add_path <- function(img, path, props = paint()) {
   if (!is.null(paint_group <- getOption(".skiagd_paint_group"))) {
     props <- paint_group
   }
-  sk_svg_path(.size, img, path, as.integer(translate), as.integer(scale), props)
+  sk_draw_path(
+    props[["canvas_size"]],
+    img,
+    props[["transform"]],
+    as_paint_props(props),
+    path
+  )
 }
 
-#' Save image to file
+#' Convert picture into PNG data
 #'
-#' @param img A raw vector.
-#' @param filename A string; file name to save.
-#' @inheritParams param-dot-size
-#' @returns `filename` is invisibly returned.
+#' @inheritParams param-img-and-props
+#' @returns A raw vector of PNG data.
 #' @export
-save_img <- function(img, filename, .size = dev_size()) {
-  invisible(sk_save_png(.size, img, filename))
+as_png <- function(img, props = paint()) {
+  sk_as_png(props[["canvas_size"]], img, props[["transform"]])
 }
 
-#' Plot image
+#' Plot picture as PNG image
 #'
-#' @param img A raw vector.
+#' @inheritParams param-img-and-props
 #' @export
-draw_img <- function(img) {
+draw_img <- function(img, props = paint()) {
   if (requireNamespace("magick", quietly = TRUE)) {
+    img <- as_png(img, props)
     png <- grDevices::as.raster(magick::image_read(img))
     plot(png)
   } else {
-    stop("magick package is required")
+    rlang::abort("magick package is required")
   }
 }

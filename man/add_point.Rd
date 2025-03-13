@@ -4,25 +4,17 @@
 \alias{add_point}
 \title{Add points}
 \usage{
-add_point(
-  img,
-  point,
-  mode = c("points", "lines", "polygon"),
-  props = paint(),
-  .size = dev_size()
-)
+add_point(img, point, props = paint())
 }
 \arguments{
-\item{img}{A raw vector.}
+\item{img}{A raw vector of picture.}
 
 \item{point}{A double matrix where each row is a point.}
 
 \item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
-
-\item{.size}{An integer vector.}
 }
 \value{
-A raw vector.
+A raw vector of picture.
 }
 \description{
 Add points
