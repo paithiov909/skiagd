@@ -15,13 +15,15 @@ before rendering it onto the canvas.
 The \code{transform} vector represents a 3x3 matrix
 used for affine transformations, following the format:
 
-\deqn{
-\begin{bmatrix} scale_x & skew_x & trans_x \\ skew_y & scale_y & trans_y \\ pers_0 & pers_1 & pers_2 \end{bmatrix}
-}
+\deqn{\begin{bmatrix}
+\text{scale}_x & \text{skew}_y & \text{pers}_0 \\
+\text{skew}_x & \text{scale}_y & \text{pers}_1 \\
+\text{trans}_x & \text{trans}_y & \text{pers}_2
+\end{bmatrix}}
 
-The first two rows define standard affine transformations,
+The first two columns define standard affine transformations,
 including scaling, skewing, and translation.
-The third row (\code{pers_0}, \code{pers_1}, and \code{pers_2}) is
+The third column (\code{pers_0}, \code{pers_1}, and \code{pers_2}) is
 typically used for perspective transformations,
 though in most affine transformations, it remains as \verb{[0, 0, 1]}.
 }
