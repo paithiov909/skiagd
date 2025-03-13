@@ -110,7 +110,6 @@ pub enum BlendMode {
 /// * style: Style (stroke style).
 /// * join: Join (stroke join).
 /// * cap: Cap (stroke cap).
-/// * lty: Line type. FIXME: Currently not used.
 /// * width: Stroke width.
 /// * miter: Stroke miter.
 /// * blend_mode: BlendMode.
@@ -129,7 +128,6 @@ impl PaintProps {
         style: Style,
         join: Join,
         cap: Cap,
-        lty: NumericScalar,
         width: NumericScalar,
         miter: NumericScalar,
         blend_mode: BlendMode,

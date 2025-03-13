@@ -59,8 +59,8 @@ SEXP savvy_sk_draw_line__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_a
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_path__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__svg) {
-    SEXP res = savvy_sk_draw_path__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__svg);
+SEXP savvy_sk_draw_path__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat1, SEXP c_arg__props, SEXP c_arg__svg, SEXP c_arg__mat2) {
+    SEXP res = savvy_sk_draw_path__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat1, c_arg__props, c_arg__svg, c_arg__mat2);
     return handle_result(res);
 }
 
@@ -82,8 +82,8 @@ SEXP savvy_sk_matrix_default__impl(void) {
 
 
 
-SEXP savvy_PaintProps_set_props__impl(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__lty, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__blend_mode) {
-    SEXP res = savvy_PaintProps_set_props__ffi(c_arg__color, c_arg__style, c_arg__join, c_arg__cap, c_arg__lty, c_arg__width, c_arg__miter, c_arg__blend_mode);
+SEXP savvy_PaintProps_set_props__impl(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__blend_mode) {
+    SEXP res = savvy_PaintProps_set_props__ffi(c_arg__color, c_arg__style, c_arg__join, c_arg__cap, c_arg__width, c_arg__miter, c_arg__blend_mode);
     return handle_result(res);
 }
 
@@ -96,14 +96,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"savvy_sk_draw_circle__impl", (DL_FUNC) &savvy_sk_draw_circle__impl, 7},
     {"savvy_sk_draw_irect__impl", (DL_FUNC) &savvy_sk_draw_irect__impl, 8},
     {"savvy_sk_draw_line__impl", (DL_FUNC) &savvy_sk_draw_line__impl, 8},
-    {"savvy_sk_draw_path__impl", (DL_FUNC) &savvy_sk_draw_path__impl, 5},
+    {"savvy_sk_draw_path__impl", (DL_FUNC) &savvy_sk_draw_path__impl, 6},
     {"savvy_sk_draw_png__impl", (DL_FUNC) &savvy_sk_draw_png__impl, 6},
     {"savvy_sk_draw_points__impl", (DL_FUNC) &savvy_sk_draw_points__impl, 7},
     {"savvy_sk_matrix_default__impl", (DL_FUNC) &savvy_sk_matrix_default__impl, 0},
 
 
 
-    {"savvy_PaintProps_set_props__impl", (DL_FUNC) &savvy_PaintProps_set_props__impl, 8},
+    {"savvy_PaintProps_set_props__impl", (DL_FUNC) &savvy_PaintProps_set_props__impl, 7},
 
 
     {NULL, NULL, 0}

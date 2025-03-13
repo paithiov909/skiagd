@@ -40,7 +40,7 @@ NULL
 #' Fills canvas with color
 #'
 #' @param size Canvas size.
-#' @param fill Integers length 4 (RGBA).
+#' @param fill Integers of length 4 (RGBA).
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_absolute_fill` <- function(`size`, `fill`) {
@@ -111,14 +111,15 @@ NULL
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
+#' @param mat1 Matrix for transforming picture.
 #' @param props PaintProps.
+#' @param mat2 Matrix for transforming SVG path.
 #' @param svg SVG strings to draw.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_path` <- function(`size`, `curr_bytes`, `mat`, `props`, `svg`) {
+`sk_draw_path` <- function(`size`, `curr_bytes`, `mat1`, `props`, `svg`, `mat2`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintProps")
-  .Call(savvy_sk_draw_path__impl, `size`, `curr_bytes`, `mat`, `props`, `svg`)
+  .Call(savvy_sk_draw_path__impl, `size`, `curr_bytes`, `mat1`, `props`, `svg`, `mat2`)
 }
 
 #' Draws PNG data as an image on canvas
@@ -158,7 +159,7 @@ NULL
 #' Users should not touch matrix to transform pictures.
 #' For a `canvas.draw_picture()` call, pass `Paint::default()`.
 #'
-#' @returns A numeric vector length 9.
+#' @returns A numeric vector of length 9.
 #' @noRd
 `sk_matrix_default` <- function() {
   .Call(savvy_sk_matrix_default__impl)
@@ -416,7 +417,6 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
 #' * style: Style (stroke style).
 #' * join: Join (stroke join).
 #' * cap: Cap (stroke cap).
-#' * lty: Line type. FIXME: Currently not used.
 #' * width: Stroke width.
 #' * miter: Stroke miter.
 #' * blend_mode: BlendMode.
@@ -426,12 +426,12 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
 
 ### associated functions for PaintProps
 
-`PaintProps`$`set_props` <- function(`color`, `style`, `join`, `cap`, `lty`, `width`, `miter`, `blend_mode`) {
+`PaintProps`$`set_props` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`) {
   `style` <- .savvy_extract_ptr(`style`, "Style")
   `join` <- .savvy_extract_ptr(`join`, "Join")
   `cap` <- .savvy_extract_ptr(`cap`, "Cap")
   `blend_mode` <- .savvy_extract_ptr(`blend_mode`, "BlendMode")
-  .savvy_wrap_PaintProps(.Call(savvy_PaintProps_set_props__impl, `color`, `style`, `join`, `cap`, `lty`, `width`, `miter`, `blend_mode`))
+  .savvy_wrap_PaintProps(.Call(savvy_PaintProps_set_props__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`))
 }
 
 

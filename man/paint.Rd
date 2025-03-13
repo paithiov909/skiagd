@@ -2,16 +2,35 @@
 % Please edit documentation in R/paint.R
 \name{paint}
 \alias{paint}
-\title{Paint props}
+\title{Define paint properties}
 \usage{
 paint(...)
 }
 \arguments{
-\item{...}{<\code{\link[rlang:dyn-dots]{dynamic-dots}}> What these dots do.}
+\item{...}{<\code{\link[rlang:dyn-dots]{dynamic-dots}}>
+Named arguments specifying paint properties. See details.}
 }
 \value{
-a list.
+A list containing the specified paint properties,
+merged with default values.
 }
 \description{
-Paint props
+The \code{paint()} function allows users to specify
+various properties for drawing shapes on the canvas,
+such as color, stroke width, and transformations.
+}
+\details{
+The following properties can be specified:
+\itemize{
+\item \code{canvas_size}: Integers of length 2 (width, height)
+\item \code{color}: RGBA representation of a color. The color can be specified using named colors or hexadecimal color codes, which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.
+\item \code{style}: \link{PaintStyle}
+\item \code{join}: \link{StrokeJoin}
+\item \code{cap}: \link{StrokeCap}
+\item \code{width}: Numeric scalar (stroke width)
+\item \code{miter}: Numeric scalar (stroke miter)
+\item \code{blend_mode}: \link{BlendMode}
+\item \code{point_mode}: \link{PointMode} for \code{\link[=add_point]{add_point()}}
+\item \code{transform}: Numerics of length 9. See \link{transform-matrix} for affine transformations.
+}
 }

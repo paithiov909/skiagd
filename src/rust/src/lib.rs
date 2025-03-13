@@ -14,7 +14,7 @@ use skia_safe::{Data, Image, Paint};
 /// Users should not touch matrix to transform pictures.
 /// For a `canvas.draw_picture()` call, pass `Paint::default()`.
 ///
-/// @returns A numeric vector length 9.
+/// @returns A numeric vector of length 9.
 /// @noRd
 #[savvy]
 fn sk_matrix_default() -> savvy::Result<savvy::Sexp> {
@@ -93,7 +93,7 @@ unsafe fn sk_draw_png(
     mat: NumericSexp,
     props: PaintProps,
     png_bytes: savvy::RawSexp,
-    left_top: IntegerSexp,
+    left_top: NumericSexp, // FIXME: Should be Numeric
 ) -> savvy::Result<savvy::Sexp> {
     if left_top.len() != 2 {
         return Err(savvy_err!("Invalid left_top. Expected 2 elements"));
@@ -101,7 +101,7 @@ unsafe fn sk_draw_png(
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
 
-    let left_top = left_top.to_vec();
+    let left_top = left_top.as_slice_f64();
     let input = Data::new_bytes(png_bytes.as_slice());
     let image = Image::from_encoded_with_alpha_type(input, skia_safe::AlphaType::Premul)
         .ok_or_else(|| return savvy_err!("Failed to read PNG as image"))?;
@@ -123,8 +123,9 @@ unsafe fn sk_draw_png(
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
+/// @param mat1 Matrix for transforming picture.
 /// @param props PaintProps.
+/// @param mat2 Matrix for transforming SVG path.
 /// @param svg SVG strings to draw.
 /// @returns A raw vector of picture.
 /// @noRd
@@ -132,21 +133,25 @@ unsafe fn sk_draw_png(
 unsafe fn sk_draw_path(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
+    mat1: NumericSexp,
     props: PaintProps,
     svg: StringSexp,
+    mat2: NumericSexp, // NOTE: not vectorized
 ) -> savvy::Result<savvy::Sexp> {
     let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat)?;
+    let mat1 = as_matrix(&mat1)?;
 
+    let mat2 = as_matrix(&mat2)?;
     let size = size.to_vec();
     let mut recorder = SkiaCanvas::new(size[0], size[1]);
     let canvas = recorder.start_recording();
-    canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
+    canvas.draw_picture(&picture, Some(&mat1), Some(&Paint::default()));
 
     for (_, s) in svg.iter().enumerate() {
+        // TODO: set_fill_type
         let path = skia_safe::utils::parse_path::from_svg(s)
-            .ok_or_else(|| return savvy_err!("Failed to parse svg"))?;
+            .ok_or_else(|| return savvy_err!("Failed to parse svg"))?
+            .with_transform(&mat2);
         canvas.draw_path(&path, &props.paint);
     }
     let picture = recorder.finish_recording()?;
@@ -330,7 +335,7 @@ unsafe fn sk_draw_irect(
 /// Fills canvas with color
 ///
 /// @param size Canvas size.
-/// @param fill Integers length 4 (RGBA).
+/// @param fill Integers of length 4 (RGBA).
 /// @returns A raw vector of picture.
 /// @noRd
 #[savvy]

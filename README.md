@@ -19,23 +19,15 @@ graphics device for R 😓
 
 ## Resources
 
-- [skia_safe - Rust](https://rust-skia.github.io/doc/skia_safe/)
-- [Rust ❤️ C++](https://cxx.rs/)
-- [cxx_build - Rust](https://docs.rs/cxx-build/latest/cxx_build/)
-- [Get started with cpp11 •
-  cpp11](https://cpp11.r-lib.org/articles/cpp11.html)
-
 ### Design notes
 
 - This is not a graphics device. skiagd does not allow R’s session to
   hold a reference to a Canvas object on Rust side.
-- Drawing functions return a PNG image as a `raw` object every time it’s
-  called. `add_*` puts those data onto canvas, actually ***adds*** some
-  paintings to there, and then returns a `raw` object again.
-- Uses [cxx](https://github.com/dtolnay/cxx) and cpp11 package. Not
-  extendr or savvy.
-  - I’m not sure if this is a good idea or not, because both extendr and
-    savvy support `raw`.
+- Drawing functions return a
+  [picture](https://shopify.github.io/react-native-skia/docs/shapes/pictures/)
+  as a `raw` object every time it’s called. `add_*` puts those data onto
+  canvas, actually ***adds*** some paintings to there, and then returns
+  a `raw` object again.
 
 ### Plans??
 
@@ -60,8 +52,6 @@ Skia](https://shopify.github.io/react-native-skia/).
   - Atlas
   - Vertices
   - Patch
-  - Picture
-    - [ ] `draw_picture`, `from_data`, and `serialize`
 - Images
 - Text
   - Paragraph
@@ -93,24 +83,22 @@ img_data <-
       add_line(
         matrix(c(runif(300, 0, size[1]), runif(300, 0, size[2])), ncol = 2),
         matrix(c(runif(300, 0, size[1]), runif(300, 0, size[2])), ncol = 2),
-        props = paint(col = "#fff28166", lwd = 6)
+        props = paint(color = "#fff28166", width = 6)
       ) |>
-      # 'skyblue' with alpha channel, blend mode 'Exclusion'.
       add_circle(
         matrix(c(runif(n_circles,  0, size[1]), runif(n_circles, 0, size[2])), ncol = 2),
         runif(n_circles, 6, 50),
-        props = paint(col = "#87ceeb66", blend_mode = 23)
+        props = paint(color = "#87ceeb66", blend_mode = BlendMode$ColorBurn)
       ) |>
-      # 'deeppink' with alpha channel, blend mode 'Overlay'.
       add_circle(
         matrix(c(runif(n_circles, 0, size[1]), runif(n_circles, 0, size[2])), ncol = 2),
         runif(n_circles, 20, 60),
-        props = paint(col = "#ff1493aa", blend_mode = 15)
+        props = paint(color = "#ff1493aa", blend_mode = BlendMode$Overlay)
       ) |>
       add_path(
         "M 128 0 L 168 80 L 256 93 L 192 155 L 207 244 L 128 202 L 49 244 L 64 155 L 0 93 L 88 80 L 128 0 Z",
-        translate = size / 2 - c(128L, 128L),
-        props = paint(col = "#fff281ee")
+        transform = c(1, 0, (size[1] / 2 - 128), 0, 1, (size[2] / 2 - 128), 0, 0, 1),
+        props = paint(color = "#fff281ee")
       ) |>
       draw_img()
   }, as = "png", width = 1280, height = 720)
