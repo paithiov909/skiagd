@@ -24,12 +24,13 @@ The following properties can be specified:
 \itemize{
 \item \code{canvas_size}: Integers of length 2 (width, height)
 \item \code{color}: RGBA representation of a color. The color can be specified using named colors or hexadecimal color codes, which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.
-\item \code{style}: \link{PaintStyle}
-\item \code{join}: \link{StrokeJoin}
-\item \code{cap}: \link{StrokeCap}
+\item \code{style}: \link{Style}
+\item \code{join}: \link{Join}
+\item \code{cap}: \link{Cap}
 \item \code{width}: Numeric scalar (stroke width)
 \item \code{miter}: Numeric scalar (stroke miter)
 \item \code{blend_mode}: \link{BlendMode}
+\item \code{path_effect}: \link{PathEffect}
 \item \code{point_mode}: \link{PointMode} for \code{\link[=add_point]{add_point()}}
 \item \code{transform}: Numerics of length 9. See \link{transform-matrix} for affine transformations.
 }

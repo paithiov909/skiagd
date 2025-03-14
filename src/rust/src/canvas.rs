@@ -22,10 +22,7 @@ pub fn as_matrix(mat: &NumericSexp) -> anyhow::Result<skia_safe::Matrix, savvy::
 }
 
 /// Returns a skia_safe::Picture
-pub unsafe fn read_picture_bytes(
-    bytes: &savvy::RawSexp,
-    // mat: &[f32; 9],
-) -> anyhow::Result<Picture, savvy::Error> {
+pub unsafe fn read_picture_bytes(bytes: &savvy::RawSexp) -> anyhow::Result<Picture, savvy::Error> {
     let picture = Picture::from_bytes(bytes.as_slice())
         .ok_or_else(|| return savvy_err!("Bomb! failed to read bytes"))?;
     Ok(picture)

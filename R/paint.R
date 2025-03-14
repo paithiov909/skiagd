@@ -13,12 +13,13 @@
 #'
 #' * `canvas_size`: Integers of length 2 (width, height)
 #' * `color`: RGBA representation of a color. The color can be specified using named colors or hexadecimal color codes, which are converted internally using [grDevices::col2rgb()].
-#' * `style`: [PaintStyle]
-#' * `join`: [StrokeJoin]
-#' * `cap`: [StrokeCap]
+#' * `style`: [Style]
+#' * `join`: [Join]
+#' * `cap`: [Cap]
 #' * `width`: Numeric scalar (stroke width)
 #' * `miter`: Numeric scalar (stroke miter)
 #' * `blend_mode`: [BlendMode]
+#' * `path_effect`: [PathEffect]
 #' * `point_mode`: [PointMode] for [add_point()]
 #' * `transform`: Numerics of length 9. See [transform-matrix] for affine transformations.
 #'
@@ -91,6 +92,7 @@ default_props <- function() {
     width = props[["lwd"]],
     miter = props[["linemitre"]],
     blend_mode = env_get(BlendMode, "Src"),
+    path_effect = PathEffect$no_effect(),
     point_mode = env_get(PointMode, "Points"),
     transform = sk_matrix_default()
   )
@@ -104,6 +106,7 @@ as_paint_props <- function(p) {
     p[["cap"]],
     p[["width"]],
     p[["miter"]],
-    p[["blend_mode"]]
+    p[["blend_mode"]],
+    p[["path_effect"]]
   )
 }

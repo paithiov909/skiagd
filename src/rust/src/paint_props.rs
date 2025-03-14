@@ -98,6 +98,47 @@ pub enum BlendMode {
     Luminosity,
 }
 
+/// PathEffect
+///
+/// @noRd
+#[savvy]
+pub struct PathEffect {
+    label: String,
+    effect: Option<skia_safe::PathEffect>,
+}
+
+#[savvy]
+impl PathEffect {
+    pub fn get_label(&self) -> savvy::Result<savvy::Sexp> {
+        let label = &self.label;
+        let out = savvy::OwnedStringSexp::try_from_scalar(&label)?;
+        Ok(out.into())
+    }
+    pub fn no_effect() -> savvy::Result<Self> {
+        Ok(PathEffect {
+            label: "none".to_string(),
+            effect: None,
+        })
+    }
+    pub fn trim(start: NumericScalar, end: NumericScalar) -> savvy::Result<Self> {
+        let start = start.as_f64();
+        let end = end.as_f64();
+        if start < 0.0 || start > 1.0 || end < 0.0 || end > 1.0 {
+            return Err(savvy_err!("Invalid trim values"));
+        }
+        let trim_path = skia_safe::PathEffect::trim(
+            start as f32,
+            end as f32,
+            skia_safe::trim_path_effect::Mode::Normal,
+        )
+        .ok_or_else(|| return savvy_err!("Failed to create path effect"))?;
+        Ok(PathEffect {
+            label: "trim".to_string(),
+            effect: Some(trim_path),
+        })
+    }
+}
+
 /// PaintProps
 ///
 /// Internal impl that wraps `skia_safe::Paint`.
@@ -113,6 +154,7 @@ pub enum BlendMode {
 /// * width: Stroke width.
 /// * miter: Stroke miter.
 /// * blend_mode: BlendMode.
+/// * path_effect: PathEffect.
 ///
 /// @noRd
 #[savvy]
@@ -122,7 +164,6 @@ pub struct PaintProps {
 
 #[savvy]
 impl PaintProps {
-    #[allow(unused_variables)]
     pub fn set_props(
         color: NumericSexp,
         style: Style,
@@ -131,6 +172,7 @@ impl PaintProps {
         width: NumericScalar,
         miter: NumericScalar,
         blend_mode: BlendMode,
+        path_effect: PathEffect,
     ) -> savvy::Result<Self> {
         let color = color.as_slice_i32()?;
         if color.len() != 4 {
@@ -153,7 +195,9 @@ impl PaintProps {
         paint.set_stroke_width(width as f32);
         paint.set_stroke_miter(miter as f32);
         paint.set_blend_mode(sk_blend_mode(&blend_mode));
-
+        if let Some(effect) = path_effect.effect {
+            paint.set_path_effect(effect);
+        }
         Ok(PaintProps { paint })
     }
 }

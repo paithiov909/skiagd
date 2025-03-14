@@ -113,8 +113,10 @@ NULL
 #' @param curr_bytes Current canvas state.
 #' @param mat1 Matrix for transforming picture.
 #' @param props PaintProps.
-#' @param mat2 Matrix for transforming SVG path.
 #' @param svg SVG strings to draw.
+#' @param trim Numerics of length 2 to trim the start and end of the path.
+#' Values are in the range `[0, 1]`.
+#' @param mat2 Matrix for transforming SVG path.
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_path` <- function(`size`, `curr_bytes`, `mat1`, `props`, `svg`, `mat2`) {
@@ -420,18 +422,20 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
 #' * width: Stroke width.
 #' * miter: Stroke miter.
 #' * blend_mode: BlendMode.
+#' * path_effect: PathEffect.
 #'
 #' @noRd
 `PaintProps` <- new.env(parent = emptyenv())
 
 ### associated functions for PaintProps
 
-`PaintProps`$`set_props` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`) {
+`PaintProps`$`set_props` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`, `path_effect`) {
   `style` <- .savvy_extract_ptr(`style`, "Style")
   `join` <- .savvy_extract_ptr(`join`, "Join")
   `cap` <- .savvy_extract_ptr(`cap`, "Cap")
   `blend_mode` <- .savvy_extract_ptr(`blend_mode`, "BlendMode")
-  .savvy_wrap_PaintProps(.Call(savvy_PaintProps_set_props__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`))
+  `path_effect` <- .savvy_extract_ptr(`path_effect`, "PathEffect")
+  .savvy_wrap_PaintProps(.Call(savvy_PaintProps_set_props__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`, `path_effect`))
 }
 
 
@@ -440,6 +444,49 @@ class(`PaintProps`) <- c("PaintProps__bundle", "savvy_skiagd__sealed")
 #' @export
 `print.PaintProps__bundle` <- function(x, ...) {
   cat('PaintProps')
+}
+
+### wrapper functions for PathEffect
+
+`PathEffect_get_label` <- function(self) {
+  function() {
+    .Call(savvy_PathEffect_get_label__impl, `self`)
+  }
+}
+
+`.savvy_wrap_PathEffect` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+  e$`get_label` <- `PathEffect_get_label`(ptr)
+
+  class(e) <- c("PathEffect", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' PathEffect
+#'
+#' This should be not exposed to users.
+#'
+#' @noRd
+`PathEffect` <- new.env(parent = emptyenv())
+
+### associated functions for PathEffect
+
+`PathEffect`$`no_effect` <- function() {
+  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_no_effect__impl))
+}
+
+`PathEffect`$`trim` <- function(`start`, `end`) {
+  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_trim__impl, `start`, `end`))
+}
+
+
+class(`PathEffect`) <- c("PathEffect__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.PathEffect__bundle` <- function(x, ...) {
+  cat('PathEffect')
 }
 
 ### wrapper functions for PointMode

@@ -125,8 +125,10 @@ unsafe fn sk_draw_png(
 /// @param curr_bytes Current canvas state.
 /// @param mat1 Matrix for transforming picture.
 /// @param props PaintProps.
-/// @param mat2 Matrix for transforming SVG path.
 /// @param svg SVG strings to draw.
+/// @param trim Numerics of length 2 to trim the start and end of the path.
+/// Values are in the range `[0, 1]`.
+/// @param mat2 Matrix for transforming SVG path.
 /// @returns A raw vector of picture.
 /// @noRd
 #[savvy]
@@ -136,12 +138,12 @@ unsafe fn sk_draw_path(
     mat1: NumericSexp,
     props: PaintProps,
     svg: StringSexp,
-    mat2: NumericSexp, // NOTE: not vectorized
+    mat2: NumericSexp, // transform
 ) -> savvy::Result<savvy::Sexp> {
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat1 = as_matrix(&mat1)?;
-
     let mat2 = as_matrix(&mat2)?;
+
     let size = size.to_vec();
     let mut recorder = SkiaCanvas::new(size[0], size[1]);
     let canvas = recorder.start_recording();

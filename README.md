@@ -17,9 +17,7 @@ skiagd is a toy R wrapper for
 Despite its name, this package is intended as a graphics library, not a
 graphics device for R 😓
 
-## Resources
-
-### Design notes
+## Design notes
 
 - This is not a graphics device. skiagd does not allow R’s session to
   hold a reference to a Canvas object on Rust side.
@@ -29,7 +27,7 @@ graphics device for R 😓
   canvas, actually ***adds*** some paintings to there, and then returns
   a `raw` object again.
 
-### Plans??
+## Future plan
 
 I’m planning to re-implement features such like [React Native
 Skia](https://shopify.github.io/react-native-skia/).
@@ -65,9 +63,9 @@ Skia](https://shopify.github.io/react-native-skia/).
   - [ ] Filters
   - [ ] Shaders??
 
-## Use Case?
+## Showcase
 
-It’s still in veeeeeery early stage. The API is subject to (possibly
+It’s still in early alpha stage. The API is subject to (possibly
 drastic) change.
 
 ``` r

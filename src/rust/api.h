@@ -18,7 +18,12 @@ SEXP savvy_sk_matrix_default__ffi(void);
 
 
 // methods and associated functions for PaintProps
-SEXP savvy_PaintProps_set_props__ffi(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__blend_mode);
+SEXP savvy_PaintProps_set_props__ffi(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__blend_mode, SEXP c_arg__path_effect);
+
+// methods and associated functions for PathEffect
+SEXP savvy_PathEffect_get_label__ffi(SEXP self__);
+SEXP savvy_PathEffect_no_effect__ffi(void);
+SEXP savvy_PathEffect_trim__ffi(SEXP c_arg__start, SEXP c_arg__end);
 
 // methods and associated functions for PointMode
 

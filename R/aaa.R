@@ -7,6 +7,11 @@
 #' @keywords internal
 NULL
 
+#' @export
+print.PathEffect <- function(x, ...) {
+  cat("PathEffect::", x$get_label(), "\n", sep = "")
+}
+
 #' Applying affine transformations to a picture
 #'
 #' @description

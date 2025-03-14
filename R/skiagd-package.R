@@ -13,7 +13,7 @@ check_finite <- function(...) {
 
 #' Paint group
 #'
-#' Evaluates `expr` with [paint(...)].
+#' Evaluates `expr` with `paint(...)`.
 #'
 #' @param expr Expressions.
 #' @param ... Any other arguments are passed to [paint()].

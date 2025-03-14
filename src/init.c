@@ -82,8 +82,23 @@ SEXP savvy_sk_matrix_default__impl(void) {
 
 
 
-SEXP savvy_PaintProps_set_props__impl(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__blend_mode) {
-    SEXP res = savvy_PaintProps_set_props__ffi(c_arg__color, c_arg__style, c_arg__join, c_arg__cap, c_arg__width, c_arg__miter, c_arg__blend_mode);
+SEXP savvy_PaintProps_set_props__impl(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__blend_mode, SEXP c_arg__path_effect) {
+    SEXP res = savvy_PaintProps_set_props__ffi(c_arg__color, c_arg__style, c_arg__join, c_arg__cap, c_arg__width, c_arg__miter, c_arg__blend_mode, c_arg__path_effect);
+    return handle_result(res);
+}
+
+SEXP savvy_PathEffect_get_label__impl(SEXP self__) {
+    SEXP res = savvy_PathEffect_get_label__ffi(self__);
+    return handle_result(res);
+}
+
+SEXP savvy_PathEffect_no_effect__impl(void) {
+    SEXP res = savvy_PathEffect_no_effect__ffi();
+    return handle_result(res);
+}
+
+SEXP savvy_PathEffect_trim__impl(SEXP c_arg__start, SEXP c_arg__end) {
+    SEXP res = savvy_PathEffect_trim__ffi(c_arg__start, c_arg__end);
     return handle_result(res);
 }
 
@@ -103,7 +118,10 @@ static const R_CallMethodDef CallEntries[] = {
 
 
 
-    {"savvy_PaintProps_set_props__impl", (DL_FUNC) &savvy_PaintProps_set_props__impl, 7},
+    {"savvy_PaintProps_set_props__impl", (DL_FUNC) &savvy_PaintProps_set_props__impl, 8},
+    {"savvy_PathEffect_get_label__impl", (DL_FUNC) &savvy_PathEffect_get_label__impl, 1},
+    {"savvy_PathEffect_no_effect__impl", (DL_FUNC) &savvy_PathEffect_no_effect__impl, 0},
+    {"savvy_PathEffect_trim__impl", (DL_FUNC) &savvy_PathEffect_trim__impl, 2},
 
 
     {NULL, NULL, 0}

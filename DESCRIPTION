@@ -10,12 +10,13 @@ License: MIT + file LICENSE
 Imports:
     grDevices,
     grid,
-    magick,
     purrr,
     rlang,
     withr
 Suggests:
-    testthat (>= 3.0.0)
+    magick,
+    testthat (>= 3.0.0),
+    vdiffr
 LinkingTo:
     cpp11
 Config/testthat/edition: 3

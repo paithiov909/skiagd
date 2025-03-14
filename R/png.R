@@ -33,12 +33,10 @@ as_png <- function(img, props = paint()) {
 #' @returns `img` is returned invisibly.
 #' @export
 draw_img <- function(img, props = paint()) {
-  if (requireNamespace("magick", quietly = TRUE)) {
-    img <- as_png(img, props)
-    png <- grDevices::as.raster(magick::image_read(img))
-    plot(png)
-  } else {
+  if (!requireNamespace("magick", quietly = TRUE)) {
     rlang::abort("magick package is required")
   }
+  png <- as_png(img, props)
+  plot(grDevices::as.raster(magick::image_read(png)))
   invisible(img)
 }

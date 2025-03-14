@@ -20,15 +20,13 @@ skiagd is a toy R wrapper for [rust-skia](https://github.com/rust-skia/rust-skia
 Despite its name, this package is intended as a graphics library, not a graphics device for R 😓
 
 
-## Resources
-
-### Design notes
+## Design notes
 
 - This is not a graphics device. skiagd does not allow R's session to hold a reference to a Canvas object on Rust side.
 - Drawing functions return a [picture](https://shopify.github.io/react-native-skia/docs/shapes/pictures/) as a `raw` object every time it's called. `add_*` puts those data onto canvas, actually ***adds*** some paintings to there, and then returns a `raw` object again.
 
 
-### Plans??
+## Future plan
 
 I'm planning to re-implement features such like [React Native Skia](https://shopify.github.io/react-native-skia/).
 
@@ -42,7 +40,7 @@ I'm planning to re-implement features such like [React Native Skia](https://shop
     - [ ] RoundedRect (round_rect)
     - [ ] DiffRect (drrect)
     - [x] Line
-    - [ ] Points (points; not point)
+    - [x] Points (points; not point)
   - Ellipses
     - [x] Circle
     - [ ] Oval (oval)
@@ -64,9 +62,9 @@ I'm planning to re-implement features such like [React Native Skia](https://shop
   - [ ] Shaders??
 
 
-## Use Case?
+## Showcase
 
-It's still in veeeeeery early stage. The API is subject to (possibly drastic) change.
+It's still in early alpha stage. The API is subject to (possibly drastic) change.
 
 ```{r}
 #| label: test-plot
