@@ -4,13 +4,13 @@
 \alias{with_group}
 \title{Paint group}
 \usage{
-with_group(expr, ...)
+with_group(props, code)
 }
 \arguments{
-\item{expr}{Expressions.}
+\item{props}{Paint properties.}
 
-\item{...}{Any other arguments are passed to \code{\link[=paint]{paint()}}.}
+\item{code}{Code to evaluate.}
 }
 \description{
-Evaluates \code{expr} with \code{paint(...)}.
+Evaluates \code{code} with \code{props}.
 }

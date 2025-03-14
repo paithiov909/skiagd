@@ -4,10 +4,10 @@
 \alias{canvas}
 \title{Create a canvas}
 \usage{
-canvas(fill = paint()[["color"]], size = paint()[["canvas_size"]])
+canvas(fill = "transparent", size = paint()[["canvas_size"]])
 }
 \arguments{
-\item{fill}{A string; color name.}
+\item{fill}{A string; named colors or hexadecimal color codes.}
 
 \item{size}{An integer; canvas size.}
 }

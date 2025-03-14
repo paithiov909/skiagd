@@ -1,6 +1,7 @@
 #' Add rectangles
 #'
-#' @param rect A double matrix where each row is a rectangle corner.
+#' @param rect A double matrix where each row is a rectangle
+#' XYWH (`[left, top, right, bottom]`).
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export

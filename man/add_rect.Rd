@@ -9,7 +9,8 @@ add_rect(img, rect, props = paint())
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{rect}{A double matrix where each row is a rectangle corner.}
+\item{rect}{A double matrix where each row is a rectangle
+XYWH (\verb{[left, top, right, bottom]}).}
 
 \item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
 }
