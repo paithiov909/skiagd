@@ -33,8 +33,6 @@ I'm planning to re-implement features such like [React Native Skia](https://shop
 - Shapes
   - Path
     - [x] SVG notation (path)
-    - [ ] trim
-    - [ ] fillType
   - Polygons
     - [x] Rect (irect)
     - [ ] RoundedRect (round_rect)
@@ -49,6 +47,8 @@ I'm planning to re-implement features such like [React Native Skia](https://shop
   - Vertices
   - Patch
 - Images
+  - [x] PNG
+  - fit??
 - Text
   - Paragraph
   - Text
@@ -56,10 +56,10 @@ I'm planning to re-implement features such like [React Native Skia](https://shop
   - Text Path
   - Text Blob
 - Mask
-- Other Paint props
-  - [ ] PathEffect
+- Other painting attributes
+  - [x] PathEffect
   - [ ] Filters
-  - [ ] Shaders??
+  - Shaders??
 
 
 ## Showcase

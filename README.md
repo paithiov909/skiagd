@@ -35,14 +35,12 @@ Skia](https://shopify.github.io/react-native-skia/).
 - Shapes
   - Path
     - [x] SVG notation (path)
-    - [ ] trim
-    - [ ] fillType
   - Polygons
     - [x] Rect (irect)
     - [ ] RoundedRect (round_rect)
     - [ ] DiffRect (drrect)
     - [x] Line
-    - [ ] Points (points; not point)
+    - [x] Points (points; not point)
   - Ellipses
     - [x] Circle
     - [ ] Oval (oval)
@@ -51,6 +49,8 @@ Skia](https://shopify.github.io/react-native-skia/).
   - Vertices
   - Patch
 - Images
+  - [x] PNG
+  - fit??
 - Text
   - Paragraph
   - Text
@@ -58,10 +58,10 @@ Skia](https://shopify.github.io/react-native-skia/).
   - Text Path
   - Text Blob
 - Mask
-- Other Paint props
-  - [ ] PathEffect
+- Other painting attributes
+  - [x] PathEffect
   - [ ] Filters
-  - [ ] Shaders??
+  - Shaders??
 
 ## Showcase
 
