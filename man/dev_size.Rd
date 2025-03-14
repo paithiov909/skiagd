@@ -10,7 +10,7 @@ dev_size(units = "px")
 \item{units}{\code{units} for \code{\link[grDevices:dev.size]{grDevices::dev.size()}}.}
 }
 \value{
-an integer vector.
+An integer vector.
 }
 \description{
 Just returns the size of the current device as an integer (not a numeric).

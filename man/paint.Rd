@@ -2,36 +2,37 @@
 % Please edit documentation in R/paint.R
 \name{paint}
 \alias{paint}
-\title{Define paint properties}
+\title{Define painting attributes}
 \usage{
 paint(...)
 }
 \arguments{
 \item{...}{<\code{\link[rlang:dyn-dots]{dynamic-dots}}>
-Named arguments specifying paint properties. See details.}
+Named arguments specifying painting attributes. See details.}
 }
 \value{
-A list containing the specified paint properties,
+A list containing the specified painting attributes,
 merged with default values.
 }
 \description{
 The \code{paint()} function allows users to specify
-various properties for drawing shapes on the canvas,
+various painting attributes for drawing shapes on the canvas,
 such as color, stroke width, and transformations.
 }
 \details{
-The following properties can be specified:
+The following painting attributes can be specified:
 \itemize{
-\item \code{canvas_size}: Integers of length 2 (width, height)
+\item \code{canvas_size}: Integers of length 2 (width, height).
 \item \code{color}: RGBA representation of a color. The color can be specified using named colors or hexadecimal color codes, which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.
-\item \code{style}: \link{Style}
-\item \code{join}: \link{Join}
-\item \code{cap}: \link{Cap}
+\item \code{style}: The paint style. See \link{Style}.
+\item \code{join}: Stroke join. See \link{Join}.
+\item \code{cap}: Stroke cap. See \link{Cap}.
 \item \code{width}: Numeric scalar (stroke width)
 \item \code{miter}: Numeric scalar (stroke miter)
-\item \code{blend_mode}: \link{BlendMode}
-\item \code{path_effect}: \link{PathEffect}
-\item \code{point_mode}: \link{PointMode} for \code{\link[=add_point]{add_point()}}
+\item \code{blend_mode}: See \link{BlendMode}.
+\item \code{path_effect}: See \link{PathEffect}.
+\item \code{point_mode}: \link{PointMode} for \code{\link[=add_point]{add_point()}}.
+\item \code{fill_type}: \link{FillType} for \code{\link[=add_path]{add_path()}}.
 \item \code{transform}: Numerics of length 9. See \link{transform-matrix} for affine transformations.
 }
 }

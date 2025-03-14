@@ -12,7 +12,7 @@ add_png <- function(img, png, left = 0, top = 0, props = paint()) {
     props[["canvas_size"]],
     img,
     props[["transform"]],
-    as_paint_props(props),
+    as_paint_attrs(props),
     png,
     as.integer(c(left, top))
   )
@@ -25,6 +25,20 @@ add_png <- function(img, png, left = 0, top = 0, props = paint()) {
 #' @export
 as_png <- function(img, props = paint()) {
   sk_as_png(props[["canvas_size"]], img, props[["transform"]])
+}
+
+#' Freeze a picture
+#'
+#' `as_png(img)` and then adds it to a new transparent canvas.
+#'
+#' @inheritParams param-img-and-props
+#' @returns A raw vector of picture.
+#' @export
+freeze <- function(img, props = paint()) {
+  props <- getOption(".skiagd_paint_group") %||% props
+  img |>
+    as_png(props = props) |>
+    add_png(canvas("transparent", size = props[["canvas_size"]]), png = _, props = props)
 }
 
 #' Plot picture as PNG image

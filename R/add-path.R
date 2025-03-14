@@ -8,14 +8,17 @@
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export
-add_path <- function(img, path, transform = c(1, 0, 0, 0, 1, 0, 0, 0, 1), props = paint()) {
+add_path <- function(img, path,
+                     transform = c(1, 0, 0, 0, 1, 0, 0, 0, 1),
+                     props = paint()) {
   props <- getOption(".skiagd_paint_group") %||% props
   sk_draw_path(
     props[["canvas_size"]],
     img,
     props[["transform"]],
-    as_paint_props(props),
+    as_paint_attrs(props),
     path,
-    transform
+    transform,
+    props[["fill_type"]]
   )
 }

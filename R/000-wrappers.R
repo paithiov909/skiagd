@@ -69,7 +69,7 @@ NULL
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_circle` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintProps")
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   .Call(savvy_sk_draw_circle__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`)
 }
 
@@ -78,7 +78,7 @@ NULL
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
 #' @param mat Matrix for transforming picture.
-#' @param props PaintProps.
+#' @param props PaintAttrs.
 #' @param left X coordinates of the left edge of the rectangles.
 #' @param top Y coordinates of the top edge of the rectangles.
 #' @param right X coordinates of the right edge of the rectangles.
@@ -86,7 +86,7 @@ NULL
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_irect` <- function(`size`, `curr_bytes`, `mat`, `props`, `left`, `top`, `right`, `bottom`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintProps")
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   .Call(savvy_sk_draw_irect__impl, `size`, `curr_bytes`, `mat`, `props`, `left`, `top`, `right`, `bottom`)
 }
 
@@ -95,7 +95,7 @@ NULL
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
 #' @param mat Matrix for transforming picture.
-#' @param props PaintProps.
+#' @param props PaintAttrs.
 #' @param from_x X coordinates of start points.
 #' @param from_y Y coordinates of start points.
 #' @param to_x X coordinates of end points.
@@ -103,7 +103,7 @@ NULL
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_line` <- function(`size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintProps")
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   .Call(savvy_sk_draw_line__impl, `size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`)
 }
 
@@ -112,16 +112,16 @@ NULL
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
 #' @param mat1 Matrix for transforming picture.
-#' @param props PaintProps.
+#' @param props PaintAttrs.
 #' @param svg SVG strings to draw.
-#' @param trim Numerics of length 2 to trim the start and end of the path.
-#' Values are in the range `[0, 1]`.
 #' @param mat2 Matrix for transforming SVG path.
+#' @param fill_type FillType.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_path` <- function(`size`, `curr_bytes`, `mat1`, `props`, `svg`, `mat2`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintProps")
-  .Call(savvy_sk_draw_path__impl, `size`, `curr_bytes`, `mat1`, `props`, `svg`, `mat2`)
+`sk_draw_path` <- function(`size`, `curr_bytes`, `mat1`, `props`, `svg`, `mat2`, `fill_type`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  `fill_type` <- .savvy_extract_ptr(`fill_type`, "FillType")
+  .Call(savvy_sk_draw_path__impl, `size`, `curr_bytes`, `mat1`, `props`, `svg`, `mat2`, `fill_type`)
 }
 
 #' Draws PNG data as an image on canvas
@@ -129,13 +129,13 @@ NULL
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
 #' @param mat Matrix for transforming picture.
-#' @param props PaintProps.
+#' @param props PaintAttrs.
 #' @param png_bytes PNG data to draw.
 #' @param left_top Offset for drawing PNG image.
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_png` <- function(`size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `left_top`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintProps")
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   .Call(savvy_sk_draw_png__impl, `size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `left_top`)
 }
 
@@ -144,13 +144,14 @@ NULL
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
 #' @param mat Matrix for transforming picture.
+#' @param props PaintAttrs.
 #' @param x X coordinates of points.
 #' @param y Y coordinates of points.
 #' @param mode PointMode.
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_points` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `mode`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintProps")
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   `mode` <- .savvy_extract_ptr(`mode`, "PointMode")
   .Call(savvy_sk_draw_points__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `mode`)
 }
@@ -181,6 +182,41 @@ NULL
 
 
 #' BlendMode (0-28)
+#'
+#' `BlendMode` determines how source and destination colors are combined.
+#'
+#' @details
+#' The following blend modes are available in Skia:
+#'
+#' 1. `Clear`
+#' 2. `Src`
+#' 3. `Dst`
+#' 4. `SrcOver`
+#' 5. `DstOver`
+#' 6. `SrcIn`
+#' 7. `DstIn`
+#' 8. `SrcOut`
+#' 9. `DstOut`
+#' 10. `SrcATop`
+#' 11. `DstATop`
+#' 12. `Xor`
+#' 13. `Plus`
+#' 14. `Modulate`
+#' 15. `Screen`
+#' 16. `Overlay`
+#' 17. `Darken`
+#' 18. `Lighten`
+#' 19. `ColorDodge`
+#' 20. `ColorBurn`
+#' 21. `HardLight`
+#' 22. `SoftLight`
+#' 23. `Difference`
+#' 24. `Exclusion`
+#' 25. `Multiply`
+#' 26. `Hue`
+#' 27. `Saturation`
+#' 28. `Color`
+#' 29. `Luminosity`
 #'
 #' @seealso
 #' [BlendMode in skia_safe - Rust](https://rust-skia.github.io/doc/skia_safe/enum.BlendMode.html)
@@ -275,6 +311,15 @@ class(`BlendMode`) <- c("BlendMode__bundle", "savvy_skiagd__sealed")
 
 #' Cap (0-2)
 #'
+#' `Cap` determines the stroke cap (the geometry drawn at the beginning and end of strokes).
+#'
+#' @details
+#' The following caps are available:
+#'
+#' * `Butt`: Butt cap.
+#' * `Round`: Round cap.
+#' * `Square`: Square cap.
+#'
 #' @seealso
 #' [Cap in skia_safe::paint - Rust](https://rust-skia.github.io/doc/skia_safe/paint/enum.Cap.html)
 #' @export
@@ -327,6 +372,85 @@ class(`Cap`) <- c("Cap__bundle", "savvy_skiagd__sealed")
   cat('Cap')
 }
 
+### wrapper functions for FillType
+
+
+`.savvy_wrap_FillType` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+
+
+  class(e) <- c("FillType", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' FillType (0-3)
+#'
+#' `FillType` determines how paths are drawn.
+#' This is for [add_path()] only. Not used in other functions.
+#'
+#' @details
+#' The following `FillType` are available:
+#'
+#' * `Winding`
+#' * `EvenOdd`
+#' * `InverseWinding`
+#' * `InverseEvenOdd`
+#'
+#' @seealso
+#' [FillType in skia_safe::path - Rust](https://rust-skia.github.io/doc/skia_safe/path/enum.FillType.html)
+#' @export
+`FillType` <- new.env(parent = emptyenv())
+`FillType`$`Winding` <- .savvy_wrap_FillType(0L)
+`FillType`$`EvenOdd` <- .savvy_wrap_FillType(1L)
+`FillType`$`InverseWinding` <- .savvy_wrap_FillType(2L)
+`FillType`$`InverseEvenOdd` <- .savvy_wrap_FillType(3L)
+
+#' @export
+`$.FillType__bundle` <- function(x, name) {
+  if (!name %in% c("Winding", "EvenOdd", "InverseWinding", "InverseEvenOdd")) {
+    stop(paste0("Unknown variant: ", name), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`[[.FillType__bundle` <- function(x, i) {
+  if (is.numeric(i)) {
+    stop("FillType cannot be subset by index", call. = FALSE)
+  }
+
+  if (!i %in% c("Winding", "EvenOdd", "InverseWinding", "InverseEvenOdd")) {
+    stop(paste0("Unknown variant: ", i), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`print.FillType` <- function(x, ...) {
+  idx <- x$.ptr + 1L
+  label <- c("Winding", "EvenOdd", "InverseWinding", "InverseEvenOdd")[idx]
+  if (is.na(label)) {
+    stop("Unexpected value for FillType", call. = TRUE)
+  }
+  cat("FillType::", label, sep = "")
+}
+
+
+### associated functions for FillType
+
+
+
+class(`FillType`) <- c("FillType__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.FillType__bundle` <- function(x, ...) {
+  cat('FillType')
+}
+
 ### wrapper functions for Join
 
 
@@ -341,6 +465,15 @@ class(`Cap`) <- c("Cap__bundle", "savvy_skiagd__sealed")
 
 
 #' Join (0-2)
+#'
+#' `Join` determines the stroke join (the geometry drawn at the corners of strokes) for shapes.
+#'
+#' @details
+#' The following joins are available:
+#'
+#' * `Miter`: Miter join.
+#' * `Round`: Round join.
+#' * `Bevel`: Bevel join.
 #'
 #' @seealso
 #' [Join in skia_safe::paint - Rust](https://rust-skia.github.io/doc/skia_safe/paint/enum.Join.html)
@@ -394,26 +527,26 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
   cat('Join')
 }
 
-### wrapper functions for PaintProps
+### wrapper functions for PaintAttrs
 
 
-`.savvy_wrap_PaintProps` <- function(ptr) {
+`.savvy_wrap_PaintAttrs` <- function(ptr) {
   e <- new.env(parent = emptyenv())
   e$.ptr <- ptr
 
 
-  class(e) <- c("PaintProps", "savvy_skiagd__sealed")
+  class(e) <- c("PaintAttrs", "savvy_skiagd__sealed")
   e
 }
 
 
-#' PaintProps
+#' PaintAttrs
 #'
 #' Internal impl that wraps `skia_safe::Paint`.
-#' Use `PaintProps$set_props()` to create a pointer to PaintProps.
+#' Use `PaintAttrs$set_attrs()` to create a pointer to PaintAttrs.
 #'
 #' @details
-#' `PaintProps$set_props()` takes arguments below:
+#' `PaintAttrs$set_attrs()` takes arguments below:
 #'
 #' * color: RGBA representaion of a color.
 #' * style: Style (stroke style).
@@ -425,25 +558,25 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
 #' * path_effect: PathEffect.
 #'
 #' @noRd
-`PaintProps` <- new.env(parent = emptyenv())
+`PaintAttrs` <- new.env(parent = emptyenv())
 
-### associated functions for PaintProps
+### associated functions for PaintAttrs
 
-`PaintProps`$`set_props` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`, `path_effect`) {
+`PaintAttrs`$`set_attrs` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`, `path_effect`) {
   `style` <- .savvy_extract_ptr(`style`, "Style")
   `join` <- .savvy_extract_ptr(`join`, "Join")
   `cap` <- .savvy_extract_ptr(`cap`, "Cap")
   `blend_mode` <- .savvy_extract_ptr(`blend_mode`, "BlendMode")
   `path_effect` <- .savvy_extract_ptr(`path_effect`, "PathEffect")
-  .savvy_wrap_PaintProps(.Call(savvy_PaintProps_set_props__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`, `path_effect`))
+  .savvy_wrap_PaintAttrs(.Call(savvy_PaintAttrs_set_attrs__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`, `path_effect`))
 }
 
 
-class(`PaintProps`) <- c("PaintProps__bundle", "savvy_skiagd__sealed")
+class(`PaintAttrs`) <- c("PaintAttrs__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.PaintProps__bundle` <- function(x, ...) {
-  cat('PaintProps')
+`print.PaintAttrs__bundle` <- function(x, ...) {
+  cat('PaintAttrs')
 }
 
 ### wrapper functions for PathEffect
@@ -466,15 +599,55 @@ class(`PaintProps`) <- c("PaintProps__bundle", "savvy_skiagd__sealed")
 
 #' PathEffect
 #'
-#' This should be not exposed to users.
+#' `PathEffect` is a struct that offers a reference to `skia_safe::PathEffect`.
+#' You can apply a path effect to shapes via [paint()].
+#' Currently only single `PathEffect` can be specified; multiple effects are not supported.
 #'
-#' @noRd
+#' @details
+#' The following effects are available:
+#'
+#' * `no_effect()`: does not apply any path effect. This is the default effect for `paint()`.
+#' * `trim(start, end)`: trims the `start` and `end` of the path. `start` and `end` are in the range `[0, 1]`.
+#' * `discrete(length, deviation, seed)`: applies discrete path effect.
+#' * `dash(intervals, phase)`: applies dash path effect.
+#' * `corner(radius)`: applies corner path effect.
+#' * `path_1d(path, advance, phase, style)`: applies 1D path effect. `style` can be `"translate"`, `"rotate"`, or `"morph"`.
+#' * `path_2d(path, mat)`: applies 2D path effect.
+#' * `line_2d(width, mat)`: applies 2D line path effect.
+#'
+#' @seealso
+#' [Path Effects | React Native Skia](https://shopify.github.io/react-native-skia/docs/path-effects/)
+#' @export
 `PathEffect` <- new.env(parent = emptyenv())
 
 ### associated functions for PathEffect
 
+`PathEffect`$`corner` <- function(`radius`) {
+  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_corner__impl, `radius`))
+}
+
+`PathEffect`$`dash` <- function(`intervals`, `phase`) {
+  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_dash__impl, `intervals`, `phase`))
+}
+
+`PathEffect`$`discrete` <- function(`length`, `deviation`, `seed`) {
+  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_discrete__impl, `length`, `deviation`, `seed`))
+}
+
+`PathEffect`$`line_2d` <- function(`width`, `mat`) {
+  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_line_2d__impl, `width`, `mat`))
+}
+
 `PathEffect`$`no_effect` <- function() {
   .savvy_wrap_PathEffect(.Call(savvy_PathEffect_no_effect__impl))
+}
+
+`PathEffect`$`path_1d` <- function(`path`, `advance`, `phase`, `style`) {
+  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_path_1d__impl, `path`, `advance`, `phase`, `style`))
+}
+
+`PathEffect`$`path_2d` <- function(`path`, `mat`) {
+  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_path_2d__impl, `path`, `mat`))
 }
 
 `PathEffect`$`trim` <- function(`start`, `end`) {
@@ -504,8 +677,15 @@ class(`PathEffect`) <- c("PathEffect__bundle", "savvy_skiagd__sealed")
 
 #' PointMode (0-2)
 #'
-#' This is for [add_point()] only.
-#' Not used in other functions.
+#' `PointMode` determines how points are drawn.
+#' This is for [add_point()] only. Not used in other functions.
+#'
+#' @details
+#' The following `PointMode` are available:
+#'
+#' * `Points`: Draws each `point` as a point. The shape of point drawn depends on `props`.
+#' * `Lines`: Each pair of `point` draws a line segment. One line is drawn for every two points; each point is used once. If count is odd, the final point is ignored.
+#' * `Polygon`: Each adjacent pair of `point` draws a line segment. count minus one lines are drawn; the first and last point are used once.
 #'
 #' @seealso
 #' [PointMode in skia_safe::canvas - Rust](https://rust-skia.github.io/doc/skia_safe/canvas/enum.PointMode.html)
@@ -573,6 +753,15 @@ class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
 
 
 #' Style (0-2)
+#'
+#' `Style` determines the stroke style of shapes.
+#'
+#' @details
+#' The following styles are available:
+#'
+#' * `StrokeAndFill`: Stroke and fill.
+#' * `Stroke`: Stroke only.
+#' * `Fill`: Fill only.
 #'
 #' @seealso
 #' [Style in skia_safe::paint - Rust](https://rust-skia.github.io/doc/skia_safe/paint/enum.Style.html)

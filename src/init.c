@@ -59,8 +59,8 @@ SEXP savvy_sk_draw_line__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_a
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_path__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat1, SEXP c_arg__props, SEXP c_arg__svg, SEXP c_arg__mat2) {
-    SEXP res = savvy_sk_draw_path__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat1, c_arg__props, c_arg__svg, c_arg__mat2);
+SEXP savvy_sk_draw_path__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat1, SEXP c_arg__props, SEXP c_arg__svg, SEXP c_arg__mat2, SEXP c_arg__fill_type) {
+    SEXP res = savvy_sk_draw_path__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat1, c_arg__props, c_arg__svg, c_arg__mat2, c_arg__fill_type);
     return handle_result(res);
 }
 
@@ -82,8 +82,24 @@ SEXP savvy_sk_matrix_default__impl(void) {
 
 
 
-SEXP savvy_PaintProps_set_props__impl(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__blend_mode, SEXP c_arg__path_effect) {
-    SEXP res = savvy_PaintProps_set_props__ffi(c_arg__color, c_arg__style, c_arg__join, c_arg__cap, c_arg__width, c_arg__miter, c_arg__blend_mode, c_arg__path_effect);
+
+SEXP savvy_PaintAttrs_set_attrs__impl(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__blend_mode, SEXP c_arg__path_effect) {
+    SEXP res = savvy_PaintAttrs_set_attrs__ffi(c_arg__color, c_arg__style, c_arg__join, c_arg__cap, c_arg__width, c_arg__miter, c_arg__blend_mode, c_arg__path_effect);
+    return handle_result(res);
+}
+
+SEXP savvy_PathEffect_corner__impl(SEXP c_arg__radius) {
+    SEXP res = savvy_PathEffect_corner__ffi(c_arg__radius);
+    return handle_result(res);
+}
+
+SEXP savvy_PathEffect_dash__impl(SEXP c_arg__intervals, SEXP c_arg__phase) {
+    SEXP res = savvy_PathEffect_dash__ffi(c_arg__intervals, c_arg__phase);
+    return handle_result(res);
+}
+
+SEXP savvy_PathEffect_discrete__impl(SEXP c_arg__length, SEXP c_arg__deviation, SEXP c_arg__seed) {
+    SEXP res = savvy_PathEffect_discrete__ffi(c_arg__length, c_arg__deviation, c_arg__seed);
     return handle_result(res);
 }
 
@@ -92,8 +108,23 @@ SEXP savvy_PathEffect_get_label__impl(SEXP self__) {
     return handle_result(res);
 }
 
+SEXP savvy_PathEffect_line_2d__impl(SEXP c_arg__width, SEXP c_arg__mat) {
+    SEXP res = savvy_PathEffect_line_2d__ffi(c_arg__width, c_arg__mat);
+    return handle_result(res);
+}
+
 SEXP savvy_PathEffect_no_effect__impl(void) {
     SEXP res = savvy_PathEffect_no_effect__ffi();
+    return handle_result(res);
+}
+
+SEXP savvy_PathEffect_path_1d__impl(SEXP c_arg__path, SEXP c_arg__advance, SEXP c_arg__phase, SEXP c_arg__style) {
+    SEXP res = savvy_PathEffect_path_1d__ffi(c_arg__path, c_arg__advance, c_arg__phase, c_arg__style);
+    return handle_result(res);
+}
+
+SEXP savvy_PathEffect_path_2d__impl(SEXP c_arg__path, SEXP c_arg__mat) {
+    SEXP res = savvy_PathEffect_path_2d__ffi(c_arg__path, c_arg__mat);
     return handle_result(res);
 }
 
@@ -111,16 +142,23 @@ static const R_CallMethodDef CallEntries[] = {
     {"savvy_sk_draw_circle__impl", (DL_FUNC) &savvy_sk_draw_circle__impl, 7},
     {"savvy_sk_draw_irect__impl", (DL_FUNC) &savvy_sk_draw_irect__impl, 8},
     {"savvy_sk_draw_line__impl", (DL_FUNC) &savvy_sk_draw_line__impl, 8},
-    {"savvy_sk_draw_path__impl", (DL_FUNC) &savvy_sk_draw_path__impl, 6},
+    {"savvy_sk_draw_path__impl", (DL_FUNC) &savvy_sk_draw_path__impl, 7},
     {"savvy_sk_draw_png__impl", (DL_FUNC) &savvy_sk_draw_png__impl, 6},
     {"savvy_sk_draw_points__impl", (DL_FUNC) &savvy_sk_draw_points__impl, 7},
     {"savvy_sk_matrix_default__impl", (DL_FUNC) &savvy_sk_matrix_default__impl, 0},
 
 
 
-    {"savvy_PaintProps_set_props__impl", (DL_FUNC) &savvy_PaintProps_set_props__impl, 8},
+
+    {"savvy_PaintAttrs_set_attrs__impl", (DL_FUNC) &savvy_PaintAttrs_set_attrs__impl, 8},
+    {"savvy_PathEffect_corner__impl", (DL_FUNC) &savvy_PathEffect_corner__impl, 1},
+    {"savvy_PathEffect_dash__impl", (DL_FUNC) &savvy_PathEffect_dash__impl, 2},
+    {"savvy_PathEffect_discrete__impl", (DL_FUNC) &savvy_PathEffect_discrete__impl, 3},
     {"savvy_PathEffect_get_label__impl", (DL_FUNC) &savvy_PathEffect_get_label__impl, 1},
+    {"savvy_PathEffect_line_2d__impl", (DL_FUNC) &savvy_PathEffect_line_2d__impl, 2},
     {"savvy_PathEffect_no_effect__impl", (DL_FUNC) &savvy_PathEffect_no_effect__impl, 0},
+    {"savvy_PathEffect_path_1d__impl", (DL_FUNC) &savvy_PathEffect_path_1d__impl, 4},
+    {"savvy_PathEffect_path_2d__impl", (DL_FUNC) &savvy_PathEffect_path_2d__impl, 2},
     {"savvy_PathEffect_trim__impl", (DL_FUNC) &savvy_PathEffect_trim__impl, 2},
 
 

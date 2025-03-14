@@ -11,7 +11,15 @@ An object of class \code{Join__bundle} (inherits from \code{savvy_skiagd__sealed
 Join
 }
 \description{
-Join (0-2)
+\code{Join} determines the stroke join (the geometry drawn at the corners of strokes) for shapes.
+}
+\details{
+The following joins are available:
+\itemize{
+\item \code{Miter}: Miter join.
+\item \code{Round}: Round join.
+\item \code{Bevel}: Bevel join.
+}
 }
 \seealso{
 \href{https://rust-skia.github.io/doc/skia_safe/paint/enum.Join.html}{Join in skia_safe::paint - Rust}

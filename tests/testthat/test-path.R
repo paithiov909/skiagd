@@ -42,7 +42,7 @@ test_that("add_line works", {
   )
 })
 
-test_that("add_path works", {
+test_that("add_path with PathEffect$trim work", {
   star <- "M 128 0 L 168 80 L 256 93 L 192 155 L 207 244 L 128 202 L 49 244 L 64 155 L 0 93 L 88 80 L 128 0 Z"
   vdiffr::expect_doppelganger(
     "path",
@@ -56,6 +56,14 @@ test_that("add_path works", {
         star,
         transform = c(0.707, -0.707, 256, 0.707, 0.707, 128, 0, 0, 1),
         props = paint(color = "yellow", blend_mode = BlendMode$Exclusion)
+      ) |>
+      add_path(
+        star,
+        transform = c(0.707, -0.707, 256, 0.707, 0.707, 128, 0, 0, 1),
+        props = paint(
+          color = "black", width = 16, style = Style$Stroke
+          , path_effect = PathEffect$trim(0.2, 0.9)
+        )
       ) |>
       as_recordedplot()
   )

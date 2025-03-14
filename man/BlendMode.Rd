@@ -11,7 +11,41 @@ An object of class \code{BlendMode__bundle} (inherits from \code{savvy_skiagd__s
 BlendMode
 }
 \description{
-BlendMode (0-28)
+\code{BlendMode} determines how source and destination colors are combined.
+}
+\details{
+The following blend modes are available in Skia:
+\enumerate{
+\item \code{Clear}
+\item \code{Src}
+\item \code{Dst}
+\item \code{SrcOver}
+\item \code{DstOver}
+\item \code{SrcIn}
+\item \code{DstIn}
+\item \code{SrcOut}
+\item \code{DstOut}
+\item \code{SrcATop}
+\item \code{DstATop}
+\item \code{Xor}
+\item \code{Plus}
+\item \code{Modulate}
+\item \code{Screen}
+\item \code{Overlay}
+\item \code{Darken}
+\item \code{Lighten}
+\item \code{ColorDodge}
+\item \code{ColorBurn}
+\item \code{HardLight}
+\item \code{SoftLight}
+\item \code{Difference}
+\item \code{Exclusion}
+\item \code{Multiply}
+\item \code{Hue}
+\item \code{Saturation}
+\item \code{Color}
+\item \code{Luminosity}
+}
 }
 \seealso{
 \href{https://rust-skia.github.io/doc/skia_safe/enum.BlendMode.html}{BlendMode in skia_safe - Rust}

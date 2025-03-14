@@ -10,7 +10,7 @@ add_point <- function(img, point, props = paint()) {
     props[["canvas_size"]],
     img,
     props[["transform"]],
-    as_paint_props(props),
+    as_paint_attrs(props),
     point[, 1],
     point[, 2],
     props[["point_mode"]]

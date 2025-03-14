@@ -1,29 +1,30 @@
-#' Define paint properties
+#' Define painting attributes
 #'
 #' @description
 #' The `paint()` function allows users to specify
-#' various properties for drawing shapes on the canvas,
+#' various painting attributes for drawing shapes on the canvas,
 #' such as color, stroke width, and transformations.
 #'
 #' @param ... <[`dynamic-dots`][rlang::dyn-dots]>
-#' Named arguments specifying paint properties. See details.
+#' Named arguments specifying painting attributes. See details.
 #'
 #' @details
-#' The following properties can be specified:
+#' The following painting attributes can be specified:
 #'
-#' * `canvas_size`: Integers of length 2 (width, height)
+#' * `canvas_size`: Integers of length 2 (width, height).
 #' * `color`: RGBA representation of a color. The color can be specified using named colors or hexadecimal color codes, which are converted internally using [grDevices::col2rgb()].
-#' * `style`: [Style]
-#' * `join`: [Join]
-#' * `cap`: [Cap]
+#' * `style`: The paint style. See [Style].
+#' * `join`: Stroke join. See [Join].
+#' * `cap`: Stroke cap. See [Cap].
 #' * `width`: Numeric scalar (stroke width)
 #' * `miter`: Numeric scalar (stroke miter)
-#' * `blend_mode`: [BlendMode]
-#' * `path_effect`: [PathEffect]
-#' * `point_mode`: [PointMode] for [add_point()]
+#' * `blend_mode`: See [BlendMode].
+#' * `path_effect`: See [PathEffect].
+#' * `point_mode`: [PointMode] for [add_point()].
+#' * `fill_type`: [FillType] for [add_path()].
 #' * `transform`: Numerics of length 9. See [transform-matrix] for affine transformations.
 #'
-#' @returns A list containing the specified paint properties,
+#' @returns A list containing the specified painting attributes,
 #' merged with default values.
 #' @export
 paint <- function(...) {
@@ -32,7 +33,7 @@ paint <- function(...) {
     dots[["color"]] <- col2rgba(dots[["color"]])
   }
   purrr::list_assign(
-    default_props(),
+    default_attrs(),
     !!!dots
   )
 }
@@ -49,7 +50,7 @@ dev_new_if_needed <- function() {
 #' Just returns the size of the current device as an integer (not a numeric).
 #'
 #' @param units `units` for [grDevices::dev.size()].
-#' @returns an integer vector.
+#' @returns An integer vector.
 #' @export
 dev_size <- function(units = "px") {
   dev_new_if_needed()
@@ -62,13 +63,13 @@ dev_size <- function(units = "px") {
 #' In general, you don't need to use this function explicitly.
 #'
 #' @param color `col` for [grDevices::col2rgb()].
-#' @returns an integer vector.
+#' @returns An integer vector.
 #' @export
 col2rgba <- function(color) {
   as.vector(grDevices::col2rgb(color, alpha = TRUE))[1:4]
 }
 
-default_props <- function() {
+default_attrs <- function() {
   dev_new_if_needed()
   props <- unclass(grid::get.gpar())
   list(
@@ -94,12 +95,13 @@ default_props <- function() {
     blend_mode = env_get(BlendMode, "Src"),
     path_effect = PathEffect$no_effect(),
     point_mode = env_get(PointMode, "Points"),
+    fill_type = env_get(FillType, "Winding"),
     transform = sk_matrix_default()
   )
 }
 
-as_paint_props <- function(p) {
-  PaintProps$set_props(
+as_paint_attrs <- function(p) {
+  PaintAttrs$set_attrs(
     p[["color"]],
     p[["style"]],
     p[["join"]],

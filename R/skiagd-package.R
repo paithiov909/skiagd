@@ -23,12 +23,6 @@ as_recordedplot <- function(img, props = paint()) {
   grDevices::recordPlot(load = "skiagd")
 }
 
-check_finite <- function(...) {
-  if (any(!is.finite(c(...)))) {
-    rlang::abort("coordinates must be finite values")
-  }
-}
-
 #' Paint group
 #'
 #' Evaluates `code` with `props`.

@@ -11,8 +11,16 @@ An object of class \code{PointMode__bundle} (inherits from \code{savvy_skiagd__s
 PointMode
 }
 \description{
-This is for \code{\link[=add_point]{add_point()}} only.
-Not used in other functions.
+\code{PointMode} determines how points are drawn.
+This is for \code{\link[=add_point]{add_point()}} only. Not used in other functions.
+}
+\details{
+The following \code{PointMode} are available:
+\itemize{
+\item \code{Points}: Draws each \code{point} as a point. The shape of point drawn depends on \code{props}.
+\item \code{Lines}: Each pair of \code{point} draws a line segment. One line is drawn for every two points; each point is used once. If count is odd, the final point is ignored.
+\item \code{Polygon}: Each adjacent pair of \code{point} draws a line segment. count minus one lines are drawn; the first and last point are used once.
+}
 }
 \seealso{
 \href{https://rust-skia.github.io/doc/skia_safe/canvas/enum.PointMode.html}{PointMode in skia_safe::canvas - Rust}

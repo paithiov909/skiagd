@@ -10,7 +10,7 @@ col2rgba(color)
 \item{color}{\code{col} for \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.}
 }
 \value{
-an integer vector.
+An integer vector.
 }
 \description{
 A wrapper of \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.

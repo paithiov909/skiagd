@@ -11,7 +11,15 @@ An object of class \code{Style__bundle} (inherits from \code{savvy_skiagd__seale
 Style
 }
 \description{
-Style (0-2)
+\code{Style} determines the stroke style of shapes.
+}
+\details{
+The following styles are available:
+\itemize{
+\item \code{StrokeAndFill}: Stroke and fill.
+\item \code{Stroke}: Stroke only.
+\item \code{Fill}: Fill only.
+}
 }
 \seealso{
 \href{https://rust-skia.github.io/doc/skia_safe/paint/enum.Style.html}{Style in skia_safe::paint - Rust}

@@ -11,7 +11,7 @@ add_rect <- function(img, rect, props = paint()) {
     props[["canvas_size"]],
     img,
     props[["transform"]],
-    as_paint_props(props),
+    as_paint_attrs(props),
     rect[, 1],
     rect[, 2],
     rect[, 3],

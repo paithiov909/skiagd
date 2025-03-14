@@ -11,7 +11,7 @@ add_line <- function(img, from, to, props = paint()) {
     props[["canvas_size"]],
     img,
     props[["transform"]],
-    as_paint_props(props),
+    as_paint_attrs(props),
     from[, 1],
     from[, 2],
     to[, 1],

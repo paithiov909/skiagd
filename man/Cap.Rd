@@ -11,7 +11,15 @@ An object of class \code{Cap__bundle} (inherits from \code{savvy_skiagd__sealed}
 Cap
 }
 \description{
-Cap (0-2)
+\code{Cap} determines the stroke cap (the geometry drawn at the beginning and end of strokes).
+}
+\details{
+The following caps are available:
+\itemize{
+\item \code{Butt}: Butt cap.
+\item \code{Round}: Round cap.
+\item \code{Square}: Square cap.
+}
 }
 \seealso{
 \href{https://rust-skia.github.io/doc/skia_safe/paint/enum.Cap.html}{Cap in skia_safe::paint - Rust}

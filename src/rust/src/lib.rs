@@ -1,8 +1,8 @@
 mod canvas;
-mod paint_props;
+mod paint_attrs;
 
 use canvas::{as_matrix, read_picture_bytes, SkiaCanvas};
-use paint_props::PaintProps;
+use paint_attrs::PaintAttrs;
 
 use savvy::{savvy, savvy_err};
 use savvy::{IntegerSexp, NumericSexp, StringSexp};
@@ -81,7 +81,7 @@ unsafe fn sk_as_png(
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
 /// @param mat Matrix for transforming picture.
-/// @param props PaintProps.
+/// @param props PaintAttrs.
 /// @param png_bytes PNG data to draw.
 /// @param left_top Offset for drawing PNG image.
 /// @returns A raw vector of picture.
@@ -91,7 +91,7 @@ unsafe fn sk_draw_png(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
     mat: NumericSexp,
-    props: PaintProps,
+    props: PaintAttrs,
     png_bytes: savvy::RawSexp,
     left_top: NumericSexp, // FIXME: Should be Numeric
 ) -> savvy::Result<savvy::Sexp> {
@@ -124,11 +124,10 @@ unsafe fn sk_draw_png(
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
 /// @param mat1 Matrix for transforming picture.
-/// @param props PaintProps.
+/// @param props PaintAttrs.
 /// @param svg SVG strings to draw.
-/// @param trim Numerics of length 2 to trim the start and end of the path.
-/// Values are in the range `[0, 1]`.
 /// @param mat2 Matrix for transforming SVG path.
+/// @param fill_type FillType.
 /// @returns A raw vector of picture.
 /// @noRd
 #[savvy]
@@ -136,9 +135,10 @@ unsafe fn sk_draw_path(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
     mat1: NumericSexp,
-    props: PaintProps,
+    props: PaintAttrs,
     svg: StringSexp,
     mat2: NumericSexp, // transform
+    fill_type: paint_attrs::FillType,
 ) -> savvy::Result<savvy::Sexp> {
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat1 = as_matrix(&mat1)?;
@@ -153,6 +153,7 @@ unsafe fn sk_draw_path(
         // TODO: set_fill_type
         let path = skia_safe::utils::parse_path::from_svg(s)
             .ok_or_else(|| return savvy_err!("Failed to parse svg"))?
+            .set_fill_type(paint_attrs::sk_fill_type(&fill_type))
             .with_transform(&mat2);
         canvas.draw_path(&path, &props.paint);
     }
@@ -165,6 +166,7 @@ unsafe fn sk_draw_path(
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
 /// @param mat Matrix for transforming picture.
+/// @param props PaintAttrs.
 /// @param x X coordinates of points.
 /// @param y Y coordinates of points.
 /// @param mode PointMode.
@@ -175,10 +177,10 @@ unsafe fn sk_draw_points(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
     mat: NumericSexp,
-    props: PaintProps,
+    props: PaintAttrs,
     x: NumericSexp,
     y: NumericSexp,
-    mode: paint_props::PointMode,
+    mode: paint_attrs::PointMode,
 ) -> savvy::Result<savvy::Sexp> {
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
@@ -188,7 +190,7 @@ unsafe fn sk_draw_points(
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
-    let mode = paint_props::sk_point_mode(&mode);
+    let mode = paint_attrs::sk_point_mode(&mode);
     let points = std::iter::zip(x.iter_f64(), y.iter_f64())
         .map(|p| skia_safe::Point::new(p.0 as f32, p.1 as f32))
         .collect::<Vec<skia_safe::Point>>();
@@ -202,7 +204,7 @@ unsafe fn sk_draw_points(
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
 /// @param mat Matrix for transforming picture.
-/// @param props PaintProps.
+/// @param props PaintAttrs.
 /// @param from_x X coordinates of start points.
 /// @param from_y Y coordinates of start points.
 /// @param to_x X coordinates of end points.
@@ -215,7 +217,7 @@ unsafe fn sk_draw_line(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
     mat: NumericSexp,
-    props: PaintProps,
+    props: PaintAttrs,
     from_x: NumericSexp,
     from_y: NumericSexp,
     to_x: NumericSexp,
@@ -262,7 +264,7 @@ unsafe fn sk_draw_circle(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
     mat: NumericSexp,
-    props: PaintProps,
+    props: PaintAttrs,
     x: NumericSexp,
     y: NumericSexp,
     radius: NumericSexp,
@@ -292,7 +294,7 @@ unsafe fn sk_draw_circle(
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
 /// @param mat Matrix for transforming picture.
-/// @param props PaintProps.
+/// @param props PaintAttrs.
 /// @param left X coordinates of the left edge of the rectangles.
 /// @param top Y coordinates of the top edge of the rectangles.
 /// @param right X coordinates of the right edge of the rectangles.
@@ -304,7 +306,7 @@ unsafe fn sk_draw_irect(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
     mat: NumericSexp,
-    props: PaintProps,
+    props: PaintAttrs,
     left: NumericSexp,
     top: NumericSexp,
     right: NumericSexp,
