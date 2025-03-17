@@ -8,6 +8,8 @@ as_recordedplot(img, props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
+
+\item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A \code{recordedplot} object. See \code{\link[grDevices:recordplot]{grDevices::recordPlot()}} for details.

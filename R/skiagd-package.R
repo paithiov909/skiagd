@@ -9,7 +9,7 @@
 #'
 #' This is mainly for testing purposes.
 #'
-#' @param img A raw vector of picture.
+#' @inheritParams param-img-and-props
 #' @returns A `recordedplot` object. See [grDevices::recordPlot()] for details.
 #' @export
 as_recordedplot <- function(img, props = paint()) {
@@ -18,7 +18,7 @@ as_recordedplot <- function(img, props = paint()) {
   }
   props <- getOption(".skiagd_paint_group") %||% props
   png <- as_png(img, props)
-  plot.new()
+  graphics::plot.new()
   grid::grid.raster(magick::image_read(png))
   grDevices::recordPlot(load = "skiagd")
 }

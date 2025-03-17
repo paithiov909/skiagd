@@ -1,8 +1,9 @@
 Package: skiagd
 Title: R wrapper for 'rust-skia'
 Version: 0.0.0.9000
-Authors@R:
-    person("Akiru", "Kato", , "paithiov909@gmail.com", role = c("aut", "cre"))
+Authors@R: c(
+    person("Akiru", "Kato", , "paithiov909@gmail.com", role = c("aut", "cre")),
+    person("Jeroen", "Ooms", role = "cph"))
 Description: A toy R wrapper for 'rust-skia' <https://github.com/rust-skia/rust-skia>
     (the rust crate 'skia_safe' <https://rust-skia.github.io/doc/skia_safe/>,
     a binding for 'Skia' <https://skia.org/>).
@@ -23,4 +24,4 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-SystemRequirements: GNU make, Cargo (Rust's package manager), rustc
+SystemRequirements: GNU make, Cargo (Rust's package manager), rustc, fontconfig, freetype2

@@ -9,6 +9,8 @@ freeze(img, fill = "transparent", props = paint())
 \arguments{
 \item{img}{A raw vector of picture.}
 
+\item{fill}{A string; named colors or hexadecimal color codes.}
+
 \item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
 }
 \value{

@@ -11,5 +11,10 @@ A toy R wrapper for 'rust-skia' \url{https://github.com/rust-skia/rust-skia} (th
 \author{
 \strong{Maintainer}: Akiru Kato \email{paithiov909@gmail.com}
 
+Other contributors:
+\itemize{
+  \item Jeroen Ooms [copyright holder]
+}
+
 }
 \keyword{internal}

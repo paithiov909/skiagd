@@ -8,8 +8,7 @@ RUSTFLAGS =
 TARGET_DIR = $(CURDIR)/rust/target
 LIBDIR = $(TARGET_DIR)/$(TARGET)/$(subst dev,debug,$(PROFILE))
 STATLIB = $(LIBDIR)/libskiagd.a
-# TODO: configure for libfontconfig
-PKG_LIBS = -L$(LIBDIR) -lskiagd -lfontconfig
+PKG_LIBS = -L$(LIBDIR) -lskiagd @libs@ $(@SYS@_LIBS)
 
 CARGO_BUILD_ARGS = --lib --profile $(PROFILE) --manifest-path=./rust/Cargo.toml --target-dir $(TARGET_DIR)
 
