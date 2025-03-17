@@ -7,6 +7,8 @@ Description: A toy R wrapper for 'rust-skia' <https://github.com/rust-skia/rust-
     (the rust crate 'skia_safe' <https://rust-skia.github.io/doc/skia_safe/>,
     a binding for 'Skia' <https://skia.org/>).
 License: MIT + file LICENSE
+Depends:
+    R (>= 4.2)
 Imports:
     grDevices,
     grid,
@@ -17,8 +19,6 @@ Suggests:
     magick,
     testthat (>= 3.0.0),
     vdiffr
-LinkingTo:
-    cpp11
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

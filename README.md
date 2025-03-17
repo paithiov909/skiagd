@@ -29,8 +29,10 @@ graphics device for R 😓
 
 ## Future plan
 
-I’m planning to re-implement features such like [React Native
+I’m planning to re-implement features like [React Native
 Skia](https://shopify.github.io/react-native-skia/).
+
+### Maybe in the near future??
 
 - Shapes
   - Path
@@ -50,23 +52,37 @@ Skia](https://shopify.github.io/react-native-skia/).
   - Patch
 - Images
   - [x] PNG
-  - fit??
 - Text
   - Paragraph
   - Text
   - Glyphs
   - Text Path
   - Text Blob
-- Mask
-- Other painting attributes
-  - [x] PathEffect
-  - [ ] Filters
-  - Shaders??
+- Painting Attributes
+  ([Paint](https://rust-skia.github.io/doc/skia_safe/type.Paint.html))
+  - [x] PathEffects
+  - [ ] MaskFilter?? (blur)
+  - [ ] ImageFilters
+  - [ ]
+    [Shaders](https://rust-skia.github.io/doc/skia_safe/type.Shader.html)
+  - [ ] RuntimeShaders
+    - sksl support
+    - [uniforms](https://rust-skia.github.io/doc/skia_safe/runtime_effect/type.RuntimeShaderBuilder.html#method.set_uniform_int)
+      support
+
+### Possibly in the future??
+
+- Fitting Images (needs to re-implement
+  [this](https://github.com/Shopify/react-native-skia/blob/4192f839d7ffc5cb0aba91c0f0f97e595d5c8409/packages/skia/cpp/api/recorder/ImageFit.h))
+- [Group](https://shopify.github.io/react-native-skia/docs/group/) /
+  [Backdrop
+  Filters](https://shopify.github.io/react-native-skia/docs/backdrops-filters)
+- [Mask](https://shopify.github.io/react-native-skia/docs/mask/)
 
 ## Showcase
 
-It’s still in early alpha stage. The API is subject to (possibly
-drastic) change.
+It’s still in early alpha stage. The API is subject to (maybe drastic)
+change.
 
 ``` r
 pkgload::load_all(export_all = FALSE)

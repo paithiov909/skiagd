@@ -38,3 +38,4 @@ SEXP savvy_PathEffect_trim__ffi(SEXP c_arg__start, SEXP c_arg__end);
 
 
 // methods and associated functions for Style
+

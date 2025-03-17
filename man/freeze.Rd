@@ -4,7 +4,7 @@
 \alias{freeze}
 \title{Freeze a picture}
 \usage{
-freeze(img, props = paint())
+freeze(img, fill = "transparent", props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
@@ -15,5 +15,5 @@ freeze(img, props = paint())
 A raw vector of picture.
 }
 \description{
-\code{as_png(img)} and then adds it to a new transparent canvas.
+\code{as_png(img)} and then adds it to a new canvas.
 }

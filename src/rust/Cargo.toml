@@ -9,7 +9,7 @@ crate-type = ["staticlib", "lib"]
 
 [dependencies]
 anyhow = "1.0.97"
-savvy = "0.8.6"
+savvy = "0.8.7"
 skia-safe = "0.82.0"
 
 [profile.release]

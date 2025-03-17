@@ -281,7 +281,7 @@ NULL
   if (is.na(label)) {
     stop("Unexpected value for BlendMode", call. = TRUE)
   }
-  cat("BlendMode::", label, sep = "")
+  cat("BlendMode::", label, "\n", sep = "")
 }
 
 
@@ -293,7 +293,7 @@ class(`BlendMode`) <- c("BlendMode__bundle", "savvy_skiagd__sealed")
 
 #' @export
 `print.BlendMode__bundle` <- function(x, ...) {
-  cat('BlendMode')
+  cat('BlendMode\n')
 }
 
 ### wrapper functions for Cap
@@ -357,7 +357,7 @@ class(`BlendMode`) <- c("BlendMode__bundle", "savvy_skiagd__sealed")
   if (is.na(label)) {
     stop("Unexpected value for Cap", call. = TRUE)
   }
-  cat("Cap::", label, sep = "")
+  cat("Cap::", label, "\n", sep = "")
 }
 
 
@@ -369,7 +369,7 @@ class(`Cap`) <- c("Cap__bundle", "savvy_skiagd__sealed")
 
 #' @export
 `print.Cap__bundle` <- function(x, ...) {
-  cat('Cap')
+  cat('Cap\n')
 }
 
 ### wrapper functions for FillType
@@ -436,7 +436,7 @@ class(`Cap`) <- c("Cap__bundle", "savvy_skiagd__sealed")
   if (is.na(label)) {
     stop("Unexpected value for FillType", call. = TRUE)
   }
-  cat("FillType::", label, sep = "")
+  cat("FillType::", label, "\n", sep = "")
 }
 
 
@@ -448,7 +448,7 @@ class(`FillType`) <- c("FillType__bundle", "savvy_skiagd__sealed")
 
 #' @export
 `print.FillType__bundle` <- function(x, ...) {
-  cat('FillType')
+  cat('FillType\n')
 }
 
 ### wrapper functions for Join
@@ -512,7 +512,7 @@ class(`FillType`) <- c("FillType__bundle", "savvy_skiagd__sealed")
   if (is.na(label)) {
     stop("Unexpected value for Join", call. = TRUE)
   }
-  cat("Join::", label, sep = "")
+  cat("Join::", label, "\n", sep = "")
 }
 
 
@@ -524,7 +524,7 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
 
 #' @export
 `print.Join__bundle` <- function(x, ...) {
-  cat('Join')
+  cat('Join\n')
 }
 
 ### wrapper functions for PaintAttrs
@@ -576,7 +576,7 @@ class(`PaintAttrs`) <- c("PaintAttrs__bundle", "savvy_skiagd__sealed")
 
 #' @export
 `print.PaintAttrs__bundle` <- function(x, ...) {
-  cat('PaintAttrs')
+  cat('PaintAttrs\n')
 }
 
 ### wrapper functions for PathEffect
@@ -659,7 +659,7 @@ class(`PathEffect`) <- c("PathEffect__bundle", "savvy_skiagd__sealed")
 
 #' @export
 `print.PathEffect__bundle` <- function(x, ...) {
-  cat('PathEffect')
+  cat('PathEffect\n')
 }
 
 ### wrapper functions for PointMode
@@ -724,7 +724,7 @@ class(`PathEffect`) <- c("PathEffect__bundle", "savvy_skiagd__sealed")
   if (is.na(label)) {
     stop("Unexpected value for PointMode", call. = TRUE)
   }
-  cat("PointMode::", label, sep = "")
+  cat("PointMode::", label, "\n", sep = "")
 }
 
 
@@ -736,7 +736,7 @@ class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
 
 #' @export
 `print.PointMode__bundle` <- function(x, ...) {
-  cat('PointMode')
+  cat('PointMode\n')
 }
 
 ### wrapper functions for Style
@@ -800,7 +800,7 @@ class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
   if (is.na(label)) {
     stop("Unexpected value for Style", call. = TRUE)
   }
-  cat("Style::", label, sep = "")
+  cat("Style::", label, "\n", sep = "")
 }
 
 
@@ -812,6 +812,6 @@ class(`Style`) <- c("Style__bundle", "savvy_skiagd__sealed")
 
 #' @export
 `print.Style__bundle` <- function(x, ...) {
-  cat('Style')
+  cat('Style\n')
 }
 

@@ -5,7 +5,7 @@
 #' @param img A raw vector of picture.
 #' @param props A paint properties out of [paint()].
 #' @keywords internal
-NULL
+NULL # TODO: explain about picture
 
 #' @export
 print.PathEffect <- function(x, ...) {
