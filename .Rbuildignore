@@ -3,11 +3,11 @@
 ^LICENSE\.md$
 ^README\.qmd$
 ^cran-comments\.md$
-^.vscode$
 
 ^src/rust/.cargo$
 ^src/rust/.vscode$
 ^src/rust/target$
-^src/target$
 
 ^\.github$
+^\.vscode$
+^ninja-build$
