@@ -3,7 +3,7 @@ TARGET = @TARGET@
 PROFILE = @PROFILE@
 
 # Add flags if necessary
-RUSTFLAGS = --print=native-static-libs -C target-feature=+crt-static
+RUSTFLAGS = --print=native-static-libs
 
 # NOTE: Windows support is limited due to lack of pre-built binaries for our target.
 TARGET_DIR = $(CURDIR)/rust/target
@@ -11,11 +11,9 @@ LIBDIR = $(TARGET_DIR)/$(TARGET)/$(subst dev,debug,$(PROFILE))
 STATLIB = $(LIBDIR)/libskiagd.a
 
 $(info using $(PKG_CONFIG_NAME) from Rtools)
-SKIA_SOURCE_DIR = $(TARGET_DIR)/skia-bindings/skia
 PKG_CONFIG_NAME = fontconfig
 PKG_CONFIG ?= $(BINPREF)pkg-config
-PKG_LIBS = -L$(LIBDIR) -lskiagd -lbcrypt \
-	-L$(TARGET_DIR)/skia_bindings -lskia -lskia-bindings \
+PKG_LIBS = -L$(LIBDIR) -lskiagd -lskia -lskia-bindings -lbcrypt \
 	-lusp10 -lole32 -luser32 -lgdi32 -lfontsub -lkernel32 -ladvapi32 -lntdll -luserenv -lws2_32 -ldbghelp \
 	$(shell $(PKG_CONFIG) --libs $(PKG_CONFIG_NAME))
 
@@ -32,15 +30,13 @@ $(STATLIB):
 	# building proc-macro2, but Rtools doesn't contain libgcc_eh. This isn't used
 	# in actual, but we need this tweak to please the compiler.
 	mkdir -p $(LIBDIR)/libgcc_mock && touch $(LIBDIR)/libgcc_mock/libgcc_eh.a
-	mkdir -p $(SKIA_SOURCE_DIR)
 
 	export CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER="$(CARGO_LINKER)" && \
 	  export LIBRARY_PATH="$${LIBRARY_PATH};$(LIBDIR)/libgcc_mock" && \
 	  export CC="$(CC)" && \
 	  export CFLAGS="$(CFLAGS)" && \
 	  export RUSTFLAGS="$(RUSTFLAGS)" && \
-		export SKIA_SOURCE_DIR="$(SKIA_SOURCE_DIR)" && \
-	  cargo build --target $(TARGET) --lib --profile $(PROFILE) --manifest-path ./rust/Cargo.toml --target-dir $(TARGET_DIR)
+	  cargo build --target $(TARGET) --lib --profile $(PROFILE) --manifest-path ./rust/Cargo.toml --target-dir $(TARGET_DIR) -vv
 
 C_clean:
 	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS)
