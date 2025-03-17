@@ -7,6 +7,7 @@
 
 ^src/rust/.cargo$
 ^src/rust/.vscode$
+^src/rust/target$
 ^src/target$
 
-^src/rust/target$
+^\.github$
