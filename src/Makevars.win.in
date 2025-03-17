@@ -5,6 +5,7 @@ PROFILE = @PROFILE@
 # Add flags if necessary
 RUSTFLAGS =
 
+# NOTE: Windows support is limited due to lack of pre-built binaries for our target.
 TARGET_DIR = $(CURDIR)/rust/target
 LIBDIR = $(TARGET_DIR)/$(TARGET)/$(subst dev,debug,$(PROFILE))
 STATLIB = $(LIBDIR)/libskiagd.a
