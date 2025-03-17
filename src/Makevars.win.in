@@ -11,12 +11,13 @@ LIBDIR = $(TARGET_DIR)/$(TARGET)/$(subst dev,debug,$(PROFILE))
 STATLIB = $(LIBDIR)/libskiagd.a
 
 $(info using $(PKG_CONFIG_NAME) from Rtools)
+SKIA_SOURCE_DIR = $(TARGET_DIR)/skia-bindings/skia
 PKG_CONFIG_NAME = fontconfig
 PKG_CONFIG ?= $(BINPREF)pkg-config
 PKG_LIBS = -L$(LIBDIR) -lskiagd -lbcrypt \
+	-L$(TARGET_DIR)/skia_bindings -lskia -lskia-bindings \
 	-lusp10 -lole32 -luser32 -lgdi32 -lfontsub -lkernel32 -ladvapi32 -lntdll -luserenv -lws2_32 -ldbghelp \
 	$(shell $(PKG_CONFIG) --libs $(PKG_CONFIG_NAME))
-# PKG_CPPFLAGS := $(shell $(PKG_CONFIG) --cflags $(PKG_CONFIG_NAME))
 
 # Rtools doesn't have the linker in the location that cargo expects, so we need
 # to overwrite it via configuration.
@@ -37,7 +38,7 @@ $(STATLIB):
 	  export CC="$(CC)" && \
 	  export CFLAGS="$(CFLAGS)" && \
 	  export RUSTFLAGS="$(RUSTFLAGS)" && \
-		# export SKIA_USE_SYSTEM_LIBRARIES=false && \
+		export SKIA_SOURCE_DIR="$(SKIA_SOURCE_DIR)" && \
 	  cargo build --target $(TARGET) --lib --profile $(PROFILE) --manifest-path ./rust/Cargo.toml --target-dir $(TARGET_DIR)
 
 C_clean:
