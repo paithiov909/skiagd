@@ -3,7 +3,7 @@ TARGET = @TARGET@
 PROFILE = @PROFILE@
 
 # Add flags if necessary
-RUSTFLAGS = --print=native-static-libs
+RUSTFLAGS = --print=native-static-libs -C link-args=-static
 
 # NOTE: Windows support is limited due to lack of pre-built binaries for our target.
 TARGET_DIR = $(CURDIR)/rust/target
