@@ -13,7 +13,7 @@ STATLIB = $(LIBDIR)/libskiagd.a
 $(info using $(PKG_CONFIG_NAME) from Rtools)
 PKG_CONFIG_NAME = fontconfig
 PKG_CONFIG ?= $(BINPREF)pkg-config
-PKG_LIBS = -L$(LIBDIR) -lskiagd -lskia -lskia-bindings -lbcrypt \
+PKG_LIBS = -L$(LIBDIR) -lskiagd -lbcrypt \
 	-lusp10 -lole32 -luser32 -lgdi32 -lfontsub -lkernel32 -ladvapi32 -lntdll -luserenv -lws2_32 -ldbghelp \
 	$(shell $(PKG_CONFIG) --libs $(PKG_CONFIG_NAME))
 
