@@ -158,10 +158,6 @@ NULL
 
 #' Returns default matrix as numerics
 #'
-#' @details
-#' Users should not touch matrix to transform pictures.
-#' For a `canvas.draw_picture()` call, pass `Paint::default()`.
-#'
 #' @returns A numeric vector of length 9.
 #' @noRd
 `sk_matrix_default` <- function() {

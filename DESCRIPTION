@@ -9,7 +9,7 @@ Description: A toy R wrapper for 'rust-skia' <https://github.com/rust-skia/rust-
     a binding for 'Skia' <https://skia.org/>).
 License: MIT + file LICENSE
 Depends:
-    R (>= 4.2)
+    R (>= 4.4)
 Imports:
     grDevices,
     grid,

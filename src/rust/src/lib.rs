@@ -10,10 +10,6 @@ use skia_safe::{Data, Image, Paint};
 
 /// Returns default matrix as numerics
 ///
-/// @details
-/// Users should not touch matrix to transform pictures.
-/// For a `canvas.draw_picture()` call, pass `Paint::default()`.
-///
 /// @returns A numeric vector of length 9.
 /// @noRd
 #[savvy]
@@ -93,7 +89,7 @@ unsafe fn sk_draw_png(
     mat: NumericSexp,
     props: PaintAttrs,
     png_bytes: savvy::RawSexp,
-    left_top: NumericSexp, // FIXME: Should be Numeric
+    left_top: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
     if left_top.len() != 2 {
         return Err(savvy_err!("Invalid left_top. Expected 2 elements"));
@@ -150,7 +146,6 @@ unsafe fn sk_draw_path(
     canvas.draw_picture(&picture, Some(&mat1), Some(&Paint::default()));
 
     for (_, s) in svg.iter().enumerate() {
-        // TODO: set_fill_type
         let path = skia_safe::utils::parse_path::from_svg(s)
             .ok_or_else(|| return savvy_err!("Failed to parse svg"))?
             .set_fill_type(paint_attrs::sk_fill_type(&fill_type))
