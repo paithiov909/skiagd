@@ -1,4 +1,4 @@
-skip_on_ci()
+skip_on_cran()
 
 # to prevent opening default graphics device
 dev <- magick::image_graph(width = 720, height = 576)
