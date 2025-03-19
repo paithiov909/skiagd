@@ -3,6 +3,7 @@
 ^LICENSE\.md$
 ^README\.qmd$
 ^cran-comments\.md$
+^configure.log$
 
 ^src/rust/.cargo$
 ^src/rust/.vscode$
