@@ -1,6 +1,5 @@
 ## usethis namespace: start
 #' @importFrom rlang env_get %||%
-#' @useDynLib skiagd, .registration = TRUE
 ## usethis namespace: end
 #' @keywords internal
 "_PACKAGE"

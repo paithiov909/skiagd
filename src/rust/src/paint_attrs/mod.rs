@@ -1,5 +1,5 @@
-mod path_effect;
 mod stroke;
+pub mod path_effect;
 pub mod shader;
 
 use savvy::{savvy, savvy_err, NumericScalar, NumericSexp};
