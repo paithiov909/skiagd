@@ -88,8 +88,8 @@ SEXP savvy_sk_matrix_default__impl(void) {
 
 
 
-SEXP savvy_PaintAttrs_set_attrs__impl(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__blend_mode, SEXP c_arg__path_effect) {
-    SEXP res = savvy_PaintAttrs_set_attrs__ffi(c_arg__color, c_arg__style, c_arg__join, c_arg__cap, c_arg__width, c_arg__miter, c_arg__blend_mode, c_arg__path_effect);
+SEXP savvy_PaintAttrs_set_attrs__impl(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__blend_mode, SEXP c_arg__path_effect, SEXP c_arg__shader) {
+    SEXP res = savvy_PaintAttrs_set_attrs__ffi(c_arg__color, c_arg__style, c_arg__join, c_arg__cap, c_arg__width, c_arg__miter, c_arg__blend_mode, c_arg__path_effect, c_arg__shader);
     return handle_result(res);
 }
 
@@ -139,6 +139,62 @@ SEXP savvy_PathEffect_trim__impl(SEXP c_arg__start, SEXP c_arg__end) {
 }
 
 
+SEXP savvy_Shader_blend__impl(SEXP c_arg__mode, SEXP c_arg__dst, SEXP c_arg__src) {
+    SEXP res = savvy_Shader_blend__ffi(c_arg__mode, c_arg__dst, c_arg__src);
+    return handle_result(res);
+}
+
+SEXP savvy_Shader_color__impl(SEXP c_arg__color) {
+    SEXP res = savvy_Shader_color__ffi(c_arg__color);
+    return handle_result(res);
+}
+
+SEXP savvy_Shader_conical_gradient__impl(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__radii, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__mat) {
+    SEXP res = savvy_Shader_conical_gradient__ffi(c_arg__start, c_arg__end, c_arg__radii, c_arg__from, c_arg__to, c_arg__mode, c_arg__flags, c_arg__mat);
+    return handle_result(res);
+}
+
+SEXP savvy_Shader_fractal_noise__impl(SEXP c_arg__freq, SEXP c_arg__octaves, SEXP c_arg__seed, SEXP c_arg__tile_size) {
+    SEXP res = savvy_Shader_fractal_noise__ffi(c_arg__freq, c_arg__octaves, c_arg__seed, c_arg__tile_size);
+    return handle_result(res);
+}
+
+SEXP savvy_Shader_from_png__impl(SEXP c_arg__png_bytes, SEXP c_arg__mode, SEXP c_arg__mat) {
+    SEXP res = savvy_Shader_from_png__ffi(c_arg__png_bytes, c_arg__mode, c_arg__mat);
+    return handle_result(res);
+}
+
+SEXP savvy_Shader_get_label__impl(SEXP self__) {
+    SEXP res = savvy_Shader_get_label__ffi(self__);
+    return handle_result(res);
+}
+
+SEXP savvy_Shader_linear_gradient__impl(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__mat) {
+    SEXP res = savvy_Shader_linear_gradient__ffi(c_arg__start, c_arg__end, c_arg__from, c_arg__to, c_arg__mode, c_arg__flags, c_arg__mat);
+    return handle_result(res);
+}
+
+SEXP savvy_Shader_no_shader__impl(void) {
+    SEXP res = savvy_Shader_no_shader__ffi();
+    return handle_result(res);
+}
+
+SEXP savvy_Shader_radial_gradient__impl(SEXP c_arg__center, SEXP c_arg__radius, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__mat) {
+    SEXP res = savvy_Shader_radial_gradient__ffi(c_arg__center, c_arg__radius, c_arg__from, c_arg__to, c_arg__mode, c_arg__flags, c_arg__mat);
+    return handle_result(res);
+}
+
+SEXP savvy_Shader_sweep_gradient__impl(SEXP c_arg__center, SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__mat) {
+    SEXP res = savvy_Shader_sweep_gradient__ffi(c_arg__center, c_arg__start, c_arg__end, c_arg__from, c_arg__to, c_arg__mode, c_arg__flags, c_arg__mat);
+    return handle_result(res);
+}
+
+SEXP savvy_Shader_turbulence__impl(SEXP c_arg__freq, SEXP c_arg__octaves, SEXP c_arg__seed, SEXP c_arg__tile_size) {
+    SEXP res = savvy_Shader_turbulence__ffi(c_arg__freq, c_arg__octaves, c_arg__seed, c_arg__tile_size);
+    return handle_result(res);
+}
+
+
 
 
 static const R_CallMethodDef CallEntries[] = {
@@ -156,7 +212,7 @@ static const R_CallMethodDef CallEntries[] = {
 
 
 
-    {"savvy_PaintAttrs_set_attrs__impl", (DL_FUNC) &savvy_PaintAttrs_set_attrs__impl, 8},
+    {"savvy_PaintAttrs_set_attrs__impl", (DL_FUNC) &savvy_PaintAttrs_set_attrs__impl, 9},
     {"savvy_PathEffect_corner__impl", (DL_FUNC) &savvy_PathEffect_corner__impl, 1},
     {"savvy_PathEffect_dash__impl", (DL_FUNC) &savvy_PathEffect_dash__impl, 2},
     {"savvy_PathEffect_discrete__impl", (DL_FUNC) &savvy_PathEffect_discrete__impl, 3},
@@ -166,6 +222,18 @@ static const R_CallMethodDef CallEntries[] = {
     {"savvy_PathEffect_path_1d__impl", (DL_FUNC) &savvy_PathEffect_path_1d__impl, 4},
     {"savvy_PathEffect_path_2d__impl", (DL_FUNC) &savvy_PathEffect_path_2d__impl, 2},
     {"savvy_PathEffect_trim__impl", (DL_FUNC) &savvy_PathEffect_trim__impl, 2},
+
+    {"savvy_Shader_blend__impl", (DL_FUNC) &savvy_Shader_blend__impl, 3},
+    {"savvy_Shader_color__impl", (DL_FUNC) &savvy_Shader_color__impl, 1},
+    {"savvy_Shader_conical_gradient__impl", (DL_FUNC) &savvy_Shader_conical_gradient__impl, 8},
+    {"savvy_Shader_fractal_noise__impl", (DL_FUNC) &savvy_Shader_fractal_noise__impl, 4},
+    {"savvy_Shader_from_png__impl", (DL_FUNC) &savvy_Shader_from_png__impl, 3},
+    {"savvy_Shader_get_label__impl", (DL_FUNC) &savvy_Shader_get_label__impl, 1},
+    {"savvy_Shader_linear_gradient__impl", (DL_FUNC) &savvy_Shader_linear_gradient__impl, 7},
+    {"savvy_Shader_no_shader__impl", (DL_FUNC) &savvy_Shader_no_shader__impl, 0},
+    {"savvy_Shader_radial_gradient__impl", (DL_FUNC) &savvy_Shader_radial_gradient__impl, 7},
+    {"savvy_Shader_sweep_gradient__impl", (DL_FUNC) &savvy_Shader_sweep_gradient__impl, 8},
+    {"savvy_Shader_turbulence__impl", (DL_FUNC) &savvy_Shader_turbulence__impl, 4},
 
 
     {NULL, NULL, 0}

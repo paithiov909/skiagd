@@ -22,7 +22,7 @@ SEXP savvy_sk_matrix_default__ffi(void);
 
 
 // methods and associated functions for PaintAttrs
-SEXP savvy_PaintAttrs_set_attrs__ffi(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__blend_mode, SEXP c_arg__path_effect);
+SEXP savvy_PaintAttrs_set_attrs__ffi(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__blend_mode, SEXP c_arg__path_effect, SEXP c_arg__shader);
 
 // methods and associated functions for PathEffect
 SEXP savvy_PathEffect_corner__ffi(SEXP c_arg__radius);
@@ -38,5 +38,21 @@ SEXP savvy_PathEffect_trim__ffi(SEXP c_arg__start, SEXP c_arg__end);
 // methods and associated functions for PointMode
 
 
+// methods and associated functions for Shader
+SEXP savvy_Shader_blend__ffi(SEXP c_arg__mode, SEXP c_arg__dst, SEXP c_arg__src);
+SEXP savvy_Shader_color__ffi(SEXP c_arg__color);
+SEXP savvy_Shader_conical_gradient__ffi(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__radii, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__mat);
+SEXP savvy_Shader_fractal_noise__ffi(SEXP c_arg__freq, SEXP c_arg__octaves, SEXP c_arg__seed, SEXP c_arg__tile_size);
+SEXP savvy_Shader_from_png__ffi(SEXP c_arg__png_bytes, SEXP c_arg__mode, SEXP c_arg__mat);
+SEXP savvy_Shader_get_label__ffi(SEXP self__);
+SEXP savvy_Shader_linear_gradient__ffi(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__mat);
+SEXP savvy_Shader_no_shader__ffi(void);
+SEXP savvy_Shader_radial_gradient__ffi(SEXP c_arg__center, SEXP c_arg__radius, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__mat);
+SEXP savvy_Shader_sweep_gradient__ffi(SEXP c_arg__center, SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__mat);
+SEXP savvy_Shader_turbulence__ffi(SEXP c_arg__freq, SEXP c_arg__octaves, SEXP c_arg__seed, SEXP c_arg__tile_size);
+
 // methods and associated functions for Style
+
+
+// methods and associated functions for TileMode
 

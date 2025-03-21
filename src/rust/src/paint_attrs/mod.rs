@@ -1,6 +1,6 @@
-mod blend_mode;
 mod path_effect;
 mod stroke;
+pub mod shader;
 
 use savvy::{savvy, savvy_err, NumericScalar, NumericSexp};
 use skia_safe::Paint;
@@ -23,6 +23,7 @@ use skia_safe::Paint;
 /// * miter: Stroke miter.
 /// * blend_mode: BlendMode.
 /// * path_effect: PathEffect.
+/// * shader: Shader.
 ///
 /// @noRd
 #[savvy]
@@ -39,8 +40,9 @@ impl PaintAttrs {
         cap: stroke::Cap,
         width: NumericScalar,
         miter: NumericScalar,
-        blend_mode: blend_mode::BlendMode,
+        blend_mode: shader::BlendMode,
         path_effect: path_effect::PathEffect,
+        shader: shader::Shader,
     ) -> savvy::Result<Self> {
         let color = color.as_slice_i32()?;
         if color.len() != 4 {
@@ -62,18 +64,17 @@ impl PaintAttrs {
         paint.set_stroke_cap(stroke::sk_cap(&cap));
         paint.set_stroke_width(width as f32);
         paint.set_stroke_miter(miter as f32);
-        paint.set_blend_mode(blend_mode::sk_blend_mode(&blend_mode));
+        paint.set_blend_mode(shader::sk_blend_mode(&blend_mode));
         if let Some(effect) = path_effect.effect {
             paint.set_path_effect(effect);
+        }
+        if let Some(shader) = shader.shader {
+            paint.set_shader(shader);
         }
         Ok(PaintAttrs { paint })
     }
 }
 
-// MaskFilter
-// ImageFilter
-// ColorFilter
-// Shader
 
 /// PointMode (0-2)
 ///

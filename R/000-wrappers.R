@@ -579,19 +579,21 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
 #' * miter: Stroke miter.
 #' * blend_mode: BlendMode.
 #' * path_effect: PathEffect.
+#' * shader: Shader.
 #'
 #' @noRd
 `PaintAttrs` <- new.env(parent = emptyenv())
 
 ### associated functions for PaintAttrs
 
-`PaintAttrs`$`set_attrs` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`, `path_effect`) {
+`PaintAttrs`$`set_attrs` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`, `path_effect`, `shader`) {
   `style` <- .savvy_extract_ptr(`style`, "Style")
   `join` <- .savvy_extract_ptr(`join`, "Join")
   `cap` <- .savvy_extract_ptr(`cap`, "Cap")
   `blend_mode` <- .savvy_extract_ptr(`blend_mode`, "BlendMode")
   `path_effect` <- .savvy_extract_ptr(`path_effect`, "PathEffect")
-  .savvy_wrap_PaintAttrs(.Call(savvy_PaintAttrs_set_attrs__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`, `path_effect`))
+  `shader` <- .savvy_extract_ptr(`shader`, "Shader")
+  .savvy_wrap_PaintAttrs(.Call(savvy_PaintAttrs_set_attrs__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`, `path_effect`, `shader`))
 }
 
 
@@ -762,6 +764,91 @@ class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
   cat('PointMode\n')
 }
 
+### wrapper functions for Shader
+
+`Shader_get_label` <- function(self) {
+  function() {
+    .Call(savvy_Shader_get_label__impl, `self`)
+  }
+}
+
+`.savvy_wrap_Shader` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+  e$`get_label` <- `Shader_get_label`(ptr)
+
+  class(e) <- c("Shader", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' Shader
+#'
+#' @seealso
+#' * [Gradients | React Native Skia](https://shopify.github.io/react-native-skia/docs/shaders/gradients)
+#' * [Perlin Noise Shaders | React Native Skia](https://shopify.github.io/react-native-skia/docs/shaders/perlin-noise)
+#' * [Blending and Colors | React Native Skia](https://shopify.github.io/react-native-skia/docs/shaders/colors)
+#' @export
+`Shader` <- new.env(parent = emptyenv())
+
+### associated functions for Shader
+
+`Shader`$`blend` <- function(`mode`, `dst`, `src`) {
+  `mode` <- .savvy_extract_ptr(`mode`, "BlendMode")
+  `dst` <- .savvy_extract_ptr(`dst`, "Shader")
+  `src` <- .savvy_extract_ptr(`src`, "Shader")
+  .savvy_wrap_Shader(.Call(savvy_Shader_blend__impl, `mode`, `dst`, `src`))
+}
+
+`Shader`$`color` <- function(`color`) {
+  .savvy_wrap_Shader(.Call(savvy_Shader_color__impl, `color`))
+}
+
+`Shader`$`conical_gradient` <- function(`start`, `end`, `radii`, `from`, `to`, `mode`, `flags`, `mat`) {
+  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  .savvy_wrap_Shader(.Call(savvy_Shader_conical_gradient__impl, `start`, `end`, `radii`, `from`, `to`, `mode`, `flags`, `mat`))
+}
+
+`Shader`$`fractal_noise` <- function(`freq`, `octaves`, `seed`, `tile_size`) {
+  .savvy_wrap_Shader(.Call(savvy_Shader_fractal_noise__impl, `freq`, `octaves`, `seed`, `tile_size`))
+}
+
+`Shader`$`from_png` <- function(`png_bytes`, `mode`, `mat`) {
+  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  .savvy_wrap_Shader(.Call(savvy_Shader_from_png__impl, `png_bytes`, `mode`, `mat`))
+}
+
+`Shader`$`linear_gradient` <- function(`start`, `end`, `from`, `to`, `mode`, `flags`, `mat`) {
+  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  .savvy_wrap_Shader(.Call(savvy_Shader_linear_gradient__impl, `start`, `end`, `from`, `to`, `mode`, `flags`, `mat`))
+}
+
+`Shader`$`no_shader` <- function() {
+  .savvy_wrap_Shader(.Call(savvy_Shader_no_shader__impl))
+}
+
+`Shader`$`radial_gradient` <- function(`center`, `radius`, `from`, `to`, `mode`, `flags`, `mat`) {
+  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  .savvy_wrap_Shader(.Call(savvy_Shader_radial_gradient__impl, `center`, `radius`, `from`, `to`, `mode`, `flags`, `mat`))
+}
+
+`Shader`$`sweep_gradient` <- function(`center`, `start`, `end`, `from`, `to`, `mode`, `flags`, `mat`) {
+  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  .savvy_wrap_Shader(.Call(savvy_Shader_sweep_gradient__impl, `center`, `start`, `end`, `from`, `to`, `mode`, `flags`, `mat`))
+}
+
+`Shader`$`turbulence` <- function(`freq`, `octaves`, `seed`, `tile_size`) {
+  .savvy_wrap_Shader(.Call(savvy_Shader_turbulence__impl, `freq`, `octaves`, `seed`, `tile_size`))
+}
+
+
+class(`Shader`) <- c("Shader__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.Shader__bundle` <- function(x, ...) {
+  cat('Shader\n')
+}
+
 ### wrapper functions for Style
 
 
@@ -836,5 +923,71 @@ class(`Style`) <- c("Style__bundle", "savvy_skiagd__sealed")
 #' @export
 `print.Style__bundle` <- function(x, ...) {
   cat('Style\n')
+}
+
+### wrapper functions for TileMode
+
+
+`.savvy_wrap_TileMode` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+
+
+  class(e) <- c("TileMode", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' TileMode (0-3)
+#'
+#' @export
+`TileMode` <- new.env(parent = emptyenv())
+`TileMode`$`Clamp` <- .savvy_wrap_TileMode(0L)
+`TileMode`$`Repeat` <- .savvy_wrap_TileMode(1L)
+`TileMode`$`Mirror` <- .savvy_wrap_TileMode(2L)
+`TileMode`$`Decal` <- .savvy_wrap_TileMode(3L)
+
+#' @export
+`$.TileMode__bundle` <- function(x, name) {
+  if (!name %in% c("Clamp", "Repeat", "Mirror", "Decal")) {
+    stop(paste0("Unknown variant: ", name), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`[[.TileMode__bundle` <- function(x, i) {
+  if (is.numeric(i)) {
+    stop("TileMode cannot be subset by index", call. = FALSE)
+  }
+
+  if (!i %in% c("Clamp", "Repeat", "Mirror", "Decal")) {
+    stop(paste0("Unknown variant: ", i), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`print.TileMode` <- function(x, ...) {
+  idx <- x$.ptr + 1L
+  label <- c("Clamp", "Repeat", "Mirror", "Decal")[idx]
+  if (is.na(label)) {
+    stop("Unexpected value for TileMode", call. = TRUE)
+  }
+  cat("TileMode::", label, "\n", sep = "")
+}
+
+
+### associated functions for TileMode
+
+
+
+class(`TileMode`) <- c("TileMode__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.TileMode__bundle` <- function(x, ...) {
+  cat('TileMode\n')
 }
 

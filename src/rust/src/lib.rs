@@ -2,7 +2,7 @@ mod canvas;
 mod paint_attrs;
 
 use canvas::{as_matrix, read_picture_bytes, SkiaCanvas};
-use paint_attrs::PaintAttrs;
+use paint_attrs::{PaintAttrs, shader};
 
 use savvy::{savvy, savvy_err};
 use savvy::{IntegerSexp, NumericSexp, StringSexp};
@@ -24,6 +24,29 @@ fn sk_matrix_default() -> savvy::Result<savvy::Sexp> {
         out.set_elt(i, *v as f64)?;
     }
     Ok(out.into())
+}
+
+/// Converts PNG data as a shader
+#[savvy]
+impl shader::Shader {
+    pub unsafe fn from_png(
+        png_bytes: savvy::RawSexp,
+        mode: shader::TileMode,
+        mat: NumericSexp
+    ) -> savvy::Result<Self> {
+        let mat = as_matrix(&mat)?;
+        let input = Data::new_bytes(png_bytes.as_slice());
+        let image = Image::from_encoded_with_alpha_type(input, skia_safe::AlphaType::Premul)
+            .ok_or_else(|| return savvy_err!("Failed to read PNG as image"))?;
+        Ok(shader::Shader {
+            label: "image".to_string(),
+            shader: image.to_shader(
+                Some((shader::sk_tile_mode(&mode), shader::sk_tile_mode(&mode))),
+                skia_safe::SamplingOptions::default(),
+                &mat
+            )
+        })
+    }
 }
 
 /// For internal use. See `sk_as_png()`

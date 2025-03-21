@@ -20,6 +20,7 @@
 #' * `miter`: Numeric scalar (stroke miter)
 #' * `blend_mode`: See [BlendMode].
 #' * `path_effect`: See [PathEffect].
+#' * `shader`: See [Shader].
 #' * `point_mode`: [PointMode] for [add_point()].
 #' * `fill_type`: [FillType] for [add_path()].
 #' * `transform`: Numerics of length 9. See [transform-matrix] for affine transformations.
@@ -94,6 +95,7 @@ default_attrs <- function() {
     miter = props[["linemitre"]],
     blend_mode = env_get(BlendMode, "Src"),
     path_effect = PathEffect$no_effect(),
+    shader = Shader$no_shader(),
     point_mode = env_get(PointMode, "Points"),
     fill_type = env_get(FillType, "Winding"),
     transform = sk_matrix_default()
@@ -109,6 +111,7 @@ as_paint_attrs <- function(p) {
     p[["width"]],
     p[["miter"]],
     p[["blend_mode"]],
-    p[["path_effect"]]
+    p[["path_effect"]],
+    p[["shader"]]
   )
 }

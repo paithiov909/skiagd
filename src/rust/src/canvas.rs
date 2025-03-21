@@ -34,7 +34,6 @@ pub struct SkiaCanvas {
     recorder: PictureRecorder,
 }
 
-#[allow(dead_code)]
 impl SkiaCanvas {
     #[allow(unused_mut)]
     pub fn new(width: i32, height: i32) -> SkiaCanvas {

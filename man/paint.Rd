@@ -31,6 +31,7 @@ The following painting attributes can be specified:
 \item \code{miter}: Numeric scalar (stroke miter)
 \item \code{blend_mode}: See \link{BlendMode}.
 \item \code{path_effect}: See \link{PathEffect}.
+\item \code{shader}: See \link{Shader}.
 \item \code{point_mode}: \link{PointMode} for \code{\link[=add_point]{add_point()}}.
 \item \code{fill_type}: \link{FillType} for \code{\link[=add_path]{add_path()}}.
 \item \code{transform}: Numerics of length 9. See \link{transform-matrix} for affine transformations.
