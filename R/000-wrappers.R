@@ -73,21 +73,29 @@ NULL
   .Call(savvy_sk_draw_circle__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`)
 }
 
-#' Draws rectangle on canvas
+#' Draws outer and inner rounded rectangles on canvas
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
 #' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
-#' @param left X coordinates of the left edge of the rectangles.
-#' @param top Y coordinates of the top edge of the rectangles.
-#' @param right X coordinates of the right edge of the rectangles.
-#' @param bottom Y coordinates of the bottom edge of the rectangles.
+#' @param outer_left X coordinates of the left edge of the outer rectangle.
+#' @param outer_top Y coordinates of the top edge of the outer rectangle.
+#' @param outer_right X coordinates of the right edge of the outer rectangle.
+#' @param outer_bottom Y coordinates of the bottom edge of the outer rectangle.
+#' @param outer_rx Axis lengths on X-axis of outer oval describing rounded corners.
+#' @param outer_ry Axis lengths on Y-axis of outer oval describing rounded corners.
+#' @param inner_left X coordinates of the left edge of the inner rectangle.
+#' @param inner_top Y coordinates of the top edge of the inner rectangle.
+#' @param inner_right X coordinates of the right edge of the inner rectangle.
+#' @param inner_bottom Y coordinates of the bottom edge of the inner rectangle.
+#' @param inner_rx Axis lengths on X-axis of inner oval describing rounded corners.
+#' @param inner_ry Axis lengths on Y-axis of inner oval describing rounded corners.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_irect` <- function(`size`, `curr_bytes`, `mat`, `props`, `left`, `top`, `right`, `bottom`) {
+`sk_draw_diff_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `outer_left`, `outer_top`, `outer_right`, `outer_bottom`, `outer_rx`, `outer_ry`, `inner_left`, `inner_top`, `inner_right`, `inner_bottom`, `inner_rx`, `inner_ry`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_irect__impl, `size`, `curr_bytes`, `mat`, `props`, `left`, `top`, `right`, `bottom`)
+  .Call(savvy_sk_draw_diff_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `outer_left`, `outer_top`, `outer_right`, `outer_bottom`, `outer_rx`, `outer_ry`, `inner_left`, `inner_top`, `inner_right`, `inner_bottom`, `inner_rx`, `inner_ry`)
 }
 
 #' Draws lines on canvas
@@ -154,6 +162,25 @@ NULL
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   `mode` <- .savvy_extract_ptr(`mode`, "PointMode")
   .Call(savvy_sk_draw_points__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `mode`)
+}
+
+#' Draws rounded rectangle on canvas
+#'
+#' @param size Canvas size.
+#' @param curr_bytes Current canvas state.
+#' @param mat Matrix for transforming picture.
+#' @param props PaintAttrs.
+#' @param left X coordinates of the left edge of the rectangles.
+#' @param top Y coordinates of the top edge of the rectangles.
+#' @param right X coordinates of the right edge of the rectangles.
+#' @param bottom Y coordinates of the bottom edge of the rectangles.
+#' @param rx Axis lengths on X-axis of oval describing rounded corners.
+#' @param ry Axis lengths on Y-axis of oval describing rounded corners.
+#' @returns A raw vector of picture.
+#' @noRd
+`sk_draw_rounded_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `left`, `top`, `right`, `bottom`, `rx`, `ry`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  .Call(savvy_sk_draw_rounded_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `left`, `top`, `right`, `bottom`, `rx`, `ry`)
 }
 
 #' Returns default matrix as numerics

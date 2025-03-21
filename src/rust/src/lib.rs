@@ -16,9 +16,8 @@ use skia_safe::{Data, Image, Paint};
 fn sk_matrix_default() -> savvy::Result<savvy::Sexp> {
     let matrix = skia_safe::Matrix::default();
     let buffer = vec![
-        matrix[0], matrix[1], matrix[2],
-        matrix[3], matrix[4], matrix[5],
-        matrix[6], matrix[7], matrix[8]
+        matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5], matrix[6], matrix[7],
+        matrix[8],
     ];
     let mut out = savvy::OwnedRealSexp::new(9)?;
     for (i, v) in buffer.iter().enumerate() {
@@ -40,7 +39,9 @@ unsafe fn sk_as_png_data(
     let mut surface = skia_safe::surfaces::raster_n32_premul((size[0], size[1]))
         .unwrap_or_else(|| skia_safe::surfaces::raster_n32_premul((720, 576)).unwrap());
     surface.canvas().clear(skia_safe::Color::TRANSPARENT);
-    surface.canvas().draw_picture(&picture, Some(&mat), Some(&Paint::default()));
+    surface
+        .canvas()
+        .draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
     let image = surface.image_snapshot();
     let mut context = surface.direct_context();
@@ -284,7 +285,7 @@ unsafe fn sk_draw_circle(
     Ok(picture.into())
 }
 
-/// Draws rectangle on canvas
+/// Draws rounded rectangle on canvas
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
@@ -294,10 +295,12 @@ unsafe fn sk_draw_circle(
 /// @param top Y coordinates of the top edge of the rectangles.
 /// @param right X coordinates of the right edge of the rectangles.
 /// @param bottom Y coordinates of the bottom edge of the rectangles.
+/// @param rx Axis lengths on X-axis of oval describing rounded corners.
+/// @param ry Axis lengths on Y-axis of oval describing rounded corners.
 /// @returns A raw vector of picture.
 /// @noRd
 #[savvy]
-unsafe fn sk_draw_irect(
+unsafe fn sk_draw_rounded_rect(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
     mat: NumericSexp,
@@ -306,17 +309,26 @@ unsafe fn sk_draw_irect(
     top: NumericSexp,
     right: NumericSexp,
     bottom: NumericSexp,
+    rx: NumericSexp,
+    ry: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    if left.len() != top.len() || right.len() != top.len() || bottom.len() != top.len() {
+    if left.len() != top.len()
+        || right.len() != top.len()
+        || bottom.len() != top.len()
+        || rx.len() != top.len()
+        || ry.len() != top.len()
+    {
         return Err(savvy_err!("All vectors must have the same length"));
     }
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
 
-    let left = left.as_slice_i32()?;
-    let top = top.as_slice_i32()?;
-    let right = right.as_slice_i32()?;
-    let bottom = bottom.as_slice_i32()?;
+    let left = left.as_slice_f64();
+    let top = top.as_slice_f64();
+    let right = right.as_slice_f64();
+    let bottom = bottom.as_slice_f64();
+    let rx = rx.as_slice_f64();
+    let ry = ry.as_slice_f64();
 
     let size = size.to_vec();
     let mut recorder = SkiaCanvas::new(size[0], size[1]);
@@ -324,8 +336,108 @@ unsafe fn sk_draw_irect(
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
     for i in 0..left.len() {
-        let rect = skia_safe::IRect::new(left[i], top[i], right[i], bottom[i]);
-        canvas.draw_irect(&rect, &props.paint);
+        let rect = skia_safe::Rect::new(
+            left[i] as f32,
+            top[i] as f32,
+            right[i] as f32,
+            bottom[i] as f32,
+        );
+        canvas.draw_round_rect(&rect, rx[i] as f32, ry[i] as f32, &props.paint);
+    }
+    let picture = recorder.finish_recording()?;
+    Ok(picture.into())
+}
+
+/// Draws outer and inner rounded rectangles on canvas
+///
+/// @param size Canvas size.
+/// @param curr_bytes Current canvas state.
+/// @param mat Matrix for transforming picture.
+/// @param props PaintAttrs.
+/// @param outer_left X coordinates of the left edge of the outer rectangle.
+/// @param outer_top Y coordinates of the top edge of the outer rectangle.
+/// @param outer_right X coordinates of the right edge of the outer rectangle.
+/// @param outer_bottom Y coordinates of the bottom edge of the outer rectangle.
+/// @param outer_rx Axis lengths on X-axis of outer oval describing rounded corners.
+/// @param outer_ry Axis lengths on Y-axis of outer oval describing rounded corners.
+/// @param inner_left X coordinates of the left edge of the inner rectangle.
+/// @param inner_top Y coordinates of the top edge of the inner rectangle.
+/// @param inner_right X coordinates of the right edge of the inner rectangle.
+/// @param inner_bottom Y coordinates of the bottom edge of the inner rectangle.
+/// @param inner_rx Axis lengths on X-axis of inner oval describing rounded corners.
+/// @param inner_ry Axis lengths on Y-axis of inner oval describing rounded corners.
+/// @returns A raw vector of picture.
+/// @noRd
+#[savvy]
+unsafe fn sk_draw_diff_rect(
+    size: IntegerSexp,
+    curr_bytes: savvy::RawSexp,
+    mat: NumericSexp,
+    props: PaintAttrs,
+    outer_left: NumericSexp,
+    outer_top: NumericSexp,
+    outer_right: NumericSexp,
+    outer_bottom: NumericSexp,
+    outer_rx: NumericSexp,
+    outer_ry: NumericSexp,
+    inner_left: NumericSexp,
+    inner_top: NumericSexp,
+    inner_right: NumericSexp,
+    inner_bottom: NumericSexp,
+    inner_rx: NumericSexp,
+    inner_ry: NumericSexp,
+) -> savvy::Result<savvy::Sexp> {
+    if outer_left.len() != outer_top.len()
+        || outer_right.len() != outer_top.len()
+        || outer_bottom.len() != outer_top.len()
+        || outer_rx.len() != outer_top.len()
+        || outer_ry.len() != outer_top.len()
+        || inner_left.len() != inner_top.len()
+        || inner_right.len() != inner_top.len()
+        || inner_bottom.len() != inner_top.len()
+        || inner_rx.len() != inner_top.len()
+        || inner_ry.len() != inner_top.len()
+    {
+        return Err(savvy_err!("All vectors must have the same length"));
+    }
+    let picture = read_picture_bytes(&curr_bytes)?;
+    let mat = as_matrix(&mat)?;
+
+    let outer_left = outer_left.as_slice_f64();
+    let outer_top = outer_top.as_slice_f64();
+    let outer_right = outer_right.as_slice_f64();
+    let outer_bottom = outer_bottom.as_slice_f64();
+    let outer_rx = outer_rx.as_slice_f64();
+    let outer_ry = outer_ry.as_slice_f64();
+
+    let inner_left = inner_left.as_slice_f64();
+    let inner_top = inner_top.as_slice_f64();
+    let inner_right = inner_right.as_slice_f64();
+    let inner_bottom = inner_bottom.as_slice_f64();
+    let inner_rx = inner_rx.as_slice_f64();
+    let inner_ry = inner_ry.as_slice_f64();
+
+    let size = size.to_vec();
+    let mut recorder = SkiaCanvas::new(size[0], size[1]);
+    let canvas = recorder.start_recording();
+    canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
+
+    for i in 0..outer_left.len() {
+        let outer = skia_safe::Rect::new(
+            outer_left[i] as f32,
+            outer_top[i] as f32,
+            outer_right[i] as f32,
+            outer_bottom[i] as f32,
+        );
+        let outer = skia_safe::RRect::new_rect_xy(outer, outer_rx[i] as f32, outer_ry[i] as f32);
+        let inner = skia_safe::Rect::new(
+            inner_left[i] as f32,
+            inner_top[i] as f32,
+            inner_right[i] as f32,
+            inner_bottom[i] as f32,
+        );
+        let inner = skia_safe::RRect::new_rect_xy(inner, inner_rx[i] as f32, inner_ry[i] as f32);
+        canvas.draw_drrect(&outer, &inner, &props.paint);
     }
     let picture = recorder.finish_recording()?;
     Ok(picture.into())
@@ -346,9 +458,12 @@ fn sk_absolute_fill(size: IntegerSexp, fill: NumericSexp) -> savvy::Result<savvy
     if fill.len() != 4 {
         return Err(savvy_err!("Invalid fill. Expected 4 elements"));
     }
-    canvas.clear(
-        skia_safe::Color::from_argb(fill[3] as u8, fill[0] as u8, fill[1] as u8, fill[2] as u8)
-    );
+    canvas.clear(skia_safe::Color::from_argb(
+        fill[3] as u8,
+        fill[0] as u8,
+        fill[1] as u8,
+        fill[2] as u8,
+    ));
     let picture = recorder.finish_recording()?;
     Ok(picture.into())
 }

@@ -39,9 +39,9 @@ Skia](https://shopify.github.io/react-native-skia/).
   - Path
     - [x] SVG notation (path)
   - Polygons
-    - [x] Rect (irect)
-    - [ ] RoundedRect (round_rect)
-    - [ ] DiffRect (drrect)
+    - [x] Rect
+    - [x] RoundedRect (round_rect)
+    - [x] DiffRect (drrect)
     - [x] Line
     - [x] Points (points; not point)
   - Ellipses
@@ -64,8 +64,7 @@ Skia](https://shopify.github.io/react-native-skia/).
   - [x] PathEffects
   - [ ] MaskFilter?? (blur)
   - [ ] ImageFilters
-  - [ ]
-    [Shaders](https://rust-skia.github.io/doc/skia_safe/type.Shader.html)
+  - [ ] [Shaders](https://rust-skia.github.io/doc/skia_safe/type.Shader.html)
   - [ ] RuntimeShaders
     - sksl support
     - [uniforms](https://rust-skia.github.io/doc/skia_safe/runtime_effect/type.RuntimeShaderBuilder.html#method.set_uniform_int)

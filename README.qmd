@@ -37,9 +37,9 @@ I'm planning to re-implement features like [React Native Skia](https://shopify.g
   - Path
     - [x] SVG notation (path)
   - Polygons
-    - [x] Rect (irect)
-    - [ ] RoundedRect (round_rect)
-    - [ ] DiffRect (drrect)
+    - [x] Rect
+    - [x] RoundedRect (round_rect)
+    - [x] DiffRect (drrect)
     - [x] Line
     - [x] Points (points; not point)
   - Ellipses
