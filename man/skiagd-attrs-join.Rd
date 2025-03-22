@@ -23,5 +23,13 @@ The following joins are available:
 }
 \seealso{
 \href{https://rust-skia.github.io/doc/skia_safe/paint/enum.Join.html}{Join in skia_safe::paint - Rust}
+
+Other paint-attributes: 
+\code{\link{BlendMode}},
+\code{\link{Cap}},
+\code{\link{FillType}},
+\code{\link{PointMode}},
+\code{\link{Style}}
 }
+\concept{paint-attributes}
 \keyword{datasets}

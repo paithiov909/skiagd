@@ -1,11 +1,5 @@
 use savvy::savvy;
 
-/// Shader
-///
-/// @seealso
-/// * [Gradients | React Native Skia](https://shopify.github.io/react-native-skia/docs/shaders/gradients)
-/// * [Perlin Noise Shaders | React Native Skia](https://shopify.github.io/react-native-skia/docs/shaders/perlin-noise)
-/// * [Blending and Colors | React Native Skia](https://shopify.github.io/react-native-skia/docs/shaders/colors)
 /// @export
 #[savvy]
 pub struct Shader {
@@ -24,6 +18,11 @@ impl Shader {
 
 /// TileMode (0-3)
 ///
+/// `TileMode` determines how the source is tiled for shaders.
+/// This attributes is not a paint attribute.
+/// To specify `TileMode`, directly pass these pointers to shader functions.
+///
+/// @rdname skiagd-attrs-tilemode
 /// @export
 #[savvy]
 pub enum TileMode {
@@ -31,15 +30,6 @@ pub enum TileMode {
     Repeat,
     Mirror,
     Decal,
-}
-
-pub fn sk_tile_mode(mode: &TileMode) -> skia_safe::TileMode {
-    match mode {
-        TileMode::Clamp => skia_safe::TileMode::Clamp,
-        TileMode::Repeat => skia_safe::TileMode::Repeat,
-        TileMode::Mirror => skia_safe::TileMode::Mirror,
-        TileMode::Decal => skia_safe::TileMode::Decal,
-    }
 }
 
 /// BlendMode (0-28)
@@ -81,6 +71,8 @@ pub fn sk_tile_mode(mode: &TileMode) -> skia_safe::TileMode {
 ///
 /// @seealso
 /// [BlendMode in skia_safe - Rust](https://rust-skia.github.io/doc/skia_safe/enum.BlendMode.html)
+/// @family paint-attributes
+/// @rdname skiagd-attrs-blendmode
 /// @export
 #[savvy]
 pub enum BlendMode {
@@ -113,6 +105,16 @@ pub enum BlendMode {
     Saturation,
     Color,
     Luminosity,
+}
+
+// FIXME: Don't export TileMode. shader functions should take tile mode as string.
+pub fn sk_tile_mode(mode: &TileMode) -> skia_safe::TileMode {
+    match mode {
+        TileMode::Clamp => skia_safe::TileMode::Clamp,
+        TileMode::Repeat => skia_safe::TileMode::Repeat,
+        TileMode::Mirror => skia_safe::TileMode::Mirror,
+        TileMode::Decal => skia_safe::TileMode::Decal,
+    }
 }
 
 pub fn sk_blend_mode(blend_mode: &BlendMode) -> skia_safe::BlendMode {

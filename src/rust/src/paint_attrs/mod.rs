@@ -1,11 +1,9 @@
-mod stroke;
 pub mod path_effect;
 pub mod shader;
+mod stroke;
 
 use savvy::{savvy, savvy_err, NumericScalar, NumericSexp};
 use skia_safe::Paint;
-
-// ---- PaintAttrs ------
 
 /// PaintAttrs
 ///
@@ -44,12 +42,12 @@ impl PaintAttrs {
         path_effect: path_effect::PathEffect,
         shader: shader::Shader,
     ) -> savvy::Result<Self> {
-        let color = color.as_slice_i32()?;
         if color.len() != 4 {
             return Err(savvy_err!("Invalid color. Expected 4 elements"));
         }
         let width = width.as_f64();
         let miter = miter.as_f64();
+        let color = color.as_slice_f64();
 
         let mut paint = Paint::default();
         paint.set_anti_alias(true);
@@ -75,7 +73,6 @@ impl PaintAttrs {
     }
 }
 
-
 /// PointMode (0-2)
 ///
 /// `PointMode` determines how points are drawn.
@@ -90,20 +87,14 @@ impl PaintAttrs {
 ///
 /// @seealso
 /// [PointMode in skia_safe::canvas - Rust](https://rust-skia.github.io/doc/skia_safe/canvas/enum.PointMode.html)
+/// @family paint-attributes
+/// @rdname skiagd-attrs-pointmode
 /// @export
 #[savvy]
 pub enum PointMode {
     Points,
     Lines,
     Polygon,
-}
-
-pub fn sk_point_mode(mode: &PointMode) -> skia_safe::canvas::PointMode {
-    match mode {
-        PointMode::Points => skia_safe::canvas::PointMode::Points,
-        PointMode::Lines => skia_safe::canvas::PointMode::Lines,
-        PointMode::Polygon => skia_safe::canvas::PointMode::Polygon,
-    }
 }
 
 /// FillType (0-3)
@@ -121,6 +112,8 @@ pub fn sk_point_mode(mode: &PointMode) -> skia_safe::canvas::PointMode {
 ///
 /// @seealso
 /// [FillType in skia_safe::path - Rust](https://rust-skia.github.io/doc/skia_safe/path/enum.FillType.html)
+/// @family paint-attributes
+/// @rdname skiagd-attrs-filltype
 /// @export
 #[savvy]
 pub enum FillType {
@@ -128,6 +121,14 @@ pub enum FillType {
     EvenOdd,
     InverseWinding,
     InverseEvenOdd,
+}
+
+pub fn sk_point_mode(mode: &PointMode) -> skia_safe::canvas::PointMode {
+    match mode {
+        PointMode::Points => skia_safe::canvas::PointMode::Points,
+        PointMode::Lines => skia_safe::canvas::PointMode::Lines,
+        PointMode::Polygon => skia_safe::canvas::PointMode::Polygon,
+    }
 }
 
 pub fn sk_fill_type(mode: &FillType) -> skia_safe::path::FillType {

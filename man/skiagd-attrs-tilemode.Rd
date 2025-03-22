@@ -11,6 +11,8 @@ An object of class \code{TileMode__bundle} (inherits from \code{savvy_skiagd__se
 TileMode
 }
 \description{
-TileMode (0-3)
+\code{TileMode} determines how the source is tiled for shaders.
+This attributes is not a paint attribute.
+To specify \code{TileMode}, directly pass these pointers to shader functions.
 }
 \keyword{datasets}

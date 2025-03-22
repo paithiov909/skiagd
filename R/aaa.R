@@ -7,16 +7,6 @@
 #' @keywords internal
 NULL # TODO: explain about picture
 
-#' @export
-print.PathEffect <- function(x, ...) {
-  cat("PathEffect::", x$get_label(), "\n", sep = "")
-}
-
-#' @export
-print.Shader <- function(x, ...) {
-  cat("Shader::", x$get_label(), "\n", sep = "")
-}
-
 #' Applying affine transformations to a picture
 #'
 #' @description

@@ -243,6 +243,8 @@ NULL
 #'
 #' @seealso
 #' [BlendMode in skia_safe - Rust](https://rust-skia.github.io/doc/skia_safe/enum.BlendMode.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-blendmode
 #' @export
 `BlendMode` <- new.env(parent = emptyenv())
 `BlendMode`$`Clear` <- .savvy_wrap_BlendMode(0L)
@@ -345,6 +347,8 @@ class(`BlendMode`) <- c("BlendMode__bundle", "savvy_skiagd__sealed")
 #'
 #' @seealso
 #' [Cap in skia_safe::paint - Rust](https://rust-skia.github.io/doc/skia_safe/paint/enum.Cap.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-cap
 #' @export
 `Cap` <- new.env(parent = emptyenv())
 `Cap`$`Butt` <- .savvy_wrap_Cap(0L)
@@ -423,6 +427,8 @@ class(`Cap`) <- c("Cap__bundle", "savvy_skiagd__sealed")
 #'
 #' @seealso
 #' [FillType in skia_safe::path - Rust](https://rust-skia.github.io/doc/skia_safe/path/enum.FillType.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-filltype
 #' @export
 `FillType` <- new.env(parent = emptyenv())
 `FillType`$`Winding` <- .savvy_wrap_FillType(0L)
@@ -500,6 +506,8 @@ class(`FillType`) <- c("FillType__bundle", "savvy_skiagd__sealed")
 #'
 #' @seealso
 #' [Join in skia_safe::paint - Rust](https://rust-skia.github.io/doc/skia_safe/paint/enum.Join.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-join
 #' @export
 `Join` <- new.env(parent = emptyenv())
 `Join`$`Miter` <- .savvy_wrap_Join(0L)
@@ -622,26 +630,6 @@ class(`PaintAttrs`) <- c("PaintAttrs__bundle", "savvy_skiagd__sealed")
 }
 
 
-#' PathEffect
-#'
-#' `PathEffect` is a struct that offers a reference to `skia_safe::PathEffect`.
-#' You can apply a path effect to shapes via [paint()].
-#' Currently only single `PathEffect` can be specified; multiple effects are not supported.
-#'
-#' @details
-#' The following effects are available:
-#'
-#' * `no_effect()`: does not apply any path effect. This is the default effect for `paint()`.
-#' * `trim(start, end)`: trims the `start` and `end` of the path. `start` and `end` are in the range `[0, 1]`.
-#' * `discrete(length, deviation, seed)`: applies discrete path effect.
-#' * `dash(intervals, phase)`: applies dash path effect.
-#' * `corner(radius)`: applies corner path effect.
-#' * `path_1d(path, advance, phase, style)`: applies 1D path effect. `style` can be `"translate"`, `"rotate"`, or `"morph"`.
-#' * `path_2d(path, mat)`: applies 2D path effect.
-#' * `line_2d(width, mat)`: applies 2D line path effect.
-#'
-#' @seealso
-#' [Path Effects | React Native Skia](https://shopify.github.io/react-native-skia/docs/path-effects/)
 #' @export
 `PathEffect` <- new.env(parent = emptyenv())
 
@@ -714,6 +702,8 @@ class(`PathEffect`) <- c("PathEffect__bundle", "savvy_skiagd__sealed")
 #'
 #' @seealso
 #' [PointMode in skia_safe::canvas - Rust](https://rust-skia.github.io/doc/skia_safe/canvas/enum.PointMode.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-pointmode
 #' @export
 `PointMode` <- new.env(parent = emptyenv())
 `PointMode`$`Points` <- .savvy_wrap_PointMode(0L)
@@ -782,12 +772,6 @@ class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
 }
 
 
-#' Shader
-#'
-#' @seealso
-#' * [Gradients | React Native Skia](https://shopify.github.io/react-native-skia/docs/shaders/gradients)
-#' * [Perlin Noise Shaders | React Native Skia](https://shopify.github.io/react-native-skia/docs/shaders/perlin-noise)
-#' * [Blending and Colors | React Native Skia](https://shopify.github.io/react-native-skia/docs/shaders/colors)
 #' @export
 `Shader` <- new.env(parent = emptyenv())
 
@@ -875,6 +859,8 @@ class(`Shader`) <- c("Shader__bundle", "savvy_skiagd__sealed")
 #'
 #' @seealso
 #' [Style in skia_safe::paint - Rust](https://rust-skia.github.io/doc/skia_safe/paint/enum.Style.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-style
 #' @export
 `Style` <- new.env(parent = emptyenv())
 `Style`$`StrokeAndFill` <- .savvy_wrap_Style(0L)
@@ -940,6 +926,11 @@ class(`Style`) <- c("Style__bundle", "savvy_skiagd__sealed")
 
 #' TileMode (0-3)
 #'
+#' `TileMode` determines how the source is tiled for shaders.
+#' This attributes is not a paint attribute.
+#' To specify `TileMode`, directly pass these pointers to shader functions.
+#'
+#' @rdname skiagd-attrs-tilemode
 #' @export
 `TileMode` <- new.env(parent = emptyenv())
 `TileMode`$`Clamp` <- .savvy_wrap_TileMode(0L)

@@ -24,5 +24,13 @@ The following \code{PointMode} are available:
 }
 \seealso{
 \href{https://rust-skia.github.io/doc/skia_safe/canvas/enum.PointMode.html}{PointMode in skia_safe::canvas - Rust}
+
+Other paint-attributes: 
+\code{\link{BlendMode}},
+\code{\link{Cap}},
+\code{\link{FillType}},
+\code{\link{Join}},
+\code{\link{Style}}
 }
+\concept{paint-attributes}
 \keyword{datasets}

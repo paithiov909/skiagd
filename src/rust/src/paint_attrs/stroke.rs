@@ -13,6 +13,8 @@ use savvy::savvy;
 ///
 /// @seealso
 /// [Style in skia_safe::paint - Rust](https://rust-skia.github.io/doc/skia_safe/paint/enum.Style.html)
+/// @family paint-attributes
+/// @rdname skiagd-attrs-style
 /// @export
 #[savvy]
 pub enum Style {
@@ -34,6 +36,8 @@ pub enum Style {
 ///
 /// @seealso
 /// [Join in skia_safe::paint - Rust](https://rust-skia.github.io/doc/skia_safe/paint/enum.Join.html)
+/// @family paint-attributes
+/// @rdname skiagd-attrs-join
 /// @export
 #[savvy]
 pub enum Join {
@@ -55,6 +59,8 @@ pub enum Join {
 ///
 /// @seealso
 /// [Cap in skia_safe::paint - Rust](https://rust-skia.github.io/doc/skia_safe/paint/enum.Cap.html)
+/// @family paint-attributes
+/// @rdname skiagd-attrs-cap
 /// @export
 #[savvy]
 pub enum Cap {
