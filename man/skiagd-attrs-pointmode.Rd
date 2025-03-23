@@ -30,6 +30,8 @@ Other paint-attributes:
 \code{\link{Cap}},
 \code{\link{FillType}},
 \code{\link{Join}},
+\code{\link{PathEffect}},
+\code{\link{Shader}},
 \code{\link{Style}}
 }
 \concept{paint-attributes}

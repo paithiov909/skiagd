@@ -647,8 +647,8 @@ class(`PaintAttrs`) <- c("PaintAttrs__bundle", "savvy_skiagd__sealed")
   .savvy_wrap_PathEffect(.Call(savvy_PathEffect_discrete__impl, `length`, `deviation`, `seed`))
 }
 
-`PathEffect`$`line_2d` <- function(`width`, `mat`) {
-  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_line_2d__impl, `width`, `mat`))
+`PathEffect`$`line_2d` <- function(`width`, `transform`) {
+  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_line_2d__impl, `width`, `transform`))
 }
 
 `PathEffect`$`no_effect` <- function() {
@@ -659,8 +659,8 @@ class(`PaintAttrs`) <- c("PaintAttrs__bundle", "savvy_skiagd__sealed")
   .savvy_wrap_PathEffect(.Call(savvy_PathEffect_path_1d__impl, `path`, `advance`, `phase`, `style`))
 }
 
-`PathEffect`$`path_2d` <- function(`path`, `mat`) {
-  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_path_2d__impl, `path`, `mat`))
+`PathEffect`$`path_2d` <- function(`path`, `transform`) {
+  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_path_2d__impl, `path`, `transform`))
 }
 
 `PathEffect`$`trim` <- function(`start`, `end`) {
@@ -788,37 +788,37 @@ class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
   .savvy_wrap_Shader(.Call(savvy_Shader_color__impl, `rgba`))
 }
 
-`Shader`$`conical_gradient` <- function(`start`, `end`, `radii`, `from`, `to`, `mode`, `flags`, `mat`) {
+`Shader`$`conical_gradient` <- function(`start`, `end`, `radii`, `from`, `to`, `mode`, `flags`, `transform`) {
   `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
-  .savvy_wrap_Shader(.Call(savvy_Shader_conical_gradient__impl, `start`, `end`, `radii`, `from`, `to`, `mode`, `flags`, `mat`))
+  .savvy_wrap_Shader(.Call(savvy_Shader_conical_gradient__impl, `start`, `end`, `radii`, `from`, `to`, `mode`, `flags`, `transform`))
 }
 
 `Shader`$`fractal_noise` <- function(`freq`, `octaves`, `seed`, `tile_size`) {
   .savvy_wrap_Shader(.Call(savvy_Shader_fractal_noise__impl, `freq`, `octaves`, `seed`, `tile_size`))
 }
 
-`Shader`$`from_png` <- function(`png_bytes`, `mode`, `mat`) {
+`Shader`$`from_png` <- function(`png_bytes`, `mode`, `transform`) {
   `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
-  .savvy_wrap_Shader(.Call(savvy_Shader_from_png__impl, `png_bytes`, `mode`, `mat`))
+  .savvy_wrap_Shader(.Call(savvy_Shader_from_png__impl, `png_bytes`, `mode`, `transform`))
 }
 
-`Shader`$`linear_gradient` <- function(`start`, `end`, `from`, `to`, `mode`, `flags`, `mat`) {
+`Shader`$`linear_gradient` <- function(`start`, `end`, `from`, `to`, `mode`, `flags`, `transform`) {
   `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
-  .savvy_wrap_Shader(.Call(savvy_Shader_linear_gradient__impl, `start`, `end`, `from`, `to`, `mode`, `flags`, `mat`))
+  .savvy_wrap_Shader(.Call(savvy_Shader_linear_gradient__impl, `start`, `end`, `from`, `to`, `mode`, `flags`, `transform`))
 }
 
 `Shader`$`no_shader` <- function() {
   .savvy_wrap_Shader(.Call(savvy_Shader_no_shader__impl))
 }
 
-`Shader`$`radial_gradient` <- function(`center`, `radius`, `from`, `to`, `mode`, `flags`, `mat`) {
+`Shader`$`radial_gradient` <- function(`center`, `radius`, `from`, `to`, `mode`, `flags`, `transform`) {
   `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
-  .savvy_wrap_Shader(.Call(savvy_Shader_radial_gradient__impl, `center`, `radius`, `from`, `to`, `mode`, `flags`, `mat`))
+  .savvy_wrap_Shader(.Call(savvy_Shader_radial_gradient__impl, `center`, `radius`, `from`, `to`, `mode`, `flags`, `transform`))
 }
 
-`Shader`$`sweep_gradient` <- function(`center`, `start_angle`, `end_angle`, `from`, `to`, `mode`, `flags`, `mat`) {
+`Shader`$`sweep_gradient` <- function(`center`, `start_angle`, `end_angle`, `from`, `to`, `mode`, `flags`, `transform`) {
   `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
-  .savvy_wrap_Shader(.Call(savvy_Shader_sweep_gradient__impl, `center`, `start_angle`, `end_angle`, `from`, `to`, `mode`, `flags`, `mat`))
+  .savvy_wrap_Shader(.Call(savvy_Shader_sweep_gradient__impl, `center`, `start_angle`, `end_angle`, `from`, `to`, `mode`, `flags`, `transform`))
 }
 
 `Shader`$`turbulence` <- function(`freq`, `octaves`, `seed`, `tile_size`) {
@@ -927,9 +927,18 @@ class(`Style`) <- c("Style__bundle", "savvy_skiagd__sealed")
 #' TileMode (0-3)
 #'
 #' `TileMode` determines how the source is tiled for shaders.
-#' This is not a paint attribute.
-#' To specify `TileMode`, directly pass these pointers to shader functions.
+#' This is not a paint attribute. To specify `TileMode`, directly pass these pointers to shader functions.
 #'
+#' @details
+#' The following `TileMode` are available:
+#'
+#' * `Clamp`
+#' * `Repeat`
+#' * `Mirror`
+#' * `Decal`
+#'
+#' @seealso
+#' [TileMode in skia_safe - Rust](https://rust-skia.github.io/doc/skia_safe/enum.TileMode.html)
 #' @rdname skiagd-attrs-tilemode
 #' @export
 `TileMode` <- new.env(parent = emptyenv())

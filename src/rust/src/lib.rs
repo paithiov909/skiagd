@@ -536,8 +536,8 @@ impl PathEffect {
             effect: Some(effect_1d),
         })
     }
-    fn path_2d(path: StringSexp, mat: NumericSexp) -> savvy::Result<Self> {
-        let mat = as_matrix(&mat)?;
+    fn path_2d(path: StringSexp, transform: NumericSexp) -> savvy::Result<Self> {
+        let mat = as_matrix(&transform)?;
         let s = path.to_vec()[0];
         let path = skia_safe::utils::parse_path::from_svg(s)
             .ok_or_else(|| return savvy_err!("Failed to parse svg"))?;
@@ -547,8 +547,8 @@ impl PathEffect {
             effect: Some(effect_2d),
         })
     }
-    fn line_2d(width: NumericScalar, mat: NumericSexp) -> savvy::Result<Self> {
-        let mat = as_matrix(&mat)?;
+    fn line_2d(width: NumericScalar, transform: NumericSexp) -> savvy::Result<Self> {
+        let mat = as_matrix(&transform)?;
         let effect_2d = skia_safe::PathEffect::line_2d(width.as_f64() as f32, &mat);
         Ok(PathEffect {
             label: "line_2d".to_string(),
@@ -568,9 +568,9 @@ impl Shader {
     pub unsafe fn from_png(
         png_bytes: savvy::RawSexp,
         mode: TileMode,
-        mat: NumericSexp,
+        transform: NumericSexp,
     ) -> savvy::Result<Self> {
-        let mat = as_matrix(&mat)?;
+        let mat = as_matrix(&transform)?;
         let input = Data::new_bytes(png_bytes.as_slice());
         let image = Image::from_encoded_with_alpha_type(input, skia_safe::AlphaType::Premul)
             .ok_or_else(|| return savvy_err!("Failed to read PNG as image"))?;
@@ -675,12 +675,12 @@ impl Shader {
         // pos: NumericSexp,
         mode: TileMode,
         flags: LogicalSexp,
-        mat: NumericSexp,
+        transform: NumericSexp,
     ) -> savvy::Result<Self> {
         if start.len() != 2 || end.len() != 2 || from.len() != 4 || to.len() != 4 {
             return Err(savvy_err!("Invalid arguments"));
         }
-        let mat = as_matrix(&mat)?;
+        let mat = as_matrix(&transform)?;
         let start = start.as_slice_f64();
         let end = end.as_slice_f64();
         let from = from.as_slice_f64();
@@ -721,12 +721,12 @@ impl Shader {
         // pos: NumericSexp,
         mode: TileMode,
         flags: LogicalSexp,
-        mat: NumericSexp,
+        transform: NumericSexp,
     ) -> savvy::Result<Self> {
         if center.len() != 2 || from.len() != 4 || to.len() != 4 {
             return Err(savvy_err!("Invalid arguments"));
         }
-        let mat = as_matrix(&mat)?;
+        let mat = as_matrix(&transform)?;
         let center = center.as_slice_f64();
         let from = from.as_slice_f64();
         let to = to.as_slice_f64();
@@ -766,7 +766,7 @@ impl Shader {
         // pos: NumericSexp,
         mode: TileMode,
         flags: LogicalSexp,
-        mat: NumericSexp,
+        transform: NumericSexp,
     ) -> savvy::Result<Self> {
         if start.len() != 2
             || end.len() != 2
@@ -776,7 +776,7 @@ impl Shader {
         {
             return Err(savvy_err!("Invalid arguments"));
         }
-        let mat = as_matrix(&mat)?;
+        let mat = as_matrix(&transform)?;
         let start = start.as_slice_f64();
         let end = end.as_slice_f64();
         let radii = radii.as_slice_f64();
@@ -819,12 +819,12 @@ impl Shader {
         // pos: NumericSexp,
         mode: TileMode,
         flags: LogicalSexp,
-        mat: NumericSexp,
+        transform: NumericSexp,
     ) -> savvy::Result<Self> {
         if center.len() != 2 || from.len() != 4 || to.len() != 4 {
             return Err(savvy_err!("Invalid arguments"));
         }
-        let mat = as_matrix(&mat)?;
+        let mat = as_matrix(&transform)?;
         let center = center.as_slice_f64();
         let from = from.as_slice_f64();
         let to = to.as_slice_f64();

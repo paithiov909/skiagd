@@ -10,7 +10,7 @@ add_path(img, path, transform = c(1, 0, 0, 0, 1, 0, 0, 0, 1), props = paint())
 \item{img}{A raw vector of picture.}
 
 \item{path}{Characters of SVG notations
-like \verb{M10 10 H 90 V 90 H 10 L 10 10}.}
+like \code{"M10 10 H 90 V 90 H 10 L 10 10"}.}
 
 \item{transform}{Numerics of length 9
 to apply affine transformations to the path themselves.

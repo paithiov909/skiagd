@@ -18,8 +18,8 @@ print.PathEffect <- function(x, ...) {
 #' * `dash(intervals, phase)`: applies dash path effect.
 #' * `corner(radius)`: applies corner path effect.
 #' * `path_1d(path, advance, phase, style)`: applies 1D path effect.
-#' * `path_2d(path, mat)`: applies 2D path effect.
-#' * `line_2d(width, mat)`: applies 2D line path effect.
+#' * `path_2d(path, transform)`: applies 2D path effect.
+#' * `line_2d(width, transform)`: applies 2D line path effect.
 #'
 #' @param start A numeric scalar in the range `[0, 1]`.
 #' @param end A numeric scalar in the range `[0, 1]`.
@@ -36,12 +36,13 @@ print.PathEffect <- function(x, ...) {
 #' @param advance A numeric scalar; space between instances of path.
 #' @param style A string scalar; how to transform path at each point.
 #' Can be `"translate"`, `"rotate"`, or `"morph"`.
-#' @param mat Numerics of length 9; transformation matrix.
+#' @param transform Numerics of length 9; transformation matrix.
 #' @param width A numeric scalar; width of the path to be stamped.
 #'
 #' @returns A `PathEffect` object.
 #' @seealso
 #' [Path Effects | React Native Skia](https://shopify.github.io/react-native-skia/docs/path-effects/)
+#' @family paint-attributes
 #' @rdname skiagd-path-effect
 #' @name PathEffect
 NULL

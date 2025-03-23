@@ -6,9 +6,9 @@
 \arguments{
 \item{png_bytes}{A raw vector of PNG data.}
 
-\item{mode}{For \code{blend()}, \link{BlendMode}; for others, \link{TileMode}.}
+\item{mode}{For \code{blend()}, \link{BlendMode}. For others, \link{TileMode}.}
 
-\item{mat}{Numerics of length 9; transformation matrix.}
+\item{transform}{Numerics of length 9; transformation matrix.}
 
 \item{rgba}{Integers of length 4 in range \verb{[0, 255]}
 representing RGBA.}
@@ -34,7 +34,7 @@ representing RGBA.}
 \item{to}{Numerics of length 4 in range \verb{[0, 255]}; ending color.}
 
 \item{flags}{A logical scalar; typically, you can leave this as \code{FALSE}.
-See \href{https://shopify.github.io/react-native-skia/docs/shaders/gradients/#common-properties}{here}.
+See \href{https://shopify.github.io/react-native-skia/docs/shaders/gradients/#common-properties}{here}
 for details.}
 
 \item{radii}{Numerics of length 2; radii of start and end circles.}
@@ -58,15 +58,15 @@ You can apply a shader to drawings via \code{\link[=paint]{paint()}}.
 The following shaders are available:
 \itemize{
 \item \code{no_shader()}: does not apply any shader. This is the default shader for \code{\link[=paint]{paint()}}.
-\item \code{from_png(png_bytes, mode, mat)}: takes a PNG image and returns an image shader.
+\item \code{from_png(png_bytes, mode, transform)}: takes a PNG image and returns an image shader.
 \item \code{color(rgba)}: takess a color and returns a color shader.
 \item \code{blend(mode, dst, src)}: returns a shader that combines the given shaders with a \link{BlendMode}.
 \item \code{fractal_noise(freq, octaves, seed, tile_size)}: fractal perlin noise shader.
 \item \code{turbulence(freq, octaves, seed, tile_size)}: turbulence noise shader.
-\item \code{linear_gradient(start, end, from, to, mode, flags, mat)}: linear gradient shader.
-\item \code{radial_gradient(center, radius, from, to, mode, flags, mat)}: radial gradient shader.
-\item \code{conical_gradient(start, end, radii, from, to, mode, flags, mat)}: conical gradient shader.
-\item \code{sweep_gradient(center, start_angle, end_angle, from, to, mode, flags, mat)}: sweep gradient shader.
+\item \code{linear_gradient(start, end, from, to, mode, flags, transform)}: linear gradient shader.
+\item \code{radial_gradient(center, radius, from, to, mode, flags, transform)}: radial gradient shader.
+\item \code{conical_gradient(start, end, radii, from, to, mode, flags, transform)}: conical gradient shader.
+\item \code{sweep_gradient(center, start_angle, end_angle, from, to, mode, flags, transform)}: sweep gradient shader.
 }
 }
 \seealso{
@@ -76,4 +76,14 @@ The following shaders are available:
 \item \href{https://shopify.github.io/react-native-skia/docs/shaders/perlin-noise}{Perlin Noise Shaders | React Native Skia}
 \item \href{https://shopify.github.io/react-native-skia/docs/shaders/colors}{Blending and Colors | React Native Skia}
 }
+
+Other paint-attributes: 
+\code{\link{BlendMode}},
+\code{\link{Cap}},
+\code{\link{FillType}},
+\code{\link{Join}},
+\code{\link{PathEffect}},
+\code{\link{PointMode}},
+\code{\link{Style}}
 }
+\concept{paint-attributes}

@@ -19,9 +19,18 @@ impl Shader {
 /// TileMode (0-3)
 ///
 /// `TileMode` determines how the source is tiled for shaders.
-/// This is not a paint attribute.
-/// To specify `TileMode`, directly pass these pointers to shader functions.
+/// This is not a paint attribute. To specify `TileMode`, directly pass these pointers to shader functions.
 ///
+/// @details
+/// The following `TileMode` are available:
+///
+/// * `Clamp`
+/// * `Repeat`
+/// * `Mirror`
+/// * `Decal`
+///
+/// @seealso
+/// [TileMode in skia_safe - Rust](https://rust-skia.github.io/doc/skia_safe/enum.TileMode.html)
 /// @rdname skiagd-attrs-tilemode
 /// @export
 #[savvy]

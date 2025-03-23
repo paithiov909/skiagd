@@ -29,7 +29,9 @@ Other paint-attributes:
 \code{\link{Cap}},
 \code{\link{FillType}},
 \code{\link{Join}},
-\code{\link{PointMode}}
+\code{\link{PathEffect}},
+\code{\link{PointMode}},
+\code{\link{Shader}}
 }
 \concept{paint-attributes}
 \keyword{datasets}

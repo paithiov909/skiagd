@@ -12,7 +12,18 @@ TileMode
 }
 \description{
 \code{TileMode} determines how the source is tiled for shaders.
-This is not a paint attribute.
-To specify \code{TileMode}, directly pass these pointers to shader functions.
+This is not a paint attribute. To specify \code{TileMode}, directly pass these pointers to shader functions.
+}
+\details{
+The following \code{TileMode} are available:
+\itemize{
+\item \code{Clamp}
+\item \code{Repeat}
+\item \code{Mirror}
+\item \code{Decal}
+}
+}
+\seealso{
+\href{https://rust-skia.github.io/doc/skia_safe/enum.TileMode.html}{TileMode in skia_safe - Rust}
 }
 \keyword{datasets}

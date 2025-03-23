@@ -30,7 +30,7 @@ or distance (mod advance) along the path for its initial position (for \code{pat
 \item{style}{A string scalar; how to transform path at each point.
 Can be \code{"translate"}, \code{"rotate"}, or \code{"morph"}.}
 
-\item{mat}{Numerics of length 9; transformation matrix.}
+\item{transform}{Numerics of length 9; transformation matrix.}
 
 \item{width}{A numeric scalar; width of the path to be stamped.}
 }
@@ -51,10 +51,20 @@ The following effects are available:
 \item \code{dash(intervals, phase)}: applies dash path effect.
 \item \code{corner(radius)}: applies corner path effect.
 \item \code{path_1d(path, advance, phase, style)}: applies 1D path effect.
-\item \code{path_2d(path, mat)}: applies 2D path effect.
-\item \code{line_2d(width, mat)}: applies 2D line path effect.
+\item \code{path_2d(path, transform)}: applies 2D path effect.
+\item \code{line_2d(width, transform)}: applies 2D line path effect.
 }
 }
 \seealso{
 \href{https://shopify.github.io/react-native-skia/docs/path-effects/}{Path Effects | React Native Skia}
+
+Other paint-attributes: 
+\code{\link{BlendMode}},
+\code{\link{Cap}},
+\code{\link{FillType}},
+\code{\link{Join}},
+\code{\link{PointMode}},
+\code{\link{Shader}},
+\code{\link{Style}}
 }
+\concept{paint-attributes}

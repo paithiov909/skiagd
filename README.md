@@ -116,7 +116,7 @@ img_data <-
   ) |>
   as_png()
 
-## `as_png` retunrns a PNG image with alpha channel as a raw vector.
+## `as_png()` returns a PNG image with alpha channel as a raw vector.
 ## You can save it to a PNG file using `writeBin()`.
 # writeBin(img_data, "man/figures/README-test-plot.png")
 
@@ -145,7 +145,7 @@ img_data <-
         to = col2rgba("skyblue"),
         mode = TileMode$Clamp,
         flags = FALSE,
-        mat = c(1, 0, 0, 0, 1, 0, 0, 0, 1)
+        transform = c(1, 0, 0, 0, 1, 0, 0, 0, 1)
       )
     )
   ) |>
@@ -163,7 +163,7 @@ img_data <-
         to = col2rgba("gold"),
         mode = TileMode$Clamp,
         flags = FALSE,
-        mat = c(1, 0, 0, 0, 1, 0, 0, 0, 1)
+        transform = c(1, 0, 0, 0, 1, 0, 0, 0, 1)
       )
     )
   ) |>

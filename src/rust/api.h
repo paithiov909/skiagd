@@ -29,10 +29,10 @@ SEXP savvy_PathEffect_corner__ffi(SEXP c_arg__radius);
 SEXP savvy_PathEffect_dash__ffi(SEXP c_arg__intervals, SEXP c_arg__phase);
 SEXP savvy_PathEffect_discrete__ffi(SEXP c_arg__length, SEXP c_arg__deviation, SEXP c_arg__seed);
 SEXP savvy_PathEffect_get_label__ffi(SEXP self__);
-SEXP savvy_PathEffect_line_2d__ffi(SEXP c_arg__width, SEXP c_arg__mat);
+SEXP savvy_PathEffect_line_2d__ffi(SEXP c_arg__width, SEXP c_arg__transform);
 SEXP savvy_PathEffect_no_effect__ffi(void);
 SEXP savvy_PathEffect_path_1d__ffi(SEXP c_arg__path, SEXP c_arg__advance, SEXP c_arg__phase, SEXP c_arg__style);
-SEXP savvy_PathEffect_path_2d__ffi(SEXP c_arg__path, SEXP c_arg__mat);
+SEXP savvy_PathEffect_path_2d__ffi(SEXP c_arg__path, SEXP c_arg__transform);
 SEXP savvy_PathEffect_trim__ffi(SEXP c_arg__start, SEXP c_arg__end);
 
 // methods and associated functions for PointMode
@@ -41,14 +41,14 @@ SEXP savvy_PathEffect_trim__ffi(SEXP c_arg__start, SEXP c_arg__end);
 // methods and associated functions for Shader
 SEXP savvy_Shader_blend__ffi(SEXP c_arg__mode, SEXP c_arg__dst, SEXP c_arg__src);
 SEXP savvy_Shader_color__ffi(SEXP c_arg__rgba);
-SEXP savvy_Shader_conical_gradient__ffi(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__radii, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__mat);
+SEXP savvy_Shader_conical_gradient__ffi(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__radii, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform);
 SEXP savvy_Shader_fractal_noise__ffi(SEXP c_arg__freq, SEXP c_arg__octaves, SEXP c_arg__seed, SEXP c_arg__tile_size);
-SEXP savvy_Shader_from_png__ffi(SEXP c_arg__png_bytes, SEXP c_arg__mode, SEXP c_arg__mat);
+SEXP savvy_Shader_from_png__ffi(SEXP c_arg__png_bytes, SEXP c_arg__mode, SEXP c_arg__transform);
 SEXP savvy_Shader_get_label__ffi(SEXP self__);
-SEXP savvy_Shader_linear_gradient__ffi(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__mat);
+SEXP savvy_Shader_linear_gradient__ffi(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform);
 SEXP savvy_Shader_no_shader__ffi(void);
-SEXP savvy_Shader_radial_gradient__ffi(SEXP c_arg__center, SEXP c_arg__radius, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__mat);
-SEXP savvy_Shader_sweep_gradient__ffi(SEXP c_arg__center, SEXP c_arg__start_angle, SEXP c_arg__end_angle, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__mat);
+SEXP savvy_Shader_radial_gradient__ffi(SEXP c_arg__center, SEXP c_arg__radius, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform);
+SEXP savvy_Shader_sweep_gradient__ffi(SEXP c_arg__center, SEXP c_arg__start_angle, SEXP c_arg__end_angle, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform);
 SEXP savvy_Shader_turbulence__ffi(SEXP c_arg__freq, SEXP c_arg__octaves, SEXP c_arg__seed, SEXP c_arg__tile_size);
 
 // methods and associated functions for Style

@@ -6,7 +6,7 @@
 \alias{skiagd-package}
 \title{skiagd: R wrapper for 'rust-skia'}
 \description{
-A toy R wrapper for 'rust-skia' \url{https://github.com/rust-skia/rust-skia} (the rust crate 'skia_safe' \url{https://rust-skia.github.io/doc/skia_safe/}, a binding for 'Skia' \url{https://skia.org/}).
+A toy R wrapper for 'rust-skia' \url{https://github.com/rust-skia/rust-skia} (the Rust crate 'skia_safe' \url{https://rust-skia.github.io/doc/skia_safe/}, a binding for 'Skia' \url{https://skia.org/}).
 }
 \author{
 \strong{Maintainer}: Akiru Kato \email{paithiov909@gmail.com}

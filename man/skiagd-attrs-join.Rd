@@ -28,7 +28,9 @@ Other paint-attributes:
 \code{\link{BlendMode}},
 \code{\link{Cap}},
 \code{\link{FillType}},
+\code{\link{PathEffect}},
 \code{\link{PointMode}},
+\code{\link{Shader}},
 \code{\link{Style}}
 }
 \concept{paint-attributes}
