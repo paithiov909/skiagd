@@ -11,7 +11,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 <!-- badges: end -->
 
 skiagd is a toy R wrapper for
-[rust-skia](https://github.com/rust-skia/rust-skia) (the rust crate
+[rust-skia](https://github.com/rust-skia/rust-skia) (the Rust crate
 [skia_safe](https://rust-skia.github.io/doc/skia_safe/), a binding for
 [Skia](https://skia.org/)).
 
@@ -64,7 +64,7 @@ Skia](https://shopify.github.io/react-native-skia/).
   - [x] PathEffects
   - [ ] MaskFilter?? (blur)
   - [ ] ImageFilters
-  - [ ] [Shaders](https://rust-skia.github.io/doc/skia_safe/type.Shader.html)
+  - [x] Shaders
   - [ ] RuntimeShaders
     - sksl support
     - [uniforms](https://rust-skia.github.io/doc/skia_safe/runtime_effect/type.RuntimeShaderBuilder.html#method.set_uniform_int)
@@ -88,39 +88,91 @@ change.
 pkgload::load_all(export_all = FALSE)
 #> ℹ Loading skiagd
 
-img_data <-
-  unigd::ugd_render_inline({
-    set.seed(1234)
-    size <- dev_size("px")
-    n_circles <- 250
-    canvas("snow") |>
-      add_line(
-        matrix(c(runif(300, 0, size[1]), runif(300, 0, size[2])), ncol = 2),
-        matrix(c(runif(300, 0, size[1]), runif(300, 0, size[2])), ncol = 2),
-        props = paint(color = "#fff28166", width = 6)
-      ) |>
-      add_circle(
-        matrix(c(runif(n_circles,  0, size[1]), runif(n_circles, 0, size[2])), ncol = 2),
-        runif(n_circles, 6, 50),
-        props = paint(color = "#87ceeb66", blend_mode = BlendMode$ColorBurn)
-      ) |>
-      add_circle(
-        matrix(c(runif(n_circles, 0, size[1]), runif(n_circles, 0, size[2])), ncol = 2),
-        runif(n_circles, 20, 60),
-        props = paint(color = "#ff1493aa", blend_mode = BlendMode$Overlay)
-      ) |>
-      add_path(
-        "M 128 0 L 168 80 L 256 93 L 192 155 L 207 244 L 128 202 L 49 244 L 64 155 L 0 93 L 88 80 L 128 0 Z",
-        transform = c(1, 0, (size[1] / 2 - 128), 0, 1, (size[2] / 2 - 128), 0, 0, 1),
-        props = paint(color = "#fff281ee")
-      ) |>
-      draw_img()
-  }, as = "png", width = 1280, height = 720)
+set.seed(1234)
+size <- dev_size("px")
+n_circles <- 250
 
-img_data |>
-  magick::image_read() |>
-  as.raster() |>
-  plot()
+img_data <-
+  canvas("snow") |>
+  add_line(
+    matrix(c(runif(300, 0, size[1]), runif(300, 0, size[2])), ncol = 2),
+    matrix(c(runif(300, 0, size[1]), runif(300, 0, size[2])), ncol = 2),
+    props = paint(color = "#fff28166", width = 6)
+  ) |>
+  add_circle(
+    matrix(c(runif(n_circles, 0, size[1]), runif(n_circles, 0, size[2])), ncol = 2),
+    runif(n_circles, 6, 50),
+    props = paint(color = "#87ceeb66", blend_mode = BlendMode$ColorBurn)
+  ) |>
+  add_circle(
+    matrix(c(runif(n_circles, 0, size[1]), runif(n_circles, 0, size[2])), ncol = 2),
+    runif(n_circles, 20, 60),
+    props = paint(color = "#ff1493aa", blend_mode = BlendMode$Overlay)
+  ) |>
+  add_path(
+    "M 128 0 L 168 80 L 256 93 L 192 155 L 207 244 L 128 202 L 49 244 L 64 155 L 0 93 L 88 80 L 128 0 Z",
+    transform = c(1, 0, (size[1] / 2 - 128), 0, 1, (size[2] / 2 - 128), 0, 0, 1),
+    props = paint(color = "#fff281ee")
+  ) |>
+  as_png()
+
+## `as_png` retunrns a PNG image with alpha channel as a raw vector.
+## You can save it to a PNG file using `writeBin()`.
+# writeBin(img_data, "man/figures/README-test-plot.png")
+
+## Here we convert it to JPEG to save file size.
+magick::image_read(img_data) |>
+  magick::image_scale("720") |>
+  magick::image_convert("jpeg") |>
+  magick::image_write("man/figures/README-test-plot-1.jpg")
 ```
 
-<img src="man/figures/README-test-plot-1.png" style="width:100.0%" />
+![README-test-plot-1](man/figures/README-test-plot-1.jpg)
+
+``` r
+img_data <-
+  canvas("darkslateblue") |>
+  add_rect(
+    matrix(c(0, 0, size[1], size[2]), ncol = 4),
+    props = paint(
+      blend_mode = BlendMode$Lighten,
+      sytle = Style$Fill,
+      shader = Shader$conical_gradient(
+        c(size[1] / 2 * .8, size[2] / 2 * .8),
+        c(size[1] / 2 * .2, size[2] / 2 * .2),
+        c(size[1] / 2 * .8, size[1] / 2 * .2),
+        from = col2rgba("blueviolet"),
+        to = col2rgba("skyblue"),
+        mode = TileMode$Clamp,
+        flags = FALSE,
+        mat = c(1, 0, 0, 0, 1, 0, 0, 0, 1)
+      )
+    )
+  ) |>
+  add_circle(
+    matrix(c(size[1] / 2, size[2]), ncol = 2), size[1] * .4,
+    props = paint(
+      blend_mode = BlendMode$HardLight,
+      style = Style$Stroke,
+      cap = Cap$Square,
+      path_effect = PathEffect$line_2d(12, c(12, 0, 0, 0, 32, 0, 0, 0, 1)),
+      shader = Shader$sweep_gradient(
+        c(size[1] / 2, size[2]),
+        0, 360,
+        from = col2rgba("magenta"),
+        to = col2rgba("gold"),
+        mode = TileMode$Clamp,
+        flags = FALSE,
+        mat = c(1, 0, 0, 0, 1, 0, 0, 0, 1)
+      )
+    )
+  ) |>
+  as_png()
+
+magick::image_read(img_data) |>
+  magick::image_scale("720") |>
+  magick::image_convert("jpeg") |>
+  magick::image_write("man/figures/README-test-plot-2.jpg")
+```
+
+![README-test-plot-2](man/figures/README-test-plot-2.jpg)

@@ -583,11 +583,11 @@ impl Shader {
             ),
         })
     }
-    fn color(color: NumericSexp) -> savvy::Result<Self> {
-        if color.len() != 4 {
+    fn color(rgba: NumericSexp) -> savvy::Result<Self> {
+        if rgba.len() != 4 {
             return Err(savvy_err!("Invalid color. Expected 4 elements"));
         }
-        let color = color.as_slice_f64();
+        let color = rgba.as_slice_f64();
         Ok(Shader {
             label: "color".to_string(),
             shader: Some(skia_safe::shader::shaders::color(
@@ -812,8 +812,8 @@ impl Shader {
     }
     fn sweep_gradient(
         center: NumericSexp,
-        start: NumericScalar,
-        end: NumericScalar,
+        start_angle: NumericScalar,
+        end_angle: NumericScalar,
         from: NumericSexp,
         to: NumericSexp,
         // pos: NumericSexp,
@@ -828,8 +828,8 @@ impl Shader {
         let center = center.as_slice_f64();
         let from = from.as_slice_f64();
         let to = to.as_slice_f64();
-        let start = start.as_f64();
-        let end = end.as_f64();
+        let start = start_angle.as_f64();
+        let end = end_angle.as_f64();
         let flags = flags.to_vec()[0];
         let shader_sweep_gradient = skia_safe::Shader::sweep_gradient(
             (center[0] as f32, center[1] as f32),

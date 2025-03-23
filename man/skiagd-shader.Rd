@@ -3,12 +3,75 @@
 \name{Shader}
 \alias{Shader}
 \title{Shader}
+\arguments{
+\item{png_bytes}{A raw vector of PNG data.}
+
+\item{mode}{For \code{blend()}, \link{BlendMode}; for others, \link{TileMode}.}
+
+\item{mat}{Numerics of length 9; transformation matrix.}
+
+\item{rgba}{Integers of length 4 in range \verb{[0, 255]}
+representing RGBA.}
+
+\item{dst}{A \code{Shader} object; destination shader.}
+
+\item{src}{A \code{Shader} object; source shader.}
+
+\item{freq}{Numerics of length 2; frequencies.}
+
+\item{octaves}{A numeric scalar; number of octaves.}
+
+\item{seed}{Integer scalar; random seed.}
+
+\item{tile_size}{Numerics of length 2; tile size (width, height).}
+
+\item{start}{Numerics of length 2; starting point (x, y).}
+
+\item{end}{Numerics of length 2; ending point (x, y).}
+
+\item{from}{Numerics of length 4 in range \verb{[0, 255]}; starting color.}
+
+\item{to}{Numerics of length 4 in range \verb{[0, 255]}; ending color.}
+
+\item{flags}{A logical scalar; typically, you can leave this as \code{FALSE}.
+See \href{https://shopify.github.io/react-native-skia/docs/shaders/gradients/#common-properties}{here}.
+for details.}
+
+\item{radii}{Numerics of length 2; radii of start and end circles.}
+
+\item{center}{Numerics of length 2; center of the gradient.}
+
+\item{start_angle}{A numeric scalar in range \verb{[0, 360]};
+starting angle. For default, set \code{0}.}
+
+\item{end_angle}{A numeric scalar in range \verb{[0, 360]};
+ending angle. For default, set \code{360}.}
+}
+\value{
+A \code{Shader} object.
+}
 \description{
 \code{Shader} is a struct that offers a reference to \code{skia_safe::Shader}.
-You can apply a shader to paintings via \code{\link[=paint]{paint()}}.
+You can apply a shader to drawings via \code{\link[=paint]{paint()}}.
+}
+\details{
+The following shaders are available:
+\itemize{
+\item \code{no_shader()}: does not apply any shader. This is the default shader for \code{\link[=paint]{paint()}}.
+\item \code{from_png(png_bytes, mode, mat)}: takes a PNG image and returns an image shader.
+\item \code{color(rgba)}: takess a color and returns a color shader.
+\item \code{blend(mode, dst, src)}: returns a shader that combines the given shaders with a \link{BlendMode}.
+\item \code{fractal_noise(freq, octaves, seed, tile_size)}: fractal perlin noise shader.
+\item \code{turbulence(freq, octaves, seed, tile_size)}: turbulence noise shader.
+\item \code{linear_gradient(start, end, from, to, mode, flags, mat)}: linear gradient shader.
+\item \code{radial_gradient(center, radius, from, to, mode, flags, mat)}: radial gradient shader.
+\item \code{conical_gradient(start, end, radii, from, to, mode, flags, mat)}: conical gradient shader.
+\item \code{sweep_gradient(center, start_angle, end_angle, from, to, mode, flags, mat)}: sweep gradient shader.
+}
 }
 \seealso{
 \itemize{
+\item \href{https://shopify.github.io/react-native-skia/docs/shaders/images}{Image Shaders | React Native Skia}
 \item \href{https://shopify.github.io/react-native-skia/docs/shaders/gradients}{Gradients | React Native Skia}
 \item \href{https://shopify.github.io/react-native-skia/docs/shaders/perlin-noise}{Perlin Noise Shaders | React Native Skia}
 \item \href{https://shopify.github.io/react-native-skia/docs/shaders/colors}{Blending and Colors | React Native Skia}

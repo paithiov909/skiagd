@@ -1,7 +1,7 @@
 #' Add rectangles
 #'
 #' @param rect A double matrix where each row is a rectangle
-#' XYWH (`[left, top, right, bottom]`).
+#' XYWH (left, top, right, bottom).
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export
@@ -24,7 +24,7 @@ add_rect <- function(img, rect, props = paint()) {
 #' Add rounded rectangles
 #'
 #' @param rect A double matrix where each row is a rectangle
-#' XYWH (`[left, top, right, bottom]`).
+#' XYWH (left, top, right, bottom).
 #' @param radii A double matrix where each row is a pair of axis lengths
 #' on X-axis and Y-axis of oval describing rounded corners.
 #' @inheritParams param-img-and-props
@@ -49,11 +49,11 @@ add_rounded_rect <- function(img, rect, radii, props = paint()) {
 #' Add difference rectangles
 #'
 #' @param outer A double matrix where each row is an outer rectangle
-#' XYWH (`[left, top, right, bottom]`).
+#' XYWH (left, top, right, bottom).
 #' @param outer_radii A double matrix where each row is a pair of axis lengths
 #' on X-axis and Y-axis of outer oval describing rounded corners.
 #' @param inner A double matrix where each row is an inner rectangle
-#' XYWH (`[left, top, right, bottom]`).
+#' XYWH (left, top, right, bottom).
 #' @param inner_radii A double matrix where each row is a pair of axis lengths
 #' on X-axis and Y-axis of inner oval describing rounded corners.
 #' @inheritParams param-img-and-props

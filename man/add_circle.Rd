@@ -11,7 +11,7 @@ add_circle(img, center, radius, props = paint())
 
 \item{center}{A double matrix where each row is circle center.}
 
-\item{radius}{A double vector of circle radius.}
+\item{radius}{Numerics of circle radius.}
 
 \item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
 }

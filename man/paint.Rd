@@ -27,8 +27,8 @@ The following painting attributes can be specified:
 \item \code{style}: The paint style. See \link{Style}.
 \item \code{join}: Stroke join. See \link{Join}.
 \item \code{cap}: Stroke cap. See \link{Cap}.
-\item \code{width}: Numeric scalar (stroke width)
-\item \code{miter}: Numeric scalar (stroke miter)
+\item \code{width}: A numeric scalar (stroke width)
+\item \code{miter}: A numeric scalar (stroke miter)
 \item \code{blend_mode}: See \link{BlendMode}.
 \item \code{path_effect}: See \link{PathEffect}.
 \item \code{shader}: See \link{Shader}.

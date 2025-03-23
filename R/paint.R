@@ -16,8 +16,8 @@
 #' * `style`: The paint style. See [Style].
 #' * `join`: Stroke join. See [Join].
 #' * `cap`: Stroke cap. See [Cap].
-#' * `width`: Numeric scalar (stroke width)
-#' * `miter`: Numeric scalar (stroke miter)
+#' * `width`: A numeric scalar (stroke width)
+#' * `miter`: A numeric scalar (stroke miter)
 #' * `blend_mode`: See [BlendMode].
 #' * `path_effect`: See [PathEffect].
 #' * `shader`: See [Shader].
@@ -61,7 +61,6 @@ dev_size <- function(units = "px") {
 #' Color to RGBA
 #'
 #' A wrapper of [grDevices::col2rgb()].
-#' In general, you don't need to use this function explicitly.
 #'
 #' @param color `col` for [grDevices::col2rgb()].
 #' @returns An integer vector.

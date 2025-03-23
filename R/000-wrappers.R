@@ -784,8 +784,8 @@ class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
   .savvy_wrap_Shader(.Call(savvy_Shader_blend__impl, `mode`, `dst`, `src`))
 }
 
-`Shader`$`color` <- function(`color`) {
-  .savvy_wrap_Shader(.Call(savvy_Shader_color__impl, `color`))
+`Shader`$`color` <- function(`rgba`) {
+  .savvy_wrap_Shader(.Call(savvy_Shader_color__impl, `rgba`))
 }
 
 `Shader`$`conical_gradient` <- function(`start`, `end`, `radii`, `from`, `to`, `mode`, `flags`, `mat`) {
@@ -816,9 +816,9 @@ class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
   .savvy_wrap_Shader(.Call(savvy_Shader_radial_gradient__impl, `center`, `radius`, `from`, `to`, `mode`, `flags`, `mat`))
 }
 
-`Shader`$`sweep_gradient` <- function(`center`, `start`, `end`, `from`, `to`, `mode`, `flags`, `mat`) {
+`Shader`$`sweep_gradient` <- function(`center`, `start_angle`, `end_angle`, `from`, `to`, `mode`, `flags`, `mat`) {
   `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
-  .savvy_wrap_Shader(.Call(savvy_Shader_sweep_gradient__impl, `center`, `start`, `end`, `from`, `to`, `mode`, `flags`, `mat`))
+  .savvy_wrap_Shader(.Call(savvy_Shader_sweep_gradient__impl, `center`, `start_angle`, `end_angle`, `from`, `to`, `mode`, `flags`, `mat`))
 }
 
 `Shader`$`turbulence` <- function(`freq`, `octaves`, `seed`, `tile_size`) {
@@ -927,7 +927,7 @@ class(`Style`) <- c("Style__bundle", "savvy_skiagd__sealed")
 #' TileMode (0-3)
 #'
 #' `TileMode` determines how the source is tiled for shaders.
-#' This attributes is not a paint attribute.
+#' This is not a paint attribute.
 #' To specify `TileMode`, directly pass these pointers to shader functions.
 #'
 #' @rdname skiagd-attrs-tilemode

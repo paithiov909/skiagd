@@ -144,8 +144,8 @@ SEXP savvy_Shader_blend__impl(SEXP c_arg__mode, SEXP c_arg__dst, SEXP c_arg__src
     return handle_result(res);
 }
 
-SEXP savvy_Shader_color__impl(SEXP c_arg__color) {
-    SEXP res = savvy_Shader_color__ffi(c_arg__color);
+SEXP savvy_Shader_color__impl(SEXP c_arg__rgba) {
+    SEXP res = savvy_Shader_color__ffi(c_arg__rgba);
     return handle_result(res);
 }
 
@@ -184,8 +184,8 @@ SEXP savvy_Shader_radial_gradient__impl(SEXP c_arg__center, SEXP c_arg__radius, 
     return handle_result(res);
 }
 
-SEXP savvy_Shader_sweep_gradient__impl(SEXP c_arg__center, SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__mat) {
-    SEXP res = savvy_Shader_sweep_gradient__ffi(c_arg__center, c_arg__start, c_arg__end, c_arg__from, c_arg__to, c_arg__mode, c_arg__flags, c_arg__mat);
+SEXP savvy_Shader_sweep_gradient__impl(SEXP c_arg__center, SEXP c_arg__start_angle, SEXP c_arg__end_angle, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__mat) {
+    SEXP res = savvy_Shader_sweep_gradient__ffi(c_arg__center, c_arg__start_angle, c_arg__end_angle, c_arg__from, c_arg__to, c_arg__mode, c_arg__flags, c_arg__mat);
     return handle_result(res);
 }
 

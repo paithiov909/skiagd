@@ -31,7 +31,7 @@ as_png <- function(img, props = paint()) {
 #'
 #' `as_png(img)` and then adds it to a new canvas.
 #'
-#' @param fill A string; named colors or hexadecimal color codes.
+#' @param fill A string scalar; named colors or hexadecimal color codes.
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export

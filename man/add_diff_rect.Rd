@@ -10,13 +10,13 @@ add_diff_rect(img, outer, outer_radii, inner, inner_radii, props = paint())
 \item{img}{A raw vector of picture.}
 
 \item{outer}{A double matrix where each row is an outer rectangle
-XYWH (\verb{[left, top, right, bottom]}).}
+XYWH (left, top, right, bottom).}
 
 \item{outer_radii}{A double matrix where each row is a pair of axis lengths
 on X-axis and Y-axis of outer oval describing rounded corners.}
 
 \item{inner}{A double matrix where each row is an inner rectangle
-XYWH (\verb{[left, top, right, bottom]}).}
+XYWH (left, top, right, bottom).}
 
 \item{inner_radii}{A double matrix where each row is a pair of axis lengths
 on X-axis and Y-axis of inner oval describing rounded corners.}

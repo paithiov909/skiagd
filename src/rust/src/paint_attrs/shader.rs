@@ -19,7 +19,7 @@ impl Shader {
 /// TileMode (0-3)
 ///
 /// `TileMode` determines how the source is tiled for shaders.
-/// This attributes is not a paint attribute.
+/// This is not a paint attribute.
 /// To specify `TileMode`, directly pass these pointers to shader functions.
 ///
 /// @rdname skiagd-attrs-tilemode

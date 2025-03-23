@@ -7,9 +7,9 @@
 canvas(fill = "transparent", size = paint()[["canvas_size"]])
 }
 \arguments{
-\item{fill}{A string; named colors or hexadecimal color codes.}
+\item{fill}{A string scalar; named colors or hexadecimal color codes.}
 
-\item{size}{An integer; canvas size.}
+\item{size}{Integers of length 2; canvas size.}
 }
 \value{
 A raw vector of picture.

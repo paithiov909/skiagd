@@ -6,9 +6,50 @@ print.Shader <- function(x, ...) {
 #' Shader
 #'
 #' `Shader` is a struct that offers a reference to `skia_safe::Shader`.
-#' You can apply a shader to paintings via [paint()].
+#' You can apply a shader to drawings via [paint()].
 #'
+#' @details
+#' The following shaders are available:
+#'
+#' * `no_shader()`: does not apply any shader. This is the default shader for [paint()].
+#' * `from_png(png_bytes, mode, mat)`: takes a PNG image and returns an image shader.
+#' * `color(rgba)`: takess a color and returns a color shader.
+#' * `blend(mode, dst, src)`: returns a shader that combines the given shaders with a [BlendMode].
+#' * `fractal_noise(freq, octaves, seed, tile_size)`: fractal perlin noise shader.
+#' * `turbulence(freq, octaves, seed, tile_size)`: turbulence noise shader.
+#' * `linear_gradient(start, end, from, to, mode, flags, mat)`: linear gradient shader.
+#' * `radial_gradient(center, radius, from, to, mode, flags, mat)`: radial gradient shader.
+#' * `conical_gradient(start, end, radii, from, to, mode, flags, mat)`: conical gradient shader.
+#' * `sweep_gradient(center, start_angle, end_angle, from, to, mode, flags, mat)`: sweep gradient shader.
+#'
+#' @param png_bytes A raw vector of PNG data.
+#' @param mode For `blend()`, [BlendMode]; for others, [TileMode].
+#' @param mat Numerics of length 9; transformation matrix.
+#' @param rgba Integers of length 4 in range `[0, 255]`
+#' representing RGBA.
+#' @param dst A `Shader` object; destination shader.
+#' @param src A `Shader` object; source shader.
+#' @param freq Numerics of length 2; frequencies.
+#' @param octaves A numeric scalar; number of octaves.
+#' @param seed Integer scalar; random seed.
+#' @param tile_size Numerics of length 2; tile size (width, height).
+#' @param start Numerics of length 2; starting point (x, y).
+#' @param end Numerics of length 2; ending point (x, y).
+#' @param from Numerics of length 4 in range `[0, 255]`; starting color.
+#' @param to Numerics of length 4 in range `[0, 255]`; ending color.
+#' @param flags A logical scalar; typically, you can leave this as `FALSE`.
+#' See [here](https://shopify.github.io/react-native-skia/docs/shaders/gradients/#common-properties).
+#' for details.
+#' @param radii Numerics of length 2; radii of start and end circles.
+#' @param center Numerics of length 2; center of the gradient.
+#' @param start_angle A numeric scalar in range `[0, 360]`;
+#' starting angle. For default, set `0`.
+#' @param end_angle A numeric scalar in range `[0, 360]`;
+#' ending angle. For default, set `360`.
+#'
+#' @returns A `Shader` object.
 #' @seealso
+#' * [Image Shaders | React Native Skia](https://shopify.github.io/react-native-skia/docs/shaders/images)
 #' * [Gradients | React Native Skia](https://shopify.github.io/react-native-skia/docs/shaders/gradients)
 #' * [Perlin Noise Shaders | React Native Skia](https://shopify.github.io/react-native-skia/docs/shaders/perlin-noise)
 #' * [Blending and Colors | React Native Skia](https://shopify.github.io/react-native-skia/docs/shaders/colors)

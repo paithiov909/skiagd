@@ -10,7 +10,7 @@ add_rounded_rect(img, rect, radii, props = paint())
 \item{img}{A raw vector of picture.}
 
 \item{rect}{A double matrix where each row is a rectangle
-XYWH (\verb{[left, top, right, bottom]}).}
+XYWH (left, top, right, bottom).}
 
 \item{radii}{A double matrix where each row is a pair of axis lengths
 on X-axis and Y-axis of oval describing rounded corners.}

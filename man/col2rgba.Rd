@@ -14,5 +14,4 @@ An integer vector.
 }
 \description{
 A wrapper of \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.
-In general, you don't need to use this function explicitly.
 }

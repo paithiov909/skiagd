@@ -1,7 +1,7 @@
 #' Add circles
 #'
 #' @param center A double matrix where each row is circle center.
-#' @param radius A double vector of circle radius.
+#' @param radius Numerics of circle radius.
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export
