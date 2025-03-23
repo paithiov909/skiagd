@@ -230,7 +230,7 @@ mp4_close(vc)
 dev.off()
 ```
 
-![README-test-plot-3](man/figures/README-test-plot-3.gif)
+<img src="man/figures/README-test-plot-3.gif" alt="README-test-plot-3" width="50%" />
 
 Since the original [R Logo](https://www.r-project.org/logo/) is
 copyrighted by **2016 The R Foundation** and licensed under the [CC
