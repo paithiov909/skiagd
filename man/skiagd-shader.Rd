@@ -55,6 +55,10 @@ A \code{Shader} object.
 \description{
 \code{Shader} is a struct that offers a reference to \code{skia_safe::Shader}.
 You can apply a shader to shapes via \code{\link[=paint]{paint()}}.
+
+Note that concatenating shaders with \code{c()} is equivalent to blend them all
+into a single shader using \code{Shader$blend()} with the default \code{BlendMode}.
+You can pass \code{mode} explicitly for \code{c()} to change the blend mode.
 }
 \details{
 The following shaders are available:

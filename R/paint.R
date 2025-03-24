@@ -12,7 +12,7 @@
 #' The following painting attributes can be specified:
 #'
 #' * `canvas_size`: Integers of length 2 (width, height).
-#' * `color`: RGBA representation of a color. The `color` can be specified using named colors or hexadecimal color codes, which are converted internally using [grDevices::col2rgb()].
+#' * `color`: RGBA representation of a color. This can be specified using named colors or hexadecimal color codes, which are converted internally using [grDevices::col2rgb()].
 #' * `style`: The paint style. See [Style].
 #' * `join`: Stroke join. See [Join].
 #' * `cap`: Stroke cap. See [Cap].
