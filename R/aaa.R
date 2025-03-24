@@ -31,7 +31,7 @@ NULL # TODO: explain about picture
 #' including scaling, skewing, and translation.
 #' The third column (`pers_0`, `pers_1`, and `pers_2`) is
 #' typically used for perspective transformations,
-#' though in most affine transformations, it remains as `[0, 0, 1]`.
+#' though in most affine transformations, it remains as `c(0, 0, 1)`.
 #'
 #' @seealso
 #' * [Matrix in skia_safe::matrix - Rust](https://rust-skia.github.io/doc/skia_safe/matrix/struct.Matrix.html)

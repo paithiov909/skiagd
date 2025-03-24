@@ -37,8 +37,8 @@ print.Shader <- function(x, ...) {
 #' @param seed Integer scalar; random seed.
 #' @param start Numerics of length 2; starting point (x, y).
 #' @param end Numerics of length 2; ending point (x, y).
-#' @param from Numerics of length 4 in range `[0, 255]`; starting color.
-#' @param to Numerics of length 4 in range `[0, 255]`; ending color.
+#' @param from Integers of lenth 4 in range `[0, 255]`; starting color.
+#' @param to Integers of length 4 in range `[0, 255]`; ending color.
 #' @param flags A logical scalar; typically, you can leave this as `FALSE`.
 #' See [here](https://shopify.github.io/react-native-skia/docs/shaders/gradients/#common-properties)
 #' for details.

@@ -7,7 +7,6 @@
 #' @returns A raw vector of picture.
 #' @export
 add_png <- function(img, png, left = 0, top = 0, props = paint()) {
-  props <- getOption(".skiagd_paint_group") %||% props
   sk_draw_png(
     props[["canvas_size"]],
     img,
@@ -36,7 +35,6 @@ as_png <- function(img, props = paint()) {
 #' @returns A raw vector of picture.
 #' @export
 freeze <- function(img, fill = "transparent", props = paint()) {
-  props <- getOption(".skiagd_paint_group") %||% props
   img |>
     as_png(props = props) |>
     add_png(canvas(fill, size = props[["canvas_size"]]), png = _, props = props)

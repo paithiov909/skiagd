@@ -31,9 +31,9 @@ representing RGBA.}
 
 \item{end}{Numerics of length 2; ending point (x, y).}
 
-\item{from}{Numerics of length 4 in range \verb{[0, 255]}; starting color.}
+\item{from}{Integers of lenth 4 in range \verb{[0, 255]}; starting color.}
 
-\item{to}{Numerics of length 4 in range \verb{[0, 255]}; ending color.}
+\item{to}{Integers of length 4 in range \verb{[0, 255]}; ending color.}
 
 \item{flags}{A logical scalar; typically, you can leave this as \code{FALSE}.
 See \href{https://shopify.github.io/react-native-skia/docs/shaders/gradients/#common-properties}{here}

@@ -6,7 +6,6 @@
 #' @returns A raw vector of picture.
 #' @export
 add_line <- function(img, from, to, props = paint()) {
-  props <- getOption(".skiagd_paint_group") %||% props
   sk_draw_line(
     props[["canvas_size"]],
     img,

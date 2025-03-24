@@ -6,7 +6,6 @@
 #' @returns A raw vector of picture.
 #' @export
 add_rect <- function(img, rect, props = paint()) {
-  props <- getOption(".skiagd_paint_group") %||% props
   sk_draw_rounded_rect(
     props[["canvas_size"]],
     img,
@@ -31,7 +30,6 @@ add_rect <- function(img, rect, props = paint()) {
 #' @returns A raw vector of picture.
 #' @export
 add_rounded_rect <- function(img, rect, radii, props = paint()) {
-  props <- getOption(".skiagd_paint_group") %||% props
   sk_draw_rounded_rect(
     props[["canvas_size"]],
     img,
@@ -60,7 +58,6 @@ add_rounded_rect <- function(img, rect, radii, props = paint()) {
 #' @returns A raw vector of picture.
 #' @export
 add_diff_rect <- function(img, outer, outer_radii, inner, inner_radii, props = paint()) {
-  props <- getOption(".skiagd_paint_group") %||% props
   sk_draw_diff_rect(
     props[["canvas_size"]],
     img,

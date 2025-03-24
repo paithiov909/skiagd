@@ -12,12 +12,12 @@
 #' The following painting attributes can be specified:
 #'
 #' * `canvas_size`: Integers of length 2 (width, height).
-#' * `color`: RGBA representation of a color. The color can be specified using named colors or hexadecimal color codes, which are converted internally using [grDevices::col2rgb()].
+#' * `color`: RGBA representation of a color. The `color` can be specified using named colors or hexadecimal color codes, which are converted internally using [grDevices::col2rgb()].
 #' * `style`: The paint style. See [Style].
 #' * `join`: Stroke join. See [Join].
 #' * `cap`: Stroke cap. See [Cap].
-#' * `width`: A numeric scalar (stroke width)
-#' * `miter`: A numeric scalar (stroke miter)
+#' * `width`: A numeric scalar (stroke width).
+#' * `miter`: A numeric scalar (stroke miter).
 #' * `blend_mode`: See [BlendMode].
 #' * `path_effect`: See [PathEffect].
 #' * `shader`: See [Shader].
@@ -30,7 +30,7 @@
 #' @export
 paint <- function(...) {
   dots <- rlang::list2(...)
-  if (!is.null(dots[["color"]])) {
+  if (all(!is.null(dots[["color"]]), !is.numeric(dots[["color"]]))) {
     dots[["color"]] <- col2rgba(dots[["color"]])
   }
   purrr::list_assign(

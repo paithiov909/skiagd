@@ -23,12 +23,12 @@ such as color, stroke width, and transformations.
 The following painting attributes can be specified:
 \itemize{
 \item \code{canvas_size}: Integers of length 2 (width, height).
-\item \code{color}: RGBA representation of a color. The color can be specified using named colors or hexadecimal color codes, which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.
+\item \code{color}: RGBA representation of a color. The \code{color} can be specified using named colors or hexadecimal color codes, which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.
 \item \code{style}: The paint style. See \link{Style}.
 \item \code{join}: Stroke join. See \link{Join}.
 \item \code{cap}: Stroke cap. See \link{Cap}.
-\item \code{width}: A numeric scalar (stroke width)
-\item \code{miter}: A numeric scalar (stroke miter)
+\item \code{width}: A numeric scalar (stroke width).
+\item \code{miter}: A numeric scalar (stroke miter).
 \item \code{blend_mode}: See \link{BlendMode}.
 \item \code{path_effect}: See \link{PathEffect}.
 \item \code{shader}: See \link{Shader}.

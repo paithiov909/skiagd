@@ -25,7 +25,7 @@ The first two columns define standard affine transformations,
 including scaling, skewing, and translation.
 The third column (\code{pers_0}, \code{pers_1}, and \code{pers_2}) is
 typically used for perspective transformations,
-though in most affine transformations, it remains as \verb{[0, 0, 1]}.
+though in most affine transformations, it remains as \code{c(0, 0, 1)}.
 }
 \seealso{
 \itemize{

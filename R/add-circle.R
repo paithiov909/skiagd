@@ -6,7 +6,6 @@
 #' @returns A raw vector of picture.
 #' @export
 add_circle <- function(img, center, radius, props = paint()) {
-  props <- getOption(".skiagd_paint_group") %||% props
   sk_draw_circle(
     props[["canvas_size"]],
     img,

@@ -5,7 +5,6 @@
 #' @returns A raw vector of picture.
 #' @export
 add_point <- function(img, point, props = paint()) {
-  props <- getOption(".skiagd_paint_group") %||% props
   sk_draw_points(
     props[["canvas_size"]],
     img,
