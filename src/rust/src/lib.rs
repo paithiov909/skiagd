@@ -119,7 +119,7 @@ unsafe fn sk_draw_path(
     props: PaintAttrs,
     svg: StringSexp,
     mat2: NumericSexp, // transform
-    fill_type: paint_attrs::FillType,
+    fill_type: &paint_attrs::FillType,
 ) -> savvy::Result<savvy::Sexp> {
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat1 = as_matrix(&mat1)?;
@@ -160,7 +160,7 @@ unsafe fn sk_draw_points(
     props: PaintAttrs,
     x: NumericSexp,
     y: NumericSexp,
-    mode: paint_attrs::PointMode,
+    mode: &paint_attrs::PointMode,
 ) -> savvy::Result<savvy::Sexp> {
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
@@ -565,9 +565,9 @@ impl Shader {
             shader: None,
         })
     }
-    pub unsafe fn from_picture(
+    unsafe fn from_picture(
         img: savvy::RawSexp,
-        mode: TileMode,
+        mode: &TileMode,
         tile_size: NumericSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
@@ -593,9 +593,9 @@ impl Shader {
         })
     }
 
-    pub unsafe fn from_png(
+    unsafe fn from_png(
         png_bytes: savvy::RawSexp,
-        mode: TileMode,
+        mode: &TileMode,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
         let mat = as_matrix(&transform)?;
@@ -628,13 +628,13 @@ impl Shader {
             )),
         })
     }
-    fn blend(mode: BlendMode, dst: Shader, src: Shader) -> savvy::Result<Self> {
-        let dst = dst.shader.ok_or(savvy_err!("dst shader is required"))?;
-        let src = src.shader.ok_or(savvy_err!("src shader is required"))?;
+    fn blend(mode: BlendMode, dst: &Shader, src: &Shader) -> savvy::Result<Self> {
+        let dst = dst.shader.clone().ok_or(savvy_err!("dst shader is required"))?;
+        let src = src.shader.clone().ok_or(savvy_err!("src shader is required"))?;
         let shader_blend = skia_safe::shader::shaders::blend(
             skia_safe::Blender::from(sk_blend_mode(&mode)),
-            &dst,
-            &src,
+            dst,
+            src,
         );
         Ok(Shader {
             label: "blend".to_string(),
@@ -701,7 +701,7 @@ impl Shader {
         from: NumericSexp,
         to: NumericSexp,
         // pos: NumericSexp,
-        mode: TileMode,
+        mode: &TileMode,
         flags: LogicalSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
@@ -747,7 +747,7 @@ impl Shader {
         from: NumericSexp,
         to: NumericSexp,
         // pos: NumericSexp,
-        mode: TileMode,
+        mode: &TileMode,
         flags: LogicalSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
@@ -792,7 +792,7 @@ impl Shader {
         from: NumericSexp,
         to: NumericSexp,
         // pos: NumericSexp,
-        mode: TileMode,
+        mode: &TileMode,
         flags: LogicalSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
@@ -845,7 +845,7 @@ impl Shader {
         from: NumericSexp,
         to: NumericSexp,
         // pos: NumericSexp,
-        mode: TileMode,
+        mode: &TileMode,
         flags: LogicalSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {

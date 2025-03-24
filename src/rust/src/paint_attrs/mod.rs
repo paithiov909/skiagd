@@ -33,14 +33,14 @@ pub struct PaintAttrs {
 impl PaintAttrs {
     pub fn set_attrs(
         color: NumericSexp,
-        style: stroke::Style,
-        join: stroke::Join,
-        cap: stroke::Cap,
+        style: &stroke::Style,
+        join: &stroke::Join,
+        cap: &stroke::Cap,
         width: NumericScalar,
         miter: NumericScalar,
-        blend_mode: shader::BlendMode,
-        path_effect: path_effect::PathEffect,
-        shader: shader::Shader,
+        blend_mode: &shader::BlendMode,
+        path_effect: &path_effect::PathEffect,
+        shader: &shader::Shader,
     ) -> savvy::Result<Self> {
         if color.len() != 4 {
             return Err(savvy_err!("Invalid color. Expected 4 elements"));
@@ -63,10 +63,10 @@ impl PaintAttrs {
         paint.set_stroke_width(width as f32);
         paint.set_stroke_miter(miter as f32);
         paint.set_blend_mode(shader::sk_blend_mode(&blend_mode));
-        if let Some(effect) = path_effect.effect {
+        if let Some(effect) = path_effect.effect.clone() {
             paint.set_path_effect(effect);
         }
-        if let Some(shader) = shader.shader {
+        if let Some(shader) = shader.shader.clone() {
             paint.set_shader(shader);
         }
         Ok(PaintAttrs { paint })
