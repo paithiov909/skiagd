@@ -797,6 +797,11 @@ class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
   .savvy_wrap_Shader(.Call(savvy_Shader_fractal_noise__impl, `freq`, `octaves`, `seed`, `tile_size`))
 }
 
+`Shader`$`from_picture` <- function(`img`, `mode`, `tile_size`, `transform`) {
+  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  .savvy_wrap_Shader(.Call(savvy_Shader_from_picture__impl, `img`, `mode`, `tile_size`, `transform`))
+}
+
 `Shader`$`from_png` <- function(`png_bytes`, `mode`, `transform`) {
   `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
   .savvy_wrap_Shader(.Call(savvy_Shader_from_png__impl, `png_bytes`, `mode`, `transform`))

@@ -4,11 +4,15 @@
 \alias{Shader}
 \title{Shader}
 \arguments{
-\item{png_bytes}{A raw vector of PNG data.}
+\item{img}{A raw vector of picture.}
 
 \item{mode}{For \code{blend()}, \link{BlendMode}. For others, \link{TileMode}.}
 
+\item{tile_size}{Numerics of length 2; tile size (width, height).}
+
 \item{transform}{Numerics of length 9; transformation matrix.}
+
+\item{png_bytes}{A raw vector of PNG data.}
 
 \item{rgba}{Integers of length 4 in range \verb{[0, 255]}
 representing RGBA.}
@@ -22,8 +26,6 @@ representing RGBA.}
 \item{octaves}{A numeric scalar; number of octaves.}
 
 \item{seed}{Integer scalar; random seed.}
-
-\item{tile_size}{Numerics of length 2; tile size (width, height).}
 
 \item{start}{Numerics of length 2; starting point (x, y).}
 
@@ -52,12 +54,13 @@ A \code{Shader} object.
 }
 \description{
 \code{Shader} is a struct that offers a reference to \code{skia_safe::Shader}.
-You can apply a shader to drawings via \code{\link[=paint]{paint()}}.
+You can apply a shader to shapes via \code{\link[=paint]{paint()}}.
 }
 \details{
 The following shaders are available:
 \itemize{
 \item \code{no_shader()}: does not apply any shader. This is the default shader for \code{\link[=paint]{paint()}}.
+\item \code{from_picture(img, mode, tile_size, transform)}: takes a picture and returns an image shader.
 \item \code{from_png(png_bytes, mode, transform)}: takes a PNG image and returns an image shader.
 \item \code{color(rgba)}: takess a color and returns a color shader.
 \item \code{blend(mode, dst, src)}: returns a shader that combines the given shaders with a \link{BlendMode}.

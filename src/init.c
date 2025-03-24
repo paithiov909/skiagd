@@ -159,6 +159,11 @@ SEXP savvy_Shader_fractal_noise__impl(SEXP c_arg__freq, SEXP c_arg__octaves, SEX
     return handle_result(res);
 }
 
+SEXP savvy_Shader_from_picture__impl(SEXP c_arg__img, SEXP c_arg__mode, SEXP c_arg__tile_size, SEXP c_arg__transform) {
+    SEXP res = savvy_Shader_from_picture__ffi(c_arg__img, c_arg__mode, c_arg__tile_size, c_arg__transform);
+    return handle_result(res);
+}
+
 SEXP savvy_Shader_from_png__impl(SEXP c_arg__png_bytes, SEXP c_arg__mode, SEXP c_arg__transform) {
     SEXP res = savvy_Shader_from_png__ffi(c_arg__png_bytes, c_arg__mode, c_arg__transform);
     return handle_result(res);
@@ -227,6 +232,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"savvy_Shader_color__impl", (DL_FUNC) &savvy_Shader_color__impl, 1},
     {"savvy_Shader_conical_gradient__impl", (DL_FUNC) &savvy_Shader_conical_gradient__impl, 8},
     {"savvy_Shader_fractal_noise__impl", (DL_FUNC) &savvy_Shader_fractal_noise__impl, 4},
+    {"savvy_Shader_from_picture__impl", (DL_FUNC) &savvy_Shader_from_picture__impl, 4},
     {"savvy_Shader_from_png__impl", (DL_FUNC) &savvy_Shader_from_png__impl, 3},
     {"savvy_Shader_get_label__impl", (DL_FUNC) &savvy_Shader_get_label__impl, 1},
     {"savvy_Shader_linear_gradient__impl", (DL_FUNC) &savvy_Shader_linear_gradient__impl, 7},

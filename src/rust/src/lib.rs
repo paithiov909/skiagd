@@ -565,6 +565,34 @@ impl Shader {
             shader: None,
         })
     }
+    pub unsafe fn from_picture(
+        img: savvy::RawSexp,
+        mode: TileMode,
+        tile_size: NumericSexp,
+        transform: NumericSexp,
+    ) -> savvy::Result<Self> {
+        if tile_size.len() != 2 {
+            return Err(savvy_err!("Invalid arguments"));
+        }
+        let tile_size = tile_size.as_slice_f64();
+        let mat = as_matrix(&transform)?;
+        let picture = read_picture_bytes(&img)?;
+        Ok(Shader {
+            label: "picture".to_string(),
+            shader: Some(picture.to_shader(
+                Some((sk_tile_mode(&mode), sk_tile_mode(&mode))),
+                skia_safe::FilterMode::Nearest,
+                &mat,
+                Some(&skia_safe::Rect::new(
+                    0.0,
+                    0.0,
+                    tile_size[0] as f32,
+                    tile_size[1] as f32,
+                )),
+            )),
+        })
+    }
+
     pub unsafe fn from_png(
         png_bytes: savvy::RawSexp,
         mode: TileMode,

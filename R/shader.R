@@ -6,12 +6,13 @@ print.Shader <- function(x, ...) {
 #' Shader
 #'
 #' `Shader` is a struct that offers a reference to `skia_safe::Shader`.
-#' You can apply a shader to drawings via [paint()].
+#' You can apply a shader to shapes via [paint()].
 #'
 #' @details
 #' The following shaders are available:
 #'
 #' * `no_shader()`: does not apply any shader. This is the default shader for [paint()].
+#' * `from_picture(img, mode, tile_size, transform)`: takes a picture and returns an image shader.
 #' * `from_png(png_bytes, mode, transform)`: takes a PNG image and returns an image shader.
 #' * `color(rgba)`: takess a color and returns a color shader.
 #' * `blend(mode, dst, src)`: returns a shader that combines the given shaders with a [BlendMode].
@@ -22,9 +23,11 @@ print.Shader <- function(x, ...) {
 #' * `conical_gradient(start, end, radii, from, to, mode, flags, transform)`: conical gradient shader.
 #' * `sweep_gradient(center, start_angle, end_angle, from, to, mode, flags, transform)`: sweep gradient shader.
 #'
-#' @param png_bytes A raw vector of PNG data.
+#' @param img A raw vector of picture.
 #' @param mode For `blend()`, [BlendMode]. For others, [TileMode].
+#' @param tile_size Numerics of length 2; tile size (width, height).
 #' @param transform Numerics of length 9; transformation matrix.
+#' @param png_bytes A raw vector of PNG data.
 #' @param rgba Integers of length 4 in range `[0, 255]`
 #' representing RGBA.
 #' @param dst A `Shader` object; destination shader.
@@ -32,7 +35,6 @@ print.Shader <- function(x, ...) {
 #' @param freq Numerics of length 2; frequencies.
 #' @param octaves A numeric scalar; number of octaves.
 #' @param seed Integer scalar; random seed.
-#' @param tile_size Numerics of length 2; tile size (width, height).
 #' @param start Numerics of length 2; starting point (x, y).
 #' @param end Numerics of length 2; ending point (x, y).
 #' @param from Numerics of length 4 in range `[0, 255]`; starting color.

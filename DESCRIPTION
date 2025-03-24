@@ -14,8 +14,7 @@ Imports:
     grDevices,
     grid,
     purrr,
-    rlang,
-    withr
+    rlang
 Suggests:
     magick,
     testthat (>= 3.0.0),

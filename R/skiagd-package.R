@@ -21,18 +21,3 @@ as_recordedplot <- function(img, props = paint()) {
   grid::grid.raster(magick::image_read(png))
   grDevices::recordPlot(load = "skiagd")
 }
-
-#' Paint group
-#'
-#' Evaluates `code` with `props`.
-#'
-#' @param props Paint properties.
-#' @param code Code to evaluate.
-#' @export
-with_group <- function(props, code) {
-  # TODO: check if this can be nested
-  withr::with_options(
-    list(.skiagd_paint_group = props),
-    code
-  )
-}

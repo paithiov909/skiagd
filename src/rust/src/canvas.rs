@@ -4,7 +4,7 @@ use skia_safe::{Picture, PictureRecorder};
 /// Returns a skia_safe::Picture
 pub unsafe fn read_picture_bytes(bytes: &savvy::RawSexp) -> anyhow::Result<Picture, savvy::Error> {
     let picture = Picture::from_bytes(bytes.as_slice())
-        .ok_or_else(|| return savvy_err!("Bomb! failed to read bytes"))?;
+        .ok_or_else(|| return savvy_err!("Failed to read picture bytes array"))?;
     Ok(picture)
 }
 

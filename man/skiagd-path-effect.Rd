@@ -39,14 +39,14 @@ A \code{PathEffect} object.
 }
 \description{
 \code{PathEffect} is a struct that offers a reference to \code{skia_safe::PathEffect}.
-You can apply a path effect to drawings via \code{\link[=paint]{paint()}}.
+You can apply a path effect to shapes via \code{\link[=paint]{paint()}}.
 Currently only single \code{PathEffect} can be specified; multiple effects are not supported.
 }
 \details{
 The following effects are available:
 \itemize{
 \item \code{no_effect()}: does not apply any path effect. This is the default effect for \code{\link[=paint]{paint()}}.
-\item \code{trim(start, end)}: trims the \code{start} and \code{end} of the path.
+\item \code{trim(start, end)}: trims the \code{start} and \code{end} of the path. Note that you can't trim nothing at all, i.e., setting \code{start = 0} and \code{end = 1} arises an error.
 \item \code{discrete(lentgh, deviation, seed)}: applies discrete path effect.
 \item \code{dash(intervals, phase)}: applies dash path effect.
 \item \code{corner(radius)}: applies corner path effect.

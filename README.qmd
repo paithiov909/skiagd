@@ -27,7 +27,7 @@ Despite its name, this package is intended as a graphics library, not a graphics
 ## Design notes
 
 - This is not a graphics device. skiagd does not allow R's session to hold a reference to a Canvas object on Rust side.
-- Drawing functions return a [picture](https://shopify.github.io/react-native-skia/docs/shapes/pictures/) as a `raw` object every time it's called. `add_*` puts those data onto canvas, actually ***adds*** some drawings to there, and then returns a `raw` object again.
+- Drawing functions return a [picture](https://shopify.github.io/react-native-skia/docs/shapes/pictures/) as a `raw` object every time it's called. `add_*` puts those data onto canvas, actually ***adds*** some shapes to there, and then returns a `raw` object again.
 
 
 ## Future plan
@@ -192,7 +192,7 @@ state <- seq(0.1, 1, length.out = 30) |>
   tweenr::tween_numeric(3, ease = "cubic-in-out")
 trans <- transform2d()
 
-for (frame in state[[1]]) {
+for (step in state[[1]]) {
   frame <- cv |>
     add_path(
       "M361.453,485.937 C162.329,485.937 0.906,377.828 0.906,244.469 C0.906,111.109 162.329,3.000 361.453,3.000 C560.578,3.000 722.000,111.109 722.000,244.469 C722.000,377.828 560.578,485.937 361.453,485.937 ZM416.641,97.406 C265.289,97.406 142.594,171.314 142.594,262.484 C142.594,353.654 265.289,427.562 416.641,427.562 C567.992,427.562 679.687,377.033 679.687,262.484 C679.687,147.971 567.992,97.406 416.641,97.406 Z",
@@ -201,7 +201,7 @@ for (frame in state[[1]]) {
         fill_type = FillType$EvenOdd,
         shader = Shader$radial_gradient(
           c(size[1] / 2, size[2] / 2),
-          848 * frame,
+          848 * step,
           from = col2rgba("magenta"),
           to = col2rgba("#83838bff"),
           mode = TileMode$Clamp,
