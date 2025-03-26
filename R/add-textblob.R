@@ -14,7 +14,7 @@
 #' @param text Strings to be drawn.
 #' @param point A double matrix where each row is the point
 #' at which each character in `text` is drawn.
-#' For example, if `text` is a character vector of 5 and 3 strings,
+#' For example, if `text` is a character vector of 5 and 3 length strings,
 #' `point` must be a 8x2 matrix.
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
@@ -26,7 +26,7 @@ add_text <- function(img, text,
     rlang::abort("`text` cannot contain NA.")
   }
   if (sum(nchar(text)) != nrow(point)) {
-    rlang::abort("Number of characters in `text` and number of rows in `point` must be the same.")
+    rlang::abort("Total number of characters in `text` and number of rows in `point` must be the same.")
   }
   sk_draw_textblob(
     props[["canvas_size"]],

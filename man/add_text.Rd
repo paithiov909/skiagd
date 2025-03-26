@@ -24,7 +24,7 @@ text_layout_vertical(text, props = paint())
 
 \item{point}{A double matrix where each row is the point
 at which each character in \code{text} is drawn.
-For example, if \code{text} is a character vector of 5 and 3 strings,
+For example, if \code{text} is a character vector of 5 and 3 length strings,
 \code{point} must be a 8x2 matrix.}
 
 \item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}

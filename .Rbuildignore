@@ -5,10 +5,13 @@
 ^cran-comments\.md$
 ^configure.log$
 
-^src/rust/.cargo$
-^src/rust/.vscode$
+^src/rust/\.vscode$
 ^src/rust/target$
 
 ^\.github$
 ^\.vscode$
 ^ninja-build$
+
+^src/rust/\.cargo$
+^src/Makevars$
+^src/Makevars\.win$
