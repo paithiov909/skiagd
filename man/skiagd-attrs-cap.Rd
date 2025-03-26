@@ -27,6 +27,7 @@ The following caps are available:
 Other paint-attributes: 
 \code{\link{BlendMode}},
 \code{\link{FillType}},
+\code{\link{FontStyle}},
 \code{\link{Join}},
 \code{\link{PathEffect}},
 \code{\link{PointMode}},

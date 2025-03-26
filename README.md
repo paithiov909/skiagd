@@ -54,11 +54,9 @@ Skia](https://shopify.github.io/react-native-skia/).
 - Images
   - [x] PNG
 - Text
-  - Paragraph
-  - Text
-  - Glyphs
-  - Text Path
-  - Text Blob
+  - [ ] Paragraph
+  - [x] Text Path
+  - [x] Text Blob
 - Painting Attributes
   ([Paint](https://rust-skia.github.io/doc/skia_safe/type.Paint.html))
   - [x] PathEffects

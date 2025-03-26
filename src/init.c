@@ -79,6 +79,21 @@ SEXP savvy_sk_draw_rounded_rect__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, 
     return handle_result(res);
 }
 
+SEXP savvy_sk_draw_textblob__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__text, SEXP c_arg__x, SEXP c_arg__y) {
+    SEXP res = savvy_sk_draw_textblob__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__text, c_arg__x, c_arg__y);
+    return handle_result(res);
+}
+
+SEXP savvy_sk_draw_textpath__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__text, SEXP c_arg__svg) {
+    SEXP res = savvy_sk_draw_textpath__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__text, c_arg__svg);
+    return handle_result(res);
+}
+
+SEXP savvy_sk_list_families__impl(void) {
+    SEXP res = savvy_sk_list_families__ffi();
+    return handle_result(res);
+}
+
 SEXP savvy_sk_matrix_default__impl(void) {
     SEXP res = savvy_sk_matrix_default__ffi();
     return handle_result(res);
@@ -88,8 +103,9 @@ SEXP savvy_sk_matrix_default__impl(void) {
 
 
 
-SEXP savvy_PaintAttrs_set_attrs__impl(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__blend_mode, SEXP c_arg__path_effect, SEXP c_arg__shader) {
-    SEXP res = savvy_PaintAttrs_set_attrs__ffi(c_arg__color, c_arg__style, c_arg__join, c_arg__cap, c_arg__width, c_arg__miter, c_arg__blend_mode, c_arg__path_effect, c_arg__shader);
+
+SEXP savvy_PaintAttrs_set_attrs__impl(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__fontsize, SEXP c_arg__family, SEXP c_arg__fontface, SEXP c_arg__blend_mode, SEXP c_arg__path_effect, SEXP c_arg__shader) {
+    SEXP res = savvy_PaintAttrs_set_attrs__ffi(c_arg__color, c_arg__style, c_arg__join, c_arg__cap, c_arg__width, c_arg__miter, c_arg__fontsize, c_arg__family, c_arg__fontface, c_arg__blend_mode, c_arg__path_effect, c_arg__shader);
     return handle_result(res);
 }
 
@@ -212,12 +228,16 @@ static const R_CallMethodDef CallEntries[] = {
     {"savvy_sk_draw_png__impl", (DL_FUNC) &savvy_sk_draw_png__impl, 6},
     {"savvy_sk_draw_points__impl", (DL_FUNC) &savvy_sk_draw_points__impl, 7},
     {"savvy_sk_draw_rounded_rect__impl", (DL_FUNC) &savvy_sk_draw_rounded_rect__impl, 10},
+    {"savvy_sk_draw_textblob__impl", (DL_FUNC) &savvy_sk_draw_textblob__impl, 7},
+    {"savvy_sk_draw_textpath__impl", (DL_FUNC) &savvy_sk_draw_textpath__impl, 6},
+    {"savvy_sk_list_families__impl", (DL_FUNC) &savvy_sk_list_families__impl, 0},
     {"savvy_sk_matrix_default__impl", (DL_FUNC) &savvy_sk_matrix_default__impl, 0},
 
 
 
 
-    {"savvy_PaintAttrs_set_attrs__impl", (DL_FUNC) &savvy_PaintAttrs_set_attrs__impl, 9},
+
+    {"savvy_PaintAttrs_set_attrs__impl", (DL_FUNC) &savvy_PaintAttrs_set_attrs__impl, 12},
     {"savvy_PathEffect_corner__impl", (DL_FUNC) &savvy_PathEffect_corner__impl, 1},
     {"savvy_PathEffect_dash__impl", (DL_FUNC) &savvy_PathEffect_dash__impl, 2},
     {"savvy_PathEffect_discrete__impl", (DL_FUNC) &savvy_PathEffect_discrete__impl, 3},

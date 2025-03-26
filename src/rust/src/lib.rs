@@ -5,7 +5,7 @@ mod paint_attrs;
 use canvas::{read_picture_bytes, SkiaCanvas};
 use matrix::as_matrix;
 use paint_attrs::shader::{sk_blend_mode, sk_tile_mode, BlendMode, Shader, TileMode};
-use paint_attrs::{path_effect::PathEffect, PaintAttrs};
+use paint_attrs::{font, path_effect::PathEffect, PaintAttrs};
 
 use savvy::{savvy, savvy_err, IntegerSexp, LogicalSexp, NumericScalar, NumericSexp, StringSexp};
 use skia_safe::{Data, Image, Paint};
@@ -118,7 +118,7 @@ unsafe fn sk_draw_path(
     mat1: NumericSexp,
     props: PaintAttrs,
     svg: StringSexp,
-    mat2: NumericSexp, // transform
+    mat2: NumericSexp, // transform for svg
     fill_type: &paint_attrs::FillType,
 ) -> savvy::Result<savvy::Sexp> {
     let picture = read_picture_bytes(&curr_bytes)?;
@@ -136,6 +136,141 @@ unsafe fn sk_draw_path(
             .set_fill_type(paint_attrs::sk_fill_type(&fill_type))
             .with_transform(&mat2);
         canvas.draw_path(&path, &props.paint);
+    }
+    let picture = recorder.finish_recording()?;
+    Ok(picture.into())
+}
+
+/// Draws textpath
+///
+/// @param size Canvas size.
+/// @param curr_bytes Current canvas state.
+/// @param mat Matrix for transforming picture.
+/// @param props PaintAttrs.
+/// @param text Text strings to draw along SVG paths.
+/// @param svg SVG paths.
+/// @returns A raw vector of picture.
+/// @noRd
+#[savvy]
+unsafe fn sk_draw_textpath(
+    size: IntegerSexp,
+    curr_bytes: savvy::RawSexp,
+    mat: NumericSexp,
+    props: PaintAttrs,
+    text: StringSexp,
+    svg: StringSexp,
+) -> savvy::Result<savvy::Sexp> {
+    // https://github.com/Shopify/react-native-skia/blob/main/packages/skia/cpp/api/recorder/Drawings.h#L238
+    if text.len() != svg.len() {
+        return Err(savvy_err!("Invalid text or svg. Expected same length"));
+    }
+    let picture = read_picture_bytes(&curr_bytes)?;
+    let mat = as_matrix(&mat)?;
+
+    let size = size.to_vec();
+    let mut recorder = SkiaCanvas::new(size[0], size[1]);
+    let canvas = recorder.start_recording();
+    canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
+
+    let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
+    let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
+
+    for (t, s) in text.iter().zip(svg.iter()) {
+        let path = skia_safe::utils::parse_path::from_svg(s)
+            .ok_or_else(|| return savvy_err!("Failed to parse svg"))?;
+        let ids = font.text_to_glyphs_vec(t.to_string());
+        let mut num_ids: Vec<f32> = Vec::new();
+        num_ids.resize(font.count_text(t.to_string()), 0.0);
+        let width_ptrs = num_ids.as_mut_slice();
+        font.get_widths_bounds(ids.as_slice(), Some(width_ptrs), None, None);
+
+        let mut meas = skia_safe::ContourMeasureIter::from_path(&path, false, Some(1.0));
+        let mut dist = 0.0; // initial_offset
+        let mut rsx: Vec<skia_safe::RSXform> = Vec::new();
+        let mut cont = meas.next().unwrap();
+
+        let mut text_body = t;
+
+        for i in 0..font.count_text(t.to_string()) {
+            let width = width_ptrs[i];
+            dist += width / 2.0;
+            if dist > cont.length() {
+                if meas.next().is_none() {
+                    text_body = &t[..i];
+                    break;
+                }
+                cont = meas.next().unwrap();
+                dist = width / 2.0;
+            }
+            let (pos, tan) = cont
+                .pos_tan(dist)
+                .ok_or_else(|| return savvy_err!("Failed to get pos"))?;
+            rsx.push(skia_safe::RSXform {
+                scos: tan.x,
+                ssin: tan.y,
+                tx: pos.x - (width / 2.0) * tan.x,
+                ty: pos.y - (width / 2.0) * tan.y,
+            });
+            dist += width / 2.0;
+        }
+        let blob = skia_safe::TextBlob::from_rsxform(&text_body, rsx.as_slice(), &font)
+            .ok_or_else(|| return savvy_err!("Failed to create text blob"))?;
+        canvas.draw_text_blob(&blob, (0, 0), &props.paint);
+    }
+    let picture = recorder.finish_recording()?;
+    Ok(picture.into())
+}
+
+/// Draws textblob
+///
+/// @param size Canvas size.
+/// @param curr_bytes Current canvas state.
+/// @param mat Matrix for transforming picture.
+/// @param props PaintAttrs.
+/// @param text Text strings.
+/// @param x X coordinates of points where to draw each character.
+/// @param y Y coordinates of points where to draw each character.
+/// @returns A raw vector of picture.
+/// @noRd
+#[savvy]
+unsafe fn sk_draw_textblob(
+    size: IntegerSexp,
+    curr_bytes: savvy::RawSexp,
+    mat: NumericSexp,
+    props: PaintAttrs,
+    text: StringSexp,
+    x: NumericSexp,
+    y: NumericSexp,
+) -> savvy::Result<savvy::Sexp> {
+    if x.len() != y.len() {
+        return Err(savvy_err!("Invalid x or y. Expected same length"));
+    }
+    let picture = read_picture_bytes(&curr_bytes)?;
+    let mat = as_matrix(&mat)?;
+
+    let size = size.to_vec();
+    let mut recorder = SkiaCanvas::new(size[0], size[1]);
+    let canvas = recorder.start_recording();
+    canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
+
+    let points = std::iter::zip(x.iter_f64(), y.iter_f64())
+        .map(|p| skia_safe::Point::new(p.0 as f32, p.1 as f32))
+        .collect::<Vec<skia_safe::Point>>();
+    let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
+    let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
+
+    let mut chars_offset = 0;
+    for (_, t) in text.iter().enumerate() {
+        let chars = t.to_string();
+        let n_chars = font.count_text(&chars);
+        let blob = skia_safe::TextBlob::from_pos_text(
+            &chars,
+            &points[chars_offset..chars_offset + n_chars],
+            &font,
+        )
+        .ok_or_else(|| return savvy_err!("Failed to create text blob"))?;
+        chars_offset += n_chars;
+        canvas.draw_text_blob(blob, (0, 0), &props.paint);
     }
     let picture = recorder.finish_recording()?;
     Ok(picture.into())
@@ -268,6 +403,8 @@ unsafe fn sk_draw_circle(
     let picture = recorder.finish_recording()?;
     Ok(picture.into())
 }
+
+// TODO: sk_draw_arc
 
 /// Draws rounded rectangle on canvas
 ///
@@ -629,8 +766,14 @@ impl Shader {
         })
     }
     fn blend(mode: BlendMode, dst: &Shader, src: &Shader) -> savvy::Result<Self> {
-        let dst = dst.shader.clone().ok_or(savvy_err!("dst shader is required"))?;
-        let src = src.shader.clone().ok_or(savvy_err!("src shader is required"))?;
+        let dst = dst
+            .shader
+            .clone()
+            .ok_or(savvy_err!("dst shader is required"))?;
+        let src = src
+            .shader
+            .clone()
+            .ok_or(savvy_err!("src shader is required"))?;
         let shader_blend = skia_safe::shader::shaders::blend(
             skia_safe::Blender::from(sk_blend_mode(&mode)),
             dst,

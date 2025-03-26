@@ -13,11 +13,14 @@
 #'
 #' * `canvas_size`: Integers of length 2 (width, height).
 #' * `color`: RGBA representation of a color. This can be specified using named colors or hexadecimal color codes, which are converted internally using [grDevices::col2rgb()].
-#' * `style`: The paint style. See [Style].
+#' * `style`: Paint style. See [Style].
 #' * `join`: Stroke join. See [Join].
 #' * `cap`: Stroke cap. See [Cap].
 #' * `width`: A numeric scalar (stroke width).
 #' * `miter`: A numeric scalar (stroke miter).
+#' * `fontsize`: A numeric scalar (font size).
+#' * `family`: Font family name.
+#' * `fontface`: Font face. See [FontStyle].
 #' * `blend_mode`: See [BlendMode].
 #' * `path_effect`: See [PathEffect].
 #' * `shader`: See [Shader].
@@ -92,6 +95,20 @@ default_attrs <- function() {
     ),
     width = props[["lwd"]],
     miter = props[["linemitre"]],
+    fontsize = props[["fontsize"]],
+    family = ifelse(props[["fontfamily"]] == "",
+      "sans",
+      props[["fontfamily"]]
+    ),
+    fontface = switch(as.character(props[["font"]]),
+      "1" = env_get(FontStyle, "Normal"),
+      "2" = env_get(FontStyle, "Bold"),
+      "3" = env_get(FontStyle, "Italic"), # "italic" or "oblique"
+      "4" = env_get(FontStyle, "BoldItalic"),
+      "5" = env_get(FontStyle, "Normal"), # "cyrillic"
+      "6" = env_get(FontStyle, "Italic"), # "cyrillic.oblique"
+      "7" = env_get(FontStyle, "Normal") # "EUC"
+    ),
     blend_mode = env_get(BlendMode, "Src"),
     path_effect = PathEffect$no_effect(),
     shader = Shader$no_shader(),
@@ -109,6 +126,9 @@ as_paint_attrs <- function(p) {
     p[["cap"]],
     p[["width"]],
     p[["miter"]],
+    p[["fontsize"]],
+    p[["family"]],
+    p[["fontface"]],
     p[["blend_mode"]],
     p[["path_effect"]],
     p[["shader"]]

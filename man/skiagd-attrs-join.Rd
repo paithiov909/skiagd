@@ -28,6 +28,7 @@ Other paint-attributes:
 \code{\link{BlendMode}},
 \code{\link{Cap}},
 \code{\link{FillType}},
+\code{\link{FontStyle}},
 \code{\link{PathEffect}},
 \code{\link{PointMode}},
 \code{\link{Shader}},

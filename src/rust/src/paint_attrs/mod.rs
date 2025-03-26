@@ -1,14 +1,16 @@
+pub mod font;
 pub mod path_effect;
 pub mod shader;
 mod stroke;
 
-use savvy::{savvy, savvy_err, NumericScalar, NumericSexp};
+use savvy::{savvy, savvy_err, NumericScalar, NumericSexp, StringSexp};
 use skia_safe::Paint;
 
 /// PaintAttrs
 ///
 /// Internal impl that wraps `skia_safe::Paint`.
-/// Use `PaintAttrs$set_attrs()` to create a pointer to PaintAttrs.
+/// Use `PaintAttrs$set_attrs()` to create a new PaintAttrs
+/// each time it is required, since `props` is always moved.
 ///
 /// @details
 /// `PaintAttrs$set_attrs()` takes arguments below:
@@ -19,6 +21,9 @@ use skia_safe::Paint;
 /// * cap: Cap (stroke cap).
 /// * width: Stroke width.
 /// * miter: Stroke miter.
+/// * fontsize: Font size.
+/// * family: Font family name
+/// * fontface: FontStyle.
 /// * blend_mode: BlendMode.
 /// * path_effect: PathEffect.
 /// * shader: Shader.
@@ -27,6 +32,9 @@ use skia_safe::Paint;
 #[savvy]
 pub struct PaintAttrs {
     pub paint: Paint,
+    pub font_size: f32,
+    pub font_family: String,
+    pub font_face: skia_safe::FontStyle,
 }
 
 #[savvy]
@@ -38,6 +46,9 @@ impl PaintAttrs {
         cap: &stroke::Cap,
         width: NumericScalar,
         miter: NumericScalar,
+        fontsize: NumericScalar,
+        family: StringSexp,
+        fontface: &font::FontStyle,
         blend_mode: &shader::BlendMode,
         path_effect: &path_effect::PathEffect,
         shader: &shader::Shader,
@@ -69,7 +80,12 @@ impl PaintAttrs {
         if let Some(shader) = shader.shader.clone() {
             paint.set_shader(shader);
         }
-        Ok(PaintAttrs { paint })
+        Ok(PaintAttrs {
+            paint,
+            font_size: fontsize.as_f64() as f32,
+            font_family: family.to_vec()[0].to_string(),
+            font_face: font::sk_font_style(fontface),
+        })
     }
 }
 

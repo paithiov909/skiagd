@@ -183,6 +183,42 @@ NULL
   .Call(savvy_sk_draw_rounded_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `left`, `top`, `right`, `bottom`, `rx`, `ry`)
 }
 
+#' Draws textblob
+#'
+#' @param size Canvas size.
+#' @param curr_bytes Current canvas state.
+#' @param mat Matrix for transforming picture.
+#' @param props PaintAttrs.
+#' @param text Text strings.
+#' @param x X coordinates of points where to draw each character.
+#' @param y Y coordinates of points where to draw each character.
+#' @returns A raw vector of picture.
+#' @noRd
+`sk_draw_textblob` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `x`, `y`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  .Call(savvy_sk_draw_textblob__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `x`, `y`)
+}
+
+#' Draws textpath
+#'
+#' @param size Canvas size.
+#' @param curr_bytes Current canvas state.
+#' @param mat Matrix for transforming picture.
+#' @param props PaintAttrs.
+#' @param text Text strings to draw along SVG paths.
+#' @param svg SVG paths.
+#' @returns A raw vector of picture.
+#' @noRd
+`sk_draw_textpath` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `svg`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  .Call(savvy_sk_draw_textpath__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `svg`)
+}
+
+
+`sk_list_families` <- function() {
+  .Call(savvy_sk_list_families__impl)
+}
+
 #' Returns default matrix as numerics
 #'
 #' @returns A numeric vector of length 9.
@@ -480,6 +516,86 @@ class(`FillType`) <- c("FillType__bundle", "savvy_skiagd__sealed")
   cat('FillType\n')
 }
 
+### wrapper functions for FontStyle
+
+
+`.savvy_wrap_FontStyle` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+
+
+  class(e) <- c("FontStyle", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' FontStyle (0-3)
+#'
+#' `FontStyle` determines the font style.
+#'
+#' @details
+#' The following styles are available:
+#'
+#' * `Normal`: Normal (plain).
+#' * `Bold`: Bold (bold).
+#' * `Italic`: Italic (italic).
+#' * `BoldItalic`: BoldItalic (bold.italic).
+#'
+#' @seealso
+#' [FontStyle in skia_safe - Rust](https://rust-skia.github.io/doc/skia_safe/struct.FontStyle.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-fontstyle
+#' @export
+`FontStyle` <- new.env(parent = emptyenv())
+`FontStyle`$`Normal` <- .savvy_wrap_FontStyle(0L)
+`FontStyle`$`Bold` <- .savvy_wrap_FontStyle(1L)
+`FontStyle`$`Italic` <- .savvy_wrap_FontStyle(2L)
+`FontStyle`$`BoldItalic` <- .savvy_wrap_FontStyle(3L)
+
+#' @export
+`$.FontStyle__bundle` <- function(x, name) {
+  if (!name %in% c("Normal", "Bold", "Italic", "BoldItalic")) {
+    stop(paste0("Unknown variant: ", name), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`[[.FontStyle__bundle` <- function(x, i) {
+  if (is.numeric(i)) {
+    stop("FontStyle cannot be subset by index", call. = FALSE)
+  }
+
+  if (!i %in% c("Normal", "Bold", "Italic", "BoldItalic")) {
+    stop(paste0("Unknown variant: ", i), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`print.FontStyle` <- function(x, ...) {
+  idx <- x$.ptr + 1L
+  label <- c("Normal", "Bold", "Italic", "BoldItalic")[idx]
+  if (is.na(label)) {
+    stop("Unexpected value for FontStyle", call. = TRUE)
+  }
+  cat("FontStyle::", label, "\n", sep = "")
+}
+
+
+### associated functions for FontStyle
+
+
+
+class(`FontStyle`) <- c("FontStyle__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.FontStyle__bundle` <- function(x, ...) {
+  cat('FontStyle\n')
+}
+
 ### wrapper functions for Join
 
 
@@ -574,7 +690,8 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
 #' PaintAttrs
 #'
 #' Internal impl that wraps `skia_safe::Paint`.
-#' Use `PaintAttrs$set_attrs()` to create a pointer to PaintAttrs.
+#' Use `PaintAttrs$set_attrs()` to create a new PaintAttrs
+#' each time it is required, since `props` is always moved.
 #'
 #' @details
 #' `PaintAttrs$set_attrs()` takes arguments below:
@@ -585,6 +702,9 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
 #' * cap: Cap (stroke cap).
 #' * width: Stroke width.
 #' * miter: Stroke miter.
+#' * fontsize: Font size.
+#' * family: Font family name
+#' * fontface: FontStyle.
 #' * blend_mode: BlendMode.
 #' * path_effect: PathEffect.
 #' * shader: Shader.
@@ -594,14 +714,15 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
 
 ### associated functions for PaintAttrs
 
-`PaintAttrs`$`set_attrs` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`, `path_effect`, `shader`) {
+`PaintAttrs`$`set_attrs` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `fontsize`, `family`, `fontface`, `blend_mode`, `path_effect`, `shader`) {
   `style` <- .savvy_extract_ptr(`style`, "Style")
   `join` <- .savvy_extract_ptr(`join`, "Join")
   `cap` <- .savvy_extract_ptr(`cap`, "Cap")
+  `fontface` <- .savvy_extract_ptr(`fontface`, "FontStyle")
   `blend_mode` <- .savvy_extract_ptr(`blend_mode`, "BlendMode")
   `path_effect` <- .savvy_extract_ptr(`path_effect`, "PathEffect")
   `shader` <- .savvy_extract_ptr(`shader`, "Shader")
-  .savvy_wrap_PaintAttrs(.Call(savvy_PaintAttrs_set_attrs__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`, `path_effect`, `shader`))
+  .savvy_wrap_PaintAttrs(.Call(savvy_PaintAttrs_set_attrs__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `fontsize`, `family`, `fontface`, `blend_mode`, `path_effect`, `shader`))
 }
 
 

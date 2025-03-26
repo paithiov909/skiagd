@@ -17,6 +17,7 @@ Imports:
     rlang
 Suggests:
     magick,
+    systemfonts,
     testthat (>= 3.0.0),
     vdiffr
 Config/testthat/edition: 3

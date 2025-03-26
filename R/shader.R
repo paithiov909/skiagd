@@ -16,7 +16,7 @@ c.Shader <- function(..., mode = paint()[["blend_mode"]]) {
 #' `Shader` is a struct that offers a reference to `skia_safe::Shader`.
 #' You can apply a shader to shapes via [paint()].
 #'
-#' Note that concatenating shaders with `c()` is equivalent to blend them all
+#' Concatenating shaders with `c()` is equivalent to blend them all
 #' into a single shader using `Shader$blend()` with the default `BlendMode`.
 #' You can pass `mode` explicitly for `c()` to change the blend mode.
 #'
