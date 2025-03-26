@@ -14,6 +14,6 @@ Returns font families available on the system.
 
 Since skiagd can only access fonts installed on the system,
 font families in the font registry or local fonts
-registered by the \link{systemfonts} package
+registered by the \href{https://systemfonts.r-lib.org/}{systemfonts} package
 cannot be specified as the \code{family} in \code{\link[=paint]{paint()}}.
 }

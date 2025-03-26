@@ -29,7 +29,7 @@ as_recordedplot <- function(img, props = paint()) {
 #'
 #' Since skiagd can only access fonts installed on the system,
 #' font families in the font registry or local fonts
-#' registered by the [systemfonts] package
+#' registered by the [systemfonts](https://systemfonts.r-lib.org/) package
 #' cannot be specified as the `family` in [paint()].
 #'
 #' @returns A tibble.
