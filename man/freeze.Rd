@@ -4,12 +4,18 @@
 \alias{freeze}
 \title{Freeze picture}
 \usage{
-freeze(img, fill = "transparent", props = paint())
+freeze(img, fill = "transparent", left = 0, top = 0, props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{fill}{A string scalar; named colors or hexadecimal color codes.}
+\item{fill}{RGBA representation of a color.
+This can be specified using named colors or hexadecimal color codes,
+which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.}
+
+\item{left}{Left offset for drawing PNG image.}
+
+\item{top}{Top offset for drawing PNG image.}
 
 \item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
@@ -17,5 +23,6 @@ freeze(img, fill = "transparent", props = paint())
 A raw vector of picture.
 }
 \description{
-\code{as_png(img)} and then adds it to a new canvas.
+\code{as_png(img, props)} and then adds it to a new canvas
+with the default blend mode (\code{BlendMode$SrcOver}).
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/canvas.R
 \name{canvas}
 \alias{canvas}
-\title{Create a canvas}
+\title{Create new canvas}
 \usage{
 canvas(fill = "transparent", size = paint()[["canvas_size"]])
 }

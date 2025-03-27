@@ -109,7 +109,7 @@ default_attrs <- function() {
       "6" = env_get(FontStyle, "Italic"), # "cyrillic.oblique"
       "7" = env_get(FontStyle, "Normal") # "EUC"
     ),
-    blend_mode = env_get(BlendMode, "Src"),
+    blend_mode = env_get(BlendMode, "SrcOver"),
     path_effect = PathEffect$no_effect(),
     shader = Shader$no_shader(),
     point_mode = env_get(PointMode, "Points"),

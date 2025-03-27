@@ -31,7 +31,7 @@ NULL
 #' @aliases picture
 NULL
 
-#' Applying affine transformations to a picture
+#' Applying affine transformations to the previous picture
 #'
 #' @description
 #' When loading a picture into a canvas,

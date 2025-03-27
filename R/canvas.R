@@ -1,4 +1,4 @@
-#' Create a canvas
+#' Create new canvas
 #'
 #' Creates a new canvas filled with specified color.
 #'

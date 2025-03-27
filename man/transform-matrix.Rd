@@ -2,7 +2,7 @@
 % Please edit documentation in R/aaa.R
 \name{transform-matrix}
 \alias{transform-matrix}
-\title{Applying affine transformations to a picture}
+\title{Applying affine transformations to the previous picture}
 \description{
 When loading a picture into a canvas,
 you can apply an affine transformation

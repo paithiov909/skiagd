@@ -28,16 +28,26 @@ as_png <- function(img, props = paint()) {
 
 #' Freeze picture
 #'
-#' `as_png(img)` and then adds it to a new canvas.
+#' `as_png(img, props)` and then adds it to a new canvas
+#' with the default blend mode (`BlendMode$SrcOver`).
 #'
-#' @param fill A string scalar; named colors or hexadecimal color codes.
+#' @param fill RGBA representation of a color.
+#' This can be specified using named colors or hexadecimal color codes,
+#' which are converted internally using [grDevices::col2rgb()].
+#' @param left Left offset for drawing PNG image.
+#' @param top Top offset for drawing PNG image.
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export
-freeze <- function(img, fill = "transparent", props = paint()) {
+freeze <- function(img, fill = "transparent", left = 0, top = 0, props = paint()) {
   img |>
     as_png(props = props) |>
-    add_png(canvas(fill, size = props[["canvas_size"]]), png = _, props = props)
+    add_png(
+      canvas(fill = fill, size = props[["canvas_size"]]),
+      png = _,
+      left = left,
+      top = top
+    )
 }
 
 #' Plot picture as PNG image
