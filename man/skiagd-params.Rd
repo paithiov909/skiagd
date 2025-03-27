@@ -6,7 +6,7 @@
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{props}{A list of paint attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \description{
 img and props

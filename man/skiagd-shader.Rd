@@ -12,7 +12,7 @@
 
 \item{transform}{Numerics of length 9; transformation matrix.}
 
-\item{png_bytes}{A raw vector of PNG data.}
+\item{png}{A raw vector of PNG data.}
 
 \item{rgba}{Integers of length 4 in range \verb{[0, 255]}
 representing RGBA.}
@@ -65,7 +65,7 @@ The following shaders are available:
 \itemize{
 \item \code{no_shader()}: does not apply any shader. This is the default shader for \code{\link[=paint]{paint()}}.
 \item \code{from_picture(img, mode, tile_size, transform)}: takes a picture and returns an image shader.
-\item \code{from_png(png_bytes, mode, transform)}: takes a PNG image and returns an image shader.
+\item \code{from_png(png, mode, transform)}: takes a PNG image and returns an image shader.
 \item \code{color(rgba)}: takess a color and returns a color shader.
 \item \code{blend(mode, dst, src)}: returns a shader that combines the given shaders with a \link{BlendMode}.
 \item \code{fractal_noise(freq, octaves, seed, tile_size)}: fractal perlin noise shader.

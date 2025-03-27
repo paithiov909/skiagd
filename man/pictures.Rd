@@ -6,9 +6,9 @@
 \title{Pictures}
 \description{
 In Skia, a picture is a prerecorded list of drawing operations on a canvas.
-The drawing functions of skiagd return a serialized picture as a raw vector,
+The drawing functions of skiagd
 take it as their first argument, add new shapes onto it,
-and return a picture again.
+and return a serialized picture as a raw vector again.
 
 A serialized picture is a binary format containing a single frame,
 which can be saved to a \code{.skp} file using \code{\link[=writeBin]{writeBin()}},

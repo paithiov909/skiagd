@@ -15,7 +15,7 @@ add_png(img, png, left = 0, top = 0, props = paint())
 
 \item{top}{Top offset for drawing PNG image.}
 
-\item{props}{A list of paint attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.

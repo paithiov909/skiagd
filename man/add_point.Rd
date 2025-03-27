@@ -11,7 +11,7 @@ add_point(img, point, props = paint())
 
 \item{point}{A double matrix where each row is a point.}
 
-\item{props}{A list of paint attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.

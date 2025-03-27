@@ -27,7 +27,7 @@ at which each character in \code{text} is drawn.
 For example, if \code{text} is a character vector of 5 and 3 length strings,
 \code{point} must be a 8x2 matrix.}
 
-\item{props}{A list of paint attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.

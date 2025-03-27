@@ -14,7 +14,7 @@ like \code{"M10 10 H 90 V 90 H 10 L 10 10"}.}
 
 \item{text}{Characters to be drawn along \code{path}.}
 
-\item{props}{A list of paint attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.
