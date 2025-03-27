@@ -13,7 +13,7 @@ add_circle(img, center, radius, props = paint())
 
 \item{radius}{Numerics of circle radius.}
 
-\item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of paint attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.

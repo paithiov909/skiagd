@@ -1,5 +1,5 @@
 Package: skiagd
-Title: R wrapper for 'rust-skia'
+Title: R Wrapper for 'rust-skia'
 Version: 0.0.0.9000
 Authors@R: c(
     person("Akiru", "Kato", , "paithiov909@gmail.com", role = c("aut", "cre")),

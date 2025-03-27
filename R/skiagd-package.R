@@ -4,7 +4,7 @@
 #' @keywords internal
 "_PACKAGE"
 
-#' Convert a picture into a recorded plot
+#' Convert picture into recorded plot
 #'
 #' This is mainly for testing purposes.
 #'

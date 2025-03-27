@@ -4,7 +4,7 @@
 \name{skiagd-package}
 \alias{skiagd}
 \alias{skiagd-package}
-\title{skiagd: R wrapper for 'rust-skia'}
+\title{skiagd: R Wrapper for 'rust-skia'}
 \description{
 A toy R wrapper for 'rust-skia' \url{https://github.com/rust-skia/rust-skia} (the Rust crate 'skia_safe' \url{https://rust-skia.github.io/doc/skia_safe/}, a binding for 'Skia' \url{https://skia.org/}).
 }

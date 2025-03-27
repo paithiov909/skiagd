@@ -15,7 +15,7 @@ XYWH (left, top, right, bottom).}
 \item{radii}{A double matrix where each row is a pair of axis lengths
 on X-axis and Y-axis of oval describing rounded corners.}
 
-\item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of paint attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.

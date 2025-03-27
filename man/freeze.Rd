@@ -2,7 +2,7 @@
 % Please edit documentation in R/png.R
 \name{freeze}
 \alias{freeze}
-\title{Freeze a picture}
+\title{Freeze picture}
 \usage{
 freeze(img, fill = "transparent", props = paint())
 }
@@ -11,7 +11,7 @@ freeze(img, fill = "transparent", props = paint())
 
 \item{fill}{A string scalar; named colors or hexadecimal color codes.}
 
-\item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of paint attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.

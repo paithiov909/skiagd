@@ -12,7 +12,7 @@ add_rect(img, rect, props = paint())
 \item{rect}{A double matrix where each row is a rectangle
 XYWH (left, top, right, bottom).}
 
-\item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of paint attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.

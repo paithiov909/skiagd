@@ -26,7 +26,7 @@ as_png <- function(img, props = paint()) {
   sk_as_png(props[["canvas_size"]], img, props[["transform"]])
 }
 
-#' Freeze a picture
+#' Freeze picture
 #'
 #' `as_png(img)` and then adds it to a new canvas.
 #'

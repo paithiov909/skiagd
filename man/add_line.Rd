@@ -13,7 +13,7 @@ add_line(img, from, to, props = paint())
 
 \item{to}{A double matrix where each row is an end point.}
 
-\item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of paint attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.

@@ -11,7 +11,7 @@
 #' You can use `text_layout_horizontal()` and `text_layout_vertical()`
 #' to create a `point` matrix.
 #'
-#' @param text Strings to be drawn.
+#' @param text Characters to be drawn.
 #' @param point A double matrix where each row is the point
 #' at which each character in `text` is drawn.
 #' For example, if `text` is a character vector of 5 and 3 length strings,

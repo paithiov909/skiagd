@@ -51,7 +51,7 @@ dev_new_if_needed <- function() {
 
 #' Device size
 #'
-#' Just returns the size of the current device as an integer (not a numeric).
+#' Just returns the size of the current device as integers.
 #'
 #' @param units `units` for [grDevices::dev.size()].
 #' @returns An integer vector.

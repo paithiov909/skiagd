@@ -9,7 +9,7 @@
 #'
 #' @param path A character vector of SVG notations
 #' like `"M10 10 H 90 V 90 H 10 L 10 10"`.
-#' @param text Strings to be drawn along `path`.
+#' @param text Characters to be drawn along `path`.
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export

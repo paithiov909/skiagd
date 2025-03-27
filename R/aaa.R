@@ -3,9 +3,33 @@
 #' @rdname skiagd-params
 #' @name param-img-and-props
 #' @param img A raw vector of picture.
-#' @param props A paint properties out of [paint()].
+#' @param props A list of paint attributes out of [paint()].
 #' @keywords internal
-NULL # TODO: explain about picture
+NULL
+
+#' Pictures
+#'
+#' @description
+#' In Skia, a picture is a prerecorded list of drawing operations on a canvas.
+#' The drawing functions of skiagd return a serialized picture as a raw vector,
+#' take it as their first argument, add new shapes onto it,
+#' and return a picture again.
+#'
+#' A serialized picture is a binary format containing a single frame,
+#' which can be saved to a `.skp` file using [writeBin()],
+#' and reused by any drawing functions
+#' as long as it is compatible with the version of Skia
+#' used to create it.
+#'
+#' You can review contents of `.skp` files
+#' with the [Skia debugger](https://skia.org/docs/dev/tools/debugger/).
+#'
+#' @seealso
+#' [Pictures | React Native Skia](https://shopify.github.io/react-native-skia/docs/shapes/pictures)
+#' @rdname pictures
+#' @name pictures
+#' @aliases picture
+NULL
 
 #' Applying affine transformations to a picture
 #'

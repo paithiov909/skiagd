@@ -13,5 +13,5 @@ dev_size(units = "px")
 An integer vector.
 }
 \description{
-Just returns the size of the current device as an integer (not a numeric).
+Just returns the size of the current device as integers.
 }

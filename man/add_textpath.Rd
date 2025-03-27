@@ -12,9 +12,9 @@ add_textpath(img, path, text, props = paint())
 \item{path}{A character vector of SVG notations
 like \code{"M10 10 H 90 V 90 H 10 L 10 10"}.}
 
-\item{text}{Strings to be drawn along \code{path}.}
+\item{text}{Characters to be drawn along \code{path}.}
 
-\item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of paint attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.

@@ -9,7 +9,7 @@ as_png(img, props = paint())
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of paint attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of PNG data.
