@@ -7,8 +7,10 @@ SEXP savvy_sk_draw_path__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_ar
 SEXP savvy_sk_draw_png__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__png_bytes, SEXP c_arg__left_top);
 SEXP savvy_sk_draw_points__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__x, SEXP c_arg__y, SEXP c_arg__mode);
 SEXP savvy_sk_draw_rounded_rect__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__left, SEXP c_arg__top, SEXP c_arg__right, SEXP c_arg__bottom, SEXP c_arg__rx, SEXP c_arg__ry);
+SEXP savvy_sk_draw_text__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__text);
 SEXP savvy_sk_draw_textblob__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__text, SEXP c_arg__x, SEXP c_arg__y);
 SEXP savvy_sk_draw_textpath__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__text, SEXP c_arg__svg);
+SEXP savvy_sk_get_text_width__ffi(SEXP c_arg__text, SEXP c_arg__props);
 SEXP savvy_sk_list_families__ffi(void);
 SEXP savvy_sk_matrix_default__ffi(void);
 
@@ -39,6 +41,7 @@ SEXP savvy_PathEffect_line_2d__ffi(SEXP c_arg__width, SEXP c_arg__transform);
 SEXP savvy_PathEffect_no_effect__ffi(void);
 SEXP savvy_PathEffect_path_1d__ffi(SEXP c_arg__path, SEXP c_arg__advance, SEXP c_arg__phase, SEXP c_arg__style);
 SEXP savvy_PathEffect_path_2d__ffi(SEXP c_arg__path, SEXP c_arg__transform);
+SEXP savvy_PathEffect_sum__ffi(SEXP c_arg__first, SEXP c_arg__second);
 SEXP savvy_PathEffect_trim__ffi(SEXP c_arg__start, SEXP c_arg__end);
 
 // methods and associated functions for PointMode

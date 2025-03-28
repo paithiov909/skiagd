@@ -26,3 +26,7 @@ The return value is often a large object
 because the specified font is embedded in the returned picture.
 Note that you should almost always \code{\link[=freeze]{freeze()}} the picture after drawing text.
 }
+\details{
+Since textblobs do not have font fallback mechanism,
+characters out of the specified font are not drawn correctly.
+}

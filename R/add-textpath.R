@@ -7,6 +7,10 @@
 #' because the specified font is embedded in the returned picture.
 #' Note that you should almost always [freeze()] the picture after drawing text.
 #'
+#' @details
+#' Since textblobs do not have font fallback mechanism,
+#' characters out of the specified font are not drawn correctly.
+#'
 #' @param path A character vector of SVG notations
 #' like `"M10 10 H 90 V 90 H 10 L 10 10"`.
 #' @param text Characters to be drawn along `path`.

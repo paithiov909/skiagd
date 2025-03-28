@@ -27,7 +27,7 @@ c.Shader <- function(..., mode = paint()[["blend_mode"]]) {
 #' * `from_picture(img, mode, tile_size, transform)`: takes a picture and returns an image shader.
 #' * `from_png(png, mode, transform)`: takes a PNG image and returns an image shader.
 #' * `color(rgba)`: takess a color and returns a color shader.
-#' * `blend(mode, dst, src)`: returns a shader that combines the given shaders with a [BlendMode].
+#' * `blend(mode, dst, src)`: returns a shader that combines the given shaders with [BlendMode].
 #' * `fractal_noise(freq, octaves, seed, tile_size)`: fractal perlin noise shader.
 #' * `turbulence(freq, octaves, seed, tile_size)`: turbulence noise shader.
 #' * `linear_gradient(start, end, from, to, mode, flags, transform)`: linear gradient shader.
@@ -39,7 +39,7 @@ c.Shader <- function(..., mode = paint()[["blend_mode"]]) {
 #' @param mode For `blend()`, [BlendMode]. For others, [TileMode].
 #' @param tile_size Numerics of length 2; tile size (width, height).
 #' @param transform Numerics of length 9; transformation matrix.
-#' @param png A raw vector of PNG data.
+#' @param png A raw vector of PNG image.
 #' @param rgba Integers of length 4 in range `[0, 255]`
 #' representing RGBA.
 #' @param dst A `Shader` object; destination shader.

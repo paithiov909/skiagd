@@ -2,7 +2,7 @@
 % Please edit documentation in R/png.R
 \name{as_png}
 \alias{as_png}
-\title{Convert picture into PNG data}
+\title{Convert picture into PNG image}
 \usage{
 as_png(img, props = paint())
 }
@@ -12,8 +12,8 @@ as_png(img, props = paint())
 \item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector of PNG data.
+A raw vector of PNG image.
 }
 \description{
-Convert picture into PNG data
+Convert picture into PNG image
 }

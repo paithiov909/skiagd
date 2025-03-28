@@ -9,7 +9,7 @@ add_png(img, png, left = 0, top = 0, props = paint())
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{png}{A raw vector of PNG data.}
+\item{png}{A raw vector of PNG image.}
 
 \item{left}{Left offset for drawing PNG image.}
 

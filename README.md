@@ -48,9 +48,7 @@ Skia](https://shopify.github.io/react-native-skia/).
     - [x] Circle
     - [ ] Oval (oval)
     - [ ] Arc (arc)
-  - Atlas
-  - Vertices
-  - Patch
+  - [ ] Atlas
 - Images
   - [x] PNG
 - Text
@@ -59,17 +57,20 @@ Skia](https://shopify.github.io/react-native-skia/).
   - [x] Text Blob
 - Painting Attributes
   ([Paint](https://rust-skia.github.io/doc/skia_safe/type.Paint.html))
-  - [x] PathEffects
-  - [ ] MaskFilter?? (blur)
-  - [ ] ImageFilters
+  - [x] Path Effects
+  - [ ] Mask Filter (blur)
+  - [ ] Color Filters
   - [x] Shaders
-  - [ ] RuntimeShaders
+  - [ ] Image Filters / Runtime Shaders
     - sksl support
     - [uniforms](https://rust-skia.github.io/doc/skia_safe/runtime_effect/type.RuntimeShaderBuilder.html#method.set_uniform_int)
       support
 
 ### Possibly in the future??
 
+- Shapes
+  - Vertices
+  - Patch
 - Fitting Images (needs to re-implement
   [this](https://github.com/Shopify/react-native-skia/blob/4192f839d7ffc5cb0aba91c0f0f97e595d5c8409/packages/skia/cpp/api/recorder/ImageFit.h))
 - [Group](https://shopify.github.io/react-native-skia/docs/group/) /
@@ -100,17 +101,24 @@ img_data <-
   add_circle(
     matrix(c(runif(n_circles, 0, size[1]), runif(n_circles, 0, size[2])), ncol = 2),
     runif(n_circles, 6, 50),
-    props = paint(color = "#87ceeb66", blend_mode = BlendMode$ColorBurn)
+    props = paint(color = "#81ffb366", blend_mode = BlendMode$Multiply)
   ) |>
   add_circle(
     matrix(c(runif(n_circles, 0, size[1]), runif(n_circles, 0, size[2])), ncol = 2),
     runif(n_circles, 20, 60),
-    props = paint(color = "#ff1493aa", blend_mode = BlendMode$Overlay)
+    props = paint(color = "#f281ff66", blend_mode = BlendMode$Exclusion)
   ) |>
   add_path(
     "M 128 0 L 168 80 L 256 93 L 192 155 L 207 244 L 128 202 L 49 244 L 64 155 L 0 93 L 88 80 L 128 0 Z",
     transform = c(1, 0, (size[1] / 2 - 128), 0, 1, (size[2] / 2 - 128), 0, 0, 1),
-    props = paint(color = "#fff281ee")
+    props = paint(color = "gold")
+  ) |>
+  add_png(
+    canvas("transparent") |>
+      add_text("Hello, skiagd♪", props = paint(fontsize = 96, fontface = FontStyle$Bold, color = "maroon")) |>
+      as_png(),
+    left = size[1] / 2 - text_width("Hello, skiagd", props = paint(fontsize = 96)) / 2,
+    top = size[2] * 5 / 7
   ) |>
   as_png()
 

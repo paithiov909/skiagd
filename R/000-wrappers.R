@@ -183,6 +183,20 @@ NULL
   .Call(savvy_sk_draw_rounded_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `left`, `top`, `right`, `bottom`, `rx`, `ry`)
 }
 
+#' Draws text as textblobs
+#'
+#' @param size Canvas size.
+#' @param curr_bytes Current canvas state.
+#' @param mat Matrix for transforming picture.
+#' @param props PaintAttrs.
+#' @param text Text strings.
+#' @returns A raw vector of picture.
+#' @noRd
+`sk_draw_text` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  .Call(savvy_sk_draw_text__impl, `size`, `curr_bytes`, `mat`, `props`, `text`)
+}
+
 #' Draws textblob
 #'
 #' @param size Canvas size.
@@ -212,6 +226,17 @@ NULL
 `sk_draw_textpath` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `svg`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   .Call(savvy_sk_draw_textpath__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `svg`)
+}
+
+#' Get text width
+#'
+#' @param text Text strings.
+#' @param props PaintAttrs.
+#' @returns A numeric vector.
+#' @noRd
+`sk_get_text_width` <- function(`text`, `props`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  .Call(savvy_sk_get_text_width__impl, `text`, `props`)
 }
 
 
@@ -782,6 +807,12 @@ class(`PaintAttrs`) <- c("PaintAttrs__bundle", "savvy_skiagd__sealed")
 
 `PathEffect`$`path_2d` <- function(`path`, `transform`) {
   .savvy_wrap_PathEffect(.Call(savvy_PathEffect_path_2d__impl, `path`, `transform`))
+}
+
+`PathEffect`$`sum` <- function(`first`, `second`) {
+  `first` <- .savvy_extract_ptr(`first`, "PathEffect")
+  `second` <- .savvy_extract_ptr(`second`, "PathEffect")
+  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_sum__impl, `first`, `second`))
 }
 
 `PathEffect`$`trim` <- function(`start`, `end`) {

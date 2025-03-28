@@ -4,18 +4,18 @@
 \alias{freeze}
 \title{Freeze picture}
 \usage{
-freeze(img, fill = "transparent", left = 0, top = 0, props = paint())
+freeze(img, left = 0, top = 0, fill = "transparent", props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{fill}{RGBA representation of a color.
-This can be specified using named colors or hexadecimal color codes,
-which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.}
-
 \item{left}{Left offset for drawing PNG image.}
 
 \item{top}{Top offset for drawing PNG image.}
+
+\item{fill}{RGBA representation of a color.
+This can be specified using named colors or hexadecimal color codes,
+which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.}
 
 \item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }

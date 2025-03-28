@@ -12,7 +12,7 @@
 
 \item{transform}{Numerics of length 9; transformation matrix.}
 
-\item{png}{A raw vector of PNG data.}
+\item{png}{A raw vector of PNG image.}
 
 \item{rgba}{Integers of length 4 in range \verb{[0, 255]}
 representing RGBA.}
@@ -67,7 +67,7 @@ The following shaders are available:
 \item \code{from_picture(img, mode, tile_size, transform)}: takes a picture and returns an image shader.
 \item \code{from_png(png, mode, transform)}: takes a PNG image and returns an image shader.
 \item \code{color(rgba)}: takess a color and returns a color shader.
-\item \code{blend(mode, dst, src)}: returns a shader that combines the given shaders with a \link{BlendMode}.
+\item \code{blend(mode, dst, src)}: returns a shader that combines the given shaders with \link{BlendMode}.
 \item \code{fractal_noise(freq, octaves, seed, tile_size)}: fractal perlin noise shader.
 \item \code{turbulence(freq, octaves, seed, tile_size)}: turbulence noise shader.
 \item \code{linear_gradient(start, end, from, to, mode, flags, transform)}: linear gradient shader.

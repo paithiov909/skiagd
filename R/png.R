@@ -1,7 +1,7 @@
 #' Add PNG image to canvas
 #'
 #' @inheritParams param-img-and-props
-#' @param png A raw vector of PNG data.
+#' @param png A raw vector of PNG image.
 #' @param left Left offset for drawing PNG image.
 #' @param top Top offset for drawing PNG image.
 #' @returns A raw vector of picture.
@@ -17,37 +17,30 @@ add_png <- function(img, png, left = 0, top = 0, props = paint()) {
   )
 }
 
-#' Convert picture into PNG data
+#' Convert picture into PNG image
 #'
 #' @inheritParams param-img-and-props
-#' @returns A raw vector of PNG data.
+#' @returns A raw vector of PNG image.
 #' @export
 as_png <- function(img, props = paint()) {
   sk_as_png(props[["canvas_size"]], img, props[["transform"]])
 }
 
-#' Freeze picture
+#' Convert picture into recorded plot
 #'
-#' `as_png(img, props)` and then adds it to a new canvas
-#' with the default blend mode (`BlendMode$SrcOver`).
+#' This is mainly for testing purposes.
 #'
-#' @param fill RGBA representation of a color.
-#' This can be specified using named colors or hexadecimal color codes,
-#' which are converted internally using [grDevices::col2rgb()].
-#' @param left Left offset for drawing PNG image.
-#' @param top Top offset for drawing PNG image.
 #' @inheritParams param-img-and-props
-#' @returns A raw vector of picture.
+#' @returns A `recordedplot` object. See [grDevices::recordPlot()] for details.
 #' @export
-freeze <- function(img, fill = "transparent", left = 0, top = 0, props = paint()) {
-  img |>
-    as_png(props = props) |>
-    add_png(
-      canvas(fill = fill, size = props[["canvas_size"]]),
-      png = _,
-      left = left,
-      top = top
-    )
+as_recordedplot <- function(img, props = paint()) {
+  if (!requireNamespace("magick", quietly = TRUE)) {
+    rlang::abort("magick package is required")
+  }
+  png <- as_png(img, props)
+  graphics::plot.new()
+  grid::grid.raster(magick::image_read(png))
+  grDevices::recordPlot(load = "skiagd")
 }
 
 #' Plot picture as PNG image
@@ -62,4 +55,28 @@ draw_img <- function(img, props = paint()) {
   png <- as_png(img, props)
   plot(grDevices::as.raster(magick::image_read(png)))
   invisible(img)
+}
+
+#' Freeze picture
+#'
+#' `as_png(img, props)` and then adds it to a new canvas
+#' with the default blend mode (`BlendMode$SrcOver`).
+#'
+#' @param left Left offset for drawing PNG image.
+#' @param top Top offset for drawing PNG image.
+#' @param fill RGBA representation of a color.
+#' This can be specified using named colors or hexadecimal color codes,
+#' which are converted internally using [grDevices::col2rgb()].
+#' @inheritParams param-img-and-props
+#' @returns A raw vector of picture.
+#' @export
+freeze <- function(img, left = 0, top = 0, fill = "transparent", props = paint()) {
+  img |>
+    as_png(props = props) |>
+    add_png(
+      canvas(fill = fill, size = props[["canvas_size"]]),
+      png = _,
+      left = left,
+      top = top
+    )
 }

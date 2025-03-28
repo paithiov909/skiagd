@@ -182,7 +182,7 @@ unsafe fn sk_draw_textpath(
         let mut num_ids: Vec<f32> = Vec::new();
         num_ids.resize(font.count_text(t.to_string()), 0.0);
         let width_ptrs = num_ids.as_mut_slice();
-        font.get_widths_bounds(ids.as_slice(), Some(width_ptrs), None, None);
+        font.get_widths_bounds(ids.as_slice(), Some(width_ptrs), None, Some(&props.paint));
 
         let mut meas = skia_safe::ContourMeasureIter::from_path(&path, false, Some(1.0));
         let mut dist = 0.0; // initial_offset
@@ -271,6 +271,43 @@ unsafe fn sk_draw_textblob(
         .ok_or_else(|| return savvy_err!("Failed to create text blob"))?;
         chars_offset += n_chars;
         canvas.draw_text_blob(blob, (0, 0), &props.paint);
+    }
+    let picture = recorder.finish_recording()?;
+    Ok(picture.into())
+}
+
+/// Draws text as textblobs
+///
+/// @param size Canvas size.
+/// @param curr_bytes Current canvas state.
+/// @param mat Matrix for transforming picture.
+/// @param props PaintAttrs.
+/// @param text Text strings.
+/// @returns A raw vector of picture.
+/// @noRd
+#[savvy]
+unsafe fn sk_draw_text(
+    size: IntegerSexp,
+    curr_bytes: savvy::RawSexp,
+    mat: NumericSexp,
+    props: PaintAttrs,
+    text: StringSexp,
+) -> savvy::Result<savvy::Sexp> {
+    let picture = read_picture_bytes(&curr_bytes)?;
+    let mat = as_matrix(&mat)?;
+
+    let size = size.to_vec();
+    let mut recorder = SkiaCanvas::new(size[0], size[1]);
+    let canvas = recorder.start_recording();
+    canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
+
+    let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
+    let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
+
+    for t in text.iter() {
+        let blob = skia_safe::TextBlob::new(t, &font)
+            .ok_or_else(|| return savvy_err!("Failed to create text blob"))?;
+        canvas.draw_text_blob(&blob, (0.0 as f32, props.font_size), &props.paint);
     }
     let picture = recorder.finish_recording()?;
     Ok(picture.into())
@@ -595,6 +632,21 @@ impl PathEffect {
         Ok(PathEffect {
             label: "none".to_string(),
             effect: None,
+        })
+    }
+    fn sum(first: &PathEffect, second: &PathEffect) -> savvy::Result<Self> {
+        let first = first.effect
+            .clone()
+            .ok_or_else(|| return savvy_err!("First effect is required"))?;
+        let second = second.effect
+            .clone()
+            .ok_or_else(|| return savvy_err!("Second effect is required"))?;
+        let effect_sum = skia_safe::PathEffect::sum(
+            first, second
+        );
+        Ok(PathEffect {
+            label: "sum".to_string(),
+            effect: Some(effect_sum),
         })
     }
     fn trim(start: NumericScalar, end: NumericScalar) -> savvy::Result<Self> {

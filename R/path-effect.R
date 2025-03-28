@@ -3,16 +3,26 @@ print.PathEffect <- function(x, ...) {
   cat("PathEffect::", x$get_label(), "\n", sep = "")
 }
 
+#' @export
+c.PathEffect <- function(...) {
+  purrr::reduce(list(...), function(acc, nxt) {
+    PathEffect$sum(acc, nxt)
+  })
+}
+
 #' PathEffect
 #'
 #' `PathEffect` is a struct that offers a reference to `skia_safe::PathEffect`.
 #' You can apply a path effect to shapes via [paint()].
-#' Currently only single `PathEffect` can be specified; multiple effects are not supported.
+#'
+#' Concatenating path effects with `c()` is equivalent to sum them sequentially
+#' into a single effect using `PathEffect$sum()`.
 #'
 #' @details
 #' The following effects are available:
 #'
 #' * `no_effect()`: does not apply any path effect. This is the default effect for [paint()].
+#' * `sum(first, second)`: applies two effects in sequence.
 #' * `trim(start, end)`: trims the `start` and `end` of the path. Note that you can't trim nothing at all, i.e., setting `start = 0` and `end = 1` arises an error.
 #' * `discrete(lentgh, deviation, seed)`: applies discrete path effect.
 #' * `dash(intervals, phase)`: applies dash path effect.
@@ -21,6 +31,8 @@ print.PathEffect <- function(x, ...) {
 #' * `path_2d(path, transform)`: applies 2D path effect.
 #' * `line_2d(width, transform)`: applies 2D line path effect.
 #'
+#' @param first A `PathEffect` object.
+#' @param second A `PathEffect` object.
 #' @param start A numeric scalar in the range `[0, 1]`.
 #' @param end A numeric scalar in the range `[0, 1]`.
 #' @param length A numeric scalar; length of the subsegments.
