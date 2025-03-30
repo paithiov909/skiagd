@@ -217,15 +217,16 @@ NULL
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
+#' @param mat1 Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param text Text strings to draw along SVG paths.
 #' @param svg SVG paths.
+#' @param mat2 Matrix for transforming SVG paths.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_textpath` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `svg`) {
+`sk_draw_textpath` <- function(`size`, `curr_bytes`, `mat1`, `props`, `text`, `svg`, `mat2`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_textpath__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `svg`)
+  .Call(savvy_sk_draw_textpath__impl, `size`, `curr_bytes`, `mat1`, `props`, `text`, `svg`, `mat2`)
 }
 
 #' Get text width
@@ -250,6 +251,36 @@ NULL
 #' @noRd
 `sk_matrix_default` <- function() {
   .Call(savvy_sk_matrix_default__impl)
+}
+
+#' Interpolates between two SVG paths
+#'
+#' @param value A numeric vector of weights.
+#' @param first SVG notation. The second or later elements will be ignored.
+#' @param second SVG notation. The second or later elements will be ignored.
+#' @returns A character vector.
+#' @noRd
+`sk_path_interpolate` <- function(`value`, `first`, `second`) {
+  .Call(savvy_sk_path_interpolate__impl, `value`, `first`, `second`)
+}
+
+#' Returns minimum and maximum axes values of Point array
+#'
+#' @param svg SVG notations.
+#' @returns A numeric vector of length `2*svg.len()`.
+#' @noRd
+`sk_path_size` <- function(`svg`) {
+  .Call(savvy_sk_path_size__impl, `svg`)
+}
+
+#' Transforms SVG paths
+#'
+#' @param svg SVG notations to transform.
+#' @param mat Matrix for transforming SVG paths.
+#' @returns A character vector.
+#' @noRd
+`sk_path_transform` <- function(`svg`, `mat`) {
+  .Call(savvy_sk_path_transform__impl, `svg`, `mat`)
 }
 
 ### wrapper functions for BlendMode

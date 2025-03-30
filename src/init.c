@@ -89,8 +89,8 @@ SEXP savvy_sk_draw_textblob__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_textpath__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__text, SEXP c_arg__svg) {
-    SEXP res = savvy_sk_draw_textpath__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__text, c_arg__svg);
+SEXP savvy_sk_draw_textpath__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat1, SEXP c_arg__props, SEXP c_arg__text, SEXP c_arg__svg, SEXP c_arg__mat2) {
+    SEXP res = savvy_sk_draw_textpath__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat1, c_arg__props, c_arg__text, c_arg__svg, c_arg__mat2);
     return handle_result(res);
 }
 
@@ -106,6 +106,21 @@ SEXP savvy_sk_list_families__impl(void) {
 
 SEXP savvy_sk_matrix_default__impl(void) {
     SEXP res = savvy_sk_matrix_default__ffi();
+    return handle_result(res);
+}
+
+SEXP savvy_sk_path_interpolate__impl(SEXP c_arg__value, SEXP c_arg__first, SEXP c_arg__second) {
+    SEXP res = savvy_sk_path_interpolate__ffi(c_arg__value, c_arg__first, c_arg__second);
+    return handle_result(res);
+}
+
+SEXP savvy_sk_path_size__impl(SEXP c_arg__svg) {
+    SEXP res = savvy_sk_path_size__ffi(c_arg__svg);
+    return handle_result(res);
+}
+
+SEXP savvy_sk_path_transform__impl(SEXP c_arg__svg, SEXP c_arg__mat) {
+    SEXP res = savvy_sk_path_transform__ffi(c_arg__svg, c_arg__mat);
     return handle_result(res);
 }
 
@@ -245,10 +260,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"savvy_sk_draw_rounded_rect__impl", (DL_FUNC) &savvy_sk_draw_rounded_rect__impl, 10},
     {"savvy_sk_draw_text__impl", (DL_FUNC) &savvy_sk_draw_text__impl, 5},
     {"savvy_sk_draw_textblob__impl", (DL_FUNC) &savvy_sk_draw_textblob__impl, 7},
-    {"savvy_sk_draw_textpath__impl", (DL_FUNC) &savvy_sk_draw_textpath__impl, 6},
+    {"savvy_sk_draw_textpath__impl", (DL_FUNC) &savvy_sk_draw_textpath__impl, 7},
     {"savvy_sk_get_text_width__impl", (DL_FUNC) &savvy_sk_get_text_width__impl, 2},
     {"savvy_sk_list_families__impl", (DL_FUNC) &savvy_sk_list_families__impl, 0},
     {"savvy_sk_matrix_default__impl", (DL_FUNC) &savvy_sk_matrix_default__impl, 0},
+    {"savvy_sk_path_interpolate__impl", (DL_FUNC) &savvy_sk_path_interpolate__impl, 3},
+    {"savvy_sk_path_size__impl", (DL_FUNC) &savvy_sk_path_size__impl, 1},
+    {"savvy_sk_path_transform__impl", (DL_FUNC) &savvy_sk_path_transform__impl, 2},
 
 
 

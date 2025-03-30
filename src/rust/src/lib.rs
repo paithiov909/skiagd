@@ -1,9 +1,9 @@
 mod canvas;
-mod matrix;
+mod path_transform;
 mod paint_attrs;
 
 use canvas::{read_picture_bytes, SkiaCanvas};
-use matrix::as_matrix;
+use path_transform::as_matrix;
 use paint_attrs::shader::{sk_blend_mode, sk_tile_mode, BlendMode, Shader, TileMode};
 use paint_attrs::{font, path_effect::PathEffect, PaintAttrs};
 
@@ -145,39 +145,43 @@ unsafe fn sk_draw_path(
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
+/// @param mat1 Matrix for transforming picture.
 /// @param props PaintAttrs.
 /// @param text Text strings to draw along SVG paths.
 /// @param svg SVG paths.
+/// @param mat2 Matrix for transforming SVG paths.
 /// @returns A raw vector of picture.
 /// @noRd
 #[savvy]
 unsafe fn sk_draw_textpath(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
+    mat1: NumericSexp,
     props: PaintAttrs,
     text: StringSexp,
     svg: StringSexp,
+    mat2: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
     // https://github.com/Shopify/react-native-skia/blob/main/packages/skia/cpp/api/recorder/Drawings.h#L238
     if text.len() != svg.len() {
         return Err(savvy_err!("Invalid text or svg. Expected same length"));
     }
     let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat)?;
+    let mat1 = as_matrix(&mat1)?;
+    let mat2 = as_matrix(&mat2)?;
 
     let size = size.to_vec();
     let mut recorder = SkiaCanvas::new(size[0], size[1]);
     let canvas = recorder.start_recording();
-    canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
+    canvas.draw_picture(&picture, Some(&mat1), Some(&Paint::default()));
 
     let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
     let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
 
     for (t, s) in text.iter().zip(svg.iter()) {
         let path = skia_safe::utils::parse_path::from_svg(s)
-            .ok_or_else(|| return savvy_err!("Failed to parse svg"))?;
+            .ok_or_else(|| return savvy_err!("Failed to parse svg"))?
+            .with_transform(&mat2);
         let ids = font.text_to_glyphs_vec(t.to_string());
         let mut num_ids: Vec<f32> = Vec::new();
         num_ids.resize(font.count_text(t.to_string()), 0.0);
