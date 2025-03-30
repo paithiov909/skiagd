@@ -19,7 +19,6 @@ test_that("Shader$from_picture works", {
       add_rect(
         matrix(c(0, 0, dev_size()[1], dev_size()[2]), ncol = 4),
         props = paint(
-          !!!props, # this doesn't matter here, just for testing reusing props.
           shader = Shader$from_picture(
             pict,
             mode = TileMode$Repeat,

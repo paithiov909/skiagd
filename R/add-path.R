@@ -9,7 +9,7 @@
 #' @returns A raw vector of picture.
 #' @export
 add_path <- function(img, path,
-                     transform = c(1, 0, 0, 0, 1, 0, 0, 0, 1),
+                     transform = diag(1, 3),
                      props = paint()) {
   sk_draw_path(
     props[["canvas_size"]],

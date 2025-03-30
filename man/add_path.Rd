@@ -4,7 +4,7 @@
 \alias{add_path}
 \title{Add paths}
 \usage{
-add_path(img, path, transform = c(1, 0, 0, 0, 1, 0, 0, 0, 1), props = paint())
+add_path(img, path, transform = diag(1, 3), props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}

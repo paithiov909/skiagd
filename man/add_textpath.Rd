@@ -4,15 +4,19 @@
 \alias{add_textpath}
 \title{Add textpath}
 \usage{
-add_textpath(img, path, text, props = paint())
+add_textpath(img, text, path, transform = diag(1, 3), props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
 
+\item{text}{Characters to be drawn along \code{path}.}
+
 \item{path}{A character vector of SVG notations
 like \code{"M10 10 H 90 V 90 H 10 L 10 10"}.}
 
-\item{text}{Characters to be drawn along \code{path}.}
+\item{transform}{Numerics of length 9
+to apply affine transformations to the path themselves.
+See \link{transform-matrix} for affine transformations.}
 
 \item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
