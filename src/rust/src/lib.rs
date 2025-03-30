@@ -1,11 +1,11 @@
 mod canvas;
-mod path_transform;
 mod paint_attrs;
+mod path_transform;
 
 use canvas::{read_picture_bytes, SkiaCanvas};
-use path_transform::as_matrix;
 use paint_attrs::shader::{sk_blend_mode, sk_tile_mode, BlendMode, Shader, TileMode};
 use paint_attrs::{font, path_effect::PathEffect, PaintAttrs};
+use path_transform::as_matrix;
 
 use savvy::{savvy, savvy_err, IntegerSexp, LogicalSexp, NumericScalar, NumericSexp, StringSexp};
 use skia_safe::{Data, Image, Paint};
@@ -130,9 +130,9 @@ unsafe fn sk_draw_path(
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat1), Some(&Paint::default()));
 
-    for (_, s) in svg.iter().enumerate() {
+    for (i, s) in svg.iter().enumerate() {
         let path = skia_safe::utils::parse_path::from_svg(s)
-            .ok_or_else(|| return savvy_err!("Failed to parse svg"))?
+            .ok_or_else(|| return savvy_err!("Failed to parse svg at {}", i + 1))?
             .set_fill_type(paint_attrs::sk_fill_type(&fill_type))
             .with_transform(&mat2);
         canvas.draw_path(&path, &props.paint);
@@ -178,9 +178,9 @@ unsafe fn sk_draw_textpath(
     let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
     let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
 
-    for (t, s) in text.iter().zip(svg.iter()) {
+    for (i, (t, s)) in text.iter().zip(svg.iter()).enumerate() {
         let path = skia_safe::utils::parse_path::from_svg(s)
-            .ok_or_else(|| return savvy_err!("Failed to parse svg"))?
+            .ok_or_else(|| return savvy_err!("Failed to parse svg at {}", i + 1))?
             .with_transform(&mat2);
         let ids = font.text_to_glyphs_vec(t.to_string());
         let mut num_ids: Vec<f32> = Vec::new();
@@ -195,12 +195,12 @@ unsafe fn sk_draw_textpath(
 
         let mut text_body = t;
 
-        for i in 0..font.count_text(t.to_string()) {
-            let width = width_ptrs[i];
+        for j in 0..font.count_text(t.to_string()) {
+            let width = width_ptrs[j];
             dist += width / 2.0;
             if dist > cont.length() {
                 if meas.next().is_none() {
-                    text_body = &t[..i];
+                    text_body = &t[..j];
                     break;
                 }
                 cont = meas.next().unwrap();
@@ -218,7 +218,7 @@ unsafe fn sk_draw_textpath(
             dist += width / 2.0;
         }
         let blob = skia_safe::TextBlob::from_rsxform(&text_body, rsx.as_slice(), &font)
-            .ok_or_else(|| return savvy_err!("Failed to create text blob"))?;
+            .ok_or_else(|| return savvy_err!("Failed to create text blob at {}", i + 1))?;
         canvas.draw_text_blob(&blob, (0, 0), &props.paint);
     }
     let picture = recorder.finish_recording()?;
@@ -264,7 +264,7 @@ unsafe fn sk_draw_textblob(
     let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
 
     let mut chars_offset = 0;
-    for (_, t) in text.iter().enumerate() {
+    for (i, t) in text.iter().enumerate() {
         let chars = t.to_string();
         let n_chars = font.count_text(&chars);
         let blob = skia_safe::TextBlob::from_pos_text(
@@ -272,7 +272,7 @@ unsafe fn sk_draw_textblob(
             &points[chars_offset..chars_offset + n_chars],
             &font,
         )
-        .ok_or_else(|| return savvy_err!("Failed to create text blob"))?;
+        .ok_or_else(|| return savvy_err!("Failed to create text blob at {}", i + 1))?;
         chars_offset += n_chars;
         canvas.draw_text_blob(blob, (0, 0), &props.paint);
     }
@@ -308,9 +308,9 @@ unsafe fn sk_draw_text(
     let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
     let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
 
-    for t in text.iter() {
+    for (i, t) in text.iter().enumerate() {
         let blob = skia_safe::TextBlob::new(t, &font)
-            .ok_or_else(|| return savvy_err!("Failed to create text blob"))?;
+            .ok_or_else(|| return savvy_err!("Failed to create text blob at {}", i + 1))?;
         canvas.draw_text_blob(&blob, (0.0 as f32, props.font_size), &props.paint);
     }
     let picture = recorder.finish_recording()?;
@@ -639,15 +639,15 @@ impl PathEffect {
         })
     }
     fn sum(first: &PathEffect, second: &PathEffect) -> savvy::Result<Self> {
-        let first = first.effect
+        let first = first
+            .effect
             .clone()
             .ok_or_else(|| return savvy_err!("First effect is required"))?;
-        let second = second.effect
+        let second = second
+            .effect
             .clone()
             .ok_or_else(|| return savvy_err!("Second effect is required"))?;
-        let effect_sum = skia_safe::PathEffect::sum(
-            first, second
-        );
+        let effect_sum = skia_safe::PathEffect::sum(first, second);
         Ok(PathEffect {
             label: "sum".to_string(),
             effect: Some(effect_sum),
@@ -663,11 +663,10 @@ impl PathEffect {
             start as f32,
             end as f32,
             skia_safe::trim_path_effect::Mode::Normal,
-        )
-        .ok_or_else(|| return savvy_err!("Failed to create path effect"))?;
+        );
         Ok(PathEffect {
             label: "trim".to_string(),
-            effect: Some(effect_trim),
+            effect: effect_trim,
         })
     }
     fn discrete(
@@ -722,11 +721,10 @@ impl PathEffect {
             advance.as_f64() as f32,
             phase.as_f64() as f32,
             style,
-        )
-        .ok_or_else(|| return savvy_err!("Failed to create path effect"))?;
+        );
         Ok(PathEffect {
             label: "path_1d".to_string(),
-            effect: Some(effect_1d),
+            effect: effect_1d,
         })
     }
     fn path_2d(path: StringSexp, transform: NumericSexp) -> savvy::Result<Self> {

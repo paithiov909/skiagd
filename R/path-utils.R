@@ -2,9 +2,9 @@
 #'
 #' @param path Characters of SVG notations.
 #' @param transform Numerics of length 9.
-#' @returns For `path_transform()`: a character vector of SVG notations.
+#' @returns A character vector of SVG notations.
 #' @export
-#' @rdname skiagd-path-utils
+#' @family path-utils
 path_transform <- function(path, transform) {
   sk_path_transform(path, transform)
 }
@@ -14,27 +14,27 @@ path_transform <- function(path, transform) {
 #' Interpolates between two SVG paths of equal length.
 #' If the paths are not interpolatable, an error is thrown.
 #'
-#' @param t A numeric vector of weights.
+#' @param t A numeric vector of weights in range `(0, 1)`.
 #' If it is inbetween or outside the range, the path is interpolated.
 #' @param first A string scalar of SVG notation.
 #' @param second A string scalar of SVG notation.
-#' @returns For `path_interpolate()`: a character vector of SVG notations interpolated.
+#' @returns A character vector of SVG notations interpolated.
 #' @export
-#' @rdname skiagd-path-utils
+#' @family path-utils
 path_interpolate <- function(t, first, second) {
   sk_path_interpolate(t, first, second)
 }
 
 #' Retrieve SVG path bounds
 #'
-#' Returns minimum and maximum axes values of `path`.
-#'
 #' @param path Characters of SVG notations.
-#' @returns For `path_bounds()`: a numeric matrix.
+#' @returns A tibble.
 #' @export
-#' @rdname skiagd-path-utils
+#' @family path-utils
 path_bounds <- function(path) {
-  ret <- sk_path_size(path)
-  dim(ret) <- c(length(path), 2)
+  ret <- sk_path_bounds(path) |>
+    as.data.frame()
+  ret[["id"]] <- ret[["id"]] + 1
+  class(ret) <- c("tbl_df", "tbl", "data.frame")
   ret
 }

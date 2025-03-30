@@ -109,13 +109,13 @@ SEXP savvy_sk_matrix_default__impl(void) {
     return handle_result(res);
 }
 
-SEXP savvy_sk_path_interpolate__impl(SEXP c_arg__value, SEXP c_arg__first, SEXP c_arg__second) {
-    SEXP res = savvy_sk_path_interpolate__ffi(c_arg__value, c_arg__first, c_arg__second);
+SEXP savvy_sk_path_bounds__impl(SEXP c_arg__svg) {
+    SEXP res = savvy_sk_path_bounds__ffi(c_arg__svg);
     return handle_result(res);
 }
 
-SEXP savvy_sk_path_size__impl(SEXP c_arg__svg) {
-    SEXP res = savvy_sk_path_size__ffi(c_arg__svg);
+SEXP savvy_sk_path_interpolate__impl(SEXP c_arg__value, SEXP c_arg__first, SEXP c_arg__second) {
+    SEXP res = savvy_sk_path_interpolate__ffi(c_arg__value, c_arg__first, c_arg__second);
     return handle_result(res);
 }
 
@@ -264,8 +264,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"savvy_sk_get_text_width__impl", (DL_FUNC) &savvy_sk_get_text_width__impl, 2},
     {"savvy_sk_list_families__impl", (DL_FUNC) &savvy_sk_list_families__impl, 0},
     {"savvy_sk_matrix_default__impl", (DL_FUNC) &savvy_sk_matrix_default__impl, 0},
+    {"savvy_sk_path_bounds__impl", (DL_FUNC) &savvy_sk_path_bounds__impl, 1},
     {"savvy_sk_path_interpolate__impl", (DL_FUNC) &savvy_sk_path_interpolate__impl, 3},
-    {"savvy_sk_path_size__impl", (DL_FUNC) &savvy_sk_path_size__impl, 1},
     {"savvy_sk_path_transform__impl", (DL_FUNC) &savvy_sk_path_transform__impl, 2},
 
 

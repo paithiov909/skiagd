@@ -102,16 +102,16 @@ fn sk_get_text_width(
 ) -> savvy::Result<savvy::Sexp> {
     let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
     let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
-    let mut out: Vec<f64> = Vec::with_capacity(text.len());
-    for t in text.iter() {
+    let mut out = savvy::OwnedRealSexp::new(text.len())?;
+    for (i, t) in text.iter().enumerate() {
         let ids = font.text_to_glyphs_vec(t.to_string());
         let mut num_ids: Vec<f32> = Vec::new();
         num_ids.resize(font.count_text(t.to_string()), 0.0);
         let width_ptrs = num_ids.as_mut_slice();
         font.get_widths_bounds(ids.as_slice(), Some(width_ptrs), None, Some(&props.paint));
-        out.push(width_ptrs.iter().map(|x| *x as f64).sum::<f64>());
+        out.set_elt(i, width_ptrs.iter().map(|x| *x as f64).sum::<f64>())?;
     }
-    out.try_into()
+    out.into()
 }
 
 /// PointMode (0-2)

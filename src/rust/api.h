@@ -13,8 +13,8 @@ SEXP savvy_sk_draw_textpath__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP 
 SEXP savvy_sk_get_text_width__ffi(SEXP c_arg__text, SEXP c_arg__props);
 SEXP savvy_sk_list_families__ffi(void);
 SEXP savvy_sk_matrix_default__ffi(void);
+SEXP savvy_sk_path_bounds__ffi(SEXP c_arg__svg);
 SEXP savvy_sk_path_interpolate__ffi(SEXP c_arg__value, SEXP c_arg__first, SEXP c_arg__second);
-SEXP savvy_sk_path_size__ffi(SEXP c_arg__svg);
 SEXP savvy_sk_path_transform__ffi(SEXP c_arg__svg, SEXP c_arg__mat);
 
 // methods and associated functions for BlendMode

@@ -253,6 +253,15 @@ NULL
   .Call(savvy_sk_matrix_default__impl)
 }
 
+#' Returns bounds of SVG paths
+#'
+#' @param svg SVG notations.
+#' @returns A list of numeric vectors.
+#' @noRd
+`sk_path_bounds` <- function(`svg`) {
+  .Call(savvy_sk_path_bounds__impl, `svg`)
+}
+
 #' Interpolates between two SVG paths
 #'
 #' @param value A numeric vector of weights.
@@ -262,15 +271,6 @@ NULL
 #' @noRd
 `sk_path_interpolate` <- function(`value`, `first`, `second`) {
   .Call(savvy_sk_path_interpolate__impl, `value`, `first`, `second`)
-}
-
-#' Returns minimum and maximum axes values of Point array
-#'
-#' @param svg SVG notations.
-#' @returns A numeric vector of length `2*svg.len()`.
-#' @noRd
-`sk_path_size` <- function(`svg`) {
-  .Call(savvy_sk_path_size__impl, `svg`)
 }
 
 #' Transforms SVG paths

@@ -2,22 +2,22 @@ use savvy::{savvy, savvy_err, NumericSexp, StringSexp};
 
 /// Returns a skia_safe::Matrix
 pub fn as_matrix(mat: &NumericSexp) -> anyhow::Result<skia_safe::Matrix, savvy::Error> {
-  if mat.len() != 9 {
-      return Err(savvy_err!("Invalid matrix. Expected 9 elements"));
-  }
-  let mat = mat.as_slice_f64();
-  let out = skia_safe::Matrix::new_all(
-      mat[0] as f32,
-      mat[1] as f32,
-      mat[2] as f32,
-      mat[3] as f32,
-      mat[4] as f32,
-      mat[5] as f32,
-      mat[6] as f32,
-      mat[7] as f32,
-      mat[8] as f32,
-  );
-  Ok(out)
+    if mat.len() != 9 {
+        return Err(savvy_err!("Invalid matrix. Expected 9 elements"));
+    }
+    let mat = mat.as_slice_f64();
+    let out = skia_safe::Matrix::new_all(
+        mat[0] as f32,
+        mat[1] as f32,
+        mat[2] as f32,
+        mat[3] as f32,
+        mat[4] as f32,
+        mat[5] as f32,
+        mat[6] as f32,
+        mat[7] as f32,
+        mat[8] as f32,
+    );
+    Ok(out)
 }
 
 /// Returns default matrix as numerics
@@ -50,7 +50,7 @@ fn sk_path_transform(svg: StringSexp, mat: NumericSexp) -> savvy::Result<savvy::
     let mut out = savvy::OwnedStringSexp::new(svg.len())?;
     for (i, s) in svg.iter().enumerate() {
         let path = skia_safe::utils::parse_path::from_svg(s)
-            .ok_or_else(|| return savvy_err!("Failed to parse svg"))?
+            .ok_or_else(|| return savvy_err!("Failed to parse svg at {}", i + 1))?
             .with_transform(&mat);
         let s = skia_safe::utils::parse_path::to_svg(&path);
         out.set_elt(i, &s)?;
@@ -66,45 +66,55 @@ fn sk_path_transform(svg: StringSexp, mat: NumericSexp) -> savvy::Result<savvy::
 /// @returns A character vector.
 /// @noRd
 #[savvy]
-fn sk_path_interpolate(value: NumericSexp, first: StringSexp, second: StringSexp) -> savvy::Result<savvy::Sexp> {
+fn sk_path_interpolate(
+    value: NumericSexp,
+    first: StringSexp,
+    second: StringSexp,
+) -> savvy::Result<savvy::Sexp> {
     let first = skia_safe::utils::parse_path::from_svg(first.to_vec()[0])
         .ok_or_else(|| return savvy_err!("Failed to parse first svg"))?;
     let second = skia_safe::utils::parse_path::from_svg(second.to_vec()[0])
         .ok_or_else(|| return savvy_err!("Failed to parse second svg"))?;
     if !first.is_interpolatable(&second) {
-        return Err(savvy_err!("Paths are not interpolatable"))
+        return Err(savvy_err!("Paths are not interpolatable"));
     }
     let mut out = savvy::OwnedStringSexp::new(value.len())?;
     for (i, w) in value.iter_f64().enumerate() {
-       let path = first.interpolate(&second, w as f32)
-            .ok_or_else(|| return savvy_err!("Failed to interpolate at {}", w))?;
-       let s = skia_safe::utils::parse_path::to_svg(&path);
-       out.set_elt(i, &s)?;
+        let path = first
+            .interpolate(&second, w as f32)
+            .ok_or_else(|| return savvy_err!("Failed to interpolate for {}", w))?;
+        let s = skia_safe::utils::parse_path::to_svg(&path);
+        out.set_elt(i, &s)?;
     }
     out.into()
 }
 
-/// Returns minimum and maximum axes values of Point array
+/// Returns bounds of SVG paths
 ///
 /// @param svg SVG notations.
-/// @returns A numeric vector of length `2*svg.len()`.
+/// @returns A list of numeric vectors.
 /// @noRd
 #[savvy]
-fn sk_path_size(svg: StringSexp) -> savvy::Result<savvy::Sexp> {
-    let mut x: Vec<f32>  = Vec::with_capacity(svg.len());
-    let mut y: Vec<f32> = Vec::with_capacity(svg.len());
-    for s in svg.iter() {
+fn sk_path_bounds(svg: StringSexp) -> savvy::Result<savvy::Sexp> {
+    let mut ids = savvy::OwnedIntegerSexp::new(svg.len())?;
+    let mut left = savvy::OwnedRealSexp::new(svg.len())?;
+    let mut top = savvy::OwnedRealSexp::new(svg.len())?;
+    let mut right = savvy::OwnedRealSexp::new(svg.len())?;
+    let mut bottom = savvy::OwnedRealSexp::new(svg.len())?;
+    for (i, s) in svg.iter().enumerate() {
         let path = skia_safe::utils::parse_path::from_svg(s)
-            .ok_or_else(|| return savvy_err!("Failed to parse svg"))?;
-        x.push(path.bounds().height());
-        y.push(path.bounds().width());
+            .ok_or_else(|| return savvy_err!("Failed to parse svg at {}", i + 1))?;
+        ids.set_elt(i, i as i32)?;
+        left.set_elt(i, path.bounds().left() as f64)?;
+        top.set_elt(i, path.bounds().top() as f64)?;
+        right.set_elt(i, path.bounds().right() as f64)?;
+        bottom.set_elt(i, path.bounds().bottom() as f64)?;
     }
-    let mut out = savvy::OwnedRealSexp::new(2 * svg.len())?;
-    for (i, v) in x.iter().enumerate() {
-        out.set_elt(i, *v as f64)?;
-    }
-    for (i, v) in y.iter().enumerate() {
-        out.set_elt(i + svg.len(), *v as f64)?;
-    }
+    let mut out = savvy::OwnedListSexp::new(5, true)?;
+    out.set_name_and_value(0, "id", ids)?;
+    out.set_name_and_value(1, "left", left)?;
+    out.set_name_and_value(2, "top", top)?;
+    out.set_name_and_value(3, "right", right)?;
+    out.set_name_and_value(4, "bottom", bottom)?;
     Ok(out.into())
 }
