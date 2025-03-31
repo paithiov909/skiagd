@@ -114,7 +114,7 @@ default_attrs <- function() {
     shader = Shader$no_shader(),
     point_mode = env_get(PointMode, "Points"),
     fill_type = env_get(FillType, "Winding"),
-    transform = sk_matrix_default()
+    transform = diag(1, 3)
   )
 }
 

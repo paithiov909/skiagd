@@ -245,12 +245,16 @@ NULL
   .Call(savvy_sk_list_families__impl)
 }
 
-#' Returns default matrix as numerics
+#' Creates a matrix for mapping points
 #'
+#' @param src_x X coordinates of source points.
+#' @param src_y Y coordinates of source points.
+#' @param dst_x X coordinates of destination points.
+#' @param dst_y Y coordinates of destination points.
 #' @returns A numeric vector of length 9.
 #' @noRd
-`sk_matrix_default` <- function() {
-  .Call(savvy_sk_matrix_default__impl)
+`sk_matrix_map_point` <- function(`src_x`, `src_y`, `dst_x`, `dst_y`) {
+  .Call(savvy_sk_matrix_map_point__impl, `src_x`, `src_y`, `dst_x`, `dst_y`)
 }
 
 #' Returns bounds of SVG paths

@@ -2,7 +2,7 @@
 % Please edit documentation in R/path-utils.R
 \name{path_bounds}
 \alias{path_bounds}
-\title{Retrieve SVG path bounds}
+\title{Retrieve bounds of SVG paths}
 \usage{
 path_bounds(path)
 }
@@ -13,7 +13,7 @@ path_bounds(path)
 A tibble.
 }
 \description{
-Retrieve SVG path bounds
+Retrieve bounds of SVG paths
 }
 \seealso{
 Other path-utils: 

@@ -1,5 +1,13 @@
 use savvy::{savvy, savvy_err, NumericSexp, StringSexp};
 
+/// Returns Vec<skia_safe::Point>
+pub fn as_points(x: &NumericSexp, y: &NumericSexp) -> Vec<skia_safe::Point> {
+    let points = std::iter::zip(x.iter_f64(), y.iter_f64())
+        .map(|(p0, p1)| skia_safe::Point::new(p0 as f32, p1 as f32))
+        .collect::<Vec<skia_safe::Point>>();
+    points
+}
+
 /// Returns a skia_safe::Matrix
 pub fn as_matrix(mat: &NumericSexp) -> anyhow::Result<skia_safe::Matrix, savvy::Error> {
     if mat.len() != 9 {
@@ -20,13 +28,25 @@ pub fn as_matrix(mat: &NumericSexp) -> anyhow::Result<skia_safe::Matrix, savvy::
     Ok(out)
 }
 
-/// Returns default matrix as numerics
+/// Creates a matrix for mapping points
 ///
+/// @param src_x X coordinates of source points.
+/// @param src_y Y coordinates of source points.
+/// @param dst_x X coordinates of destination points.
+/// @param dst_y Y coordinates of destination points.
 /// @returns A numeric vector of length 9.
 /// @noRd
 #[savvy]
-fn sk_matrix_default() -> savvy::Result<savvy::Sexp> {
-    let matrix = skia_safe::Matrix::default();
+fn sk_matrix_map_point(
+    src_x: NumericSexp,
+    src_y: NumericSexp,
+    dst_x: NumericSexp,
+    dst_y: NumericSexp,
+) -> savvy::Result<savvy::Sexp> {
+    let src = as_points(&src_x, &src_y);
+    let dst = as_points(&dst_x, &dst_y);
+    let matrix = skia_safe::Matrix::from_poly_to_poly(&src, &dst)
+        .ok_or_else(|| return savvy_err!("Failed to map points"))?;
     let buffer = vec![
         matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5], matrix[6], matrix[7],
         matrix[8],

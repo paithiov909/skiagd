@@ -12,7 +12,7 @@ SEXP savvy_sk_draw_textblob__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP 
 SEXP savvy_sk_draw_textpath__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat1, SEXP c_arg__props, SEXP c_arg__text, SEXP c_arg__svg, SEXP c_arg__mat2);
 SEXP savvy_sk_get_text_width__ffi(SEXP c_arg__text, SEXP c_arg__props);
 SEXP savvy_sk_list_families__ffi(void);
-SEXP savvy_sk_matrix_default__ffi(void);
+SEXP savvy_sk_matrix_map_point__ffi(SEXP c_arg__src_x, SEXP c_arg__src_y, SEXP c_arg__dst_x, SEXP c_arg__dst_y);
 SEXP savvy_sk_path_bounds__ffi(SEXP c_arg__svg);
 SEXP savvy_sk_path_interpolate__ffi(SEXP c_arg__value, SEXP c_arg__first, SEXP c_arg__second);
 SEXP savvy_sk_path_transform__ffi(SEXP c_arg__svg, SEXP c_arg__mat);

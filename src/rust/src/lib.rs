@@ -5,7 +5,7 @@ mod path_transform;
 use canvas::{read_picture_bytes, SkiaCanvas};
 use paint_attrs::shader::{sk_blend_mode, sk_tile_mode, BlendMode, Shader, TileMode};
 use paint_attrs::{font, path_effect::PathEffect, PaintAttrs};
-use path_transform::as_matrix;
+use path_transform::{as_matrix, as_points};
 
 use savvy::{savvy, savvy_err, IntegerSexp, LogicalSexp, NumericScalar, NumericSexp, StringSexp};
 use skia_safe::{Data, Image, Paint};
@@ -257,9 +257,7 @@ unsafe fn sk_draw_textblob(
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
-    let points = std::iter::zip(x.iter_f64(), y.iter_f64())
-        .map(|p| skia_safe::Point::new(p.0 as f32, p.1 as f32))
-        .collect::<Vec<skia_safe::Point>>();
+    let points = as_points(&x, &y);
     let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
     let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
 
@@ -347,9 +345,7 @@ unsafe fn sk_draw_points(
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
     let mode = paint_attrs::sk_point_mode(&mode);
-    let points = std::iter::zip(x.iter_f64(), y.iter_f64())
-        .map(|p| skia_safe::Point::new(p.0 as f32, p.1 as f32))
-        .collect::<Vec<skia_safe::Point>>();
+    let points = as_points(&x, &y);
     canvas.draw_points(mode, &points, &props.paint);
     let picture = recorder.finish_recording()?;
     Ok(picture.into())
