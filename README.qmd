@@ -49,12 +49,14 @@ I'm planning to re-implement features like [React Native Skia](https://shopify.g
     - [x] Circle
     - [ ] Oval (oval)
     - [ ] Arc (arc)
-  - [ ] Atlas
+  - Others
+    - [ ] Vertices
+    - [ ] Atlas
 - Images
   - [x] PNG
 - Text
   - [ ] Paragraph
-  - [x] Text Path
+  - [x] Text Path (unstable yet)
   - [x] Text Blob
 - Painting Attributes ([Paint](https://rust-skia.github.io/doc/skia_safe/type.Paint.html))
   - [x] Path Effects
@@ -68,12 +70,10 @@ I'm planning to re-implement features like [React Native Skia](https://shopify.g
 ### Possibly in the future??
 
 - Shapes
-  - Vertices
   - Patch
 - Fitting Images (needs to re-implement [this](https://github.com/Shopify/react-native-skia/blob/4192f839d7ffc5cb0aba91c0f0f97e595d5c8409/packages/skia/cpp/api/recorder/ImageFit.h))
 - [Group](https://shopify.github.io/react-native-skia/docs/group/) / [Backdrop Filters](https://shopify.github.io/react-native-skia/docs/backdrops-filters)
 - [Mask](https://shopify.github.io/react-native-skia/docs/mask/)
-
 
 
 ## Showcase
@@ -194,11 +194,11 @@ unigd::ugd(width = 848, height = 480)
 size <- dev_size("px")
 vc <- mp4_open("test.mp4", fps = 30)
 cv <- canvas("snow")
-state <- seq(0.1, 1, length.out = 30) |>
-  tweenr::tween_numeric(3, ease = "cubic-in-out")
+state <- seq(0, 1, length.out = 90)
 trans <- transform2d()
 
-for (step in state[[1]]) {
+for (step in state) {
+  t <- tweenr::tween_at(0.1, 1, step, "linear")
   frame <- cv |>
     add_path(
       "M361.453,485.937 C162.329,485.937 0.906,377.828 0.906,244.469 C0.906,111.109 162.329,3.000 361.453,3.000 C560.578,3.000 722.000,111.109 722.000,244.469 C722.000,377.828 560.578,485.937 361.453,485.937 ZM416.641,97.406 C265.289,97.406 142.594,171.314 142.594,262.484 C142.594,353.654 265.289,427.562 416.641,427.562 C567.992,427.562 679.687,377.033 679.687,262.484 C679.687,147.971 567.992,97.406 416.641,97.406 Z",
