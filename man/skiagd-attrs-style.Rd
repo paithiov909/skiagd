@@ -32,7 +32,8 @@ Other paint-attributes:
 \code{\link{Join}},
 \code{\link{PathEffect}},
 \code{\link{PointMode}},
-\code{\link{Shader}}
+\code{\link{Shader}},
+\code{\link{VertexMode}}
 }
 \concept{paint-attributes}
 \keyword{datasets}

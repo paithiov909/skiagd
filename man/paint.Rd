@@ -36,6 +36,7 @@ The following painting attributes can be specified:
 \item \code{path_effect}: See \link{PathEffect}.
 \item \code{shader}: See \link{Shader}.
 \item \code{point_mode}: \link{PointMode} for \code{\link[=add_point]{add_point()}}.
+\item \code{vertex_mode}: \link{VertexMode} for \code{\link[=add_vertices]{add_vertices()}}.
 \item \code{fill_type}: \link{FillType} for \code{\link[=add_path]{add_path()}}.
 \item \code{transform}: Numerics of length 9. See \link{transform-matrix} for affine transformations.
 }

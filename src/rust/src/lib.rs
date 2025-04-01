@@ -11,16 +11,13 @@ use savvy::{savvy, savvy_err, IntegerSexp, LogicalSexp, NumericScalar, NumericSe
 use skia_safe::{Data, Image, Paint};
 
 /// For internal use. See `sk_as_png()`
-unsafe fn sk_as_png_data(
-    size: &IntegerSexp,
-    curr_bytes: &savvy::RawSexp,
-    mat: &NumericSexp,
+unsafe fn as_png_data(
+    width: i32,
+    height: i32,
+    picture: &skia_safe::Picture,
+    mat: &skia_safe::Matrix,
 ) -> savvy::Result<Data> {
-    let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat)?;
-
-    let size = size.to_vec();
-    let mut surface = skia_safe::surfaces::raster_n32_premul((size[0], size[1]))
+    let mut surface = skia_safe::surfaces::raster_n32_premul((width, height))
         .unwrap_or_else(|| skia_safe::surfaces::raster_n32_premul((720, 576)).unwrap());
     surface.canvas().clear(skia_safe::Color::TRANSPARENT);
     surface
@@ -49,7 +46,13 @@ unsafe fn sk_as_png(
     curr_bytes: savvy::RawSexp,
     mat: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    let dat = sk_as_png_data(&size, &curr_bytes, &mat)?;
+    if size.len() != 2 {
+        return Err(savvy_err!("Invalid canvas size. Expected 2 elements"));
+    }
+    let picture = read_picture_bytes(&curr_bytes)?;
+    let mat = as_matrix(&mat)?;
+    let size = size.to_vec();
+    let dat = as_png_data(size[0], size[1], &picture, &mat)?;
     let mut ret = savvy::OwnedRawSexp::new(dat.len())?;
     for (i, b) in dat.as_bytes().iter().enumerate() {
         ret.set_elt(i, *b)?;
@@ -87,8 +90,7 @@ unsafe fn sk_draw_png(
     let image = Image::from_encoded_with_alpha_type(input, skia_safe::AlphaType::Premul)
         .ok_or_else(|| return savvy_err!("Failed to read PNG as image"))?;
 
-    let size = size.to_vec();
-    let mut recorder = SkiaCanvas::new(size[0], size[1]);
+    let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
     canvas.draw_image(
@@ -100,7 +102,7 @@ unsafe fn sk_draw_png(
     Ok(picture.into())
 }
 
-/// Draws SVG path on canvas
+/// Draws SVG paths
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
@@ -125,8 +127,7 @@ unsafe fn sk_draw_path(
     let mat1 = as_matrix(&mat1)?;
     let mat2 = as_matrix(&mat2)?;
 
-    let size = size.to_vec();
-    let mut recorder = SkiaCanvas::new(size[0], size[1]);
+    let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat1), Some(&Paint::default()));
 
@@ -141,7 +142,7 @@ unsafe fn sk_draw_path(
     Ok(picture.into())
 }
 
-/// Draws textpath
+/// Draws textpaths
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
@@ -170,8 +171,7 @@ unsafe fn sk_draw_textpath(
     let mat1 = as_matrix(&mat1)?;
     let mat2 = as_matrix(&mat2)?;
 
-    let size = size.to_vec();
-    let mut recorder = SkiaCanvas::new(size[0], size[1]);
+    let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat1), Some(&Paint::default()));
 
@@ -225,7 +225,7 @@ unsafe fn sk_draw_textpath(
     Ok(picture.into())
 }
 
-/// Draws textblob
+/// Draws textblobs
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
@@ -252,8 +252,7 @@ unsafe fn sk_draw_textblob(
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
 
-    let size = size.to_vec();
-    let mut recorder = SkiaCanvas::new(size[0], size[1]);
+    let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
@@ -298,8 +297,7 @@ unsafe fn sk_draw_text(
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
 
-    let size = size.to_vec();
-    let mut recorder = SkiaCanvas::new(size[0], size[1]);
+    let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
@@ -339,8 +337,7 @@ unsafe fn sk_draw_points(
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
 
-    let size = size.to_vec();
-    let mut recorder = SkiaCanvas::new(size[0], size[1]);
+    let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
@@ -351,7 +348,7 @@ unsafe fn sk_draw_points(
     Ok(picture.into())
 }
 
-/// Draws lines on canvas
+/// Draws lines
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
@@ -381,8 +378,7 @@ unsafe fn sk_draw_line(
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
 
-    let size = size.to_vec();
-    let mut recorder = SkiaCanvas::new(size[0], size[1]);
+    let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
@@ -401,7 +397,7 @@ unsafe fn sk_draw_line(
     Ok(picture.into())
 }
 
-/// Draws circle on canvas
+/// Draws circles
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
@@ -427,8 +423,7 @@ unsafe fn sk_draw_circle(
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
 
-    let size = size.to_vec();
-    let mut recorder = SkiaCanvas::new(size[0], size[1]);
+    let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
@@ -443,7 +438,7 @@ unsafe fn sk_draw_circle(
 
 // TODO: sk_draw_arc
 
-/// Draws rounded rectangle on canvas
+/// Draws rounded rectangles
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
@@ -488,8 +483,7 @@ unsafe fn sk_draw_rounded_rect(
     let rx = rx.as_slice_f64();
     let ry = ry.as_slice_f64();
 
-    let size = size.to_vec();
-    let mut recorder = SkiaCanvas::new(size[0], size[1]);
+    let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
@@ -506,7 +500,7 @@ unsafe fn sk_draw_rounded_rect(
     Ok(picture.into())
 }
 
-/// Draws outer and inner rounded rectangles on canvas
+/// Draws outer and inner rounded rectangles
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
@@ -575,8 +569,7 @@ unsafe fn sk_draw_diff_rect(
     let inner_rx = inner_rx.as_slice_f64();
     let inner_ry = inner_ry.as_slice_f64();
 
-    let size = size.to_vec();
-    let mut recorder = SkiaCanvas::new(size[0], size[1]);
+    let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
@@ -601,6 +594,57 @@ unsafe fn sk_draw_diff_rect(
     Ok(picture.into())
 }
 
+/// Draws vertices
+///
+/// @param size Canvas size.
+/// @param curr_bytes Current canvas state.
+/// @param mat Matrix for transforming picture.
+/// @param props PaintAttrs.
+/// @param x X coordinates of points.
+/// @param y Y coordinates of points.
+/// @param mode Vertex mode. Can be "triangles", "triangle_strip" or "triangle_fan".
+/// @returns A raw vector of picture.
+/// @noRd
+#[savvy]
+unsafe fn sk_draw_vertices(
+    size: IntegerSexp,
+    curr_bytes: savvy::RawSexp,
+    mat: NumericSexp,
+    props: PaintAttrs,
+    x: NumericSexp,
+    y: NumericSexp,
+    mode: &paint_attrs::VertexMode,
+) -> savvy::Result<savvy::Sexp> {
+    if x.len() != y.len() {
+        return Err(savvy_err!("Invalid x or y. Expected same length"));
+    }
+    let picture = read_picture_bytes(&curr_bytes)?;
+    let mat = as_matrix(&mat)?;
+
+    let mode = paint_attrs::sk_vertex_mode(&mode);
+    let positions = as_points(&x, &y);
+    let mut colors: Vec<skia_safe::Color> = Vec::new();
+    colors.resize(x.len(), props.paint.color());
+    let vertices = skia_safe::Vertices::new_copy(
+        mode,
+        &positions,
+        &positions,
+        &colors,
+        None,
+    );
+    let mut recorder = SkiaCanvas::setup(&size)?;
+    let canvas = recorder.start_recording();
+    canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
+
+    canvas.draw_vertices(
+        &vertices,
+        props.paint.blend_mode_or(skia_safe::BlendMode::SrcOver),
+        &props.paint,
+    );
+    let picture = recorder.finish_recording()?;
+    Ok(picture.into())
+}
+
 /// Fills canvas with color
 ///
 /// @param size Canvas size.
@@ -609,13 +653,12 @@ unsafe fn sk_draw_diff_rect(
 /// @noRd
 #[savvy]
 fn sk_absolute_fill(size: IntegerSexp, fill: NumericSexp) -> savvy::Result<savvy::Sexp> {
-    let size = size.to_vec();
-    let mut recorder = SkiaCanvas::new(size[0], size[1]);
-    let canvas = recorder.start_recording();
-    let fill = fill.as_slice_i32()?;
     if fill.len() != 4 {
         return Err(savvy_err!("Invalid fill. Expected 4 elements"));
     }
+    let fill = fill.as_slice_i32()?;
+    let mut recorder = SkiaCanvas::setup(&size)?;
+    let canvas = recorder.start_recording();
     canvas.clear(skia_safe::Color::from_argb(
         fill[3] as u8,
         fill[0] as u8,

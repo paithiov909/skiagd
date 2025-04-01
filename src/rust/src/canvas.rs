@@ -16,13 +16,19 @@ pub struct SkiaCanvas {
 
 impl SkiaCanvas {
     #[allow(unused_mut)]
-    pub fn new(width: i32, height: i32) -> SkiaCanvas {
+    pub fn setup(size: &savvy::IntegerSexp) -> Result<SkiaCanvas, savvy::Error> {
+        if size.len() != 2 {
+            return Err(savvy_err!("Failed to setup canvas. Invalid canvas size"));
+        }
+        let size = size.to_vec();
+        let width = size[0];
+        let height = size[1];
         let mut recorder = skia_safe::PictureRecorder::new();
-        SkiaCanvas {
+        Ok(SkiaCanvas {
             width,
             height,
             recorder,
-        }
+        })
     }
 
     pub fn start_recording(&mut self) -> &skia_safe::Canvas {

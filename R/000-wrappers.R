@@ -58,7 +58,7 @@ NULL
   .Call(savvy_sk_as_png__impl, `size`, `curr_bytes`, `mat`)
 }
 
-#' Draws circle on canvas
+#' Draws circles
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
@@ -73,7 +73,7 @@ NULL
   .Call(savvy_sk_draw_circle__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`)
 }
 
-#' Draws outer and inner rounded rectangles on canvas
+#' Draws outer and inner rounded rectangles
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
@@ -98,7 +98,7 @@ NULL
   .Call(savvy_sk_draw_diff_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `outer_left`, `outer_top`, `outer_right`, `outer_bottom`, `outer_rx`, `outer_ry`, `inner_left`, `inner_top`, `inner_right`, `inner_bottom`, `inner_rx`, `inner_ry`)
 }
 
-#' Draws lines on canvas
+#' Draws lines
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
@@ -115,7 +115,7 @@ NULL
   .Call(savvy_sk_draw_line__impl, `size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`)
 }
 
-#' Draws SVG path on canvas
+#' Draws SVG paths
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
@@ -164,7 +164,7 @@ NULL
   .Call(savvy_sk_draw_points__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `mode`)
 }
 
-#' Draws rounded rectangle on canvas
+#' Draws rounded rectangles
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
@@ -197,7 +197,7 @@ NULL
   .Call(savvy_sk_draw_text__impl, `size`, `curr_bytes`, `mat`, `props`, `text`)
 }
 
-#' Draws textblob
+#' Draws textblobs
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
@@ -213,7 +213,7 @@ NULL
   .Call(savvy_sk_draw_textblob__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `x`, `y`)
 }
 
-#' Draws textpath
+#' Draws textpaths
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
@@ -227,6 +227,23 @@ NULL
 `sk_draw_textpath` <- function(`size`, `curr_bytes`, `mat1`, `props`, `text`, `svg`, `mat2`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   .Call(savvy_sk_draw_textpath__impl, `size`, `curr_bytes`, `mat1`, `props`, `text`, `svg`, `mat2`)
+}
+
+#' Draws vertices
+#'
+#' @param size Canvas size.
+#' @param curr_bytes Current canvas state.
+#' @param mat Matrix for transforming picture.
+#' @param props PaintAttrs.
+#' @param x X coordinates of points.
+#' @param y Y coordinates of points.
+#' @param mode Vertex mode. Can be "triangles", "triangle_strip" or "triangle_fan".
+#' @returns A raw vector of picture.
+#' @noRd
+`sk_draw_vertices` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `mode`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  `mode` <- .savvy_extract_ptr(`mode`, "VertexMode")
+  .Call(savvy_sk_draw_vertices__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `mode`)
 }
 
 #' Get text width
@@ -1181,5 +1198,84 @@ class(`TileMode`) <- c("TileMode__bundle", "savvy_skiagd__sealed")
 #' @export
 `print.TileMode__bundle` <- function(x, ...) {
   cat('TileMode\n')
+}
+
+### wrapper functions for VertexMode
+
+
+`.savvy_wrap_VertexMode` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+
+
+  class(e) <- c("VertexMode", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' VertexMode (0-2)
+#'
+#' `VertexMode` determines how vertices are drawn.
+#' This is for [add_vertices()] only. Not used in other functions.
+#'
+#' @details
+#' The following `VertexMode` are available:
+#'
+#' * `Triangles`
+#' * `TriangleStrip`
+#' * `TriangleFan`
+#'
+#' @seealso
+#' [VertexMode in skia_safe::vertices - Rust](https://rust-skia.github.io/doc/skia_safe/vertices/enum.VertexMode.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-vertexmode
+#' @export
+`VertexMode` <- new.env(parent = emptyenv())
+`VertexMode`$`Triangles` <- .savvy_wrap_VertexMode(0L)
+`VertexMode`$`TriangleStrip` <- .savvy_wrap_VertexMode(1L)
+`VertexMode`$`TriangleFan` <- .savvy_wrap_VertexMode(2L)
+
+#' @export
+`$.VertexMode__bundle` <- function(x, name) {
+  if (!name %in% c("Triangles", "TriangleStrip", "TriangleFan")) {
+    stop(paste0("Unknown variant: ", name), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`[[.VertexMode__bundle` <- function(x, i) {
+  if (is.numeric(i)) {
+    stop("VertexMode cannot be subset by index", call. = FALSE)
+  }
+
+  if (!i %in% c("Triangles", "TriangleStrip", "TriangleFan")) {
+    stop(paste0("Unknown variant: ", i), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`print.VertexMode` <- function(x, ...) {
+  idx <- x$.ptr + 1L
+  label <- c("Triangles", "TriangleStrip", "TriangleFan")[idx]
+  if (is.na(label)) {
+    stop("Unexpected value for VertexMode", call. = TRUE)
+  }
+  cat("VertexMode::", label, "\n", sep = "")
+}
+
+
+### associated functions for VertexMode
+
+
+
+class(`VertexMode`) <- c("VertexMode__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.VertexMode__bundle` <- function(x, ...) {
+  cat('VertexMode\n')
 }
 

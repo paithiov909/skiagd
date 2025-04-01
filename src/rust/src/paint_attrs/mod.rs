@@ -138,6 +138,31 @@ pub enum PointMode {
     Polygon,
 }
 
+
+/// VertexMode (0-2)
+///
+/// `VertexMode` determines how vertices are drawn.
+/// This is for [add_vertices()] only. Not used in other functions.
+///
+/// @details
+/// The following `VertexMode` are available:
+///
+/// * `Triangles`
+/// * `TriangleStrip`
+/// * `TriangleFan`
+///
+/// @seealso
+/// [VertexMode in skia_safe::vertices - Rust](https://rust-skia.github.io/doc/skia_safe/vertices/enum.VertexMode.html)
+/// @family paint-attributes
+/// @rdname skiagd-attrs-vertexmode
+/// @export
+#[savvy]
+pub enum VertexMode {
+    Triangles,
+    TriangleStrip,
+    TriangleFan,
+}
+
 /// FillType (0-3)
 ///
 /// `FillType` determines how paths are drawn.
@@ -169,6 +194,14 @@ pub fn sk_point_mode(mode: &PointMode) -> skia_safe::canvas::PointMode {
         PointMode::Points => skia_safe::canvas::PointMode::Points,
         PointMode::Lines => skia_safe::canvas::PointMode::Lines,
         PointMode::Polygon => skia_safe::canvas::PointMode::Polygon,
+    }
+}
+
+pub fn sk_vertex_mode(mode: &VertexMode) -> skia_safe::vertices::VertexMode {
+    match mode {
+        VertexMode::Triangles => skia_safe::vertices::VertexMode::Triangles,
+        VertexMode::TriangleStrip => skia_safe::vertices::VertexMode::TriangleStrip,
+        VertexMode::TriangleFan => skia_safe::vertices::VertexMode::TriangleFan,
     }
 }
 

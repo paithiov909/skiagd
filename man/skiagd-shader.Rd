@@ -92,6 +92,7 @@ Other paint-attributes:
 \code{\link{Join}},
 \code{\link{PathEffect}},
 \code{\link{PointMode}},
-\code{\link{Style}}
+\code{\link{Style}},
+\code{\link{VertexMode}}
 }
 \concept{paint-attributes}
