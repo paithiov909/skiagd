@@ -4,14 +4,14 @@
 \alias{canvas}
 \title{Create new canvas}
 \usage{
-canvas(fill = "transparent", size = paint()[["canvas_size"]])
+canvas(fill = "transparent", canvas_size = paint()[["canvas_size"]])
 }
 \arguments{
 \item{fill}{RGBA representation of a color.
 This can be specified using named colors or hexadecimal color codes,
 which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.}
 
-\item{size}{Integers of length 2; canvas size.}
+\item{canvas_size}{Integers of length 2.}
 }
 \value{
 A raw vector of picture.
