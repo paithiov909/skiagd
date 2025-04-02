@@ -25,7 +25,7 @@ path_interpolate <- function(t, first, second) {
   sk_path_interpolate(t, first, second)
 }
 
-#' Retrieve bounds of SVG paths
+#' Retrieve bounding boxes of SVG paths
 #'
 #' @param path Characters of SVG notations.
 #' @returns A tibble.

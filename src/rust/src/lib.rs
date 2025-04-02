@@ -602,7 +602,7 @@ unsafe fn sk_draw_diff_rect(
 /// @param props PaintAttrs.
 /// @param x X coordinates of points.
 /// @param y Y coordinates of points.
-/// @param mode Vertex mode. Can be "triangles", "triangle_strip" or "triangle_fan".
+/// @param mode VertexMode.
 /// @returns A raw vector of picture.
 /// @noRd
 #[savvy]
