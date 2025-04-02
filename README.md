@@ -49,8 +49,8 @@ Skia](https://shopify.github.io/react-native-skia/).
     - [ ] Oval (oval)
     - [ ] Arc (arc)
   - Others
-    - [ ] Vertices
-    - [ ] Atlas
+    - [x] Vertices
+    - [x] Atlas
 - Images
   - [x] PNG
 - Text

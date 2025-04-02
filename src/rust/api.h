@@ -1,5 +1,6 @@
 SEXP savvy_sk_absolute_fill__ffi(SEXP c_arg__size, SEXP c_arg__fill);
 SEXP savvy_sk_as_png__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat);
+SEXP savvy_sk_draw_atlas__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__png_bytes, SEXP c_arg__scale, SEXP c_arg__radians, SEXP c_arg__tx, SEXP c_arg__ty, SEXP c_arg__anchor_x, SEXP c_arg__anchor_y);
 SEXP savvy_sk_draw_circle__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__x, SEXP c_arg__y, SEXP c_arg__radius);
 SEXP savvy_sk_draw_diff_rect__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__outer_left, SEXP c_arg__outer_top, SEXP c_arg__outer_right, SEXP c_arg__outer_bottom, SEXP c_arg__outer_rx, SEXP c_arg__outer_ry, SEXP c_arg__inner_left, SEXP c_arg__inner_top, SEXP c_arg__inner_right, SEXP c_arg__inner_bottom, SEXP c_arg__inner_rx, SEXP c_arg__inner_ry);
 SEXP savvy_sk_draw_line__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__from_x, SEXP c_arg__from_y, SEXP c_arg__to_x, SEXP c_arg__to_y);

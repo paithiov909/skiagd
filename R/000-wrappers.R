@@ -58,6 +58,29 @@ NULL
   .Call(savvy_sk_as_png__impl, `size`, `curr_bytes`, `mat`)
 }
 
+#' Draws atlas
+#'
+#' This function doesn't take `sprites` (offsets for the sprites) argument.
+#' The entire image is always used as a sprite.
+#'
+#' @param size Canvas size.
+#' @param curr_bytes Current canvas state.
+#' @param mat Matrix for transforming picture.
+#' @param props PaintAttrs.
+#' @param png_bytes PNG bytes.
+#' @param scale Scale factor.
+#' @param radians Rotation factor.
+#' @param tx X translation.
+#' @param ty Y translation.
+#' @param anchor_x X coordinates of anchor points.
+#' @param anchor_y Y coordinates of anchor points.
+#' @returns A raw vector of picture.
+#' @noRd
+`sk_draw_atlas` <- function(`size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `scale`, `radians`, `tx`, `ty`, `anchor_x`, `anchor_y`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  .Call(savvy_sk_draw_atlas__impl, `size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `scale`, `radians`, `tx`, `ty`, `anchor_x`, `anchor_y`)
+}
+
 #' Draws circles
 #'
 #' @param size Canvas size.

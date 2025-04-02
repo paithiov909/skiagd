@@ -44,6 +44,11 @@ SEXP savvy_sk_as_png__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg_
     return handle_result(res);
 }
 
+SEXP savvy_sk_draw_atlas__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__png_bytes, SEXP c_arg__scale, SEXP c_arg__radians, SEXP c_arg__tx, SEXP c_arg__ty, SEXP c_arg__anchor_x, SEXP c_arg__anchor_y) {
+    SEXP res = savvy_sk_draw_atlas__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__png_bytes, c_arg__scale, c_arg__radians, c_arg__tx, c_arg__ty, c_arg__anchor_x, c_arg__anchor_y);
+    return handle_result(res);
+}
+
 SEXP savvy_sk_draw_circle__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__x, SEXP c_arg__y, SEXP c_arg__radius) {
     SEXP res = savvy_sk_draw_circle__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__x, c_arg__y, c_arg__radius);
     return handle_result(res);
@@ -257,6 +262,7 @@ SEXP savvy_Shader_turbulence__impl(SEXP c_arg__freq, SEXP c_arg__octaves, SEXP c
 static const R_CallMethodDef CallEntries[] = {
     {"savvy_sk_absolute_fill__impl", (DL_FUNC) &savvy_sk_absolute_fill__impl, 2},
     {"savvy_sk_as_png__impl", (DL_FUNC) &savvy_sk_as_png__impl, 3},
+    {"savvy_sk_draw_atlas__impl", (DL_FUNC) &savvy_sk_draw_atlas__impl, 11},
     {"savvy_sk_draw_circle__impl", (DL_FUNC) &savvy_sk_draw_circle__impl, 7},
     {"savvy_sk_draw_diff_rect__impl", (DL_FUNC) &savvy_sk_draw_diff_rect__impl, 16},
     {"savvy_sk_draw_line__impl", (DL_FUNC) &savvy_sk_draw_line__impl, 8},

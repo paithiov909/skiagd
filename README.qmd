@@ -50,8 +50,8 @@ I'm planning to re-implement features like [React Native Skia](https://shopify.g
     - [ ] Oval (oval)
     - [ ] Arc (arc)
   - Others
-    - [ ] Vertices
-    - [ ] Atlas
+    - [x] Vertices
+    - [x] Atlas
 - Images
   - [x] PNG
 - Text

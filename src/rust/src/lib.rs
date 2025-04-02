@@ -594,6 +594,97 @@ unsafe fn sk_draw_diff_rect(
     Ok(picture.into())
 }
 
+/// Draws atlas
+///
+/// This function doesn't take `sprites` (offsets for the sprites) argument.
+/// The entire image is always used as a sprite.
+///
+/// @param size Canvas size.
+/// @param curr_bytes Current canvas state.
+/// @param mat Matrix for transforming picture.
+/// @param props PaintAttrs.
+/// @param png_bytes PNG bytes.
+/// @param scale Scale factor.
+/// @param radians Rotation factor.
+/// @param tx X translation.
+/// @param ty Y translation.
+/// @param anchor_x X coordinates of anchor points.
+/// @param anchor_y Y coordinates of anchor points.
+/// @returns A raw vector of picture.
+/// @noRd
+#[savvy]
+unsafe fn sk_draw_atlas(
+    size: IntegerSexp,
+    curr_bytes: savvy::RawSexp,
+    mat: NumericSexp,
+    props: PaintAttrs,
+    png_bytes: savvy::RawSexp,
+    scale: NumericSexp,
+    radians: NumericSexp,
+    tx: NumericSexp,
+    ty: NumericSexp,
+    anchor_x: NumericSexp,
+    anchor_y: NumericSexp,
+) -> savvy::Result<savvy::Sexp> {
+    if scale.len() != radians.len()
+        || radians.len() != tx.len()
+        || tx.len() != ty.len()
+        || ty.len() != anchor_x.len()
+        || anchor_x.len() != anchor_y.len()
+    {
+        return Err(savvy_err!(
+            "All transform vectors must have the same length"
+        ));
+    }
+    let picture = read_picture_bytes(&curr_bytes)?;
+    let mat = as_matrix(&mat)?;
+
+    let input = Data::new_bytes(png_bytes.as_slice());
+    let image = Image::from_encoded_with_alpha_type(input, skia_safe::AlphaType::Premul)
+        .ok_or_else(|| return savvy_err!("Failed to read PNG as image"))?;
+
+    let mut recorder = SkiaCanvas::setup(&size)?;
+    let canvas = recorder.start_recording();
+    canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
+
+    let scale = scale.as_slice_f64();
+    let radians = radians.as_slice_f64();
+    let tx = tx.as_slice_f64();
+    let ty = ty.as_slice_f64();
+    let anchor_x = anchor_x.as_slice_f64();
+    let anchor_y = anchor_y.as_slice_f64();
+    let mut transforms: Vec<skia_safe::RSXform> = Vec::new();
+    let mut rects: Vec<skia_safe::Rect> = Vec::new();
+    for i in 0..scale.len() {
+        let trans = skia_safe::RSXform::from_radians(
+            scale[i] as f32,
+            radians[i] as f32,
+            (tx[i] as f32, ty[i] as f32),
+            (anchor_x[i] as f32, anchor_y[i] as f32),
+        );
+        transforms.push(trans);
+        rects.push(skia_safe::Rect::new(
+            0.0,
+            0.0,
+            image.width() as f32,
+            image.height() as f32,
+        ));
+    }
+    canvas.draw_atlas(
+        &image,
+        &transforms,
+        &rects,
+        None,
+        props.paint.blend_mode_or(skia_safe::BlendMode::SrcOver),
+        skia_safe::SamplingOptions::from_aniso(0), // Aniso level
+        None,
+        &props.paint,
+    );
+
+    let picture = recorder.finish_recording()?;
+    Ok(picture.into())
+}
+
 /// Draws vertices
 ///
 /// @param size Canvas size.
@@ -625,13 +716,7 @@ unsafe fn sk_draw_vertices(
     let positions = as_points(&x, &y);
     let mut colors: Vec<skia_safe::Color> = Vec::new();
     colors.resize(x.len(), props.paint.color());
-    let vertices = skia_safe::Vertices::new_copy(
-        mode,
-        &positions,
-        &positions,
-        &colors,
-        None,
-    );
+    let vertices = skia_safe::Vertices::new_copy(mode, &positions, &positions, &colors, None);
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
