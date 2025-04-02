@@ -9,11 +9,11 @@ add_vertices(img, vertices, props = paint())
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
-
-\item{point}{A double matrix where each row is a point.
+\item{vertices}{A double matrix where each row is a point.
 If \code{nrow(vertices)} is not a multiple of 3,
 the last \code{nrow(vertices) \%\% 3} points are ignored.}
+
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.

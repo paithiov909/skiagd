@@ -74,7 +74,7 @@ freeze <- function(img, left = 0, top = 0, fill = "transparent", props = paint()
   img |>
     as_png(props = props) |>
     add_png(
-      canvas(fill = fill, size = props[["canvas_size"]]),
+      canvas(fill = fill, canvas_size = props[["canvas_size"]]),
       png = _,
       left = left,
       top = top

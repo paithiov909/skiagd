@@ -1,6 +1,6 @@
 #' Add vertices
 #'
-#' @param point A double matrix where each row is a point.
+#' @param vertices A double matrix where each row is a point.
 #' If `nrow(vertices)` is not a multiple of 3,
 #' the last `nrow(vertices) %% 3` points are ignored.
 #' @inheritParams param-img-and-props
