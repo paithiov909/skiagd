@@ -15,7 +15,7 @@ skiagd is a toy R wrapper for
 [skia_safe](https://rust-skia.github.io/doc/skia_safe/), a binding for
 [Skia](https://skia.org/)).
 
-Despite its name, this package is intended as a graphics library, not a
+Despite its name, this package is intended as a drawing library, not a
 graphics device for R 😓
 
 ## Design notes

@@ -21,7 +21,7 @@ knitr:
 
 skiagd is a toy R wrapper for [rust-skia](https://github.com/rust-skia/rust-skia) (the Rust crate [skia_safe](https://rust-skia.github.io/doc/skia_safe/), a binding for [Skia](https://skia.org/)).
 
-Despite its name, this package is intended as a graphics library, not a graphics device for R 😓
+Despite its name, this package is intended as a drawing library, not a graphics device for R 😓
 
 
 ## Design notes
