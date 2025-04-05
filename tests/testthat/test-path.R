@@ -78,6 +78,50 @@ test_that("add_line works", {
   )
 })
 
+test_that("add_point works", {
+  size <- dev_size()
+  deg2rad <- function(deg) deg * (pi / 180)
+
+  i <- seq_len(360)
+  r <- 150 * abs(sin(deg2rad(4 * i)))
+  mat <-
+    data.frame(
+      x = r * cos(deg2rad(360 * i / 360)) + size[1] / 2,
+      y = r * sin(deg2rad(360 * i / 360)) + size[2] / 2
+    ) |>
+    as.matrix()
+
+  vdiffr::expect_doppelganger(
+    "point_as_points",
+    canvas("snow") |>
+      add_point(
+        mat,
+        props = paint(color = "red", width = 8, point_mode = PointMode$Points)
+      ) |>
+      as_recordedplot()
+  )
+
+  vdiffr::expect_doppelganger(
+    "point_as_lines",
+    canvas("snow") |>
+      add_point(
+        mat,
+        props = paint(color = "red", width = 8, point_mode = PointMode$Lines)
+      ) |>
+      as_recordedplot()
+  )
+
+  vdiffr::expect_doppelganger(
+    "point_as_polygon",
+    canvas("snow") |>
+      add_point(
+        mat,
+        props = paint(color = "red", width = 8, point_mode = PointMode$Polygon)
+      ) |>
+      as_recordedplot()
+  )
+})
+
 test_that("add_path with PathEffect$trim work", {
   star <- "M 128 0 L 168 80 L 256 93 L 192 155 L 207 244 L 128 202 L 49 244 L 64 155 L 0 93 L 88 80 L 128 0 Z"
   vdiffr::expect_doppelganger(
