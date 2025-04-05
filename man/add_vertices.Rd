@@ -4,7 +4,7 @@
 \alias{add_vertices}
 \title{Add vertices}
 \usage{
-add_vertices(img, vertices, props = paint())
+add_vertices(img, vertices, colors = NULL, props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
@@ -13,6 +13,9 @@ add_vertices(img, vertices, props = paint())
 If \code{nrow(vertices)} is not a multiple of 3,
 the last \code{nrow(vertices) \%\% 3} points are ignored.}
 
+\item{colors}{An integer matrix where each \emph{\strong{column}} is an RGBA color
+for each vertex. If \code{NULL}, all vertices are drawn with \code{props[["color"]]}.}
+
 \item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
@@ -20,4 +23,11 @@ A raw vector of picture.
 }
 \description{
 Add vertices
+}
+\details{
+When \code{colors} is provided, they will be combined with
+\code{props[["shader"]]} if present or opaque \code{props[["color"]]} if not.
+
+Therefore, if you want to paint each vertex with a different color,
+you must specify a shader as \code{paint(shader = Shader$color(...))}.
 }

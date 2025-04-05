@@ -53,21 +53,14 @@ impl PaintAttrs {
         path_effect: &path_effect::PathEffect,
         shader: &shader::Shader,
     ) -> savvy::Result<Self> {
-        if color.len() != 4 {
-            return Err(savvy_err!("Invalid color. Expected 4 elements"));
-        }
         let width = width.as_f64();
         let miter = miter.as_f64();
-        let color = color.as_slice_f64();
+        let color = num2colors(&color)
+            .ok_or_else(|| return savvy_err!("Invalid color. Expected 4 elements"))?;
 
         let mut paint = Paint::default();
         paint.set_anti_alias(true);
-        paint.set_color(skia_safe::Color::from_argb(
-            color[3] as u8,
-            color[0] as u8,
-            color[1] as u8,
-            color[2] as u8,
-        ));
+        paint.set_color(color[0]);
         paint.set_style(stroke::sk_style(&style));
         paint.set_stroke_join(stroke::sk_join(&join));
         paint.set_stroke_cap(stroke::sk_cap(&cap));
@@ -86,6 +79,26 @@ impl PaintAttrs {
             font_family: family.to_vec()[0].to_string(),
             font_face: font::sk_font_style(fontface),
         })
+    }
+}
+
+pub fn num2colors(color: &NumericSexp) -> Option<Vec<skia_safe::Color>> {
+    let data = color.as_slice_f64();
+    let mut ret = Vec::new();
+    for chunk in data.chunks(4) {
+        if chunk.len() == 4 {
+            ret.push(skia_safe::Color::from_argb(
+                chunk[3] as u8,
+                chunk[0] as u8,
+                chunk[1] as u8,
+                chunk[2] as u8,
+            ));
+        }
+    }
+    if ret.is_empty() {
+        None
+    } else {
+        Some(ret)
     }
 }
 

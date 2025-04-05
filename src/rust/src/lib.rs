@@ -693,6 +693,7 @@ unsafe fn sk_draw_atlas(
 /// @param props PaintAttrs.
 /// @param x X coordinates of points.
 /// @param y Y coordinates of points.
+/// @param colors Colors of vertices.
 /// @param mode VertexMode.
 /// @returns A raw vector of picture.
 /// @noRd
@@ -704,18 +705,29 @@ unsafe fn sk_draw_vertices(
     props: PaintAttrs,
     x: NumericSexp,
     y: NumericSexp,
+    colors: NumericSexp,
     mode: &paint_attrs::VertexMode,
 ) -> savvy::Result<savvy::Sexp> {
     if x.len() != y.len() {
-        return Err(savvy_err!("Invalid x or y. Expected same length"));
+        return Err(savvy_err!("Invalid vertices."));
     }
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
 
     let mode = paint_attrs::sk_vertex_mode(&mode);
     let positions = as_points(&x, &y);
-    let mut colors: Vec<skia_safe::Color> = Vec::new();
-    colors.resize(x.len(), props.paint.color());
+    let colors = paint_attrs::num2colors(&colors).unwrap_or_else(|| {
+        // if matrix is too small to take color, implicitly use paint color
+        let mut ret: Vec<skia_safe::Color> = Vec::new();
+        ret.resize(positions.len(), props.paint.color());
+        ret
+    });
+    if colors.len() != positions.len() {
+        // if colors are not fit to positions, throw an error
+        return Err(savvy_err!(
+            "Colors must have same length as vertices triplets"
+        ));
+    }
     let vertices = skia_safe::Vertices::new_copy(mode, &positions, &positions, &colors, None);
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
@@ -723,7 +735,7 @@ unsafe fn sk_draw_vertices(
 
     canvas.draw_vertices(
         &vertices,
-        props.paint.blend_mode_or(skia_safe::BlendMode::SrcOver),
+        props.paint.blend_mode_or(skia_safe::BlendMode::DstOver),
         &props.paint,
     );
     let picture = recorder.finish_recording()?;

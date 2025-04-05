@@ -99,8 +99,8 @@ SEXP savvy_sk_draw_textpath__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_vertices__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__x, SEXP c_arg__y, SEXP c_arg__mode) {
-    SEXP res = savvy_sk_draw_vertices__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__x, c_arg__y, c_arg__mode);
+SEXP savvy_sk_draw_vertices__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__x, SEXP c_arg__y, SEXP c_arg__colors, SEXP c_arg__mode) {
+    SEXP res = savvy_sk_draw_vertices__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__x, c_arg__y, c_arg__colors, c_arg__mode);
     return handle_result(res);
 }
 
@@ -273,7 +273,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"savvy_sk_draw_text__impl", (DL_FUNC) &savvy_sk_draw_text__impl, 5},
     {"savvy_sk_draw_textblob__impl", (DL_FUNC) &savvy_sk_draw_textblob__impl, 7},
     {"savvy_sk_draw_textpath__impl", (DL_FUNC) &savvy_sk_draw_textpath__impl, 7},
-    {"savvy_sk_draw_vertices__impl", (DL_FUNC) &savvy_sk_draw_vertices__impl, 7},
+    {"savvy_sk_draw_vertices__impl", (DL_FUNC) &savvy_sk_draw_vertices__impl, 8},
     {"savvy_sk_get_text_width__impl", (DL_FUNC) &savvy_sk_get_text_width__impl, 2},
     {"savvy_sk_list_families__impl", (DL_FUNC) &savvy_sk_list_families__impl, 0},
     {"savvy_sk_matrix_map_point__impl", (DL_FUNC) &savvy_sk_matrix_map_point__impl, 4},

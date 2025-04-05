@@ -260,13 +260,14 @@ NULL
 #' @param props PaintAttrs.
 #' @param x X coordinates of points.
 #' @param y Y coordinates of points.
+#' @param colors Colors of vertices.
 #' @param mode VertexMode.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_vertices` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `mode`) {
+`sk_draw_vertices` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `colors`, `mode`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   `mode` <- .savvy_extract_ptr(`mode`, "VertexMode")
-  .Call(savvy_sk_draw_vertices__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `mode`)
+  .Call(savvy_sk_draw_vertices__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `colors`, `mode`)
 }
 
 #' Get text width
