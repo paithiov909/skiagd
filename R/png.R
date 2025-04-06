@@ -44,14 +44,20 @@ as_recordedplot <- function(img, props = paint()) {
   grDevices::recordPlot(load = "skiagd")
 }
 
-#' Plot picture as PNG image
+#' Plot picture as a raster
 #'
 #' @inheritParams param-img-and-props
 #' @returns `img` is returned invisibly.
 #' @export
 draw_img <- function(img, props = paint()) {
-  plt <- as_recordedplot(img, props)
-  grDevices::replayPlot(plt)
+  png <- as_png(img, props) |>
+    fastpng::read_png(type = "nativeraster", rgba = TRUE) |>
+    grid::grid.raster()
+  plot(
+    png,
+    xlim = c(0, props[["canvas_size"]][1]),
+    ylim = c(0, props[["canvas_size"]][2])
+  )
   invisible(img)
 }
 

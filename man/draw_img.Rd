@@ -2,7 +2,7 @@
 % Please edit documentation in R/png.R
 \name{draw_img}
 \alias{draw_img}
-\title{Plot picture as PNG image}
+\title{Plot picture as a raster}
 \usage{
 draw_img(img, props = paint())
 }
@@ -15,5 +15,5 @@ draw_img(img, props = paint())
 \code{img} is returned invisibly.
 }
 \description{
-Plot picture as PNG image
+Plot picture as a raster
 }
