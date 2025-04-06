@@ -5,8 +5,7 @@
 
 <!-- badges: start -->
 
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![rust-skia-version](https://img.shields.io/badge/skia--bindings-v0.84.0-orange)](https://github.com/rust-skia/rust-skia/releases/tag/0.84.0)
 [![R-CMD-check](https://github.com/paithiov909/skiagd/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/paithiov909/skiagd/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 

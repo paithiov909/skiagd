@@ -18,7 +18,7 @@ test_that("add_atlas works", {
   size <- dev_size()
   num_rects <- 250
   tx <- 25 + seq_len(num_rects) * ((size[1] / 2) / num_rects)
-  ty <- 50 + (seq_len(num_rects) * ((size[2] / 2) / num_rects))
+  ty <- 50 + seq_len(num_rects) * ((size[2] / 2) / num_rects)
   r <- atan2(size[2] - ty, size[1] - tx)
 
   trans <- data.frame(
