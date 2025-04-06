@@ -67,7 +67,7 @@ dev_size <- function(units = "px") {
 #' A wrapper of [grDevices::col2rgb()].
 #'
 #' @param color `col` for [grDevices::col2rgb()].
-#' @returns An integer vector.
+#' @returns An integer vector of length 4.
 #' @export
 col2rgba <- function(color) {
   as.vector(grDevices::col2rgb(color, alpha = TRUE))[1:4]

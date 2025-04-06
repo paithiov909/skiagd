@@ -34,12 +34,13 @@ as_png <- function(img, props = paint()) {
 #' @returns A `recordedplot` object. See [grDevices::recordPlot()] for details.
 #' @export
 as_recordedplot <- function(img, props = paint()) {
-  if (!requireNamespace("magick", quietly = TRUE)) {
-    rlang::abort("magick package is required")
+  if (!requireNamespace("fastpng", quietly = TRUE)) {
+    rlang::abort("fastpng package is required")
   }
-  png <- as_png(img, props)
+  png <- as_png(img, props) |>
+    fastpng::read_png(type = "nativeraster", rgba = TRUE)
   graphics::plot.new()
-  grid::grid.raster(magick::image_read(png))
+  grid::grid.raster(png)
   grDevices::recordPlot(load = "skiagd")
 }
 
@@ -49,11 +50,8 @@ as_recordedplot <- function(img, props = paint()) {
 #' @returns `img` is returned invisibly.
 #' @export
 draw_img <- function(img, props = paint()) {
-  if (!requireNamespace("magick", quietly = TRUE)) {
-    rlang::abort("magick package is required")
-  }
-  png <- as_png(img, props)
-  plot(grDevices::as.raster(magick::image_read(png)))
+  plt <- as_recordedplot(img, props)
+  grDevices::replayPlot(plt)
   invisible(img)
 }
 
