@@ -1,10 +1,11 @@
 mod canvas;
 mod paint_attrs;
 mod path_transform;
+mod runtime_effect;
 
 use canvas::{read_picture_bytes, SkiaCanvas};
-use paint_attrs::shader::{sk_blend_mode, sk_tile_mode, BlendMode, Shader, TileMode};
-use paint_attrs::{font, path_effect::PathEffect, PaintAttrs};
+use paint_attrs::shader::{sk_tile_mode, Shader, TileMode};
+use paint_attrs::{font, image_filter::ImageFilter, path_effect::PathEffect, PaintAttrs};
 use path_transform::{as_matrix, as_points};
 
 use savvy::{savvy, savvy_err, IntegerSexp, LogicalSexp, NumericScalar, NumericSexp, StringSexp};
@@ -767,102 +768,23 @@ fn sk_absolute_fill(size: IntegerSexp, fill: NumericSexp) -> savvy::Result<savvy
 }
 
 #[savvy]
+impl ImageFilter {
+    fn runtime_shader(
+        source: &runtime_effect::RuntimeEffect,
+        uniforms: savvy::ListSexp,
+    ) -> savvy::Result<Self> {
+        let builder = runtime_effect::make_builder(source, &uniforms)?;
+        let imgf = skia_safe::image_filters::runtime_shader(&builder, "", None)
+            .ok_or_else(|| return savvy_err!("Failed to create runtime shader. Maybe the types of uniforms are mismatched"))?;
+        Ok(ImageFilter {
+            label: "runtime_effect".to_string(),
+            filter: Some(imgf),
+        })
+    }
+}
+
+#[savvy]
 impl PathEffect {
-    fn no_effect() -> savvy::Result<Self> {
-        Ok(PathEffect {
-            label: "none".to_string(),
-            effect: None,
-        })
-    }
-    fn sum(first: &PathEffect, second: &PathEffect) -> savvy::Result<Self> {
-        let first = first
-            .effect
-            .clone()
-            .ok_or_else(|| return savvy_err!("First effect is required"))?;
-        let second = second
-            .effect
-            .clone()
-            .ok_or_else(|| return savvy_err!("Second effect is required"))?;
-        let effect_sum = skia_safe::PathEffect::sum(first, second);
-        Ok(PathEffect {
-            label: "sum".to_string(),
-            effect: Some(effect_sum),
-        })
-    }
-    fn trim(start: NumericScalar, end: NumericScalar) -> savvy::Result<Self> {
-        let start = start.as_f64();
-        let end = end.as_f64();
-        if start < 0.0 || start > 1.0 || end < 0.0 || end > 1.0 {
-            return Err(savvy_err!("Invalid trim values"));
-        }
-        let effect_trim = skia_safe::PathEffect::trim(
-            start as f32,
-            end as f32,
-            skia_safe::trim_path_effect::Mode::Normal,
-        );
-        Ok(PathEffect {
-            label: "trim".to_string(),
-            effect: effect_trim,
-        })
-    }
-    fn discrete(
-        length: NumericScalar,
-        deviation: NumericScalar,
-        seed: NumericScalar, // must be an integer
-    ) -> savvy::Result<Self> {
-        let length = length.as_f64();
-        let deviation = deviation.as_f64();
-        let seed = seed.as_i32()?;
-        let effect_discrete =
-            skia_safe::PathEffect::discrete(length as f32, deviation as f32, seed as u32);
-        Ok(PathEffect {
-            label: "discrete".to_string(),
-            effect: effect_discrete,
-        })
-    }
-    fn dash(intervals: NumericSexp, phase: NumericScalar) -> savvy::Result<Self> {
-        let intervals = intervals.iter_f64().map(|x| x as f32).collect::<Vec<f32>>();
-        let phase = phase.as_f64();
-        let effect_dash = skia_safe::PathEffect::dash(intervals.as_slice(), phase as f32);
-        Ok(PathEffect {
-            label: "dash".to_string(),
-            effect: effect_dash,
-        })
-    }
-    fn corner(radius: NumericScalar) -> savvy::Result<Self> {
-        let radius = radius.as_f64();
-        let effect_corner = skia_safe::PathEffect::corner_path(radius as f32);
-        Ok(PathEffect {
-            label: "corner".to_string(),
-            effect: effect_corner,
-        })
-    }
-    fn path_1d(
-        path: StringSexp,
-        advance: NumericScalar,
-        phase: NumericScalar,
-        style: StringSexp,
-    ) -> savvy::Result<Self> {
-        let s = path.to_vec()[0];
-        let path = skia_safe::utils::parse_path::from_svg(s)
-            .ok_or_else(|| return savvy_err!("Failed to parse svg"))?;
-        let style = match style.to_vec()[0] {
-            "translate" => skia_safe::path_1d_path_effect::Style::Translate,
-            "rotate" => skia_safe::path_1d_path_effect::Style::Rotate,
-            "morph" => skia_safe::path_1d_path_effect::Style::Morph,
-            _ => skia_safe::path_1d_path_effect::Style::Translate,
-        };
-        let effect_1d = skia_safe::PathEffect::path_1d(
-            &path,
-            advance.as_f64() as f32,
-            phase.as_f64() as f32,
-            style,
-        );
-        Ok(PathEffect {
-            label: "path_1d".to_string(),
-            effect: effect_1d,
-        })
-    }
     fn path_2d(path: StringSexp, transform: NumericSexp) -> savvy::Result<Self> {
         let mat = as_matrix(&transform)?;
         let s = path.to_vec()[0];
@@ -919,7 +841,6 @@ impl Shader {
             )),
         })
     }
-
     unsafe fn from_png(
         png_bytes: savvy::RawSexp,
         mode: &TileMode,
@@ -938,94 +859,17 @@ impl Shader {
             ),
         })
     }
-    fn color(rgba: NumericSexp) -> savvy::Result<Self> {
-        if rgba.len() != 4 {
-            return Err(savvy_err!("Invalid color. Expected 4 elements"));
-        }
-        let color = rgba.as_slice_f64();
-        Ok(Shader {
-            label: "color".to_string(),
-            shader: Some(skia_safe::shader::shaders::color(
-                skia_safe::Color::from_argb(
-                    color[3] as u8,
-                    color[0] as u8,
-                    color[1] as u8,
-                    color[2] as u8,
-                ),
-            )),
-        })
-    }
-    fn blend(mode: BlendMode, dst: &Shader, src: &Shader) -> savvy::Result<Self> {
-        let dst = dst
-            .shader
-            .clone()
-            .ok_or(savvy_err!("dst shader is required"))?;
-        let src = src
-            .shader
-            .clone()
-            .ok_or(savvy_err!("src shader is required"))?;
-        let shader_blend = skia_safe::shader::shaders::blend(
-            skia_safe::Blender::from(sk_blend_mode(&mode)),
-            dst,
-            src,
-        );
-        Ok(Shader {
-            label: "blend".to_string(),
-            shader: Some(shader_blend),
-        })
-    }
-    fn fractal_noise(
-        freq: NumericSexp,
-        octaves: NumericScalar,
-        seed: NumericScalar,
-        tile_size: NumericSexp,
+    fn from_runtime_effect(
+        source: &runtime_effect::RuntimeEffect,
+        uniforms: savvy::ListSexp,
     ) -> savvy::Result<Self> {
-        if freq.len() != 2 || tile_size.len() != 2 {
-            return Err(savvy_err!("Invalid arguments"));
-        }
-        let freq = freq.as_slice_f64();
-        let octaves = octaves.as_usize()?;
-        let seed = seed.as_f64();
-        let tile_size = tile_size.as_slice_f64();
-        let shader_fractal_noise = skia_safe::Shader::fractal_perlin_noise(
-            (freq[0] as f32, freq[1] as f32),
-            octaves,
-            seed as f32,
-            Some(skia_safe::ISize::new(
-                tile_size[0] as i32,
-                tile_size[1] as i32,
-            )),
-        );
+        let builder = runtime_effect::make_builder(source, &uniforms)?;
+        let shader = builder
+            .make_shader(&skia_safe::Matrix::default())
+            .ok_or_else(|| return savvy_err!("Failed to create runtime shader"))?;
         Ok(Shader {
-            label: "fractal_noise".to_string(),
-            shader: shader_fractal_noise,
-        })
-    }
-    fn turbulence(
-        freq: NumericSexp,
-        octaves: NumericScalar,
-        seed: NumericScalar,
-        tile_size: NumericSexp,
-    ) -> savvy::Result<Self> {
-        if freq.len() != 2 || tile_size.len() != 2 {
-            return Err(savvy_err!("Invalid arguments"));
-        }
-        let freq = freq.as_slice_f64();
-        let octaves = octaves.as_usize()?;
-        let seed = seed.as_f64();
-        let tile_size = tile_size.as_slice_f64();
-        let shader_turbulence_noise = skia_safe::Shader::turbulence_perlin_noise(
-            (freq[0] as f32, freq[1] as f32),
-            octaves,
-            seed as f32,
-            Some(skia_safe::ISize::new(
-                tile_size[0] as i32,
-                tile_size[1] as i32,
-            )),
-        );
-        Ok(Shader {
-            label: "turbulence".to_string(),
-            shader: shader_turbulence_noise,
+            label: "runtime_effect".to_string(),
+            shader: Some(shader),
         })
     }
     fn linear_gradient(

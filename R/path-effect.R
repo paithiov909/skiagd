@@ -12,6 +12,7 @@ c.PathEffect <- function(...) {
 
 #' PathEffect
 #'
+#' @description
 #' `PathEffect` is a struct that offers a reference to `skia_safe::PathEffect`.
 #' You can apply a path effect to shapes via [paint()].
 #'
@@ -23,7 +24,7 @@ c.PathEffect <- function(...) {
 #'
 #' * `no_effect()`: does not apply any path effect. This is the default effect for [paint()].
 #' * `sum(first, second)`: applies two effects in sequence.
-#' * `trim(start, end)`: trims the `start` and `end` of the path. Note that you can't trim nothing at all, i.e., setting `start = 0` and `end = 1` arises an error.
+#' * `trim(start, end)`: trims the `start` and `end` of the path. Note that you can't trim nothing at all, i.e., setting `start = 0` and `end = 1` does nothing.
 #' * `discrete(lentgh, deviation, seed)`: applies discrete path effect.
 #' * `dash(intervals, phase)`: applies dash path effect.
 #' * `corner(radius)`: applies corner path effect.

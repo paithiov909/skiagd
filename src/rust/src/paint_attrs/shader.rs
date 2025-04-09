@@ -1,4 +1,4 @@
-use savvy::savvy;
+use savvy::{savvy, savvy_err, NumericScalar, NumericSexp};
 
 /// @export
 #[savvy]
@@ -13,6 +13,96 @@ impl Shader {
         let label = &self.label;
         let out = savvy::OwnedStringSexp::try_from_scalar(&label)?;
         Ok(out.into())
+    }
+    fn color(rgba: NumericSexp) -> savvy::Result<Self> {
+        if rgba.len() != 4 {
+            return Err(savvy_err!("Invalid color. Expected 4 elements"));
+        }
+        let color = rgba.as_slice_f64();
+        Ok(Shader {
+            label: "color".to_string(),
+            shader: Some(skia_safe::shader::shaders::color(
+                skia_safe::Color::from_argb(
+                    color[3] as u8,
+                    color[0] as u8,
+                    color[1] as u8,
+                    color[2] as u8,
+                ),
+            )),
+        })
+    }
+    fn blend(mode: BlendMode, dst: &Shader, src: &Shader) -> savvy::Result<Self> {
+        let dst = dst
+            .shader
+            .clone()
+            .ok_or(savvy_err!("dst shader is required"))?;
+        let src = src
+            .shader
+            .clone()
+            .ok_or(savvy_err!("src shader is required"))?;
+        let shader_blend = skia_safe::shader::shaders::blend(
+            skia_safe::Blender::from(sk_blend_mode(&mode)),
+            dst,
+            src,
+        );
+        Ok(Shader {
+            label: "blend".to_string(),
+            shader: Some(shader_blend),
+        })
+    }
+    fn fractal_noise(
+        freq: NumericSexp,
+        octaves: NumericScalar,
+        seed: NumericScalar,
+        tile_size: NumericSexp,
+    ) -> savvy::Result<Self> {
+        if freq.len() != 2 || tile_size.len() != 2 {
+            return Err(savvy_err!("Invalid arguments"));
+        }
+        let freq = freq.as_slice_f64();
+        let octaves = octaves.as_usize()?;
+        let seed = seed.as_f64();
+        let tile_size = tile_size.as_slice_f64();
+        let shader_fractal_noise = skia_safe::Shader::fractal_perlin_noise(
+            (freq[0] as f32, freq[1] as f32),
+            octaves,
+            seed as f32,
+            Some(skia_safe::ISize::new(
+                tile_size[0] as i32,
+                tile_size[1] as i32,
+            )),
+        );
+        Ok(Shader {
+            label: "fractal_noise".to_string(),
+            shader: shader_fractal_noise,
+        })
+    }
+    fn turbulence(
+        freq: NumericSexp,
+        octaves: NumericScalar,
+        seed: NumericScalar,
+        tile_size: NumericSexp,
+    ) -> savvy::Result<Self> {
+        if freq.len() != 2 || tile_size.len() != 2 {
+            return Err(savvy_err!("Invalid arguments"));
+        }
+        let freq = freq.as_slice_f64();
+        let octaves = octaves.as_usize()?;
+        let seed = seed.as_f64();
+        let tile_size = tile_size.as_slice_f64();
+        let shader_turbulence_noise = skia_safe::Shader::turbulence_perlin_noise(
+            (freq[0] as f32, freq[1] as f32),
+            octaves,
+            seed as f32,
+            Some(skia_safe::ISize::new(
+                tile_size[0] as i32,
+                tile_size[1] as i32,
+            )),
+        );
+        Ok(Shader {
+            label: "turbulence".to_string(),
+            shader: shader_turbulence_noise,
+        })
     }
 }
 

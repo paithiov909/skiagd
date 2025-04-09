@@ -35,6 +35,7 @@ The following painting attributes can be specified:
 \item \code{blend_mode}: See \link{BlendMode}.
 \item \code{path_effect}: See \link{PathEffect}.
 \item \code{shader}: See \link{Shader}.
+\item \code{image_filter}: See \link{ImageFilter}.
 \item \code{point_mode}: \link{PointMode} for \code{\link[=add_point]{add_point()}}.
 \item \code{vertex_mode}: \link{VertexMode} for \code{\link[=add_vertices]{add_vertices()}}.
 \item \code{fill_type}: \link{FillType} for \code{\link[=add_path]{add_path()}}.

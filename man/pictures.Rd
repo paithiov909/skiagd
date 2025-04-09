@@ -17,7 +17,8 @@ as long as it is compatible with the version of Skia
 used to create it.
 
 You can review contents of \code{.skp} files
-with the \href{https://skia.org/docs/dev/tools/debugger/}{Skia debugger}.
+with the \href{https://skia.org/docs/dev/tools/debugger/}{Skia debugger}
+if they are compatible with the wasm version.
 }
 \seealso{
 \href{https://shopify.github.io/react-native-skia/docs/shapes/pictures}{Pictures | React Native Skia}

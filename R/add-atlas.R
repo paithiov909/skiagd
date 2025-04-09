@@ -1,7 +1,7 @@
 #' Add atlas
 #'
-#' @param img A raw vector of image.
-#' @param png A raw vector of PNG to be used as the sprite.
+#' @param img A raw vector of picture.
+#' @param png A raw vector of PNG image to be used as the sprite.
 #' @param rsx_trans A double matrix where each row represents an RSX transform.
 #' Each column of the matrix corresponds to the scale, the angle of rotation,
 #' the amount of translation

@@ -24,6 +24,7 @@
 #' * `blend_mode`: See [BlendMode].
 #' * `path_effect`: See [PathEffect].
 #' * `shader`: See [Shader].
+#' * `image_filter`: See [ImageFilter].
 #' * `point_mode`: [PointMode] for [add_point()].
 #' * `vertex_mode`: [VertexMode] for [add_vertices()].
 #' * `fill_type`: [FillType] for [add_path()].
@@ -45,8 +46,8 @@ paint <- function(...) {
 
 dev_new_if_needed <- function() {
   if (grDevices::dev.cur() == 1) {
-    rlang::warn("No device has been open. Opened a new one with `dev.new()`.")
-    grDevices::dev.new()
+    rlang::warn("No device has been open. Opened a new one with `grid.null()`.")
+    grid::grid.null()
   }
 }
 
@@ -113,6 +114,7 @@ default_attrs <- function() {
     blend_mode = env_get(BlendMode, "SrcOver"),
     path_effect = PathEffect$no_effect(),
     shader = Shader$no_shader(),
+    image_filter = ImageFilter$no_filter(),
     point_mode = env_get(PointMode, "Points"),
     vertex_mode = env_get(VertexMode, "Triangles"),
     fill_type = env_get(FillType, "Winding"),
@@ -133,6 +135,7 @@ as_paint_attrs <- function(p) {
     p[["fontface"]],
     p[["blend_mode"]],
     p[["path_effect"]],
-    p[["shader"]]
+    p[["shader"]],
+    p[["image_filter"]]
   )
 }

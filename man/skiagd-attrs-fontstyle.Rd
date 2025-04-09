@@ -29,6 +29,7 @@ Other paint-attributes:
 \code{\link{BlendMode}},
 \code{\link{Cap}},
 \code{\link{FillType}},
+\code{\link{ImageFilter}},
 \code{\link{Join}},
 \code{\link{PathEffect}},
 \code{\link{PointMode}},

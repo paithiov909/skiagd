@@ -40,7 +40,7 @@ Note that you should almost always \code{\link[=freeze]{freeze()}} the picture a
 
 You can use \code{text_layout_horizontal()} and \code{text_layout_vertical()}
 to create a \code{point} matrix
-and \code{text_width} to get widths of textblobs.
+and \code{text_width()} to get widths of textblobs.
 }
 \details{
 Since textblobs do not have font fallback mechanism,

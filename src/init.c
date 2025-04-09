@@ -138,9 +138,24 @@ SEXP savvy_sk_path_transform__impl(SEXP c_arg__svg, SEXP c_arg__mat) {
 
 
 
+SEXP savvy_ImageFilter_get_label__impl(SEXP self__) {
+    SEXP res = savvy_ImageFilter_get_label__ffi(self__);
+    return handle_result(res);
+}
 
-SEXP savvy_PaintAttrs_set_attrs__impl(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__fontsize, SEXP c_arg__family, SEXP c_arg__fontface, SEXP c_arg__blend_mode, SEXP c_arg__path_effect, SEXP c_arg__shader) {
-    SEXP res = savvy_PaintAttrs_set_attrs__ffi(c_arg__color, c_arg__style, c_arg__join, c_arg__cap, c_arg__width, c_arg__miter, c_arg__fontsize, c_arg__family, c_arg__fontface, c_arg__blend_mode, c_arg__path_effect, c_arg__shader);
+SEXP savvy_ImageFilter_no_filter__impl(void) {
+    SEXP res = savvy_ImageFilter_no_filter__ffi();
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_runtime_shader__impl(SEXP c_arg__source, SEXP c_arg__uniforms) {
+    SEXP res = savvy_ImageFilter_runtime_shader__ffi(c_arg__source, c_arg__uniforms);
+    return handle_result(res);
+}
+
+
+SEXP savvy_PaintAttrs_set_attrs__impl(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__fontsize, SEXP c_arg__family, SEXP c_arg__fontface, SEXP c_arg__blend_mode, SEXP c_arg__path_effect, SEXP c_arg__shader, SEXP c_arg__image_filter) {
+    SEXP res = savvy_PaintAttrs_set_attrs__ffi(c_arg__color, c_arg__style, c_arg__join, c_arg__cap, c_arg__width, c_arg__miter, c_arg__fontsize, c_arg__family, c_arg__fontface, c_arg__blend_mode, c_arg__path_effect, c_arg__shader, c_arg__image_filter);
     return handle_result(res);
 }
 
@@ -195,6 +210,16 @@ SEXP savvy_PathEffect_trim__impl(SEXP c_arg__start, SEXP c_arg__end) {
 }
 
 
+SEXP savvy_RuntimeEffect_make__impl(SEXP c_arg__sksl) {
+    SEXP res = savvy_RuntimeEffect_make__ffi(c_arg__sksl);
+    return handle_result(res);
+}
+
+SEXP savvy_RuntimeEffect_source__impl(SEXP self__) {
+    SEXP res = savvy_RuntimeEffect_source__ffi(self__);
+    return handle_result(res);
+}
+
 SEXP savvy_Shader_blend__impl(SEXP c_arg__mode, SEXP c_arg__dst, SEXP c_arg__src) {
     SEXP res = savvy_Shader_blend__ffi(c_arg__mode, c_arg__dst, c_arg__src);
     return handle_result(res);
@@ -222,6 +247,11 @@ SEXP savvy_Shader_from_picture__impl(SEXP c_arg__img, SEXP c_arg__mode, SEXP c_a
 
 SEXP savvy_Shader_from_png__impl(SEXP c_arg__png_bytes, SEXP c_arg__mode, SEXP c_arg__transform) {
     SEXP res = savvy_Shader_from_png__ffi(c_arg__png_bytes, c_arg__mode, c_arg__transform);
+    return handle_result(res);
+}
+
+SEXP savvy_Shader_from_runtime_effect__impl(SEXP c_arg__source, SEXP c_arg__uniforms) {
+    SEXP res = savvy_Shader_from_runtime_effect__ffi(c_arg__source, c_arg__uniforms);
     return handle_result(res);
 }
 
@@ -284,8 +314,11 @@ static const R_CallMethodDef CallEntries[] = {
 
 
 
+    {"savvy_ImageFilter_get_label__impl", (DL_FUNC) &savvy_ImageFilter_get_label__impl, 1},
+    {"savvy_ImageFilter_no_filter__impl", (DL_FUNC) &savvy_ImageFilter_no_filter__impl, 0},
+    {"savvy_ImageFilter_runtime_shader__impl", (DL_FUNC) &savvy_ImageFilter_runtime_shader__impl, 2},
 
-    {"savvy_PaintAttrs_set_attrs__impl", (DL_FUNC) &savvy_PaintAttrs_set_attrs__impl, 12},
+    {"savvy_PaintAttrs_set_attrs__impl", (DL_FUNC) &savvy_PaintAttrs_set_attrs__impl, 13},
     {"savvy_PathEffect_corner__impl", (DL_FUNC) &savvy_PathEffect_corner__impl, 1},
     {"savvy_PathEffect_dash__impl", (DL_FUNC) &savvy_PathEffect_dash__impl, 2},
     {"savvy_PathEffect_discrete__impl", (DL_FUNC) &savvy_PathEffect_discrete__impl, 3},
@@ -297,12 +330,15 @@ static const R_CallMethodDef CallEntries[] = {
     {"savvy_PathEffect_sum__impl", (DL_FUNC) &savvy_PathEffect_sum__impl, 2},
     {"savvy_PathEffect_trim__impl", (DL_FUNC) &savvy_PathEffect_trim__impl, 2},
 
+    {"savvy_RuntimeEffect_make__impl", (DL_FUNC) &savvy_RuntimeEffect_make__impl, 1},
+    {"savvy_RuntimeEffect_source__impl", (DL_FUNC) &savvy_RuntimeEffect_source__impl, 1},
     {"savvy_Shader_blend__impl", (DL_FUNC) &savvy_Shader_blend__impl, 3},
     {"savvy_Shader_color__impl", (DL_FUNC) &savvy_Shader_color__impl, 1},
     {"savvy_Shader_conical_gradient__impl", (DL_FUNC) &savvy_Shader_conical_gradient__impl, 8},
     {"savvy_Shader_fractal_noise__impl", (DL_FUNC) &savvy_Shader_fractal_noise__impl, 4},
     {"savvy_Shader_from_picture__impl", (DL_FUNC) &savvy_Shader_from_picture__impl, 4},
     {"savvy_Shader_from_png__impl", (DL_FUNC) &savvy_Shader_from_png__impl, 3},
+    {"savvy_Shader_from_runtime_effect__impl", (DL_FUNC) &savvy_Shader_from_runtime_effect__impl, 2},
     {"savvy_Shader_get_label__impl", (DL_FUNC) &savvy_Shader_get_label__impl, 1},
     {"savvy_Shader_linear_gradient__impl", (DL_FUNC) &savvy_Shader_linear_gradient__impl, 7},
     {"savvy_Shader_no_shader__impl", (DL_FUNC) &savvy_Shader_no_shader__impl, 0},

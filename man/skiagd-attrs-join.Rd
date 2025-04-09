@@ -29,6 +29,7 @@ Other paint-attributes:
 \code{\link{Cap}},
 \code{\link{FillType}},
 \code{\link{FontStyle}},
+\code{\link{ImageFilter}},
 \code{\link{PathEffect}},
 \code{\link{PointMode}},
 \code{\link{Shader}},

@@ -697,6 +697,46 @@ class(`FontStyle`) <- c("FontStyle__bundle", "savvy_skiagd__sealed")
   cat('FontStyle\n')
 }
 
+### wrapper functions for ImageFilter
+
+`ImageFilter_get_label` <- function(self) {
+  function() {
+    .Call(savvy_ImageFilter_get_label__impl, `self`)
+  }
+}
+
+`.savvy_wrap_ImageFilter` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+  e$`get_label` <- `ImageFilter_get_label`(ptr)
+
+  class(e) <- c("ImageFilter", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' @export
+`ImageFilter` <- new.env(parent = emptyenv())
+
+### associated functions for ImageFilter
+
+`ImageFilter`$`no_filter` <- function() {
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_no_filter__impl))
+}
+
+`ImageFilter`$`runtime_shader` <- function(`source`, `uniforms`) {
+  `source` <- .savvy_extract_ptr(`source`, "RuntimeEffect")
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_runtime_shader__impl, `source`, `uniforms`))
+}
+
+
+class(`ImageFilter`) <- c("ImageFilter__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.ImageFilter__bundle` <- function(x, ...) {
+  cat('ImageFilter\n')
+}
+
 ### wrapper functions for Join
 
 
@@ -809,13 +849,14 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
 #' * blend_mode: BlendMode.
 #' * path_effect: PathEffect.
 #' * shader: Shader.
+#' * image_filter: ImageFilter.
 #'
 #' @noRd
 `PaintAttrs` <- new.env(parent = emptyenv())
 
 ### associated functions for PaintAttrs
 
-`PaintAttrs`$`set_attrs` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `fontsize`, `family`, `fontface`, `blend_mode`, `path_effect`, `shader`) {
+`PaintAttrs`$`set_attrs` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `fontsize`, `family`, `fontface`, `blend_mode`, `path_effect`, `shader`, `image_filter`) {
   `style` <- .savvy_extract_ptr(`style`, "Style")
   `join` <- .savvy_extract_ptr(`join`, "Join")
   `cap` <- .savvy_extract_ptr(`cap`, "Cap")
@@ -823,7 +864,8 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
   `blend_mode` <- .savvy_extract_ptr(`blend_mode`, "BlendMode")
   `path_effect` <- .savvy_extract_ptr(`path_effect`, "PathEffect")
   `shader` <- .savvy_extract_ptr(`shader`, "Shader")
-  .savvy_wrap_PaintAttrs(.Call(savvy_PaintAttrs_set_attrs__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `fontsize`, `family`, `fontface`, `blend_mode`, `path_effect`, `shader`))
+  `image_filter` <- .savvy_extract_ptr(`image_filter`, "ImageFilter")
+  .savvy_wrap_PaintAttrs(.Call(savvy_PaintAttrs_set_attrs__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `fontsize`, `family`, `fontface`, `blend_mode`, `path_effect`, `shader`, `image_filter`))
 }
 
 
@@ -982,6 +1024,41 @@ class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
   cat('PointMode\n')
 }
 
+### wrapper functions for RuntimeEffect
+
+`RuntimeEffect_source` <- function(self) {
+  function() {
+    .Call(savvy_RuntimeEffect_source__impl, `self`)
+  }
+}
+
+`.savvy_wrap_RuntimeEffect` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+  e$`source` <- `RuntimeEffect_source`(ptr)
+
+  class(e) <- c("RuntimeEffect", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' @export
+`RuntimeEffect` <- new.env(parent = emptyenv())
+
+### associated functions for RuntimeEffect
+
+`RuntimeEffect`$`make` <- function(`sksl`) {
+  .savvy_wrap_RuntimeEffect(.Call(savvy_RuntimeEffect_make__impl, `sksl`))
+}
+
+
+class(`RuntimeEffect`) <- c("RuntimeEffect__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.RuntimeEffect__bundle` <- function(x, ...) {
+  cat('RuntimeEffect\n')
+}
+
 ### wrapper functions for Shader
 
 `Shader_get_label` <- function(self) {
@@ -1033,6 +1110,11 @@ class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
 `Shader`$`from_png` <- function(`png_bytes`, `mode`, `transform`) {
   `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
   .savvy_wrap_Shader(.Call(savvy_Shader_from_png__impl, `png_bytes`, `mode`, `transform`))
+}
+
+`Shader`$`from_runtime_effect` <- function(`source`, `uniforms`) {
+  `source` <- .savvy_extract_ptr(`source`, "RuntimeEffect")
+  .savvy_wrap_Shader(.Call(savvy_Shader_from_runtime_effect__impl, `source`, `uniforms`))
 }
 
 `Shader`$`linear_gradient` <- function(`start`, `end`, `from`, `to`, `mode`, `flags`, `transform`) {

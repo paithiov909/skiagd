@@ -30,6 +30,7 @@ Other paint-attributes:
 \code{\link{Cap}},
 \code{\link{FillType}},
 \code{\link{FontStyle}},
+\code{\link{ImageFilter}},
 \code{\link{Join}},
 \code{\link{PathEffect}},
 \code{\link{PointMode}},

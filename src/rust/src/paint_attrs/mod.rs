@@ -1,4 +1,5 @@
 pub mod font;
+pub mod image_filter;
 pub mod path_effect;
 pub mod shader;
 mod stroke;
@@ -27,6 +28,7 @@ use skia_safe::Paint;
 /// * blend_mode: BlendMode.
 /// * path_effect: PathEffect.
 /// * shader: Shader.
+/// * image_filter: ImageFilter.
 ///
 /// @noRd
 #[savvy]
@@ -52,6 +54,7 @@ impl PaintAttrs {
         blend_mode: &shader::BlendMode,
         path_effect: &path_effect::PathEffect,
         shader: &shader::Shader,
+        image_filter: &image_filter::ImageFilter,
     ) -> savvy::Result<Self> {
         let width = width.as_f64();
         let miter = miter.as_f64();
@@ -72,6 +75,9 @@ impl PaintAttrs {
         }
         if let Some(shader) = shader.shader.clone() {
             paint.set_shader(shader);
+        }
+        if let Some(filter) = image_filter.filter.clone() {
+            paint.set_image_filter(filter);
         }
         Ok(PaintAttrs {
             paint,

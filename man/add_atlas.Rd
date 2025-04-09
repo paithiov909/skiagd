@@ -7,9 +7,9 @@
 add_atlas(img, png, rsx_trans, props = paint())
 }
 \arguments{
-\item{img}{A raw vector of image.}
+\item{img}{A raw vector of picture.}
 
-\item{png}{A raw vector of PNG to be used as the sprite.}
+\item{png}{A raw vector of PNG image to be used as the sprite.}
 
 \item{rsx_trans}{A double matrix where each row represents an RSX transform.
 Each column of the matrix corresponds to the scale, the angle of rotation,

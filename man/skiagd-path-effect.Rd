@@ -44,16 +44,16 @@ A \code{PathEffect} object.
 \description{
 \code{PathEffect} is a struct that offers a reference to \code{skia_safe::PathEffect}.
 You can apply a path effect to shapes via \code{\link[=paint]{paint()}}.
-}
-\details{
+
 Concatenating path effects with \code{c()} is equivalent to sum them sequentially
 into a single effect using \code{PathEffect$sum()}.
-
+}
+\details{
 The following effects are available:
 \itemize{
 \item \code{no_effect()}: does not apply any path effect. This is the default effect for \code{\link[=paint]{paint()}}.
 \item \code{sum(first, second)}: applies two effects in sequence.
-\item \code{trim(start, end)}: trims the \code{start} and \code{end} of the path. Note that you can't trim nothing at all, i.e., setting \code{start = 0} and \code{end = 1} arises an error.
+\item \code{trim(start, end)}: trims the \code{start} and \code{end} of the path. Note that you can't trim nothing at all, i.e., setting \code{start = 0} and \code{end = 1} does nothing.
 \item \code{discrete(lentgh, deviation, seed)}: applies discrete path effect.
 \item \code{dash(intervals, phase)}: applies dash path effect.
 \item \code{corner(radius)}: applies corner path effect.
@@ -70,6 +70,7 @@ Other paint-attributes:
 \code{\link{Cap}},
 \code{\link{FillType}},
 \code{\link{FontStyle}},
+\code{\link{ImageFilter}},
 \code{\link{Join}},
 \code{\link{PointMode}},
 \code{\link{Shader}},

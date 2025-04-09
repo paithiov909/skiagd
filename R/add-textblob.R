@@ -9,7 +9,7 @@
 #'
 #' You can use `text_layout_horizontal()` and `text_layout_vertical()`
 #' to create a `point` matrix
-#' and `text_width` to get widths of textblobs.
+#' and `text_width()` to get widths of textblobs.
 #'
 #' @details
 #' Since textblobs do not have font fallback mechanism,

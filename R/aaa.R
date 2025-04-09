@@ -22,7 +22,8 @@ NULL
 #' used to create it.
 #'
 #' You can review contents of `.skp` files
-#' with the [Skia debugger](https://skia.org/docs/dev/tools/debugger/).
+#' with the [Skia debugger](https://skia.org/docs/dev/tools/debugger/)
+#' if they are compatible with the wasm version.
 #'
 #' @seealso
 #' [Pictures | React Native Skia](https://shopify.github.io/react-native-skia/docs/shapes/pictures)
