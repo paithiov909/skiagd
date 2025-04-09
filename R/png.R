@@ -39,7 +39,7 @@ as_recordedplot <- function(img, props = paint()) {
   }
   png <- as_png(img, props) |>
     fastpng::read_png(type = "nativeraster", rgba = TRUE)
-  graphics::plot.new()
+  grid::grid.newpage(recording = FALSE)
   grid::grid.raster(png)
   grDevices::recordPlot(load = "skiagd")
 }
@@ -50,14 +50,13 @@ as_recordedplot <- function(img, props = paint()) {
 #' @returns `img` is returned invisibly.
 #' @export
 draw_img <- function(img, props = paint()) {
+  if (!requireNamespace("fastpng", quietly = TRUE)) {
+    rlang::abort("fastpng package is required")
+  }
   png <- as_png(img, props) |>
-    fastpng::read_png(type = "nativeraster", rgba = TRUE) |>
-    grid::grid.raster()
-  plot(
-    png,
-    xlim = c(0, props[["canvas_size"]][1]),
-    ylim = c(0, props[["canvas_size"]][2])
-  )
+    fastpng::read_png(type = "nativeraster", rgba = TRUE)
+  grid::grid.newpage(recording = FALSE)
+  grid::grid.raster(png)
   invisible(img)
 }
 
