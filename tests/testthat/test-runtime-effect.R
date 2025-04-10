@@ -48,7 +48,7 @@ test_that("ImageFilter$runtime_shader works", {
 
  	  vec4 main(vec2 fragCoord) {
       vec2 uv = fragCoord / resolution;
-   		return distance(uv, vec2(.5)) > .2 ? image.eval(uv).gbra : image.eval(uv).rgba;
+   		return distance(uv, vec2(.5)) > .2 ? image.eval(fragCoord).gbra : image.eval(fragCoord).rgba;
   	}
   }")
 
@@ -78,7 +78,7 @@ test_that("ImageFilter$runtime_shader works", {
 
  	  vec4 main(vec2 fragCoord) {
       vec2 uv = fragCoord / resolution;
-   		return uv.y < 0.5 ? image.eval(uv).gbra : image.eval(uv).rgba;
+   		return uv.y < 0.5 ? image.eval(fragCoord).gbra : image.eval(fragCoord).rgba;
   	}
   }")
 
