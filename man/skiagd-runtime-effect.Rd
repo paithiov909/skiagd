@@ -5,8 +5,8 @@
 \title{RuntimeEffect}
 \arguments{
 \item{sksl}{A string scalar of SkSL source.
-The fragment shader must receive the currently filtered image
-as \code{shader} uniform.}
+For \link{ImageFilter}, the fragment shader must receive
+the currently filtered image as \code{shader} uniform.}
 }
 \value{
 For \code{make()}, a \code{RuntimeEffect} object is returned
@@ -23,7 +23,7 @@ can be found \href{https://github.com/google/skia/tree/main/src/sksl#readme}{her
 
 You can compile a SkSL source into a \code{RuntimeEffect}
 using \code{RuntimeEffect$make()},
-and apply it to the canvas as an \link{ImageFilter}.
+and apply it as an \link{ImageFilter} or a \link{Shader}.
 }
 \details{
 \code{RuntimeEffect} as an R environment exposes the following method:

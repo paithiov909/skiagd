@@ -10,7 +10,7 @@
 #'
 #' You can compile a SkSL source into a `RuntimeEffect`
 #' using `RuntimeEffect$make()`,
-#' and apply it to the canvas as an [ImageFilter].
+#' and apply it as an [ImageFilter] or a [Shader].
 #'
 #' @details
 #' `RuntimeEffect` as an R environment exposes the following method:
@@ -22,8 +22,8 @@
 #' * `source()`: Returns the original SkSL source as a string scalar.
 #'
 #' @param sksl A string scalar of SkSL source.
-#' The fragment shader must receive the currently filtered image
-#' as `shader` uniform.
+#' For [ImageFilter], the fragment shader must receive
+#' the currently filtered image as `shader` uniform.
 #' @returns For `make()`, a `RuntimeEffect` object is returned
 #' if the SkSL source is successfully compiled.
 #' Otherwise, an error is thrown with the compilation error message.
