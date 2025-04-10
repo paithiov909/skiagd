@@ -1,14 +1,25 @@
-use savvy::{savvy, savvy_err, NumericScalar, NumericSexp};
+use crate::canvas::read_picture_bytes;
+use crate::path_transform::as_matrix;
+use crate::runtime_effect;
+
+use savvy::{savvy, savvy_err, LogicalSexp, NumericScalar, NumericSexp};
+use skia_safe::{Data, Image};
 
 /// @export
 #[savvy]
 pub struct Shader {
-    pub label: String,
+    label: String,
     pub shader: Option<skia_safe::Shader>,
 }
 
 #[savvy]
 impl Shader {
+    fn no_shader() -> savvy::Result<Self> {
+        Ok(Shader {
+            label: "none".to_string(),
+            shader: None,
+        })
+    }
     fn get_label(&self) -> savvy::Result<savvy::Sexp> {
         let label = &self.label;
         let out = savvy::OwnedStringSexp::try_from_scalar(&label)?;
@@ -102,6 +113,253 @@ impl Shader {
         Ok(Shader {
             label: "turbulence".to_string(),
             shader: shader_turbulence_noise,
+        })
+    }
+    unsafe fn from_png(
+        png_bytes: savvy::RawSexp,
+        mode: &TileMode,
+        transform: NumericSexp,
+    ) -> savvy::Result<Self> {
+        let mat = as_matrix(&transform)?;
+        let input = Data::new_bytes(png_bytes.as_slice());
+        let image = Image::from_encoded_with_alpha_type(input, skia_safe::AlphaType::Premul)
+            .ok_or_else(|| return savvy_err!("Failed to read PNG as image"))?;
+        Ok(Shader {
+            label: "image".to_string(),
+            shader: image.to_shader(
+                Some((sk_tile_mode(&mode), sk_tile_mode(&mode))),
+                skia_safe::SamplingOptions::default(),
+                &mat,
+            ),
+        })
+    }
+    fn from_runtime_effect(
+        source: &runtime_effect::RuntimeEffect,
+        uniforms: savvy::ListSexp,
+    ) -> savvy::Result<Self> {
+        let builder = runtime_effect::make_builder(source, &uniforms)?;
+        let shader = builder
+            .make_shader(&skia_safe::Matrix::default())
+            .ok_or_else(|| return savvy_err!("Failed to create runtime shader"))?;
+        Ok(Shader {
+            label: "runtime_effect".to_string(),
+            shader: Some(shader),
+        })
+    }
+    unsafe fn from_picture(
+        img: savvy::RawSexp,
+        mode: &TileMode,
+        tile_size: NumericSexp,
+        transform: NumericSexp,
+    ) -> savvy::Result<Self> {
+        if tile_size.len() != 2 {
+            return Err(savvy_err!("Invalid arguments"));
+        }
+        let tile_size = tile_size.as_slice_f64();
+        let mat = as_matrix(&transform)?;
+        let picture = read_picture_bytes(&img)?;
+        Ok(Shader {
+            label: "picture".to_string(),
+            shader: Some(picture.to_shader(
+                Some((sk_tile_mode(&mode), sk_tile_mode(&mode))),
+                skia_safe::FilterMode::Nearest,
+                &mat,
+                Some(&skia_safe::Rect::new(
+                    0.0,
+                    0.0,
+                    tile_size[0] as f32,
+                    tile_size[1] as f32,
+                )),
+            )),
+        })
+    }
+    fn linear_gradient(
+        start: NumericSexp,
+        end: NumericSexp,
+        from: NumericSexp,
+        to: NumericSexp,
+        // pos: NumericSexp,
+        mode: &TileMode,
+        flags: LogicalSexp,
+        transform: NumericSexp,
+    ) -> savvy::Result<Self> {
+        if start.len() != 2 || end.len() != 2 || from.len() != 4 || to.len() != 4 {
+            return Err(savvy_err!("Invalid arguments"));
+        }
+        let mat = as_matrix(&transform)?;
+        let start = start.as_slice_f64();
+        let end = end.as_slice_f64();
+        let from = from.as_slice_f64();
+        let to = to.as_slice_f64();
+        let flags = flags.to_vec()[0];
+        let shader_linear_gradient = skia_safe::Shader::linear_gradient(
+            (
+                (start[0] as f32, start[1] as f32),
+                (end[0] as f32, end[1] as f32),
+            ),
+            skia_safe::gradient_shader::GradientShaderColors::from(
+                [
+                    skia_safe::Color::from_argb(
+                        from[3] as u8,
+                        from[0] as u8,
+                        from[1] as u8,
+                        from[2] as u8,
+                    ),
+                    skia_safe::Color::from_argb(to[3] as u8, to[0] as u8, to[1] as u8, to[2] as u8),
+                ]
+                .as_slice(),
+            ),
+            None,
+            sk_tile_mode(&mode),
+            skia_safe::gradient_shader::Flags::from_bits(flags as u32).or(None),
+            Some(&mat),
+        );
+        Ok(Shader {
+            label: "linear_gradient".to_string(),
+            shader: shader_linear_gradient,
+        })
+    }
+    fn radial_gradient(
+        center: NumericSexp,
+        radius: NumericScalar,
+        from: NumericSexp,
+        to: NumericSexp,
+        // pos: NumericSexp,
+        mode: &TileMode,
+        flags: LogicalSexp,
+        transform: NumericSexp,
+    ) -> savvy::Result<Self> {
+        if center.len() != 2 || from.len() != 4 || to.len() != 4 {
+            return Err(savvy_err!("Invalid arguments"));
+        }
+        let mat = as_matrix(&transform)?;
+        let center = center.as_slice_f64();
+        let from = from.as_slice_f64();
+        let to = to.as_slice_f64();
+        let radius = radius.as_f64();
+        let flags = flags.to_vec()[0];
+        let shader_radial_gradient = skia_safe::Shader::radial_gradient(
+            (center[0] as f32, center[1] as f32),
+            radius as f32,
+            skia_safe::gradient_shader::GradientShaderColors::from(
+                [
+                    skia_safe::Color::from_argb(
+                        from[3] as u8,
+                        from[0] as u8,
+                        from[1] as u8,
+                        from[2] as u8,
+                    ),
+                    skia_safe::Color::from_argb(to[3] as u8, to[0] as u8, to[1] as u8, to[2] as u8),
+                ]
+                .as_slice(),
+            ),
+            None,
+            sk_tile_mode(&mode),
+            skia_safe::gradient_shader::Flags::from_bits(flags as u32).or(None),
+            Some(&mat),
+        );
+        Ok(Shader {
+            label: "radial_gradient".to_string(),
+            shader: shader_radial_gradient,
+        })
+    }
+    fn conical_gradient(
+        start: NumericSexp,
+        end: NumericSexp,
+        radii: NumericSexp,
+        from: NumericSexp,
+        to: NumericSexp,
+        // pos: NumericSexp,
+        mode: &TileMode,
+        flags: LogicalSexp,
+        transform: NumericSexp,
+    ) -> savvy::Result<Self> {
+        if start.len() != 2
+            || end.len() != 2
+            || radii.len() != 2
+            || from.len() != 4
+            || to.len() != 4
+        {
+            return Err(savvy_err!("Invalid arguments"));
+        }
+        let mat = as_matrix(&transform)?;
+        let start = start.as_slice_f64();
+        let end = end.as_slice_f64();
+        let radii = radii.as_slice_f64();
+        let from = from.as_slice_f64();
+        let to = to.as_slice_f64();
+        let flags = flags.to_vec()[0];
+        let shader_conical_gradient = skia_safe::Shader::two_point_conical_gradient(
+            (start[0] as f32, start[1] as f32),
+            radii[0] as f32,
+            (end[0] as f32, end[1] as f32),
+            radii[1] as f32,
+            skia_safe::gradient_shader::GradientShaderColors::from(
+                [
+                    skia_safe::Color::from_argb(
+                        from[3] as u8,
+                        from[0] as u8,
+                        from[1] as u8,
+                        from[2] as u8,
+                    ),
+                    skia_safe::Color::from_argb(to[3] as u8, to[0] as u8, to[1] as u8, to[2] as u8),
+                ]
+                .as_slice(),
+            ),
+            None,
+            sk_tile_mode(&mode),
+            skia_safe::gradient_shader::Flags::from_bits(flags as u32).or(None),
+            Some(&mat),
+        );
+        Ok(Shader {
+            label: "conical_gradient".to_string(),
+            shader: shader_conical_gradient,
+        })
+    }
+    fn sweep_gradient(
+        center: NumericSexp,
+        start_angle: NumericScalar,
+        end_angle: NumericScalar,
+        from: NumericSexp,
+        to: NumericSexp,
+        // pos: NumericSexp,
+        mode: &TileMode,
+        flags: LogicalSexp,
+        transform: NumericSexp,
+    ) -> savvy::Result<Self> {
+        if center.len() != 2 || from.len() != 4 || to.len() != 4 {
+            return Err(savvy_err!("Invalid arguments"));
+        }
+        let mat = as_matrix(&transform)?;
+        let center = center.as_slice_f64();
+        let from = from.as_slice_f64();
+        let to = to.as_slice_f64();
+        let start = start_angle.as_f64();
+        let end = end_angle.as_f64();
+        let flags = flags.to_vec()[0];
+        let shader_sweep_gradient = skia_safe::Shader::sweep_gradient(
+            (center[0] as f32, center[1] as f32),
+            skia_safe::gradient_shader::GradientShaderColors::from(
+                [
+                    skia_safe::Color::from_argb(
+                        from[3] as u8,
+                        from[0] as u8,
+                        from[1] as u8,
+                        from[2] as u8,
+                    ),
+                    skia_safe::Color::from_argb(to[3] as u8, to[0] as u8, to[1] as u8, to[2] as u8),
+                ]
+                .as_slice(),
+            ),
+            None,
+            sk_tile_mode(&mode),
+            Some((start as f32, end as f32)),
+            skia_safe::gradient_shader::Flags::from_bits(flags as u32).or(None),
+            Some(&mat),
+        );
+        Ok(Shader {
+            label: "sweep_gradient".to_string(),
+            shader: shader_sweep_gradient,
         })
     }
 }

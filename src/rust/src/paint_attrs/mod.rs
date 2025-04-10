@@ -1,7 +1,7 @@
 pub mod font;
-pub mod image_filter;
-pub mod path_effect;
-pub mod shader;
+mod image_filter;
+mod path_effect;
+mod shader;
 mod stroke;
 
 use savvy::{savvy, savvy_err, NumericScalar, NumericSexp, StringSexp};
@@ -115,10 +115,7 @@ pub fn num2colors(color: &NumericSexp) -> Option<Vec<skia_safe::Color>> {
 /// @returns A numeric vector.
 /// @noRd
 #[savvy]
-fn sk_get_text_width(
-    text: savvy::StringSexp,
-    props: PaintAttrs,
-) -> savvy::Result<savvy::Sexp> {
+fn sk_get_text_width(text: savvy::StringSexp, props: PaintAttrs) -> savvy::Result<savvy::Sexp> {
     let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
     let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
     let mut out = savvy::OwnedRealSexp::new(text.len())?;
@@ -156,7 +153,6 @@ pub enum PointMode {
     Lines,
     Polygon,
 }
-
 
 /// VertexMode (0-2)
 ///
