@@ -19,7 +19,7 @@
 #' @param point `NULL` or a double matrix where each row is the point
 #' at which each character in `text` is drawn.
 #' For example, if `text` is a character vector of 5 and 3 length strings,
-#' `point` must be a 8x2 matrix.
+#' `point` must contain 8 points.
 #' If `NULL`, `text` is drawn at `c(0, props[["fontsize"]])` naturally.
 #' @inheritParams param-img-and-props
 #' @returns For `add_text()`, a raw vector of picture.
@@ -66,9 +66,10 @@ text_layout_horizontal <- function(text, props = paint()) {
   n_chars <- sum(nchar(text))
   vec <- c(
     seq(props[["fontsize"]] / 4, props[["fontsize"]] * n_chars, by = props[["fontsize"]]),
-    rep_len(props[["fontsize"]], n_chars)
+    rep_len(props[["fontsize"]], n_chars),
+    rep_len(1, n_chars)
   )
-  matrix(vec, ncol = 2)
+  matrix(vec, ncol = 3)
 }
 
 #' @rdname add_text
@@ -77,9 +78,10 @@ text_layout_vertical <- function(text, props = paint()) {
   n_chars <- sum(nchar(text))
   vec <- c(
     rep_len(props[["fontsize"]], n_chars),
-    seq(props[["fontsize"]] / 4, props[["fontsize"]] * n_chars, by = props[["fontsize"]])
+    seq(props[["fontsize"]] / 4, props[["fontsize"]] * n_chars, by = props[["fontsize"]]),
+    rep_len(1, n_chars)
   )
-  matrix(vec, ncol = 2)
+  matrix(vec, ncol = 3)
 }
 
 #' @rdname add_text

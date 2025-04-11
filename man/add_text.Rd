@@ -23,7 +23,7 @@ text_width(text, props = paint())
 \item{point}{\code{NULL} or a double matrix where each row is the point
 at which each character in \code{text} is drawn.
 For example, if \code{text} is a character vector of 5 and 3 length strings,
-\code{point} must be a 8x2 matrix.
+\code{point} must contain 8 points.
 If \code{NULL}, \code{text} is drawn at \code{c(0, props[["fontsize"]])} naturally.}
 
 \item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
