@@ -8,6 +8,7 @@
 ^src/rust/\.vscode$
 ^src/rust/target$
 
+^\.devcontainer$
 ^\.github$
 ^\.vscode$
 ^ninja-build$
