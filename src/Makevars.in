@@ -25,7 +25,7 @@ $(STATLIB):
 		export CFLAGS="$(CFLAGS)" && \
 		export RUSTFLAGS="$(RUSTFLAGS)" && \
 		if [ "$(TARGET)" != "wasm32-unknown-emscripten" ]; then \
-			export EMCC_CFLAGS="-s ERROR_ON_UNDEFINED_SYMBOLS=0" && \
+			export EMCC_CFLAGS="-s ERROR_ON_UNDEFINED_SYMBOLS=0 -s MAX_WEBGL_VERSION=2 -s EXPORTED_RUNTIME_METHODS=GL" && \
 			cargo build $(CARGO_BUILD_ARGS); \
 		else \
 			export CARGO_PROFILE_DEV_PANIC="abort" && \
