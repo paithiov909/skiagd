@@ -51,9 +51,9 @@ checksum = "5c8214115b7bf84099f1309324e63141d4c5d7cc26862f97a0a857dbefe165bd"
 
 [[package]]
 name = "cc"
-version = "1.2.18"
+version = "1.2.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "525046617d8376e3db1deffb079e91cef90a89fc3ca5c185bbf8c9ecdd15cd5c"
+checksum = "8e3a13707ac958681c13b39b458c073d0d9bc8a22cb1b2f4c8e55eb72c13f362"
 dependencies = [
  "shlex",
 ]
@@ -215,9 +215,9 @@ dependencies = [
 
 [[package]]
 name = "linux-raw-sys"
-version = "0.9.3"
+version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe7db12097d22ec582439daf8618b8fdd1a7bef6270e9af3b1ebcd30893cf413"
+checksum = "cd945864f07fe9f5371a27ad7b52a172b4b499999f1d97574c9fa68373937e12"
 
 [[package]]
 name = "log"
@@ -239,9 +239,9 @@ checksum = "68354c5c6bd36d73ff3feceb05efa59b6acb7626617f4962be322a825e61f79a"
 
 [[package]]
 name = "miniz_oxide"
-version = "0.8.7"
+version = "0.8.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ff70ce3e48ae43fa075863cef62e8b43b71a4f2382229920e0df362592919430"
+checksum = "3be647b768db090acb35d5ec5db2b0e1f1de11133ca123b9eacf5137868f892a"
 dependencies = [
  "adler2",
 ]
@@ -355,9 +355,9 @@ checksum = "28d3b2b1366ec20994f1fd18c3c594f05c5dd4bc44d8bb0c1c632c8d6829481f"
 
 [[package]]
 name = "savvy"
-version = "0.8.8"
+version = "0.8.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "756baa5179a4959c0cff23ce685a5618affd5f6abe4de321b908789b2599348c"
+checksum = "e4098ef9d68ba6db67d6121123139728dc24835647db93f24383a768dc7ba3e7"
 dependencies = [
  "cc",
  "rustversion",
@@ -367,9 +367,9 @@ dependencies = [
 
 [[package]]
 name = "savvy-bindgen"
-version = "0.8.8"
+version = "0.8.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d26980d4bd6623bbea28567be980d5925954bd9d317f9ea62413838df11ba3e"
+checksum = "cee6342af3ed057a8041f06b62f487f0f860735f73ddec057a65c25dcfbfa939"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -378,15 +378,15 @@ dependencies = [
 
 [[package]]
 name = "savvy-ffi"
-version = "0.8.8"
+version = "0.8.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "805f561ddd10ad204f6f75df1deba1ea244c355d2be24e6c587356297c4ff383"
+checksum = "96070ab1ac49059b745129d166e26601ed7e3f4512da1024b9cae175c3dc8101"
 
 [[package]]
 name = "savvy-macro"
-version = "0.8.8"
+version = "0.8.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a6b2104e4615d1d5409bed7aaf8a5e58efd80fa6c243c8af039f68af7f3b9fed"
+checksum = "6bfd334a82c7736d54ec40cd27efd5d4edce089676699b23aeaa9947b22b07ac"
 dependencies = [
  "proc-macro2",
  "quote",
