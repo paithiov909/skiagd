@@ -5,6 +5,11 @@ PROFILE = @PROFILE@
 # Add flags if necessary
 RUSTFLAGS =
 
+# This is passed fine to wasm-ld called by rwasm.
+# However, the build is failing with the current configuration
+# because it seems that `-fPIC` needs to be passed when building Skia for WebR.
+WASM_LDFLAGS = -sERROR_ON_UNDEFINED_SYMBOLS=0 -sMAX_WEBGL_VERSION=2 -sMODULARIZE=1
+
 TARGET_DIR = $(CURDIR)/rust/target
 LIBDIR = $(TARGET_DIR)/$(TARGET)/$(subst dev,debug,$(PROFILE))
 STATLIB = $(LIBDIR)/libskiagd.a
@@ -29,7 +34,6 @@ $(STATLIB):
 		else \
 			export CARGO_PROFILE_DEV_PANIC="abort" && \
 			export CARGO_PROFILE_RELEASE_PANIC="abort" && \
-			export EMCC_CFLAGS="-s ERROR_ON_UNDEFINED_SYMBOLS=0 -s MAX_WEBGL_VERSION=2 -s EXPORTED_RUNTIME_METHODS=GL" && \
 			cargo +nightly build $(CARGO_BUILD_ARGS) --target $(TARGET) -Zbuild-std=panic_abort,std; \
 		fi
 
