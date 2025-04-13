@@ -14,6 +14,9 @@ create_mapping <- function(src, dst) {
       src[, 2],
       dst[, 1],
       dst[, 2]
-    )
-  matrix(ret, ncol = 3)
+    ) |>
+    matrix(, ncol = 3)
+  # for compatibility with 'affiner' package
+  class(ret) <- c("transform2d", "at_matrix", class(ret))
+  ret
 }
