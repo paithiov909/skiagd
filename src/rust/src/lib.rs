@@ -402,6 +402,7 @@ unsafe fn sk_draw_line(
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
 /// @param mat Matrix for transforming picture.
+/// @param props PaintAttrs.
 /// @param x X coordinates of center.
 /// @param y Y coordinates of center.
 /// @param radius Circle radius.

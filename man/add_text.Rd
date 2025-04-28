@@ -26,7 +26,10 @@ For example, if \code{text} is a character vector of 5 and 3 length strings,
 \code{point} must contain 8 points.
 If \code{NULL}, \code{text} is drawn at \code{c(0, props[["fontsize"]])} naturally.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.
+For drawing functions, this can be a list of several painting attributes;
+if it is a nested list, the drawing operation is performed
+sequentially using each one.}
 }
 \value{
 For \code{add_text()}, a raw vector of picture.

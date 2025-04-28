@@ -16,6 +16,9 @@
 #' @returns A raw vector of picture.
 #' @export
 add_vertices <- function(img, vertices, colors = NULL, props = paint()) {
+  if (!inherits(props, "paint_attrs")) {
+    rlang::abort("Providing a nested `props` is not supported for `add_vertices`.")
+  }
   vertices <- vertices[seq_len(nrow(vertices) - (nrow(vertices) %% 3)), ]
   if (rlang::is_empty(vertices)) {
     rlang::abort("Requires at least 3 vertices.")

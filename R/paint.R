@@ -38,10 +38,13 @@ paint <- function(...) {
   if (all(!is.null(dots[["color"]]), !is.numeric(dots[["color"]]))) {
     dots[["color"]] <- col2rgba(dots[["color"]])
   }
-  purrr::list_assign(
-    default_attrs(),
-    !!!dots
-  )
+  ret <-
+    purrr::list_assign(
+      default_attrs(),
+      !!!dots
+    )
+  class(ret) <- c("paint_attrs", class(ret))
+  ret
 }
 
 dev_new_if_needed <- function() {

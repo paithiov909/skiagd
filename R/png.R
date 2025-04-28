@@ -7,6 +7,9 @@
 #' @returns A raw vector of picture.
 #' @export
 add_png <- function(img, png, left = 0, top = 0, props = paint()) {
+  if (!inherits(props, "paint_attrs")) {
+    rlang::abort("Providing a nested `props` is not supported for `add_png`.")
+  }
   sk_draw_png(
     props[["canvas_size"]],
     img,
@@ -23,6 +26,9 @@ add_png <- function(img, png, left = 0, top = 0, props = paint()) {
 #' @returns A raw vector of PNG image.
 #' @export
 as_png <- function(img, props = paint()) {
+  if (!inherits(props, "paint_attrs")) {
+    rlang::abort("Providing a nested `props` is not supported for `as_png`.")
+  }
   sk_as_png(props[["canvas_size"]], img, props[["transform"]])
 }
 

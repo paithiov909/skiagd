@@ -9,7 +9,10 @@ as_recordedplot(img, props = paint())
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.
+For drawing functions, this can be a list of several painting attributes;
+if it is a nested list, the drawing operation is performed
+sequentially using each one.}
 }
 \value{
 A \code{recordedplot} object. See \code{\link[grDevices:recordplot]{grDevices::recordPlot()}} for details.

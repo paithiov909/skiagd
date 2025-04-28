@@ -11,6 +11,9 @@
 add_path <- function(img, path,
                      transform = diag(1, 3),
                      props = paint()) {
+  if (!inherits(props, "paint_attrs")) {
+    rlang::abort("Providing a nested `props` is not supported for `add_path`.")
+  }
   sk_draw_path(
     props[["canvas_size"]],
     img,

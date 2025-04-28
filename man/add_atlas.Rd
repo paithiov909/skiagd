@@ -17,7 +17,10 @@ the amount of translation
 in the X-axis direction and in the Y-axis direction,
 and the X and Y coordinates of the pivot point.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.
+For drawing functions, this can be a list of several painting attributes;
+if it is a nested list, the drawing operation is performed
+sequentially using each one.}
 }
 \value{
 A raw vector of picture.

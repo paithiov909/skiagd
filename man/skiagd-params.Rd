@@ -2,13 +2,16 @@
 % Please edit documentation in R/aaa.R
 \name{param-img-and-props}
 \alias{param-img-and-props}
-\title{img and props}
+\title{Params for drawing functions}
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.
+For drawing functions, this can be a list of several painting attributes;
+if it is a nested list, the drawing operation is performed
+sequentially using each one.}
 }
 \description{
-img and props
+Params for drawing functions
 }
 \keyword{internal}

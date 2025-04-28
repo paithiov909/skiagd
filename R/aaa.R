@@ -1,9 +1,12 @@
-#' img and props
+#' Params for drawing functions
 #'
 #' @rdname skiagd-params
 #' @name param-img-and-props
 #' @param img A raw vector of picture.
 #' @param props A list of painting attributes out of [paint()].
+#' For drawing functions, this can be a list of several painting attributes;
+#' if it is a nested list, the drawing operation is performed
+#' sequentially using each one.
 #' @keywords internal
 NULL
 

@@ -16,7 +16,10 @@ the last \code{nrow(vertices) \%\% 3} points are ignored.}
 \item{colors}{An integer matrix where each \emph{\strong{column}} is an RGBA color
 for each vertex. If \code{NULL}, all vertices are drawn with \code{props[["color"]]}.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.
+For drawing functions, this can be a list of several painting attributes;
+if it is a nested list, the drawing operation is performed
+sequentially using each one.}
 }
 \value{
 A raw vector of picture.

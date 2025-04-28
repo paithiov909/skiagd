@@ -17,7 +17,10 @@ freeze(img, left = 0, top = 0, fill = "transparent", props = paint())
 This can be specified using named colors or hexadecimal color codes,
 which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.
+For drawing functions, this can be a list of several painting attributes;
+if it is a nested list, the drawing operation is performed
+sequentially using each one.}
 }
 \value{
 A raw vector of picture.

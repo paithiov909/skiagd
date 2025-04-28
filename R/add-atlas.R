@@ -11,17 +11,28 @@
 #' @returns A raw vector of picture.
 #' @export
 add_atlas <- function(img, png, rsx_trans, props = paint()) {
-  sk_draw_atlas(
-    props[["canvas_size"]],
-    img,
-    props[["transform"]],
-    as_paint_attrs(props),
-    png,
-    rsx_trans[, 1],
-    rsx_trans[, 2],
-    rsx_trans[, 3],
-    rsx_trans[, 4],
-    rsx_trans[, 5],
-    rsx_trans[, 6]
-  )
+  if (!inherits(props, "paint_attrs")) {
+    purrr::reduce(seq_along(props), \(curr, i) {
+      add_atlas(
+        curr,
+        png,
+        rsx_trans[i, , drop = FALSE],
+        props = props[[i]]
+      )
+    }, .init = img)
+  } else {
+    sk_draw_atlas(
+      props[["canvas_size"]],
+      img,
+      props[["transform"]],
+      as_paint_attrs(props),
+      png,
+      rsx_trans[, 1],
+      rsx_trans[, 2],
+      rsx_trans[, 3],
+      rsx_trans[, 4],
+      rsx_trans[, 5],
+      rsx_trans[, 6]
+    )
+  }
 }
