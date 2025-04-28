@@ -18,8 +18,16 @@ used to create it.
 
 You can review contents of \code{.skp} files
 with the \href{https://skia.org/docs/dev/tools/debugger/}{Skia debugger}
-if they are compatible with the wasm version.
+if they are compatible with the version.
 }
+\section{Notes}{
+
+\itemize{
+\item A serialized picture can hold only up to 100 drawing operations.
+If you need more, you can save the capacity by using \code{\link[=freeze]{freeze()}} as needed.
+}
+}
+
 \seealso{
 \href{https://shopify.github.io/react-native-skia/docs/shapes/pictures}{Pictures | React Native Skia}
 }

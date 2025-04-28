@@ -18,7 +18,8 @@ add_atlas <- function(img, png, rsx_trans, props = paint()) {
         png,
         rsx_trans[i, , drop = FALSE],
         props = props[[i]]
-      )
+      ) |>
+        freeze(props = props[[i]])
     }, .init = img)
   } else {
     sk_draw_atlas(

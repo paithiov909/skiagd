@@ -13,7 +13,8 @@ add_circle <- function(img, center, radius, props = paint()) {
         center[i, , drop = FALSE],
         radius[i],
         props = props[[i]]
-      )
+      ) |>
+        freeze(props = props[[i]])
     }, .init = img)
   } else {
     sk_draw_circle(

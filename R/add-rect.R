@@ -12,7 +12,8 @@ add_rect <- function(img, rect, props = paint()) {
         curr,
         rect[i, , drop = FALSE],
         props = props[[i]]
-      )
+      ) |>
+        freeze(props = props[[i]])
     }, .init = img)
   } else {
     sk_draw_rounded_rect(
@@ -47,7 +48,8 @@ add_rounded_rect <- function(img, rect, radii, props = paint()) {
         rect[i, , drop = FALSE],
         radii[i, , drop = FALSE],
         props = props[[i]]
-      )
+      ) |>
+        freeze(props = props[[i]])
     }, .init = img)
   } else {
     sk_draw_rounded_rect(
@@ -88,7 +90,8 @@ add_diff_rect <- function(img, outer, outer_radii, inner, inner_radii, props = p
         inner[i, , drop = FALSE],
         inner_radii[i, , drop = FALSE],
         props = props[[i]]
-      )
+      ) |>
+        freeze(props = props[[i]])
     }, .init = img)
   } else {
     sk_draw_diff_rect(

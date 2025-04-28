@@ -26,7 +26,11 @@ NULL
 #'
 #' You can review contents of `.skp` files
 #' with the [Skia debugger](https://skia.org/docs/dev/tools/debugger/)
-#' if they are compatible with the wasm version.
+#' if they are compatible with the version.
+#'
+#' @section Notes:
+#' * A serialized picture can hold only up to 100 drawing operations.
+#' If you need more, you can save the capacity by using [freeze()] as needed.
 #'
 #' @seealso
 #' [Pictures | React Native Skia](https://shopify.github.io/react-native-skia/docs/shapes/pictures)

@@ -13,7 +13,8 @@ add_line <- function(img, from, to, props = paint()) {
         from[i, , drop = FALSE],
         to[i, , drop = FALSE],
         props = props[[i]]
-      )
+      ) |>
+        freeze(props = props[[i]])
     }, .init = img)
   } else {
     sk_draw_line(

@@ -42,7 +42,8 @@ add_text_impl <- function(img, text, props = paint()) {
         curr,
         text[i],
         props = props[[i]]
-      )
+      ) |>
+        freeze(props = props[[i]])
     }, .init = img)
   } else {
     sk_draw_text(
@@ -63,7 +64,8 @@ add_textblob_impl <- function(img, text, point, props = paint()) {
         text[i],
         point[i, , drop = FALSE],
         props = props[[i]]
-      )
+      ) |>
+        freeze(props = props[[i]])
     }, .init = img)
   } else {
     if (sum(nchar(text)) != nrow(point)) {

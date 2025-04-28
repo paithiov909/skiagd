@@ -11,7 +11,8 @@ add_point <- function(img, point, props = paint()) {
         curr,
         point[i, , drop = FALSE],
         props = props[[i]]
-      )
+      ) |>
+        freeze(props = props[[i]])
     }, .init = img)
   } else {
     sk_draw_points(
