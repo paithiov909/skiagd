@@ -29,7 +29,7 @@
     ret <- rlang::eval_tidy(rhs)
   })
   rlang::try_fetch(
-    rlang::eval_tidy(lhs, data = list(time = time[["elapsed"]])),
+    rlang::eval_tidy(lhs, data = list(time = time)),
     error = function(e) {
       rlang::warn("Failed to evaluate lhs.", parent = e)
     }

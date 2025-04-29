@@ -28,7 +28,7 @@ c.Shader <- function(..., mode = paint()[["blend_mode"]]) {
 #' * `from_png(png, mode, transform)`: takes a PNG image and returns an image shader.
 #' * `from_runtime_effect(source, uniforms)`: takes a [RuntimeEffect] and returns a shader.
 #' * `color(rgba)`: takes a color and returns a color shader.
-#' * `blend(mode, dst, src)`: returns a shader that combines the given shaders with [BlendMode].
+#' * `blend(mode, dst, src)`: returns a shader where the given shaders are combined with [BlendMode].
 #' * `fractal_noise(freq, octaves, seed, tile_size)`: fractal perlin noise shader.
 #' * `turbulence(freq, octaves, seed, tile_size)`: turbulence noise shader.
 #' * `linear_gradient(start, end, from, to, mode, flags, transform)`: linear gradient shader.

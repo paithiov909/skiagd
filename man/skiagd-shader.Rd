@@ -72,7 +72,7 @@ The following shaders are available:
 \item \code{from_png(png, mode, transform)}: takes a PNG image and returns an image shader.
 \item \code{from_runtime_effect(source, uniforms)}: takes a \link{RuntimeEffect} and returns a shader.
 \item \code{color(rgba)}: takes a color and returns a color shader.
-\item \code{blend(mode, dst, src)}: returns a shader that combines the given shaders with \link{BlendMode}.
+\item \code{blend(mode, dst, src)}: returns a shader where the given shaders are combined with \link{BlendMode}.
 \item \code{fractal_noise(freq, octaves, seed, tile_size)}: fractal perlin noise shader.
 \item \code{turbulence(freq, octaves, seed, tile_size)}: turbulence noise shader.
 \item \code{linear_gradient(start, end, from, to, mode, flags, transform)}: linear gradient shader.
