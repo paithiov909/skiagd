@@ -37,7 +37,9 @@ as_png <- function(img, props = paint()) {
 #' This is mainly for testing purposes.
 #'
 #' @inheritParams param-img-and-props
-#' @returns A `recordedplot` object. See [grDevices::recordPlot()] for details.
+#' @returns
+#' A `recordedplot` object is invisibly returned.
+#' See [grDevices::recordPlot()] for details.
 #' @export
 as_recordedplot <- function(img, props = paint()) {
   if (!requireNamespace("fastpng", quietly = TRUE)) {
@@ -47,7 +49,7 @@ as_recordedplot <- function(img, props = paint()) {
     fastpng::read_png(type = "nativeraster", rgba = TRUE)
   grid::grid.newpage(recording = FALSE)
   grid::grid.raster(png)
-  grDevices::recordPlot(load = "skiagd")
+  invisible(grDevices::recordPlot(load = "skiagd"))
 }
 
 #' Plot picture as a raster

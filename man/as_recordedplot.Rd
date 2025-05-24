@@ -15,7 +15,8 @@ if it is a nested list, the drawing operation is performed
 sequentially using each one.}
 }
 \value{
-A \code{recordedplot} object. See \code{\link[grDevices:recordplot]{grDevices::recordPlot()}} for details.
+A \code{recordedplot} object is invisibly returned.
+See \code{\link[grDevices:recordplot]{grDevices::recordPlot()}} for details.
 }
 \description{
 This is mainly for testing purposes.
