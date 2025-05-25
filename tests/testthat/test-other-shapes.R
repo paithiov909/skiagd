@@ -15,6 +15,7 @@ test_that("add_atlas works", {
     ) |>
     as_png(props = paint(canvas_size = rect_size))
 
+  # NOTE: This is dependent on the canvas size.
   size <- dev_size()
   num_rects <- 250
   tx <- 25 + seq_len(num_rects) * ((size[1] / 2) / num_rects)
@@ -33,7 +34,7 @@ test_that("add_atlas works", {
   vdiffr::expect_doppelganger(
     "atlas",
     canvas("violetred") |>
-      add_atlas(sprite, trans) |>
+      add_atlas(sprite, as.matrix(trans)) |>
       as_recordedplot()
   )
 })
