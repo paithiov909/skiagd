@@ -7,7 +7,7 @@ on.exit(dev.off())
 
 test_that("add_atlas works", {
   rect_size <- as.integer(c(24, 11))
-  image <- canvas("transparent", canvas_size = rect_size) |>
+  sprite <- canvas("transparent", canvas_size = rect_size) |>
     add_rounded_rect(
       matrix(c(0, 0, rect_size[1], rect_size[2]), ncol = 4),
       matrix(c(6, 6), ncol = 2),
@@ -33,7 +33,7 @@ test_that("add_atlas works", {
   vdiffr::expect_doppelganger(
     "atlas",
     canvas("violetred") |>
-      add_atlas(image, trans) |>
+      add_atlas(sprite, trans) |>
       as_recordedplot()
   )
 })

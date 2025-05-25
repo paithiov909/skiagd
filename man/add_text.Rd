@@ -33,7 +33,7 @@ If \code{NULL}, \code{text} is drawn at \code{c(0, props[["fontsize"]])} natural
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
-If the function does not take care of \code{...}, they are simply ignored.}
+If the function does not matter them,  \code{...} is simply ignored.}
 
 \item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }

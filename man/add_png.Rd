@@ -22,7 +22,7 @@ add_png(img, png, left = 0, top = 0, ..., props = paint())
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
-If the function does not take care of \code{...}, they are simply ignored.}
+If the function does not matter them,  \code{...} is simply ignored.}
 
 \item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }

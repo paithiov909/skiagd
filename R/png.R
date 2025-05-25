@@ -43,7 +43,7 @@ as_recordedplot <- function(img, ..., props = paint()) {
     fastpng::read_png(type = "nativeraster", rgba = TRUE)
   grid::grid.newpage(recording = FALSE)
   grid::grid.raster(png)
-  invisible(grDevices::recordPlot(load = "skiagd"))
+  invisible(grDevices::recordPlot())
 }
 
 #' Plot picture as a raster

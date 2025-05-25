@@ -10,7 +10,7 @@
 #' * `color` must be an integer matrix where each ***column*** is an RGBA color for each shape.
 #'
 #' If they are not provided as named arguments, they will be taken from `props`.
-#' If the function does not take care of `...`, they are simply ignored.
+#' If the function does not matter them,  `...` is simply ignored.
 #' @keywords internal
 NULL
 

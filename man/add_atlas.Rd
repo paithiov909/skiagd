@@ -24,7 +24,7 @@ and the X and Y coordinates of the pivot point.}
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
-If the function does not take care of \code{...}, they are simply ignored.}
+If the function does not matter them,  \code{...} is simply ignored.}
 
 \item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
