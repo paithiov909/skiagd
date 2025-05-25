@@ -6,10 +6,7 @@
 #' @param top Top offset for drawing PNG image.
 #' @returns A raw vector of picture.
 #' @export
-add_png <- function(img, png, left = 0, top = 0, props = paint()) {
-  if (!inherits(props, "paint_attrs")) {
-    rlang::abort("Providing a nested `props` is not supported for `add_png`.")
-  }
+add_png <- function(img, png, left = 0, top = 0, ..., props = paint()) {
   sk_draw_png(
     props[["canvas_size"]],
     img,
@@ -25,10 +22,7 @@ add_png <- function(img, png, left = 0, top = 0, props = paint()) {
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of PNG image.
 #' @export
-as_png <- function(img, props = paint()) {
-  if (!inherits(props, "paint_attrs")) {
-    rlang::abort("Providing a nested `props` is not supported for `as_png`.")
-  }
+as_png <- function(img, ..., props = paint()) {
   sk_as_png(props[["canvas_size"]], img, props[["transform"]])
 }
 
@@ -41,11 +35,11 @@ as_png <- function(img, props = paint()) {
 #' A `recordedplot` object is invisibly returned.
 #' See [grDevices::recordPlot()] for details.
 #' @export
-as_recordedplot <- function(img, props = paint()) {
+as_recordedplot <- function(img, ..., props = paint()) {
   if (!requireNamespace("fastpng", quietly = TRUE)) {
     rlang::abort("fastpng package is required")
   }
-  png <- as_png(img, props) |>
+  png <- as_png(img, props = props) |>
     fastpng::read_png(type = "nativeraster", rgba = TRUE)
   grid::grid.newpage(recording = FALSE)
   grid::grid.raster(png)
@@ -57,11 +51,11 @@ as_recordedplot <- function(img, props = paint()) {
 #' @inheritParams param-img-and-props
 #' @returns `img` is returned invisibly.
 #' @export
-draw_img <- function(img, props = paint()) {
+draw_img <- function(img, ..., props = paint()) {
   if (!requireNamespace("fastpng", quietly = TRUE)) {
     rlang::abort("fastpng package is required")
   }
-  png <- as_png(img, props) |>
+  png <- as_png(img, props = props) |>
     fastpng::read_png(type = "nativeraster", rgba = TRUE)
   grid::grid.newpage(recording = FALSE)
   grid::grid.raster(png)
@@ -81,7 +75,7 @@ draw_img <- function(img, props = paint()) {
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export
-freeze <- function(img, left = 0, top = 0, fill = "transparent", props = paint()) {
+freeze <- function(img, left = 0, top = 0, fill = "transparent", ..., props = paint()) {
   img |>
     as_png(props = props) |>
     add_png(

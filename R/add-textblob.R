@@ -24,7 +24,7 @@
 #' @inheritParams param-img-and-props
 #' @returns For `add_text()`, a raw vector of picture.
 #' @export
-add_text <- function(img, text, point = NULL, props = paint()) {
+add_text <- function(img, text, point = NULL, ..., props = paint()) {
   if (anyNA(text)) {
     rlang::abort("`text` cannot contain NA.")
   }
@@ -36,51 +36,28 @@ add_text <- function(img, text, point = NULL, props = paint()) {
 }
 
 add_text_impl <- function(img, text, props = paint()) {
-  if (!inherits(props, "paint_attrs")) {
-    purrr::reduce(seq_along(props), \(curr, i) {
-      add_text_impl(
-        curr,
-        text[i],
-        props = props[[i]]
-      ) |>
-        freeze(props = props[[i]])
-    }, .init = img)
-  } else {
-    sk_draw_text(
-      props[["canvas_size"]],
-      img,
-      props[["transform"]],
-      as_paint_attrs(props),
-      text
-    )
-  }
+  sk_draw_text(
+    props[["canvas_size"]],
+    img,
+    props[["transform"]],
+    as_paint_attrs(props),
+    text
+  )
 }
 
 add_textblob_impl <- function(img, text, point, props = paint()) {
-  if (!inherits(props, "paint_attrs")) {
-    purrr::reduce(seq_along(props), \(curr, i) {
-      add_textblob_impl(
-        curr,
-        text[i],
-        point[i, , drop = FALSE],
-        props = props[[i]]
-      ) |>
-        freeze(props = props[[i]])
-    }, .init = img)
-  } else {
-    if (sum(nchar(text)) != nrow(point)) {
-      rlang::abort("Total number of characters in `text` and number of rows in `point` must be the same.")
-    }
-    sk_draw_textblob(
-      props[["canvas_size"]],
-      img,
-      props[["transform"]],
-      as_paint_attrs(props),
-      text,
-      point[, 1],
-      point[, 2]
-    )
+  if (sum(nchar(text)) != nrow(point)) {
+    rlang::abort("Total number of characters in `text` and number of rows in `point` must be the same.")
   }
+  sk_draw_textblob(
+    props[["canvas_size"]],
+    img,
+    props[["transform"]],
+    as_paint_attrs(props),
+    text,
+    point[, 1],
+    point[, 2]
+  )
 }
 
 #' @rdname add_text

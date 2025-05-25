@@ -7,7 +7,7 @@
 \alias{text_width}
 \title{Add text}
 \usage{
-add_text(img, text, point = NULL, props = paint())
+add_text(img, text, point = NULL, ..., props = paint())
 
 text_layout_horizontal(text, props = paint())
 
@@ -26,10 +26,16 @@ For example, if \code{text} is a character vector of 5 and 3 length strings,
 \code{point} must contain 8 points.
 If \code{NULL}, \code{text} is drawn at \code{c(0, props[["fontsize"]])} naturally.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.
-For drawing functions, this can be a list of several painting attributes;
-if it is a nested list, the drawing operation is performed
-sequentially using each one.}
+\item{...}{For some drawing functions, you can specify \code{width} and \code{color} as named arguments.
+\itemize{
+\item \code{width} must be a numeric vector of stroke widths for each shape.
+\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+}
+
+If they are not provided as named arguments, they will be taken from \code{props}.
+If the function does not take care of \code{...}, they are simply ignored.}
+
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 For \code{add_text()}, a raw vector of picture.

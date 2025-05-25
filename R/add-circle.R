@@ -5,26 +5,27 @@
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export
-add_circle <- function(img, center, radius, props = paint()) {
-  if (!inherits(props, "paint_attrs")) {
-    purrr::reduce(seq_along(props), \(curr, i) {
-      add_circle(
-        curr,
-        center[i, , drop = FALSE],
-        radius[i],
-        props = props[[i]]
-      ) |>
-        freeze(props = props[[i]])
-    }, .init = img)
-  } else {
-    sk_draw_circle(
-      props[["canvas_size"]],
-      img,
-      props[["transform"]],
-      as_paint_attrs(props),
-      center[, 1],
-      center[, 2],
-      radius
-    )
+add_circle <- function(img, center, radius, ..., props = paint()) {
+  dots <- rlang::list2(...)
+  width <- dots[["width"]]
+  if (is.null(width)) {
+    width <- rep(props[["width"]], nrow(center))
   }
+  color <- dots[["color"]]
+  if (is.null(color)) {
+    color <- rep(props[["color"]], nrow(center))
+  }
+  validate_length(nrow(center), radius, width)
+
+  sk_draw_circle(
+    props[["canvas_size"]],
+    img,
+    props[["transform"]],
+    as_paint_attrs(props),
+    center[, 1],
+    center[, 2],
+    radius,
+    width,
+    as.integer(color)
+  )
 }

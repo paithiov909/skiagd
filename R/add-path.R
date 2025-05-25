@@ -8,18 +8,28 @@
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export
-add_path <- function(img, path,
-                     transform = diag(1, 3),
+add_path <- function(img, path, transform = diag(1, 3),
+                     ...,
                      props = paint()) {
-  if (!inherits(props, "paint_attrs")) {
-    rlang::abort("Providing a nested `props` is not supported for `add_path`.")
+  dots <- rlang::list2(...)
+  width <- dots[["width"]]
+  if (is.null(width)) {
+    width <- rep(props[["width"]], length(path))
   }
+  color <- dots[["color"]]
+  if (is.null(color)) {
+    color <- rep(props[["color"]], length(path))
+  }
+  validate_length(length(width), path)
+
   sk_draw_path(
     props[["canvas_size"]],
     img,
     props[["transform"]],
     as_paint_attrs(props),
     path,
+    width,
+    as.integer(color),
     transform,
     props[["fill_type"]]
   )

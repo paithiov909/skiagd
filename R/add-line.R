@@ -5,27 +5,28 @@
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export
-add_line <- function(img, from, to, props = paint()) {
-  if (!inherits(props, "paint_attrs")) {
-    purrr::reduce(seq_along(props), \(curr, i) {
-      add_line(
-        curr,
-        from[i, , drop = FALSE],
-        to[i, , drop = FALSE],
-        props = props[[i]]
-      ) |>
-        freeze(props = props[[i]])
-    }, .init = img)
-  } else {
-    sk_draw_line(
-      props[["canvas_size"]],
-      img,
-      props[["transform"]],
-      as_paint_attrs(props),
-      from[, 1],
-      from[, 2],
-      to[, 1],
-      to[, 2]
-    )
+add_line <- function(img, from, to, ..., props = paint()) {
+  dots <- rlang::list2(...)
+  width <- dots[["width"]]
+  if (is.null(width)) {
+    width <- rep(props[["width"]], nrow(from))
   }
+  color <- dots[["color"]]
+  if (is.null(color)) {
+    color <- rep(props[["color"]], nrow(from))
+  }
+  validate_length(length(width), from[, 1], to[, 1])
+
+  sk_draw_line(
+    props[["canvas_size"]],
+    img,
+    props[["transform"]],
+    as_paint_attrs(props),
+    from[, 1],
+    from[, 2],
+    to[, 1],
+    to[, 2],
+    width,
+    as.integer(color)
+  )
 }

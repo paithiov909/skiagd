@@ -90,11 +90,13 @@ NULL
 #' @param x X coordinates of center.
 #' @param y Y coordinates of center.
 #' @param radius Circle radius.
+#' @param width Stroke width.
+#' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_circle` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`) {
+`sk_draw_circle` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_circle__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`)
+  .Call(savvy_sk_draw_circle__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`, `width`, `color`)
 }
 
 #' Draws outer and inner rounded rectangles
@@ -115,11 +117,13 @@ NULL
 #' @param inner_bottom Y coordinates of the bottom edge of the inner rectangle.
 #' @param inner_rx Axis lengths on X-axis of inner oval describing rounded corners.
 #' @param inner_ry Axis lengths on Y-axis of inner oval describing rounded corners.
+#' @param width Stroke width.
+#' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_diff_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `outer_left`, `outer_top`, `outer_right`, `outer_bottom`, `outer_rx`, `outer_ry`, `inner_left`, `inner_top`, `inner_right`, `inner_bottom`, `inner_rx`, `inner_ry`) {
+`sk_draw_diff_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `outer_left`, `outer_top`, `outer_right`, `outer_bottom`, `outer_rx`, `outer_ry`, `inner_left`, `inner_top`, `inner_right`, `inner_bottom`, `inner_rx`, `inner_ry`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_diff_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `outer_left`, `outer_top`, `outer_right`, `outer_bottom`, `outer_rx`, `outer_ry`, `inner_left`, `inner_top`, `inner_right`, `inner_bottom`, `inner_rx`, `inner_ry`)
+  .Call(savvy_sk_draw_diff_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `outer_left`, `outer_top`, `outer_right`, `outer_bottom`, `outer_rx`, `outer_ry`, `inner_left`, `inner_top`, `inner_right`, `inner_bottom`, `inner_rx`, `inner_ry`, `width`, `color`)
 }
 
 #' Draws lines
@@ -132,11 +136,13 @@ NULL
 #' @param from_y Y coordinates of start points.
 #' @param to_x X coordinates of end points.
 #' @param to_y Y coordinates of end points.
+#' @param width Stroke width.
+#' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_line` <- function(`size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`) {
+`sk_draw_line` <- function(`size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_line__impl, `size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`)
+  .Call(savvy_sk_draw_line__impl, `size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`, `width`, `color`)
 }
 
 #' Draws SVG paths
@@ -146,14 +152,16 @@ NULL
 #' @param mat1 Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param svg SVG strings to draw.
+#' @param width Stroke width.
+#' @param color Colors.
 #' @param mat2 Matrix for transforming SVG path.
 #' @param fill_type FillType.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_path` <- function(`size`, `curr_bytes`, `mat1`, `props`, `svg`, `mat2`, `fill_type`) {
+`sk_draw_path` <- function(`size`, `curr_bytes`, `mat1`, `props`, `svg`, `width`, `color`, `mat2`, `fill_type`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   `fill_type` <- .savvy_extract_ptr(`fill_type`, "FillType")
-  .Call(savvy_sk_draw_path__impl, `size`, `curr_bytes`, `mat1`, `props`, `svg`, `mat2`, `fill_type`)
+  .Call(savvy_sk_draw_path__impl, `size`, `curr_bytes`, `mat1`, `props`, `svg`, `width`, `color`, `mat2`, `fill_type`)
 }
 
 #' Draws PNG data as an image on canvas
@@ -200,11 +208,13 @@ NULL
 #' @param bottom Y coordinates of the bottom edge of the rectangles.
 #' @param rx Axis lengths on X-axis of oval describing rounded corners.
 #' @param ry Axis lengths on Y-axis of oval describing rounded corners.
+#' @param width Stroke width.
+#' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_rounded_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `left`, `top`, `right`, `bottom`, `rx`, `ry`) {
+`sk_draw_rounded_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `left`, `top`, `right`, `bottom`, `rx`, `ry`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_rounded_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `left`, `top`, `right`, `bottom`, `rx`, `ry`)
+  .Call(savvy_sk_draw_rounded_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `left`, `top`, `right`, `bottom`, `rx`, `ry`, `width`, `color`)
 }
 
 #' Draws text as textblobs
@@ -261,14 +271,14 @@ NULL
 #' @param props PaintAttrs.
 #' @param x X coordinates of points.
 #' @param y Y coordinates of points.
-#' @param colors Colors of vertices.
+#' @param color Colors of vertices.
 #' @param mode VertexMode.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_vertices` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `colors`, `mode`) {
+`sk_draw_vertices` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `color`, `mode`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   `mode` <- .savvy_extract_ptr(`mode`, "VertexMode")
-  .Call(savvy_sk_draw_vertices__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `colors`, `mode`)
+  .Call(savvy_sk_draw_vertices__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `color`, `mode`)
 }
 
 #' Get text width

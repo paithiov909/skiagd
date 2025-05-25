@@ -4,7 +4,15 @@
 \alias{add_diff_rect}
 \title{Add difference rectangles}
 \usage{
-add_diff_rect(img, outer, outer_radii, inner, inner_radii, props = paint())
+add_diff_rect(
+  img,
+  outer,
+  outer_radii,
+  inner,
+  inner_radii,
+  ...,
+  props = paint()
+)
 }
 \arguments{
 \item{img}{A raw vector of picture.}
@@ -21,10 +29,16 @@ XYWH (left, top, right, bottom).}
 \item{inner_radii}{A double matrix where each row is a pair of axis lengths
 on X-axis and Y-axis of inner oval describing rounded corners.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.
-For drawing functions, this can be a list of several painting attributes;
-if it is a nested list, the drawing operation is performed
-sequentially using each one.}
+\item{...}{For some drawing functions, you can specify \code{width} and \code{color} as named arguments.
+\itemize{
+\item \code{width} must be a numeric vector of stroke widths for each shape.
+\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+}
+
+If they are not provided as named arguments, they will be taken from \code{props}.
+If the function does not take care of \code{...}, they are simply ignored.}
+
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.

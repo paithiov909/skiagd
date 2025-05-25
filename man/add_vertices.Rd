@@ -4,7 +4,7 @@
 \alias{add_vertices}
 \title{Add vertices}
 \usage{
-add_vertices(img, vertices, colors = NULL, props = paint())
+add_vertices(img, vertices, ..., props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
@@ -13,13 +13,16 @@ add_vertices(img, vertices, colors = NULL, props = paint())
 If \code{nrow(vertices)} is not a multiple of 3,
 the last \code{nrow(vertices) \%\% 3} points are ignored.}
 
-\item{colors}{An integer matrix where each \emph{\strong{column}} is an RGBA color
-for each vertex. If \code{NULL}, all vertices are drawn with \code{props[["color"]]}.}
+\item{...}{For some drawing functions, you can specify \code{width} and \code{color} as named arguments.
+\itemize{
+\item \code{width} must be a numeric vector of stroke widths for each shape.
+\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.
-For drawing functions, this can be a list of several painting attributes;
-if it is a nested list, the drawing operation is performed
-sequentially using each one.}
+If they are not provided as named arguments, they will be taken from \code{props}.
+If the function does not take care of \code{...}, they are simply ignored.}
+
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.
@@ -28,7 +31,7 @@ A raw vector of picture.
 Add vertices
 }
 \details{
-When \code{colors} is provided, they will be combined with
+When \code{color} is explicitly provided, they will be combined with
 \code{props[["shader"]]} if present or opaque \code{props[["color"]]} if not.
 
 Therefore, if you want to paint each vertex with a different color,

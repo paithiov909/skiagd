@@ -5,30 +5,32 @@
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export
-add_rect <- function(img, rect, props = paint()) {
-  if (!inherits(props, "paint_attrs")) {
-    purrr::reduce(seq_along(props), \(curr, i) {
-      add_rect(
-        curr,
-        rect[i, , drop = FALSE],
-        props = props[[i]]
-      ) |>
-        freeze(props = props[[i]])
-    }, .init = img)
-  } else {
-    sk_draw_rounded_rect(
-      props[["canvas_size"]],
-      img,
-      props[["transform"]],
-      as_paint_attrs(props),
-      rect[, 1],
-      rect[, 2],
-      rect[, 3],
-      rect[, 4],
-      rep_len(.0, nrow(rect)),
-      rep_len(.0, nrow(rect))
-    )
+add_rect <- function(img, rect, ..., props = paint()) {
+  dots <- rlang::list2(...)
+  width <- dots[["width"]]
+  if (is.null(width)) {
+    width <- rep(props[["width"]], nrow(rect))
   }
+  color <- dots[["color"]]
+  if (is.null(color)) {
+    color <- rep(props[["color"]], nrow(rect))
+  }
+  validate_length(length(width), rect[, 1])
+
+  sk_draw_rounded_rect(
+    props[["canvas_size"]],
+    img,
+    props[["transform"]],
+    as_paint_attrs(props),
+    rect[, 1],
+    rect[, 2],
+    rect[, 3],
+    rect[, 4],
+    rep_len(.0, nrow(rect)),
+    rep_len(.0, nrow(rect)),
+    width,
+    as.integer(color)
+  )
 }
 
 #' Add rounded rectangles
@@ -40,31 +42,38 @@ add_rect <- function(img, rect, props = paint()) {
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export
-add_rounded_rect <- function(img, rect, radii, props = paint()) {
-  if (!inherits(props, "paint_attrs")) {
-    purrr::reduce(seq_along(props), \(curr, i) {
-      add_rounded_rect(
-        curr,
-        rect[i, , drop = FALSE],
-        radii[i, , drop = FALSE],
-        props = props[[i]]
-      ) |>
-        freeze(props = props[[i]])
-    }, .init = img)
-  } else {
-    sk_draw_rounded_rect(
-      props[["canvas_size"]],
-      img,
-      props[["transform"]],
-      as_paint_attrs(props),
-      rect[, 1],
-      rect[, 2],
-      rect[, 3],
-      rect[, 4],
-      radii[, 1],
-      radii[, 2]
-    )
+add_rounded_rect <- function(img,
+                             rect, radii,
+                             ...,
+                             props = paint()) {
+  dots <- rlang::list2(...)
+  width <- dots[["width"]]
+  if (is.null(width)) {
+    width <- rep(props[["width"]], nrow(rect))
   }
+  color <- dots[["color"]]
+  if (is.null(color)) {
+    color <- rep(props[["color"]], nrow(rect))
+  }
+  validate_length(
+    length(width),
+    rect[, 1],
+    radii[, 1]
+  )
+  sk_draw_rounded_rect(
+    props[["canvas_size"]],
+    img,
+    props[["transform"]],
+    as_paint_attrs(props),
+    rect[, 1],
+    rect[, 2],
+    rect[, 3],
+    rect[, 4],
+    radii[, 1],
+    radii[, 2],
+    width,
+    as.integer(color)
+  )
 }
 
 #' Add difference rectangles
@@ -80,37 +89,43 @@ add_rounded_rect <- function(img, rect, radii, props = paint()) {
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export
-add_diff_rect <- function(img, outer, outer_radii, inner, inner_radii, props = paint()) {
-  if (!inherits(props, "paint_attrs")) {
-    purrr::reduce(seq_along(props), \(curr, i) {
-      add_diff_rect(
-        curr,
-        outer[i, , drop = FALSE],
-        outer_radii[i, , drop = FALSE],
-        inner[i, , drop = FALSE],
-        inner_radii[i, , drop = FALSE],
-        props = props[[i]]
-      ) |>
-        freeze(props = props[[i]])
-    }, .init = img)
-  } else {
-    sk_draw_diff_rect(
-      props[["canvas_size"]],
-      img,
-      props[["transform"]],
-      as_paint_attrs(props),
-      outer[, 1],
-      outer[, 2],
-      outer[, 3],
-      outer[, 4],
-      outer_radii[, 1],
-      outer_radii[, 2],
-      inner[, 1],
-      inner[, 2],
-      inner[, 3],
-      inner[, 4],
-      inner_radii[, 1],
-      inner_radii[, 2]
-    )
+add_diff_rect <- function(img,
+                          outer, outer_radii,
+                          inner, inner_radii,
+                          ...,
+                          props = paint()) {
+  dots <- rlang::list2(...)
+  width <- dots[["width"]]
+  if (is.null(width)) {
+    width <- rep(props[["width"]], nrow(outer))
   }
+  color <- dots[["color"]]
+  if (is.null(color)) {
+    color <- rep(props[["color"]], nrow(outer))
+  }
+  validate_length(
+    length(width),
+    outer[, 1], outer_radii[, 1],
+    inner[, 1], inner_radii[, 1]
+  )
+  sk_draw_diff_rect(
+    props[["canvas_size"]],
+    img,
+    props[["transform"]],
+    as_paint_attrs(props),
+    outer[, 1],
+    outer[, 2],
+    outer[, 3],
+    outer[, 4],
+    outer_radii[, 1],
+    outer_radii[, 2],
+    inner[, 1],
+    inner[, 2],
+    inner[, 3],
+    inner[, 4],
+    inner_radii[, 1],
+    inner_radii[, 2],
+    width,
+    as.integer(color)
+  )
 }

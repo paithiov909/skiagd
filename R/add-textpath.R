@@ -22,10 +22,8 @@
 #' @export
 add_textpath <- function(img, text, path,
                          transform = diag(1, 3),
+                         ...,
                          props = paint()) {
-  if (!inherits(props, "paint_attrs")) {
-    rlang::abort("Providing a nested `props` is not supported for `add_textpath`.")
-  }
   sk_draw_textpath(
     props[["canvas_size"]],
     img,
