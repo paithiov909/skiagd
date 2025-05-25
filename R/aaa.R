@@ -4,9 +4,13 @@
 #' @name param-img-and-props
 #' @param img A raw vector of picture.
 #' @param props A list of painting attributes out of [paint()].
-#' For drawing functions, this can be a list of several painting attributes;
-#' if it is a nested list, the drawing operation is performed
-#' sequentially using each one.
+#' @param ... For some drawing functions, you can specify `width` and `color` as named arguments.
+#'
+#' * `width` must be a numeric vector of stroke widths for each shape.
+#' * `color` must be an integer matrix where each ***column*** is an RGBA color for each shape.
+#'
+#' If they are not provided as named arguments, they will be taken from `props`.
+#' If the function does not matter them,  `...` is simply ignored.
 #' @keywords internal
 NULL
 

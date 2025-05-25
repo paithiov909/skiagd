@@ -7,7 +7,7 @@ on.exit(dev.off())
 
 test_that("add_atlas works", {
   rect_size <- as.integer(c(24, 11))
-  image <- canvas("transparent", canvas_size = rect_size) |>
+  sprite <- canvas("transparent", canvas_size = rect_size) |>
     add_rounded_rect(
       matrix(c(0, 0, rect_size[1], rect_size[2]), ncol = 4),
       matrix(c(6, 6), ncol = 2),
@@ -15,6 +15,7 @@ test_that("add_atlas works", {
     ) |>
     as_png(props = paint(canvas_size = rect_size))
 
+  # NOTE: This is dependent on the canvas size.
   size <- dev_size()
   num_rects <- 250
   tx <- 25 + seq_len(num_rects) * ((size[1] / 2) / num_rects)
@@ -33,7 +34,7 @@ test_that("add_atlas works", {
   vdiffr::expect_doppelganger(
     "atlas",
     canvas("violetred") |>
-      add_atlas(image, trans) |>
+      add_atlas(sprite, as.matrix(trans)) |>
       as_recordedplot()
   )
 })
@@ -44,7 +45,7 @@ test_that("add_vertices works", {
     canvas("snow") |>
       add_vertices(
         matrix(c(64, 0, 128, 256, 0, 256), ncol = 2, byrow = TRUE),
-        col2rgb("violetred", alpha = TRUE) |>
+        color = col2rgb("violetred", alpha = TRUE) |>
           kronecker(matrix(1, 1, 3)),
         props = paint(
           shader = Shader$fractal_noise(c(.05, .05), 4, 123, c(16, 16))
@@ -52,7 +53,7 @@ test_that("add_vertices works", {
       ) |>
       add_vertices(
         matrix(c(64, 0, 128, 256, 0, 256), ncol = 2, byrow = TRUE),
-        col2rgb(c("#61dafb", "#fb61da", "#dafb61"), alpha = TRUE),
+        color = col2rgb(c("#61dafb", "#fb61da", "#dafb61"), alpha = TRUE),
         props = paint(
           transform = c(1, 0, 256, 0, 1, 0,  0, 0, 1),
           shader = Shader$fractal_noise(c(.05, .05), 4, 123, c(16, 16))

@@ -32,6 +32,7 @@ use skia_safe::Paint;
 ///
 /// @noRd
 #[savvy]
+#[derive(Clone)]
 pub struct PaintAttrs {
     pub paint: Paint,
     pub font_size: f32,
@@ -41,7 +42,7 @@ pub struct PaintAttrs {
 
 #[savvy]
 impl PaintAttrs {
-    pub fn set_attrs(
+    fn set_attrs(
         color: NumericSexp,
         style: &stroke::Style,
         join: &stroke::Join,
@@ -88,6 +89,17 @@ impl PaintAttrs {
     }
 }
 
+/// Temporarily reset props
+impl PaintAttrs {
+    pub fn reset_color(&mut self, color: skia_safe::Color) {
+        self.paint.set_color(color);
+    }
+    pub fn reset_width(&mut self, width: f64) {
+        self.paint.set_stroke_width(width as f32);
+    }
+}
+
+/// Split a numeric vector into colors
 pub fn num2colors(color: &NumericSexp) -> Option<Vec<skia_safe::Color>> {
     let data = color.as_slice_f64();
     let mut ret = Vec::new();
@@ -105,6 +117,15 @@ pub fn num2colors(color: &NumericSexp) -> Option<Vec<skia_safe::Color>> {
         None
     } else {
         Some(ret)
+    }
+}
+
+/// If colors are not fit to the argument, throws an error
+pub fn assert_len(actual: usize, expected: usize) -> anyhow::Result<(), savvy::Error> {
+    if actual != expected {
+        Err(savvy_err!("Color must have the same length as other arguments"))
+    } else {
+        Ok(())
     }
 }
 

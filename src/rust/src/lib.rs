@@ -109,6 +109,8 @@ unsafe fn sk_draw_png(
 /// @param mat1 Matrix for transforming picture.
 /// @param props PaintAttrs.
 /// @param svg SVG strings to draw.
+/// @param width Stroke width.
+/// @param color Colors.
 /// @param mat2 Matrix for transforming SVG path.
 /// @param fill_type FillType.
 /// @returns A raw vector of picture.
@@ -120,18 +122,32 @@ unsafe fn sk_draw_path(
     mat1: NumericSexp,
     props: PaintAttrs,
     svg: StringSexp,
+    width: NumericSexp,
+    color: NumericSexp,
     mat2: NumericSexp, // transform for svg
     fill_type: &paint_attrs::FillType,
 ) -> savvy::Result<savvy::Sexp> {
+    let width = width.as_slice_f64();
+    let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
+        // if matrix is too small to take color, implicitly use paint color
+        let mut ret: Vec<skia_safe::Color> = Vec::new();
+        ret.resize(width.len(), props.paint.color());
+        ret
+    });
+    paint_attrs::assert_len(color.len(), width.len())?;
+
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat1 = as_matrix(&mat1)?;
     let mat2 = as_matrix(&mat2)?;
+    let mut props = props.clone();
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat1), Some(&Paint::default()));
 
     for (i, s) in svg.iter().enumerate() {
+        props.reset_color(color[i]);
+        props.reset_width(width[i]);
         let path = skia_safe::utils::parse_path::from_svg(s)
             .ok_or_else(|| return savvy_err!("Failed to parse svg at {}", i + 1))?
             .set_fill_type(paint_attrs::sk_fill_type(&fill_type))
@@ -164,9 +180,9 @@ unsafe fn sk_draw_textpath(
     mat2: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
     // https://github.com/Shopify/react-native-skia/blob/main/packages/skia/cpp/api/recorder/Drawings.h#L238
-    if text.len() != svg.len() {
-        return Err(savvy_err!("Invalid text or svg. Expected same length"));
-    }
+    let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
+    let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
+
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat1 = as_matrix(&mat1)?;
     let mat2 = as_matrix(&mat2)?;
@@ -174,9 +190,6 @@ unsafe fn sk_draw_textpath(
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat1), Some(&Paint::default()));
-
-    let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
-    let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
 
     for (i, (t, s)) in text.iter().zip(svg.iter()).enumerate() {
         let path = skia_safe::utils::parse_path::from_svg(s)
@@ -205,6 +218,8 @@ unsafe fn sk_draw_textpath(
                 }
                 cont = meas.next().unwrap();
                 dist = width / 2.0;
+                // FIXME: need to handle when text is longer than path
+                // continue;
             }
             let (pos, tan) = cont
                 .pos_tan(dist)
@@ -246,19 +261,16 @@ unsafe fn sk_draw_textblob(
     x: NumericSexp,
     y: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    if x.len() != y.len() {
-        return Err(savvy_err!("Invalid x or y. Expected same length"));
-    }
+    let points = as_points(&x, &y);
+    let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
+    let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
+
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
-
-    let points = as_points(&x, &y);
-    let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
-    let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
 
     let mut chars_offset = 0;
     for (i, t) in text.iter().enumerate() {
@@ -294,15 +306,15 @@ unsafe fn sk_draw_text(
     props: PaintAttrs,
     text: StringSexp,
 ) -> savvy::Result<savvy::Sexp> {
+    let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
+    let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
+
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
-
-    let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
-    let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
 
     for (i, t) in text.iter().enumerate() {
         let blob = skia_safe::TextBlob::new(t, &font)
@@ -334,6 +346,9 @@ unsafe fn sk_draw_points(
     y: NumericSexp,
     mode: &paint_attrs::PointMode,
 ) -> savvy::Result<savvy::Sexp> {
+    let mode = paint_attrs::sk_point_mode(&mode);
+    let points = as_points(&x, &y);
+
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
 
@@ -341,8 +356,6 @@ unsafe fn sk_draw_points(
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
-    let mode = paint_attrs::sk_point_mode(&mode);
-    let points = as_points(&x, &y);
     canvas.draw_points(mode, &points, &props.paint);
     let picture = recorder.finish_recording()?;
     Ok(picture.into())
@@ -358,6 +371,8 @@ unsafe fn sk_draw_points(
 /// @param from_y Y coordinates of start points.
 /// @param to_x X coordinates of end points.
 /// @param to_y Y coordinates of end points.
+/// @param width Stroke width.
+/// @param color Colors.
 /// @returns A raw vector of picture.
 /// @noRd
 #[allow(unused_mut)]
@@ -371,22 +386,32 @@ unsafe fn sk_draw_line(
     from_y: NumericSexp,
     to_x: NumericSexp,
     to_y: NumericSexp,
+    width: NumericSexp,
+    color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    if from_x.len() != from_y.len() || to_x.len() != to_y.len() || from_x.len() != to_x.len() {
-        return Err(savvy_err!("All vectors must have the same length"));
-    }
+    let from_x = from_x.as_slice_f64();
+    let from_y = from_y.as_slice_f64();
+    let to_x = to_x.as_slice_f64();
+    let to_y = to_y.as_slice_f64();
+    let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
+        // if matrix is too small to take color, implicitly use paint color
+        let mut ret: Vec<skia_safe::Color> = Vec::new();
+        ret.resize(width.len(), props.paint.color());
+        ret
+    });
+    paint_attrs::assert_len(color.len(), width.len())?;
+
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
+    let mut props = props.clone();
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
-    let from_x = from_x.as_slice_f64();
-    let from_y = from_y.as_slice_f64();
-    let to_x = to_x.as_slice_f64();
-    let to_y = to_y.as_slice_f64();
-    for i in 0..from_x.len() {
+    for (i, w) in width.iter_f64().enumerate() {
+        props.reset_width(w);
+        props.reset_color(color[i]);
         canvas.draw_line(
             (from_x[i] as f32, from_y[i] as f32),
             (to_x[i] as f32, to_y[i] as f32),
@@ -406,6 +431,8 @@ unsafe fn sk_draw_line(
 /// @param x X coordinates of center.
 /// @param y Y coordinates of center.
 /// @param radius Circle radius.
+/// @param width Stroke width.
+/// @param color Colors.
 /// @returns A raw vector of picture.
 /// @noRd
 #[savvy]
@@ -417,21 +444,32 @@ unsafe fn sk_draw_circle(
     x: NumericSexp,
     y: NumericSexp,
     radius: NumericSexp,
+    width: NumericSexp,
+    color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    if x.len() != radius.len() || y.len() != radius.len() {
-        return Err(savvy_err!("Invalid center or radius. Expected same length"));
-    }
+    let x = x.as_slice_f64();
+    let y = y.as_slice_f64();
+    let radius = radius.as_slice_f64();
+    let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
+        // if matrix is too small to take color, implicitly use paint color
+        let mut ret: Vec<skia_safe::Color> = Vec::new();
+        ret.resize(width.len(), props.paint.color());
+        ret
+    });
+    paint_attrs::assert_len(color.len(), width.len())?;
+
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
+    let mut props = props.clone();
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
-    let x = x.as_slice_f64();
-    let y = y.as_slice_f64();
-    for (i, radii) in radius.iter_f64().enumerate() {
-        canvas.draw_circle((x[i] as f32, y[i] as f32), radii as f32, &props.paint);
+    for (i, w) in width.iter_f64().enumerate() {
+        props.reset_width(w);
+        props.reset_color(color[i]);
+        canvas.draw_circle((x[i] as f32, y[i] as f32), radius[i] as f32, &props.paint);
     }
     let picture = recorder.finish_recording()?;
     Ok(picture.into())
@@ -451,6 +489,8 @@ unsafe fn sk_draw_circle(
 /// @param bottom Y coordinates of the bottom edge of the rectangles.
 /// @param rx Axis lengths on X-axis of oval describing rounded corners.
 /// @param ry Axis lengths on Y-axis of oval describing rounded corners.
+/// @param width Stroke width.
+/// @param color Colors.
 /// @returns A raw vector of picture.
 /// @noRd
 #[savvy]
@@ -465,30 +505,34 @@ unsafe fn sk_draw_rounded_rect(
     bottom: NumericSexp,
     rx: NumericSexp,
     ry: NumericSexp,
+    width: NumericSexp,
+    color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    if left.len() != top.len()
-        || right.len() != top.len()
-        || bottom.len() != top.len()
-        || rx.len() != top.len()
-        || ry.len() != top.len()
-    {
-        return Err(savvy_err!("All vectors must have the same length"));
-    }
-    let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat)?;
-
     let left = left.as_slice_f64();
     let top = top.as_slice_f64();
     let right = right.as_slice_f64();
     let bottom = bottom.as_slice_f64();
     let rx = rx.as_slice_f64();
     let ry = ry.as_slice_f64();
+    let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
+        // if matrix is too small to take color, implicitly use paint color
+        let mut ret: Vec<skia_safe::Color> = Vec::new();
+        ret.resize(width.len(), props.paint.color());
+        ret
+    });
+    paint_attrs::assert_len(color.len(), width.len())?;
+
+    let picture = read_picture_bytes(&curr_bytes)?;
+    let mat = as_matrix(&mat)?;
+    let mut props = props.clone();
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
-    for i in 0..left.len() {
+    for (i, w) in width.iter_f64().enumerate() {
+        props.reset_width(w);
+        props.reset_color(color[i]);
         let rect = skia_safe::Rect::new(
             left[i] as f32,
             top[i] as f32,
@@ -519,6 +563,8 @@ unsafe fn sk_draw_rounded_rect(
 /// @param inner_bottom Y coordinates of the bottom edge of the inner rectangle.
 /// @param inner_rx Axis lengths on X-axis of inner oval describing rounded corners.
 /// @param inner_ry Axis lengths on Y-axis of inner oval describing rounded corners.
+/// @param width Stroke width.
+/// @param color Colors.
 /// @returns A raw vector of picture.
 /// @noRd
 #[savvy]
@@ -539,23 +585,9 @@ unsafe fn sk_draw_diff_rect(
     inner_bottom: NumericSexp,
     inner_rx: NumericSexp,
     inner_ry: NumericSexp,
+    width: NumericSexp,
+    color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    if outer_left.len() != outer_top.len()
-        || outer_right.len() != outer_top.len()
-        || outer_bottom.len() != outer_top.len()
-        || outer_rx.len() != outer_top.len()
-        || outer_ry.len() != outer_top.len()
-        || inner_left.len() != inner_top.len()
-        || inner_right.len() != inner_top.len()
-        || inner_bottom.len() != inner_top.len()
-        || inner_rx.len() != inner_top.len()
-        || inner_ry.len() != inner_top.len()
-    {
-        return Err(savvy_err!("All vectors must have the same length"));
-    }
-    let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat)?;
-
     let outer_left = outer_left.as_slice_f64();
     let outer_top = outer_top.as_slice_f64();
     let outer_right = outer_right.as_slice_f64();
@@ -570,11 +602,25 @@ unsafe fn sk_draw_diff_rect(
     let inner_rx = inner_rx.as_slice_f64();
     let inner_ry = inner_ry.as_slice_f64();
 
+    let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
+        // if matrix is too small to take color, implicitly use paint color
+        let mut ret: Vec<skia_safe::Color> = Vec::new();
+        ret.resize(width.len(), props.paint.color());
+        ret
+    });
+    paint_attrs::assert_len(color.len(), width.len())?;
+
+    let picture = read_picture_bytes(&curr_bytes)?;
+    let mat = as_matrix(&mat)?;
+    let mut props = props.clone();
+
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
-    for i in 0..outer_left.len() {
+    for (i, w) in width.iter_f64().enumerate() {
+        props.reset_width(w);
+        props.reset_color(color[i]);
         let outer = skia_safe::Rect::new(
             outer_left[i] as f32,
             outer_top[i] as f32,
@@ -627,26 +673,9 @@ unsafe fn sk_draw_atlas(
     anchor_x: NumericSexp,
     anchor_y: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    if scale.len() != radians.len()
-        || radians.len() != tx.len()
-        || tx.len() != ty.len()
-        || ty.len() != anchor_x.len()
-        || anchor_x.len() != anchor_y.len()
-    {
-        return Err(savvy_err!(
-            "All transform vectors must have the same length"
-        ));
-    }
-    let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat)?;
-
     let input = Data::new_bytes(png_bytes.as_slice());
     let image = Image::from_encoded_with_alpha_type(input, skia_safe::AlphaType::Premul)
         .ok_or_else(|| return savvy_err!("Failed to read PNG as image"))?;
-
-    let mut recorder = SkiaCanvas::setup(&size)?;
-    let canvas = recorder.start_recording();
-    canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
 
     let scale = scale.as_slice_f64();
     let radians = radians.as_slice_f64();
@@ -654,6 +683,7 @@ unsafe fn sk_draw_atlas(
     let ty = ty.as_slice_f64();
     let anchor_x = anchor_x.as_slice_f64();
     let anchor_y = anchor_y.as_slice_f64();
+
     let mut transforms: Vec<skia_safe::RSXform> = Vec::new();
     let mut rects: Vec<skia_safe::Rect> = Vec::new();
     for i in 0..scale.len() {
@@ -671,6 +701,13 @@ unsafe fn sk_draw_atlas(
             image.height() as f32,
         ));
     }
+    let picture = read_picture_bytes(&curr_bytes)?;
+    let mat = as_matrix(&mat)?;
+
+    let mut recorder = SkiaCanvas::setup(&size)?;
+    let canvas = recorder.start_recording();
+    canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
+
     canvas.draw_atlas(
         &image,
         &transforms,
@@ -681,7 +718,6 @@ unsafe fn sk_draw_atlas(
         None,
         &props.paint,
     );
-
     let picture = recorder.finish_recording()?;
     Ok(picture.into())
 }
@@ -694,7 +730,7 @@ unsafe fn sk_draw_atlas(
 /// @param props PaintAttrs.
 /// @param x X coordinates of points.
 /// @param y Y coordinates of points.
-/// @param colors Colors of vertices.
+/// @param color Colors of vertices.
 /// @param mode VertexMode.
 /// @returns A raw vector of picture.
 /// @noRd
@@ -706,30 +742,24 @@ unsafe fn sk_draw_vertices(
     props: PaintAttrs,
     x: NumericSexp,
     y: NumericSexp,
-    colors: NumericSexp,
+    color: NumericSexp,
     mode: &paint_attrs::VertexMode,
 ) -> savvy::Result<savvy::Sexp> {
-    if x.len() != y.len() {
-        return Err(savvy_err!("Invalid vertices."));
-    }
-    let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat)?;
-
     let mode = paint_attrs::sk_vertex_mode(&mode);
     let positions = as_points(&x, &y);
-    let colors = paint_attrs::num2colors(&colors).unwrap_or_else(|| {
+    let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
         // if matrix is too small to take color, implicitly use paint color
         let mut ret: Vec<skia_safe::Color> = Vec::new();
         ret.resize(positions.len(), props.paint.color());
         ret
     });
-    if colors.len() != positions.len() {
-        // if colors are not fit to positions, throw an error
-        return Err(savvy_err!(
-            "Colors must have same length as vertices triplets"
-        ));
-    }
-    let vertices = skia_safe::Vertices::new_copy(mode, &positions, &positions, &colors, None);
+    paint_attrs::assert_len(color.len(), positions.len())?;
+
+    let vertices = skia_safe::Vertices::new_copy(mode, &positions, &positions, &color, None);
+
+    let picture = read_picture_bytes(&curr_bytes)?;
+    let mat = as_matrix(&mat)?;
+
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat), Some(&Paint::default()));
