@@ -183,57 +183,46 @@ magick::image_read(img_data) |>
 ![README-test-plot-2](man/figures/README-test-plot-2.jpg)
 
 
-The following is a simple example of animation using [mp4encoder](https://github.com/coolbutuseless/mp4encoder), converted to gif for display.
+The following is a short animation of 'Mystery curves'. The code is based on [this post](https://georgemsavva.github.io/creativecoding/posts/mystery/).
 
 ```r
-library(mp4encoder)
-library(affiner)
+library(gifski)
 
-unigd::ugd(width = 848, height = 480)
-
-size <- dev_size("px")
-vc <- mp4_open("test.mp4", fps = 30)
-cv <- canvas("snow")
-state <- seq(0, 1, length.out = 90)
-trans <- transform2d()
-
-for (step in state) {
-  t <- tweenr::tween_at(0.1, 1, step, "linear")
-  frame <- cv |>
-    add_path(
-      "M361.453,485.937 C162.329,485.937 0.906,377.828 0.906,244.469 C0.906,111.109 162.329,3.000 361.453,3.000 C560.578,3.000 722.000,111.109 722.000,244.469 C722.000,377.828 560.578,485.937 361.453,485.937 ZM416.641,97.406 C265.289,97.406 142.594,171.314 142.594,262.484 C142.594,353.654 265.289,427.562 416.641,427.562 C567.992,427.562 679.687,377.033 679.687,262.484 C679.687,147.971 567.992,97.406 416.641,97.406 Z",
-      transform = trans %*% translate2d(128, -24) %*% scale2d(0.8),
-      props = paint(
-        fill_type = FillType$EvenOdd,
-        shader = Shader$radial_gradient(
-          c(size[1] / 2, size[2] / 2),
-          848 * step,
-          from = col2rgba("magenta"),
-          to = col2rgba("#83838bff"),
-          mode = TileMode$Clamp,
-          flags = FALSE,
-          transform = trans
-        )
-      )
-    ) |>
-    add_path(
-      "M550.000,377.000 C550.000,377.000 571.822,383.585 584.500,390.000 C588.899,392.226 596.510,396.668 602.000,402.500 C607.378,408.212 610.000,414.000 610.000,414.000 L696.000,559.000 L557.000,559.062 L492.000,437.000 C492.000,437.000 478.690,414.131 470.500,407.500 C463.668,401.969 460.755,400.000 454.000,400.000 C449.298,400.000 420.974,400.000 420.974,400.000 L421.000,558.974 L298.000,559.026 L298.000,152.938 L545.000,152.938 C545.000,152.938 657.500,154.967 657.500,262.000 C657.500,369.033 550.000,377.000 550.000,377.000 ZM496.500,241.024 L422.037,240.976 L422.000,310.026 L496.500,310.002 C496.500,310.002 531.000,309.895 531.000,274.877 C531.000,239.155 496.500,241.024 496.500,241.024 Z",
-      transform = trans %*% translate2d(128, -24) %*% scale2d(0.8),
-      props = paint(
-        color = "#276dc3ff",
-        fill_type = FillType$EvenOdd
-      )
-    ) |>
-    as_png() |>
-    png::readPNG(native = TRUE)
-
-  mp4_write(vc, frame)
+circle <- function(amp, freq, phase) {
+  amp * 1i^(freq * seq(0, 600, length.out = 260) + phase)
 }
+li <- seq(0, 1, length.out = 30)[-1]
 
-mp4_close(vc)
-dev.off()
+size <- c(120, 120) / 2
+trans <- matrix(c(20, 0, size[1], 0, 20, size[2], 0, 0, 1), ncol = 3)
+
+save_gif(lapply(seq_along(li), function(ai) {
+  a <- li[ai] * 5
+  l <- sin(pi * (2 * a - .5)) + 1
+
+  z <- circle(1, 1, 0) +
+    circle(l, ceiling(a), -8 * a) +
+    circle(l / 2 - 1, ceiling(((-a + 2.5) %% 5) - 5), -4 * a)
+  z2 <- c(z[-1], z[1])
+
+  hue <- (a + (Re(z / 10))) %% 1
+  colors <- grDevices::hsv(hue, 0.65, 1, alpha = 1)
+
+  canvas("#04010F") |>
+    add_circle(
+      matrix(c(Re(z), Im(z), rep_len(1, length(z))), ncol = 3) %*% trans,
+      rep_len(2, length(z)),
+      color = grDevices::col2rgb(colors, alpha = TRUE)
+    ) |>
+    add_line(
+      matrix(c(Re(z), Im(z), rep_len(1, length(z))), ncol = 3) %*% trans,
+      matrix(c(Re(z2), Im(z2), rep_len(1, length(z))), ncol = 3) %*% trans,
+      width = rep(0.1 + seq(0, 1, length.out = length(z) / 10), each = 10),
+      color = grDevices::col2rgb(colors, alpha = TRUE)
+    ) |>
+    draw_img()
+
+}), delay = 1 / 6, width = 120, height = 120, progress = TRUE)
 ```
 
-<img src="man/figures/README-test-plot-3.gif" alt="README-test-plot-3" width="50%" />
-
-Since the original [R Logo](https://www.r-project.org/logo/) is copyrighted by **2016 The R Foundation** and licensed under the [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), this animation is licensed under the same license.
+<img src="man/figures/animation.gif" alt="mystery-curves" width="50%" />
