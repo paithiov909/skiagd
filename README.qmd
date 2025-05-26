@@ -183,7 +183,7 @@ magick::image_read(img_data) |>
 ![README-test-plot-2](man/figures/README-test-plot-2.jpg)
 
 
-The following is a short animation of 'Mystery curves'. The code is based on [this post](https://georgemsavva.github.io/creativecoding/posts/mystery/).
+The following is a short animation of 'Mystery rose'. The code is based on [this post](https://georgemsavva.github.io/creativecoding/posts/mystery/).
 
 ```r
 library(gifski)
@@ -225,4 +225,4 @@ save_gif(lapply(seq_along(li), function(ai) {
 }), delay = 1 / 6, width = 120, height = 120, progress = TRUE)
 ```
 
-<img src="man/figures/animation.gif" alt="mystery-curves" width="50%" />
+<img src="man/figures/animation.gif" alt="mystery-rose" width="50%" />

@@ -24,7 +24,7 @@ test_that("drawing functions can take width and color", {
   trans <- matrix(c(100, 0, size[1], 0, 100, size[2], 0, 0, 1), ncol = 3)
 
   vdiffr::expect_doppelganger(
-    "mystery-curves",
+    "mystery-rose",
     canvas("#04010F") |>
       add_circle(
         matrix(c(Re(z), Im(z), rep_len(1, length(z))), ncol = 3) %*% trans,
