@@ -224,11 +224,12 @@ NULL
 #' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param text Text strings.
+#' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_text` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`) {
+`sk_draw_text` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_text__impl, `size`, `curr_bytes`, `mat`, `props`, `text`)
+  .Call(savvy_sk_draw_text__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `color`)
 }
 
 #' Draws textblobs
@@ -240,11 +241,12 @@ NULL
 #' @param text Text strings.
 #' @param x X coordinates of points where to draw each character.
 #' @param y Y coordinates of points where to draw each character.
+#' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_textblob` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `x`, `y`) {
+`sk_draw_textblob` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `x`, `y`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_textblob__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `x`, `y`)
+  .Call(savvy_sk_draw_textblob__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `x`, `y`, `color`)
 }
 
 #' Draws textpaths

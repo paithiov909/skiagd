@@ -249,6 +249,7 @@ unsafe fn sk_draw_textpath(
 /// @param text Text strings.
 /// @param x X coordinates of points where to draw each character.
 /// @param y Y coordinates of points where to draw each character.
+/// @param color Colors.
 /// @returns A raw vector of picture.
 /// @noRd
 #[savvy]
@@ -260,13 +261,22 @@ unsafe fn sk_draw_textblob(
     text: StringSexp,
     x: NumericSexp,
     y: NumericSexp,
+    color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
     let points = as_points(&x, &y);
     let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
     let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
+    let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
+        // if matrix is too small to take color, implicitly use paint color
+        let mut ret: Vec<skia_safe::Color> = Vec::new();
+        ret.resize(text.len(), props.paint.color());
+        ret
+    });
+    paint_attrs::assert_len(color.len(), text.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
+    let mut props = props.clone();
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
@@ -283,6 +293,7 @@ unsafe fn sk_draw_textblob(
         )
         .ok_or_else(|| return savvy_err!("Failed to create text blob at {}", i + 1))?;
         chars_offset += n_chars;
+        props.reset_color(color[i]);
         canvas.draw_text_blob(blob, (0, 0), &props.paint);
     }
     let picture = recorder.finish_recording()?;
@@ -296,6 +307,7 @@ unsafe fn sk_draw_textblob(
 /// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
 /// @param text Text strings.
+/// @param color Colors.
 /// @returns A raw vector of picture.
 /// @noRd
 #[savvy]
@@ -305,12 +317,21 @@ unsafe fn sk_draw_text(
     mat: NumericSexp,
     props: PaintAttrs,
     text: StringSexp,
+    color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
     let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
     let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
+    let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
+        // if matrix is too small to take color, implicitly use paint color
+        let mut ret: Vec<skia_safe::Color> = Vec::new();
+        ret.resize(text.len(), props.paint.color());
+        ret
+    });
+    paint_attrs::assert_len(color.len(), text.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat)?;
+    let mut props = props.clone();
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
@@ -318,7 +339,8 @@ unsafe fn sk_draw_text(
 
     for (i, t) in text.iter().enumerate() {
         let blob = skia_safe::TextBlob::new(t, &font)
-            .ok_or_else(|| return savvy_err!("Failed to create text blob at {}", i + 1))?;
+        .ok_or_else(|| return savvy_err!("Failed to create text blob at {}", i + 1))?;
+        props.reset_color(color[i]);
         canvas.draw_text_blob(&blob, (0.0 as f32, props.font_size), &props.paint);
     }
     let picture = recorder.finish_recording()?;

@@ -89,7 +89,6 @@ impl PaintAttrs {
     }
 }
 
-/// Temporarily reset props
 impl PaintAttrs {
     pub fn reset_color(&mut self, color: skia_safe::Color) {
         self.paint.set_color(color);
@@ -99,7 +98,7 @@ impl PaintAttrs {
     }
 }
 
-/// Split a numeric vector into colors
+/// Splits a numeric vector into colors
 pub fn num2colors(color: &NumericSexp) -> Option<Vec<skia_safe::Color>> {
     let data = color.as_slice_f64();
     let mut ret = Vec::new();

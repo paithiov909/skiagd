@@ -1,3 +1,4 @@
+use super::num2colors;
 use crate::canvas::read_picture_bytes;
 use crate::path_transform::as_matrix;
 use crate::runtime_effect;
@@ -26,20 +27,11 @@ impl Shader {
         Ok(out.into())
     }
     fn color(rgba: NumericSexp) -> savvy::Result<Self> {
-        if rgba.len() != 4 {
-            return Err(savvy_err!("Invalid color. Expected 4 elements"));
-        }
-        let color = rgba.as_slice_f64();
+        let color = num2colors(&rgba)
+            .ok_or_else(|| return savvy_err!("Invalid color. Expected 4 elements"))?;
         Ok(Shader {
             label: "color".to_string(),
-            shader: Some(skia_safe::shader::shaders::color(
-                skia_safe::Color::from_argb(
-                    color[3] as u8,
-                    color[0] as u8,
-                    color[1] as u8,
-                    color[2] as u8,
-                ),
-            )),
+            shader: Some(skia_safe::shader::shaders::color(color[0])),
         })
     }
     fn blend(mode: BlendMode, dst: &Shader, src: &Shader) -> savvy::Result<Self> {
@@ -464,7 +456,6 @@ pub enum BlendMode {
     Luminosity,
 }
 
-// FIXME: Don't export TileMode. shader functions should take tile mode as string.
 pub fn sk_tile_mode(mode: &TileMode) -> skia_safe::TileMode {
     match mode {
         TileMode::Clamp => skia_safe::TileMode::Clamp,

@@ -29,25 +29,36 @@ add_text <- function(img, text, point = NULL, ..., props = paint()) {
     rlang::abort("`text` cannot contain NA.")
   }
   if (is.null(point)) {
-    add_text_impl(img, text, props)
+    add_text_impl(img, text, props, ...)
   } else {
-    add_textblob_impl(img, text, point, props)
+    add_textblob_impl(img, text, point, props, ...)
   }
 }
 
-add_text_impl <- function(img, text, props = paint()) {
+add_text_impl <- function(img, text, props = paint(), ...) {
+  dots <- rlang::list2(...)
+  color <- dots[["color"]]
+  if (is.null(color)) {
+    color <- rep(props[["color"]], length(text))
+  }
   sk_draw_text(
     props[["canvas_size"]],
     img,
     props[["transform"]],
     as_paint_attrs(props),
-    text
+    text,
+    color
   )
 }
 
-add_textblob_impl <- function(img, text, point, props = paint()) {
+add_textblob_impl <- function(img, text, point, props = paint(), ...) {
   if (sum(nchar(text)) != nrow(point)) {
     rlang::abort("Total number of characters in `text` and number of rows in `point` must be the same.")
+  }
+  dots <- rlang::list2(...)
+  color <- dots[["color"]]
+  if (is.null(color)) {
+    color <- rep(props[["color"]], length(text))
   }
   sk_draw_textblob(
     props[["canvas_size"]],
@@ -56,7 +67,8 @@ add_textblob_impl <- function(img, text, point, props = paint()) {
     as_paint_attrs(props),
     text,
     point[, 1],
-    point[, 2]
+    point[, 2],
+    color
   )
 }
 

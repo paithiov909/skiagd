@@ -84,13 +84,13 @@ SEXP savvy_sk_draw_rounded_rect__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, 
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_text__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__text) {
-    SEXP res = savvy_sk_draw_text__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__text);
+SEXP savvy_sk_draw_text__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__text, SEXP c_arg__color) {
+    SEXP res = savvy_sk_draw_text__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__text, c_arg__color);
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_textblob__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__text, SEXP c_arg__x, SEXP c_arg__y) {
-    SEXP res = savvy_sk_draw_textblob__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__text, c_arg__x, c_arg__y);
+SEXP savvy_sk_draw_textblob__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__text, SEXP c_arg__x, SEXP c_arg__y, SEXP c_arg__color) {
+    SEXP res = savvy_sk_draw_textblob__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__text, c_arg__x, c_arg__y, c_arg__color);
     return handle_result(res);
 }
 
@@ -300,8 +300,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"savvy_sk_draw_png__impl", (DL_FUNC) &savvy_sk_draw_png__impl, 6},
     {"savvy_sk_draw_points__impl", (DL_FUNC) &savvy_sk_draw_points__impl, 7},
     {"savvy_sk_draw_rounded_rect__impl", (DL_FUNC) &savvy_sk_draw_rounded_rect__impl, 12},
-    {"savvy_sk_draw_text__impl", (DL_FUNC) &savvy_sk_draw_text__impl, 5},
-    {"savvy_sk_draw_textblob__impl", (DL_FUNC) &savvy_sk_draw_textblob__impl, 7},
+    {"savvy_sk_draw_text__impl", (DL_FUNC) &savvy_sk_draw_text__impl, 6},
+    {"savvy_sk_draw_textblob__impl", (DL_FUNC) &savvy_sk_draw_textblob__impl, 8},
     {"savvy_sk_draw_textpath__impl", (DL_FUNC) &savvy_sk_draw_textpath__impl, 7},
     {"savvy_sk_draw_vertices__impl", (DL_FUNC) &savvy_sk_draw_vertices__impl, 8},
     {"savvy_sk_get_text_width__impl", (DL_FUNC) &savvy_sk_get_text_width__impl, 2},
