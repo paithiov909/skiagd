@@ -160,114 +160,6 @@ unsafe fn sk_draw_path(
     Ok(picture.into())
 }
 
-/// Draws textpaths
-///
-/// @param size Canvas size.
-/// @param curr_bytes Current canvas state.
-/// @param mat1 Matrix for transforming picture.
-/// @param props PaintAttrs.
-/// @param text Text strings to draw along SVG paths.
-/// @param svg SVG paths.
-/// @returns A raw vector of picture.
-/// @noRd
-#[savvy]
-unsafe fn sk_draw_textpath(
-    size: IntegerSexp,
-    curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
-    props: PaintAttrs,
-    text: StringSexp,
-    svg: StringSexp,
-) -> savvy::Result<savvy::Sexp> {
-    // NOTE: Do we need to withdraw this function?
-    // https://github.com/Shopify/react-native-skia/blob/main/packages/skia/cpp/api/recorder/Drawings.h#L238
-    let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
-    let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
-
-    let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
-
-    let mut recorder = SkiaCanvas::setup(&size)?;
-    let canvas = recorder.start_recording();
-    canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
-
-    for (i, (t, s)) in text.iter().zip(svg.iter()).enumerate() {
-        let path = skia_safe::utils::parse_path::from_svg(s)
-            .ok_or_else(|| return savvy_err!("Failed to parse svg at {}", i + 1))?
-            .with_transform(&skia_safe::Matrix::default());
-        let ids = font.text_to_glyphs_vec(t.to_string());
-        let mut num_ids: Vec<f32> = Vec::new();
-        num_ids.resize(font.count_text(t.to_string()), 0.0);
-        let width_ptrs = num_ids.as_mut_slice();
-        font.get_widths_bounds(ids.as_slice(), Some(width_ptrs), None, Some(&props.paint));
-
-        let mut meas = skia_safe::ContourMeasureIter::from_path(&path, false, Some(1.0));
-        let mut dist = 0.0; // initial_offset
-        let mut rsx: Vec<skia_safe::RSXform> = Vec::new();
-        let mut cont = meas.next().unwrap();
-
-        let mut text_body = t;
-
-        for j in 0..font.count_text(t.to_string()) {
-            let width = width_ptrs[j];
-            dist += width / 2.0;
-            if dist > cont.length() {
-                if meas.next().is_none() {
-                    text_body = &t[..j];
-                    break;
-                }
-                cont = meas.next().unwrap();
-                dist = width / 2.0;
-                // FIXME: need to handle when text is longer than path
-                // continue;
-            }
-            let (pos, tan) = cont
-                .pos_tan(dist)
-                .ok_or_else(|| return savvy_err!("Failed to get pos"))?;
-            rsx.push(skia_safe::RSXform {
-                scos: tan.x,
-                ssin: tan.y,
-                tx: pos.x - (width / 2.0) * tan.x,
-                ty: pos.y - (width / 2.0) * tan.y,
-            });
-            dist += width / 2.0;
-        }
-        let blob = skia_safe::TextBlob::from_rsxform(&text_body, rsx.as_slice(), &font)
-            .ok_or_else(|| return savvy_err!("Failed to create text blob at {}", i + 1))?;
-        canvas.draw_text_blob(&blob, (0, 0), &props.paint);
-    }
-    let picture = recorder.finish_recording()?;
-    Ok(picture.into())
-}
-
-/// Draws textblobs
-///
-/// @param size Canvas size.
-/// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
-/// @param props PaintAttrs.
-/// @param text Text strings.
-/// @param x X coordinates of points where to draw each character.
-/// @param y Y coordinates of points where to draw each character.
-/// @param color Colors.
-/// @returns A raw vector of picture.
-/// @noRd
-#[allow(unused_variables)]
-#[savvy]
-unsafe fn sk_draw_textblob(
-    size: IntegerSexp,
-    curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
-    props: PaintAttrs,
-    text: StringSexp,
-    x: NumericSexp,
-    y: NumericSexp,
-    color: NumericSexp,
-) -> savvy::Result<savvy::Sexp> {
-    // TODO: remove and replace with sk_draw_text
-    return Err(savvy_err!("Defunct function"));
-}
-
 /// Draws text as textblobs
 ///
 /// @param size Canvas size.
@@ -275,7 +167,7 @@ unsafe fn sk_draw_textblob(
 /// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
 /// @param text Text strings.
-/// @param rsx_trans RSX transform for each text.
+/// @param rsx_trans RSX transform for each character.
 /// @param color Colors.
 /// @returns A raw vector of picture.
 /// @noRd

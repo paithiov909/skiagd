@@ -219,45 +219,13 @@ NULL
 #' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param text Text strings.
-#' @param rsx_trans RSX transform for each text.
+#' @param rsx_trans RSX transform for each character.
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_text` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `rsx_trans`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   .Call(savvy_sk_draw_text__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `rsx_trans`, `color`)
-}
-
-#' Draws textblobs
-#'
-#' @param size Canvas size.
-#' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
-#' @param props PaintAttrs.
-#' @param text Text strings.
-#' @param x X coordinates of points where to draw each character.
-#' @param y Y coordinates of points where to draw each character.
-#' @param color Colors.
-#' @returns A raw vector of picture.
-#' @noRd
-`sk_draw_textblob` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `x`, `y`, `color`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_textblob__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `x`, `y`, `color`)
-}
-
-#' Draws textpaths
-#'
-#' @param size Canvas size.
-#' @param curr_bytes Current canvas state.
-#' @param mat1 Matrix for transforming picture.
-#' @param props PaintAttrs.
-#' @param text Text strings to draw along SVG paths.
-#' @param svg SVG paths.
-#' @returns A raw vector of picture.
-#' @noRd
-`sk_draw_textpath` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `svg`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_textpath__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `svg`)
 }
 
 #' Draws vertices
