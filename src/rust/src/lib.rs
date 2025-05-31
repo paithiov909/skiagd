@@ -4,8 +4,8 @@ mod path_transform;
 mod runtime_effect;
 
 use canvas::{read_picture_bytes, SkiaCanvas};
-use paint_attrs::{font, PaintAttrs};
-use path_transform::{as_matrix, as_points, as_rects};
+use paint_attrs::PaintAttrs;
+use path_transform::as_matrix;
 
 use savvy::{savvy, savvy_err, IntegerSexp, NumericSexp, StringSexp};
 use skia_safe::{Data, Image, Paint};
@@ -52,9 +52,9 @@ unsafe fn sk_as_png(
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let size = size.to_vec();
-    let dat = as_png_data(size[0], size[1], &picture, &mat[0])?;
-    let mut ret = savvy::OwnedRawSexp::new(dat.len())?;
-    for (i, b) in dat.as_bytes().iter().enumerate() {
+    let data = as_png_data(size[0], size[1], &picture, &mat[0])?;
+    let mut ret = savvy::OwnedRawSexp::new(data.len())?;
+    for (i, b) in data.as_bytes().iter().enumerate() {
         ret.set_elt(i, *b)?;
     }
     Ok(ret.into())
@@ -151,7 +151,7 @@ unsafe fn sk_draw_path(
         props.reset_color(color[i]);
         props.reset_width(width[i]);
         let path = skia_safe::utils::parse_path::from_svg(s)
-            .ok_or_else(|| return savvy_err!("Failed to parse svg at {}", i + 1))?
+            .ok_or_else(|| return savvy_err!("Failed to parse svg at index {}", i + 1))?
             .set_fill_type(paint_attrs::sk_fill_type(&fill_type))
             .with_transform(&skia_safe::Matrix::default().set_rsxform(&transforms[i]));
         canvas.draw_path(&path, &props.paint);
@@ -181,7 +181,8 @@ unsafe fn sk_draw_text(
     rsx_trans: NumericSexp,
     color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
+    let typeface =
+        paint_attrs::font::match_family_style(props.font_family.as_str(), props.font_face)?;
     let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
     let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
         // if matrix is too small to take color, implicitly use paint color
@@ -212,7 +213,7 @@ unsafe fn sk_draw_text(
         trans_offset += n_chars;
 
         let blob = skia_safe::TextBlob::from_rsxform(&chars, trans, &font)
-            .ok_or_else(|| return savvy_err!("Failed to create text blob at {}", i + 1))?;
+            .ok_or_else(|| return savvy_err!("Failed to create text blob at index {}", i + 1))?;
 
         props.reset_color(color[i]);
         canvas.draw_text_blob(&blob, (0.0, 0.0), &props.paint);
@@ -243,7 +244,7 @@ unsafe fn sk_draw_points(
     mode: &paint_attrs::PointMode,
 ) -> savvy::Result<savvy::Sexp> {
     let mode = paint_attrs::sk_point_mode(&mode);
-    let points = as_points(&x, &y);
+    let points = path_transform::as_points(&x, &y);
 
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
@@ -285,8 +286,9 @@ unsafe fn sk_draw_line(
     width: NumericSexp,
     color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    let from = as_points(&from_x, &from_y);
-    let to = as_points(&to_x, &to_y);
+    let from = path_transform::as_points(&from_x, &from_y);
+    let to = path_transform::as_points(&to_x, &to_y);
+    let width = width.as_slice_f64();
     let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
         // if matrix is too small to take color, implicitly use paint color
         let mut ret: Vec<skia_safe::Color> = Vec::new();
@@ -303,10 +305,10 @@ unsafe fn sk_draw_line(
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
 
-    for (i, w) in width.iter_f64().enumerate() {
-        props.reset_width(w);
+    for (i, (from, to)) in from.iter().zip(to.iter()).enumerate() {
+        props.reset_width(width[i]);
         props.reset_color(color[i]);
-        canvas.draw_line(from[i], to[i], &props.paint);
+        canvas.draw_line(*from, *to, &props.paint);
     }
     let picture = recorder.finish_recording()?;
     Ok(picture.into())
@@ -337,14 +339,15 @@ unsafe fn sk_draw_circle(
     width: NumericSexp,
     color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    let center = as_points(&x, &y);
-    let radius = radius.as_slice_f64();
+    let center = path_transform::as_points(&x, &y);
+    let width = width.as_slice_f64();
     let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
         // if matrix is too small to take color, implicitly use paint color
         let mut ret: Vec<skia_safe::Color> = Vec::new();
         ret.resize(width.len(), props.paint.color());
         ret
     });
+    paint_attrs::assert_len("center", center.len(), width.len())?;
     paint_attrs::assert_len("color", color.len(), width.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
@@ -355,10 +358,10 @@ unsafe fn sk_draw_circle(
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
 
-    for (i, w) in width.iter_f64().enumerate() {
-        props.reset_width(w);
+    for (i, (center, radius)) in center.iter().zip(radius.iter_f64()).enumerate() {
+        props.reset_width(width[i]);
         props.reset_color(color[i]);
-        canvas.draw_circle(center[i], radius[i] as f32, &props.paint);
+        canvas.draw_circle(*center, radius as f32, &props.paint);
     }
     let picture = recorder.finish_recording()?;
     Ok(picture.into())
@@ -375,6 +378,7 @@ unsafe fn sk_draw_circle(
 /// @param xywh Rectangles.
 /// @param rx Axis lengths on X-axis of oval describing rounded corners.
 /// @param ry Axis lengths on Y-axis of oval describing rounded corners.
+/// @param rsx_trans RSX transform for each rectangle.
 /// @param width Stroke width.
 /// @param color Colors.
 /// @returns A raw vector of picture.
@@ -388,12 +392,12 @@ unsafe fn sk_draw_rounded_rect(
     xywh: NumericSexp,
     rx: NumericSexp,
     ry: NumericSexp,
+    rsx_trans: NumericSexp,
     width: NumericSexp,
     color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    let rects = as_rects(&xywh).ok_or_else(|| return savvy_err!("Failed to parse xywh"))?;
-    let rx = rx.as_slice_f64();
-    let ry = ry.as_slice_f64();
+    let rects = path_transform::as_rrects(&xywh, &rx, &ry)
+        .ok_or_else(|| return savvy_err!("Failed to parse xywh"))?;
     let width = width.as_slice_f64();
     let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
         // if matrix is too small to take color, implicitly use paint color
@@ -401,7 +405,10 @@ unsafe fn sk_draw_rounded_rect(
         ret.resize(width.len(), props.paint.color());
         ret
     });
+    let transforms = path_transform::as_rsx_trans(&rsx_trans)
+        .ok_or_else(|| return savvy_err!("Failed to parse rsx_trans"))?;
     paint_attrs::assert_len("color", color.len(), rects.len())?;
+    paint_attrs::assert_len("rsx_trans", transforms.len(), rects.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
@@ -414,7 +421,11 @@ unsafe fn sk_draw_rounded_rect(
     for (i, rect) in rects.iter().enumerate() {
         props.reset_width(width[i]);
         props.reset_color(color[i]);
-        canvas.draw_round_rect(rect, rx[i] as f32, ry[i] as f32, &props.paint);
+        let rect = rect
+            .clone()
+            .transform(&skia_safe::Matrix::default().set_rsxform(&transforms[i]))
+            .ok_or_else(|| return savvy_err!("Failed to transform rrect at index {}", i))?;
+        canvas.draw_rrect(&rect, &props.paint);
     }
     let picture = recorder.finish_recording()?;
     Ok(picture.into())
@@ -432,6 +443,7 @@ unsafe fn sk_draw_rounded_rect(
 /// @param inner_xywh Inner rectangles.
 /// @param inner_rx Axis lengths on X-axis of inner oval describing rounded corners.
 /// @param inner_ry Axis lengths on Y-axis of inner oval describing rounded corners.
+/// @param rsx_trans RSX transform for each rectangle.
 /// @param width Stroke width.
 /// @param color Colors.
 /// @returns A raw vector of picture.
@@ -448,17 +460,14 @@ unsafe fn sk_draw_diff_rect(
     inner_xywh: NumericSexp,
     inner_rx: NumericSexp,
     inner_ry: NumericSexp,
+    rsx_trans: NumericSexp,
     width: NumericSexp,
     color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    let outer =
-        as_rects(&outer_xywh).ok_or_else(|| return savvy_err!("Failed to parse outer xywh"))?;
-    let inner =
-        as_rects(&inner_xywh).ok_or_else(|| return savvy_err!("Failed to parse inner xywh"))?;
-    let outer_rx = outer_rx.as_slice_f64();
-    let outer_ry = outer_ry.as_slice_f64();
-    let inner_rx = inner_rx.as_slice_f64();
-    let inner_ry = inner_ry.as_slice_f64();
+    let outer = path_transform::as_rrects(&outer_xywh, &outer_rx, &outer_ry)
+        .ok_or_else(|| return savvy_err!("Failed to parse outer xywh"))?;
+    let inner = path_transform::as_rrects(&inner_xywh, &inner_rx, &inner_ry)
+        .ok_or_else(|| return savvy_err!("Failed to parse inner xywh"))?;
     let width = width.as_slice_f64();
     let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
         // if matrix is too small to take color, implicitly use paint color
@@ -466,7 +475,10 @@ unsafe fn sk_draw_diff_rect(
         ret.resize(width.len(), props.paint.color());
         ret
     });
+    let transforms = path_transform::as_rsx_trans(&rsx_trans)
+        .ok_or_else(|| return savvy_err!("Failed to parse rsx_trans"))?;
     paint_attrs::assert_len("color", color.len(), outer.len())?;
+    paint_attrs::assert_len("rsx_trans", transforms.len(), outer.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
@@ -479,9 +491,18 @@ unsafe fn sk_draw_diff_rect(
     for (i, (outer, inner)) in outer.iter().zip(inner.iter()).enumerate() {
         props.reset_width(width[i]);
         props.reset_color(color[i]);
-        let outer = skia_safe::RRect::new_rect_xy(outer, outer_rx[i] as f32, outer_ry[i] as f32);
-        let inner = skia_safe::RRect::new_rect_xy(inner, inner_rx[i] as f32, inner_ry[i] as f32);
-        canvas.draw_drrect(&outer, &inner, &props.paint);
+        let outer = outer
+            .clone()
+            .transform(&skia_safe::Matrix::default().set_rsxform(&transforms[i]))
+            .ok_or_else(|| return savvy_err!("Failed to transform outer rrect at index {}", i))?;
+        let inner = inner
+            .clone()
+            .transform(&skia_safe::Matrix::default().set_rsxform(&transforms[i]))
+            .ok_or_else(|| return savvy_err!("Failed to transform inner rrect at index {}", i))?;
+        if outer.contains(inner.bounds()) {
+            // Check is required because this drawing can be undefined
+            canvas.draw_drrect(&outer, &inner, &props.paint);
+        }
     }
     let picture = recorder.finish_recording()?;
     Ok(picture.into())
@@ -566,7 +587,7 @@ unsafe fn sk_draw_vertices(
     mode: &paint_attrs::VertexMode,
 ) -> savvy::Result<savvy::Sexp> {
     let mode = paint_attrs::sk_vertex_mode(&mode);
-    let positions = as_points(&x, &y);
+    let positions = path_transform::as_points(&x, &y);
     let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
         // if matrix is too small to take color, implicitly use paint color
         let mut ret: Vec<skia_safe::Color> = Vec::new();

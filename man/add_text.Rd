@@ -2,23 +2,19 @@
 % Please edit documentation in R/add-textblob.R
 \name{add_text}
 \alias{add_text}
-\alias{text_info}
 \title{Add text}
 \usage{
 add_text(img, text, rsx_trans, ..., props = paint())
-
-text_info(text, props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
 
 \item{text}{Characters to be drawn.}
 
-\item{rsx_trans}{A double matrix where each row represents an RSX transform.
-Each column of the matrix corresponds to the scale, the angle of rotation,
-the amount of translation
-in the X-axis direction and in the Y-axis direction,
-and the X and Y coordinates of the pivot point.}
+\item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
+Each column of the matrix corresponds to the scale, the angle of rotation (in radians),
+the amount of translation in the X-axis direction and in the Y-axis direction,
+and the X and Y coordinates of the transformation origin.}
 
 \item{...}{For some drawing functions, you can specify \code{width} and \code{color} as named arguments.
 \itemize{
@@ -32,16 +28,20 @@ If the function does not matter them,  \code{...} is simply ignored.}
 \item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
-For \code{add_text()}, a raw vector of picture.
+A raw vector of picture.
 }
 \description{
-Draws text as textblobs.
-
-The return value is often a large object
+Add text
+}
+\note{
+\itemize{
+\item \code{rsx_trans} for \code{add_text()} must have
+the same number of rows as the total number of characters to be drawn;
+not just the length of \code{text}.
+\item Since textblobs do not have font fallback mechanism,
+characters out of the specified font are not drawn correctly.
+\item The return value is often a large object
 because the specified font is embedded in the returned picture.
 Note that you should almost always \code{\link[=freeze]{freeze()}} the picture after drawing text.
 }
-\details{
-Since textblobs do not have font fallback mechanism,
-characters out of the specified font are not drawn correctly.
 }

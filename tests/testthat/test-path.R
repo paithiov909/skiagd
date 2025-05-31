@@ -46,9 +46,9 @@ test_that("add_diff_rect works", {
     canvas("coral") |>
       add_diff_rect(
         matrix(c(120, 40, 440, 480), ncol = 4),
-        matrix(c(48, 48), ncol = 2),
         matrix(c(240, 80, 360, 440), ncol = 4),
-        matrix(c(16, 16), ncol = 2),
+        outer_radii = matrix(c(48, 48), ncol = 2),
+        inner_radii = matrix(c(16, 16), ncol = 2),
         props = paint(color = "snow", width = 16, style = Style$Fill)
       ) |>
       as_recordedplot()

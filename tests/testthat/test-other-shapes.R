@@ -10,7 +10,7 @@ test_that("add_atlas works", {
   sprite <- canvas("transparent", canvas_size = rect_size) |>
     add_rect(
       matrix(c(0, 0, rect_size[1], rect_size[2]), ncol = 4),
-      matrix(c(6, 6), ncol = 2),
+      radii = matrix(c(6, 6), ncol = 2),
       props = paint(canvas_size = rect_size, color = "snow", style = Style$Fill)
     ) |>
     as_png(props = paint(canvas_size = rect_size))

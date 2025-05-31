@@ -106,13 +106,14 @@ NULL
 #' @param inner_xywh Inner rectangles.
 #' @param inner_rx Axis lengths on X-axis of inner oval describing rounded corners.
 #' @param inner_ry Axis lengths on Y-axis of inner oval describing rounded corners.
+#' @param rsx_trans RSX transform for each rectangle.
 #' @param width Stroke width.
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_diff_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `outer_xywh`, `outer_rx`, `outer_ry`, `inner_xywh`, `inner_rx`, `inner_ry`, `width`, `color`) {
+`sk_draw_diff_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `outer_xywh`, `outer_rx`, `outer_ry`, `inner_xywh`, `inner_rx`, `inner_ry`, `rsx_trans`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_diff_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `outer_xywh`, `outer_rx`, `outer_ry`, `inner_xywh`, `inner_rx`, `inner_ry`, `width`, `color`)
+  .Call(savvy_sk_draw_diff_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `outer_xywh`, `outer_rx`, `outer_ry`, `inner_xywh`, `inner_rx`, `inner_ry`, `rsx_trans`, `width`, `color`)
 }
 
 #' Draws lines
@@ -194,13 +195,14 @@ NULL
 #' @param xywh Rectangles.
 #' @param rx Axis lengths on X-axis of oval describing rounded corners.
 #' @param ry Axis lengths on Y-axis of oval describing rounded corners.
+#' @param rsx_trans RSX transform for each rectangle.
 #' @param width Stroke width.
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_rounded_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `xywh`, `rx`, `ry`, `width`, `color`) {
+`sk_draw_rounded_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `xywh`, `rx`, `ry`, `rsx_trans`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_rounded_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `xywh`, `rx`, `ry`, `width`, `color`)
+  .Call(savvy_sk_draw_rounded_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `xywh`, `rx`, `ry`, `rsx_trans`, `width`, `color`)
 }
 
 #' Draws text as textblobs

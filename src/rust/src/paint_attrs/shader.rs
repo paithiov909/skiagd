@@ -112,8 +112,8 @@ impl Shader {
         mode: &TileMode,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
-        let mat = as_matrix(&transform)
-            .ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
+        let mat =
+            as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let input = Data::new_bytes(png_bytes.as_slice());
         let image = Image::from_encoded_with_alpha_type(input, skia_safe::AlphaType::Premul)
             .ok_or_else(|| return savvy_err!("Failed to read PNG as image"))?;
@@ -149,8 +149,8 @@ impl Shader {
             return Err(savvy_err!("Invalid arguments"));
         }
         let tile_size = tile_size.as_slice_f64();
-        let mat = as_matrix(&transform)
-            .ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
+        let mat =
+            as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let picture = read_picture_bytes(&img)?;
         Ok(Shader {
             label: "picture".to_string(),
@@ -180,8 +180,8 @@ impl Shader {
         if start.len() != 2 || end.len() != 2 || from.len() != 4 || to.len() != 4 {
             return Err(savvy_err!("Invalid arguments"));
         }
-        let mat = as_matrix(&transform)
-            .ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
+        let mat =
+            as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let start = start.as_slice_f64();
         let end = end.as_slice_f64();
         let from = from.as_slice_f64();
@@ -227,8 +227,8 @@ impl Shader {
         if center.len() != 2 || from.len() != 4 || to.len() != 4 {
             return Err(savvy_err!("Invalid arguments"));
         }
-        let mat = as_matrix(&transform)
-            .ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
+        let mat =
+            as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let center = center.as_slice_f64();
         let from = from.as_slice_f64();
         let to = to.as_slice_f64();
@@ -278,8 +278,8 @@ impl Shader {
         {
             return Err(savvy_err!("Invalid arguments"));
         }
-        let mat = as_matrix(&transform)
-            .ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
+        let mat =
+            as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let start = start.as_slice_f64();
         let end = end.as_slice_f64();
         let radii = radii.as_slice_f64();
@@ -327,8 +327,8 @@ impl Shader {
         if center.len() != 2 || from.len() != 4 || to.len() != 4 {
             return Err(savvy_err!("Invalid arguments"));
         }
-        let mat = as_matrix(&transform)
-            .ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
+        let mat =
+            as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let center = center.as_slice_f64();
         let from = from.as_slice_f64();
         let to = to.as_slice_f64();

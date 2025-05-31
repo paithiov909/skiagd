@@ -2,6 +2,7 @@
 % Please edit documentation in R/aaa.R
 \name{param-img-and-props}
 \alias{param-img-and-props}
+\alias{param-rsx-trans}
 \title{Params for drawing functions}
 \arguments{
 \item{img}{A raw vector of picture.}
@@ -16,8 +17,15 @@
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
+
+\item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
+Each column of the matrix corresponds to the scale, the angle of rotation (in radians),
+the amount of translation in the X-axis direction and in the Y-axis direction,
+and the X and Y coordinates of the transformation origin.}
 }
 \description{
 Params for drawing functions
+
+RSX transform
 }
 \keyword{internal}

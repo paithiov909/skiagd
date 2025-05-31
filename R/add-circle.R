@@ -15,7 +15,12 @@ add_circle <- function(img, center, radius, ..., props = paint()) {
   if (is.null(color)) {
     color <- rep(props[["color"]], nrow(center))
   }
-  validate_length(nrow(center), radius, width)
+  validate_length(
+    nrow(center),
+    length(radius),
+    length(width),
+    ncol(color)
+  )
 
   sk_draw_circle(
     props[["canvas_size"]],

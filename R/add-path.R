@@ -1,16 +1,12 @@
 #' Add paths
 #'
-#' @param path Characters of SVG notations
-#' like `"M10 10 H 90 V 90 H 10 L 10 10"`.
-#' @param rsx_trans A double matrix where each row represents an RSX transform.
-#' Each column of the matrix corresponds to the scale, the angle of rotation,
-#' the amount of translation
-#' in the X-axis direction and in the Y-axis direction,
-#' and the X and Y coordinates of the pivot point.
+#' @param path Characters of SVG notations like `"M10 10 H 90 V 90 H 10 L 10 10"`.
 #' @inheritParams param-img-and-props
+#' @inheritParams param-rsx-trans
 #' @returns A raw vector of picture.
 #' @export
-add_path <- function(img, path, rsx_trans,
+add_path <- function(img, path,
+                     rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), length(path), 6, byrow = TRUE),
                      ...,
                      props = paint()) {
   dots <- rlang::list2(...)
@@ -22,7 +18,12 @@ add_path <- function(img, path, rsx_trans,
   if (is.null(color)) {
     color <- rep(props[["color"]], length(path))
   }
-  validate_length(nrow(rsx_trans), width)
+  validate_length(
+    length(path),
+    nrow(rsx_trans),
+    length(width),
+    ncol(color)
+  )
 
   sk_draw_path(
     props[["canvas_size"]],

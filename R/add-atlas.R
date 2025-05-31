@@ -1,13 +1,12 @@
 #' Add atlas
 #'
+#' @description
+#' Draws the same number of sprites as the number of rows in `rsx_trans`.
+#'
 #' @param img A raw vector of picture.
-#' @param png A raw vector of PNG image to be used as the sprite.
-#' @param rsx_trans A double matrix where each row represents an RSX transform.
-#' Each column of the matrix corresponds to the scale, the angle of rotation,
-#' the amount of translation
-#' in the X-axis direction and in the Y-axis direction,
-#' and the X and Y coordinates of the pivot point.
+#' @param png A raw vector of PNG image to be used as a sprite.
 #' @inheritParams param-img-and-props
+#' @inheritParams param-rsx-trans
 #' @returns A raw vector of picture.
 #' @export
 add_atlas <- function(img, png, rsx_trans, ..., props = paint()) {
@@ -17,6 +16,6 @@ add_atlas <- function(img, png, rsx_trans, ..., props = paint()) {
     props[["transform"]],
     as_paint_attrs(props),
     png,
-    t(rsx_trans) # needs to be transposed
+    t(rsx_trans[, 1:6])
   )
 }

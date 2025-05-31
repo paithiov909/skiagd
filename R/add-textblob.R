@@ -1,24 +1,19 @@
 #' Add text
 #'
-#' @description
-#' Draws text as textblobs.
-#'
-#' The return value is often a large object
+#' @note
+#' * `rsx_trans` for `add_text()` must have
+#' the same number of rows as the total number of characters to be drawn;
+#' not just the length of `text`.
+#' * Since textblobs do not have font fallback mechanism,
+#' characters out of the specified font are not drawn correctly.
+#' * The return value is often a large object
 #' because the specified font is embedded in the returned picture.
 #' Note that you should almost always [freeze()] the picture after drawing text.
 #'
-#' @details
-#' Since textblobs do not have font fallback mechanism,
-#' characters out of the specified font are not drawn correctly.
-#'
 #' @param text Characters to be drawn.
-#' @param rsx_trans A double matrix where each row represents an RSX transform.
-#' Each column of the matrix corresponds to the scale, the angle of rotation,
-#' the amount of translation
-#' in the X-axis direction and in the Y-axis direction,
-#' and the X and Y coordinates of the pivot point.
 #' @inheritParams param-img-and-props
-#' @returns For `add_text()`, a raw vector of picture.
+#' @inheritParams param-rsx-trans
+#' @returns A raw vector of picture.
 #' @export
 add_text <- function(img, text, rsx_trans, ..., props = paint()) {
   if (anyNA(text)) {
@@ -29,18 +24,30 @@ add_text <- function(img, text, rsx_trans, ..., props = paint()) {
   if (is.null(color)) {
     color <- rep(props[["color"]], length(text))
   }
+  validate_length(
+    length(text),
+    ncol(color)
+  )
+
   sk_draw_text(
     props[["canvas_size"]],
     img,
     props[["transform"]],
     as_paint_attrs(props),
     text,
-    t(rsx_trans),
-    color
+    t(rsx_trans[, 1:6]),
+    as.integer(color)
   )
 }
 
-#' @rdname add_text
+#' Get width and number of characters
+#'
+#' Returns information about text strings
+#' when they are drawn naturally as a textblob with `props`.
+#'
+#' @param text Text strings.
+#' @param props A list of painting attributes out of [paint()].
+#' @returns A data frame.
 #' @export
 text_info <- function(text, props = paint()) {
   ret <-

@@ -8,11 +8,17 @@ pub fn as_points(x: &NumericSexp, y: &NumericSexp) -> Vec<skia_safe::Point> {
     points
 }
 
-/// Converts NumericSexp to Vec<skia_safe::Rect>
-pub fn as_rects(rect: &NumericSexp) -> Option<Vec<skia_safe::Rect>> {
+/// Converts NumericSexp to Vec<skia_safe::RRect>
+pub fn as_rrects(
+    rect: &NumericSexp,
+    rx: &NumericSexp,
+    ry: &NumericSexp,
+) -> Option<Vec<skia_safe::RRect>> {
     let data = rect.as_slice_f64();
-    let mut ret: Vec<skia_safe::Rect> = Vec::new();
-    for chunk in data.chunks(4) {
+    let rx = rx.as_slice_f64();
+    let ry = ry.as_slice_f64();
+    let mut ret: Vec<skia_safe::RRect> = Vec::new();
+    for (i, chunk) in data.chunks(4).enumerate() {
         if chunk.len() == 4 {
             let out = skia_safe::Rect::new(
                 chunk[0] as f32,
@@ -20,7 +26,11 @@ pub fn as_rects(rect: &NumericSexp) -> Option<Vec<skia_safe::Rect>> {
                 chunk[2] as f32,
                 chunk[3] as f32,
             );
-            ret.push(out);
+            ret.push(skia_safe::RRect::new_rect_xy(
+                out,
+                rx[i] as f32,
+                ry[i] as f32,
+            ));
         }
     }
     if ret.is_empty() {

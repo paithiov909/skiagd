@@ -4,13 +4,25 @@
 \alias{add_rect}
 \title{Add rectangles}
 \usage{
-add_rect(img, xywh, radii = matrix(0, nrow(xywh), 2), ..., props = paint())
+add_rect(
+  img,
+  xywh,
+  rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), nrow(xywh), 6, byrow = TRUE),
+  radii = matrix(0, nrow(xywh), 2),
+  ...,
+  props = paint()
+)
 }
 \arguments{
 \item{img}{A raw vector of picture.}
 
 \item{xywh}{A double matrix where each row is a rectangle
 XYWH (left, top, right, bottom).}
+
+\item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
+Each column of the matrix corresponds to the scale, the angle of rotation (in radians),
+the amount of translation in the X-axis direction and in the Y-axis direction,
+and the X and Y coordinates of the transformation origin.}
 
 \item{radii}{A double matrix where each row is a pair of axis lengths
 on X-axis and Y-axis of oval describing rounded corners.}

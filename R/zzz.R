@@ -39,10 +39,10 @@
 
 #' Check that all arguments have the expected length
 #'
-#' @param ... Arguments to check.
+#' @param ... Numeric vectors.
 #' @noRd
 validate_length <- function(expected, ...) {
-  len <- lengths(list(...))
+  len <- c(...)
   if (!all(len == expected)) {
     rlang::abort("Some arguments have different lengths than others.")
   }

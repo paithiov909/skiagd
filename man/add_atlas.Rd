@@ -9,13 +9,12 @@ add_atlas(img, png, rsx_trans, ..., props = paint())
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{png}{A raw vector of PNG image to be used as the sprite.}
+\item{png}{A raw vector of PNG image to be used as a sprite.}
 
-\item{rsx_trans}{A double matrix where each row represents an RSX transform.
-Each column of the matrix corresponds to the scale, the angle of rotation,
-the amount of translation
-in the X-axis direction and in the Y-axis direction,
-and the X and Y coordinates of the pivot point.}
+\item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
+Each column of the matrix corresponds to the scale, the angle of rotation (in radians),
+the amount of translation in the X-axis direction and in the Y-axis direction,
+and the X and Y coordinates of the transformation origin.}
 
 \item{...}{For some drawing functions, you can specify \code{width} and \code{color} as named arguments.
 \itemize{
@@ -32,5 +31,5 @@ If the function does not matter them,  \code{...} is simply ignored.}
 A raw vector of picture.
 }
 \description{
-Add atlas
+Draws the same number of sprites as the number of rows in \code{rsx_trans}.
 }
