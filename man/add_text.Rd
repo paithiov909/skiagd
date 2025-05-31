@@ -2,29 +2,20 @@
 % Please edit documentation in R/add-textblob.R
 \name{add_text}
 \alias{add_text}
-\alias{text_layout_horizontal}
-\alias{text_layout_vertical}
 \alias{text_width}
+\alias{text_count}
 \title{Add text}
 \usage{
-add_text(img, text, point = NULL, ..., props = paint())
-
-text_layout_horizontal(text, props = paint())
-
-text_layout_vertical(text, props = paint())
+add_text(img, text, rsx_trans, ..., props = paint())
 
 text_width(text, props = paint())
+
+text_count(text, props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
 
 \item{text}{Characters to be drawn.}
-
-\item{point}{\code{NULL} or a double matrix where each row is the point
-at which each character in \code{text} is drawn.
-For example, if \code{text} is a character vector of 5 and 3 length strings,
-\code{point} must contain 8 points.
-If \code{NULL}, \code{text} is drawn at \code{c(0, props[["fontsize"]])} naturally.}
 
 \item{...}{For some drawing functions, you can specify \code{width} and \code{color} as named arguments.
 \itemize{
@@ -36,6 +27,12 @@ If they are not provided as named arguments, they will be taken from \code{props
 If the function does not matter them,  \code{...} is simply ignored.}
 
 \item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+
+\item{point}{\code{NULL} or a double matrix where each row is the point
+at which each character in \code{text} is drawn.
+For example, if \code{text} is a character vector of 5 and 3 length strings,
+\code{point} must contain 8 points.
+If \code{NULL}, \code{text} is drawn at \code{c(0, props[["fontsize"]])} naturally.}
 }
 \value{
 For \code{add_text()}, a raw vector of picture.

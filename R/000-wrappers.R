@@ -37,7 +37,7 @@ NULL
   stop(class, " cannot be modified", call. = FALSE)
 }
 
-#' Fills canvas with color
+#' Fills canvas with the specified color
 #'
 #' @param size Canvas size.
 #' @param fill Integers of length 4 (RGBA).
@@ -68,17 +68,12 @@ NULL
 #' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param png_bytes PNG bytes.
-#' @param scale Scale factor.
-#' @param radians Rotation factor.
-#' @param tx X translation.
-#' @param ty Y translation.
-#' @param anchor_x X coordinates of anchor points.
-#' @param anchor_y Y coordinates of anchor points.
+#' @param rsx_trans RSX transforms for each sprite.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_atlas` <- function(`size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `scale`, `radians`, `tx`, `ty`, `anchor_x`, `anchor_y`) {
+`sk_draw_atlas` <- function(`size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `rsx_trans`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_atlas__impl, `size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `scale`, `radians`, `tx`, `ty`, `anchor_x`, `anchor_y`)
+  .Call(savvy_sk_draw_atlas__impl, `size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `rsx_trans`)
 }
 
 #' Draws circles
@@ -149,19 +144,19 @@ NULL
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat1 Matrix for transforming picture.
+#' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param svg SVG strings to draw.
+#' @param rsx_trans RSX transform for each path.
 #' @param width Stroke width.
 #' @param color Colors.
-#' @param mat2 Matrix for transforming SVG path.
 #' @param fill_type FillType.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_path` <- function(`size`, `curr_bytes`, `mat1`, `props`, `svg`, `width`, `color`, `mat2`, `fill_type`) {
+`sk_draw_path` <- function(`size`, `curr_bytes`, `mat`, `props`, `svg`, `rsx_trans`, `width`, `color`, `fill_type`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   `fill_type` <- .savvy_extract_ptr(`fill_type`, "FillType")
-  .Call(savvy_sk_draw_path__impl, `size`, `curr_bytes`, `mat1`, `props`, `svg`, `width`, `color`, `mat2`, `fill_type`)
+  .Call(savvy_sk_draw_path__impl, `size`, `curr_bytes`, `mat`, `props`, `svg`, `rsx_trans`, `width`, `color`, `fill_type`)
 }
 
 #' Draws PNG data as an image on canvas
@@ -224,12 +219,13 @@ NULL
 #' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param text Text strings.
+#' @param rsx_trans RSX transform for each text.
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_text` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `color`) {
+`sk_draw_text` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `rsx_trans`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_text__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `color`)
+  .Call(savvy_sk_draw_text__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `rsx_trans`, `color`)
 }
 
 #' Draws textblobs
@@ -257,12 +253,11 @@ NULL
 #' @param props PaintAttrs.
 #' @param text Text strings to draw along SVG paths.
 #' @param svg SVG paths.
-#' @param mat2 Matrix for transforming SVG paths.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_textpath` <- function(`size`, `curr_bytes`, `mat1`, `props`, `text`, `svg`, `mat2`) {
+`sk_draw_textpath` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `svg`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_textpath__impl, `size`, `curr_bytes`, `mat1`, `props`, `text`, `svg`, `mat2`)
+  .Call(savvy_sk_draw_textpath__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `svg`)
 }
 
 #' Draws vertices

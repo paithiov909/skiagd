@@ -31,6 +31,5 @@ add_textpath <- function(img, text, path,
     as_paint_attrs(props),
     text,
     path,
-    transform
   )
 }

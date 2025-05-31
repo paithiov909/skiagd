@@ -17,11 +17,6 @@ add_atlas <- function(img, png, rsx_trans, ..., props = paint()) {
     props[["transform"]],
     as_paint_attrs(props),
     png,
-    rsx_trans[, 1],
-    rsx_trans[, 2],
-    rsx_trans[, 3],
-    rsx_trans[, 4],
-    rsx_trans[, 5],
-    rsx_trans[, 6]
+    t(rsx_trans) # needs to be transposed
   )
 }

@@ -111,19 +111,21 @@ impl PathEffect {
         })
     }
     fn path_2d(path: StringSexp, transform: NumericSexp) -> savvy::Result<Self> {
-        let mat = as_matrix(&transform)?;
+        let mat = as_matrix(&transform)
+            .ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let s = path.to_vec()[0];
         let path = skia_safe::utils::parse_path::from_svg(s)
             .ok_or_else(|| return savvy_err!("Failed to parse svg"))?;
-        let effect_2d = skia_safe::PathEffect::path_2d(&mat, &path);
+        let effect_2d = skia_safe::PathEffect::path_2d(&mat[0], &path);
         Ok(PathEffect {
             label: "path_2d".to_string(),
             effect: Some(effect_2d),
         })
     }
     fn line_2d(width: NumericScalar, transform: NumericSexp) -> savvy::Result<Self> {
-        let mat = as_matrix(&transform)?;
-        let effect_2d = skia_safe::PathEffect::line_2d(width.as_f64() as f32, &mat);
+        let mat = as_matrix(&transform)
+            .ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
+        let effect_2d = skia_safe::PathEffect::line_2d(width.as_f64() as f32, &mat[0]);
         Ok(PathEffect {
             label: "line_2d".to_string(),
             effect: effect_2d,

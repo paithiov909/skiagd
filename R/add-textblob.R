@@ -24,18 +24,10 @@
 #' @inheritParams param-img-and-props
 #' @returns For `add_text()`, a raw vector of picture.
 #' @export
-add_text <- function(img, text, point = NULL, ..., props = paint()) {
+add_text <- function(img, text, rsx_trans, ..., props = paint()) {
   if (anyNA(text)) {
     rlang::abort("`text` cannot contain NA.")
   }
-  if (is.null(point)) {
-    add_text_impl(img, text, props, ...)
-  } else {
-    add_textblob_impl(img, text, point, props, ...)
-  }
-}
-
-add_text_impl <- function(img, text, props = paint(), ...) {
   dots <- rlang::list2(...)
   color <- dots[["color"]]
   if (is.null(color)) {
@@ -47,53 +39,9 @@ add_text_impl <- function(img, text, props = paint(), ...) {
     props[["transform"]],
     as_paint_attrs(props),
     text,
+    t(rsx_trans),
     color
   )
-}
-
-add_textblob_impl <- function(img, text, point, props = paint(), ...) {
-  if (sum(nchar(text)) != nrow(point)) {
-    rlang::abort("Total number of characters in `text` and number of rows in `point` must be the same.")
-  }
-  dots <- rlang::list2(...)
-  color <- dots[["color"]]
-  if (is.null(color)) {
-    color <- rep(props[["color"]], length(text))
-  }
-  sk_draw_textblob(
-    props[["canvas_size"]],
-    img,
-    props[["transform"]],
-    as_paint_attrs(props),
-    text,
-    point[, 1],
-    point[, 2],
-    color
-  )
-}
-
-#' @rdname add_text
-#' @export
-text_layout_horizontal <- function(text, props = paint()) {
-  n_chars <- sum(nchar(text))
-  vec <- c(
-    seq(props[["fontsize"]] / 4, props[["fontsize"]] * n_chars, by = props[["fontsize"]]),
-    rep_len(props[["fontsize"]], n_chars),
-    rep_len(1, n_chars)
-  )
-  matrix(vec, ncol = 3)
-}
-
-#' @rdname add_text
-#' @export
-text_layout_vertical <- function(text, props = paint()) {
-  n_chars <- sum(nchar(text))
-  vec <- c(
-    rep_len(props[["fontsize"]], n_chars),
-    seq(props[["fontsize"]] / 4, props[["fontsize"]] * n_chars, by = props[["fontsize"]]),
-    rep_len(1, n_chars)
-  )
-  matrix(vec, ncol = 3)
 }
 
 #' @rdname add_text
@@ -103,4 +51,14 @@ text_width <- function(text, props = paint()) {
     text,
     as_paint_attrs(props)
   )
+}
+
+#' @rdname add_text
+#' @export
+text_count <- function(text, props = paint()) {
+  # TODO: implement
+  # sk_get_text_count(
+  #   text,
+  #   as_paint_attrs(props)
+  # )
 }
