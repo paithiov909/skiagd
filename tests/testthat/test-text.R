@@ -11,16 +11,42 @@ test_that("add_text and add_textpath works", {
   )
   white <- list(color = "white")
   fontface <- list(family = "Noto Sans Mono", fontsize = 48)
-  line_path <- path_transform("M 720 576 L 0 0", c(1, 0, -24, 0, 1, -24, 0, 0, 1))
+
+  texts <- c(
+    "Hello, Skiagd!",
+    "This is a curved text."
+  )
+  rsx_trans_1 <-
+    text_info(texts[1], props = paint(!!!fontface)) |>
+    dplyr::reframe(
+      sc = rep_len(1, n_chars),
+      rot = rep_len(0, n_chars),
+      x = width / n_chars * seq_len(n_chars),
+      y = rep_len(48, n_chars),
+      ax = rep_len(0, n_chars),
+      ay = rep_len(0, n_chars),
+      .by = id
+    )
+  rsx_trans_2 <-
+    text_info(texts[2], props = paint(!!!fontface)) |>
+    dplyr::reframe(
+      sc = rep_len(1, n_chars),
+      rot = seq(-pi / 4, pi / 4, length.out = n_chars),
+      x = width / n_chars * seq_len(n_chars),
+      y = (seq(-pi, 0, length.out = n_chars) |> sin()) * width / 4 + 288,
+      ax = rep_len(0, n_chars),
+      ay = rep_len(0, n_chars),
+      .by = id
+    )
 
   vdiffr::expect_doppelganger(
     "text",
     canvas("limegreen") |>
-      add_path(line_path, props = paint(!!!white, style = Style$Stroke, width = 4)) |>
-      add_text("Hello, Skiagd!", props = paint(!!!white, !!!fontface)) |>
-      add_textpath(
-        "This is text path text.",
-        line_path,
+      add_text(
+        texts,
+        rsx_trans = rbind(rsx_trans_1, rsx_trans_2) |>
+          dplyr::select(!"id") |>
+          as.matrix(),
         props = paint(!!!white, !!!fontface)
       ) |>
       as_recordedplot()

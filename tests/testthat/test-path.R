@@ -129,20 +129,20 @@ test_that("add_path with PathEffect$trim work", {
     canvas("limegreen") |>
       add_path(
         star,
-        transform = c(1, 0, 256, 0, 1, 128, 0, 0, 1),
+        rsx_trans = matrix(c(1, 0, 256, 128, 0, 0), ncol = 6),
         props = paint(color = "yellow")
       ) |>
       add_path(
         star,
-        transform = c(0.707, -0.707, 256, 0.707, 0.707, 128, 0, 0, 1),
+        rsx_trans = matrix(c(1, pi / 4, 256, 128, 0, 0), ncol = 6),
         props = paint(color = "yellow", blend_mode = BlendMode$Exclusion)
       ) |>
       add_path(
         star,
-        transform = c(0.707, -0.707, 256, 0.707, 0.707, 128, 0, 0, 1),
+        rsx_trans = matrix(c(1, pi / 4, 256, 128, 0, 0), ncol = 6),
         props = paint(
-          color = "black", width = 16, style = Style$Stroke
-          , path_effect = PathEffect$trim(0.2, 0.9)
+          color = "black", width = 16, style = Style$Stroke,
+          path_effect = PathEffect$trim(0.2, 0.9)
         )
       ) |>
       as_recordedplot()
