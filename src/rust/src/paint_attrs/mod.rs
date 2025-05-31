@@ -122,32 +122,49 @@ pub fn num2colors(color: &NumericSexp) -> Option<Vec<skia_safe::Color>> {
 /// If the length of first argument are not fit to the other argument, throws an error
 pub fn assert_len(name: &str, actual: usize, expected: usize) -> anyhow::Result<(), savvy::Error> {
     if actual != expected {
-        Err(savvy_err!("{} must have the same length as other arguments", name))
+        Err(savvy_err!(
+            "{} must have the same length as other arguments",
+            name
+        ))
     } else {
         Ok(())
     }
 }
 
-/// Get text width
+/// Get width and number of characters
 ///
 /// @param text Text strings.
 /// @param props PaintAttrs.
-/// @returns A numeric vector.
+/// @returns A list.
 /// @noRd
 #[savvy]
-fn sk_get_text_width(text: savvy::StringSexp, props: PaintAttrs) -> savvy::Result<savvy::Sexp> {
+fn sk_get_text_info(text: savvy::StringSexp, props: PaintAttrs) -> savvy::Result<savvy::Sexp> {
     let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
     let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
-    let mut out = savvy::OwnedRealSexp::new(text.len())?;
+    let mut width = savvy::OwnedRealSexp::new(text.len())?;
+    let mut id = savvy::OwnedIntegerSexp::new(text.len())?;
+    let mut n_chars = savvy::OwnedIntegerSexp::new(text.len())?;
     for (i, t) in text.iter().enumerate() {
-        let ids = font.text_to_glyphs_vec(t.to_string());
-        let mut num_ids: Vec<f32> = Vec::new();
-        num_ids.resize(font.count_text(t.to_string()), 0.0);
-        let width_ptrs = num_ids.as_mut_slice();
-        font.get_widths_bounds(ids.as_slice(), Some(width_ptrs), None, Some(&props.paint));
-        out.set_elt(i, width_ptrs.iter().map(|x| *x as f64).sum::<f64>())?;
+        let glyph_ids = font.text_to_glyphs_vec(t.to_string());
+        let n = font.count_text(t.to_string());
+        let mut width_ptrs: Vec<f32> = Vec::new();
+        width_ptrs.resize(n, 0.0);
+        let width_ptrs = width_ptrs.as_mut_slice();
+        font.get_widths_bounds(
+            &glyph_ids.as_slice(),
+            Some(width_ptrs),
+            None,
+            Some(&props.paint),
+        );
+        width.set_elt(i, width_ptrs.iter().map(|x| *x as f64).sum::<f64>())?;
+        id.set_elt(i, i as i32)?;
+        n_chars.set_elt(i, n as i32)?;
     }
-    out.into()
+    let mut out = savvy::OwnedListSexp::new(3, true)?;
+    out.set_name_and_value(0, "id", id)?;
+    out.set_name_and_value(1, "n_chars", n_chars)?;
+    out.set_name_and_value(2, "width", width)?;
+    Ok(out.into())
 }
 
 /// PointMode (0-2)

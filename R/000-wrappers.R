@@ -246,15 +246,15 @@ NULL
   .Call(savvy_sk_draw_vertices__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `color`, `mode`)
 }
 
-#' Get text width
+#' Get width and number of characters
 #'
 #' @param text Text strings.
 #' @param props PaintAttrs.
-#' @returns A numeric vector.
+#' @returns A list.
 #' @noRd
-`sk_get_text_width` <- function(`text`, `props`) {
+`sk_get_text_info` <- function(`text`, `props`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_get_text_width__impl, `text`, `props`)
+  .Call(savvy_sk_get_text_info__impl, `text`, `props`)
 }
 
 

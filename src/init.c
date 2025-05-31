@@ -94,8 +94,8 @@ SEXP savvy_sk_draw_vertices__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP
     return handle_result(res);
 }
 
-SEXP savvy_sk_get_text_width__impl(SEXP c_arg__text, SEXP c_arg__props) {
-    SEXP res = savvy_sk_get_text_width__ffi(c_arg__text, c_arg__props);
+SEXP savvy_sk_get_text_info__impl(SEXP c_arg__text, SEXP c_arg__props) {
+    SEXP res = savvy_sk_get_text_info__ffi(c_arg__text, c_arg__props);
     return handle_result(res);
 }
 
@@ -292,7 +292,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"savvy_sk_draw_rounded_rect__impl", (DL_FUNC) &savvy_sk_draw_rounded_rect__impl, 12},
     {"savvy_sk_draw_text__impl", (DL_FUNC) &savvy_sk_draw_text__impl, 7},
     {"savvy_sk_draw_vertices__impl", (DL_FUNC) &savvy_sk_draw_vertices__impl, 8},
-    {"savvy_sk_get_text_width__impl", (DL_FUNC) &savvy_sk_get_text_width__impl, 2},
+    {"savvy_sk_get_text_info__impl", (DL_FUNC) &savvy_sk_get_text_info__impl, 2},
     {"savvy_sk_list_families__impl", (DL_FUNC) &savvy_sk_list_families__impl, 0},
     {"savvy_sk_matrix_map_point__impl", (DL_FUNC) &savvy_sk_matrix_map_point__impl, 4},
     {"savvy_sk_path_bounds__impl", (DL_FUNC) &savvy_sk_path_bounds__impl, 1},

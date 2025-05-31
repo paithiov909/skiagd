@@ -2,20 +2,23 @@
 % Please edit documentation in R/add-textblob.R
 \name{add_text}
 \alias{add_text}
-\alias{text_width}
-\alias{text_count}
+\alias{text_info}
 \title{Add text}
 \usage{
 add_text(img, text, rsx_trans, ..., props = paint())
 
-text_width(text, props = paint())
-
-text_count(text, props = paint())
+text_info(text, props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
 
 \item{text}{Characters to be drawn.}
+
+\item{rsx_trans}{A double matrix where each row represents an RSX transform.
+Each column of the matrix corresponds to the scale, the angle of rotation,
+the amount of translation
+in the X-axis direction and in the Y-axis direction,
+and the X and Y coordinates of the pivot point.}
 
 \item{...}{For some drawing functions, you can specify \code{width} and \code{color} as named arguments.
 \itemize{
@@ -27,12 +30,6 @@ If they are not provided as named arguments, they will be taken from \code{props
 If the function does not matter them,  \code{...} is simply ignored.}
 
 \item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
-
-\item{point}{\code{NULL} or a double matrix where each row is the point
-at which each character in \code{text} is drawn.
-For example, if \code{text} is a character vector of 5 and 3 length strings,
-\code{point} must contain 8 points.
-If \code{NULL}, \code{text} is drawn at \code{c(0, props[["fontsize"]])} naturally.}
 }
 \value{
 For \code{add_text()}, a raw vector of picture.
@@ -43,10 +40,6 @@ Draws text as textblobs.
 The return value is often a large object
 because the specified font is embedded in the returned picture.
 Note that you should almost always \code{\link[=freeze]{freeze()}} the picture after drawing text.
-
-You can use \code{text_layout_horizontal()} and \code{text_layout_vertical()}
-to create a \code{point} matrix
-and \code{text_width()} to get widths of textblobs.
 }
 \details{
 Since textblobs do not have font fallback mechanism,

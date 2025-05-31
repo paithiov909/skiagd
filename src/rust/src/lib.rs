@@ -364,7 +364,7 @@ unsafe fn sk_draw_circle(
     Ok(picture.into())
 }
 
-// TODO: sk_draw_arc
+// TODO: sk_draw_arc and oval
 
 /// Draws rounded rectangles
 ///
