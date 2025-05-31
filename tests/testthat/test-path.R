@@ -23,20 +23,17 @@ test_that("add_rect works", {
       ) |>
       as_recordedplot()
   )
-})
-
-test_that("add_rounded_rect works", {
   vdiffr::expect_doppelganger(
     "rounded_rect",
     canvas("tomato") |>
-      add_rounded_rect(
+      add_rect(
         matrix(c(120, 40, 440, 480), ncol = 4),
-        matrix(c(160, 160), ncol = 2),
+        radii = matrix(c(160, 160), ncol = 2),
         props = paint(color = "snow", width = 16, style = Style$Stroke)
       ) |>
-      add_rounded_rect(
+      add_rect(
         matrix(c(160, 200, 480, 300, 240, 80, 360, 440), nrow = 2, byrow = TRUE),
-        matrix(c(24, 48, 24, 48), ncol = 2),
+        radii = matrix(c(24, 48, 24, 48), ncol = 2),
         props = paint(color = "yellow", width = 16, style = Style$Stroke)
       ) |>
       as_recordedplot()

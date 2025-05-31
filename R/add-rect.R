@@ -1,74 +1,35 @@
 #' Add rectangles
 #'
-#' @param rect A double matrix where each row is a rectangle
-#' XYWH (left, top, right, bottom).
-#' @inheritParams param-img-and-props
-#' @returns A raw vector of picture.
-#' @export
-add_rect <- function(img, rect, ..., props = paint()) {
-  dots <- rlang::list2(...)
-  width <- dots[["width"]]
-  if (is.null(width)) {
-    width <- rep(props[["width"]], nrow(rect))
-  }
-  color <- dots[["color"]]
-  if (is.null(color)) {
-    color <- rep(props[["color"]], nrow(rect))
-  }
-  validate_length(length(width), rect[, 1])
-
-  sk_draw_rounded_rect(
-    props[["canvas_size"]],
-    img,
-    props[["transform"]],
-    as_paint_attrs(props),
-    rect[, 1],
-    rect[, 2],
-    rect[, 3],
-    rect[, 4],
-    rep_len(.0, nrow(rect)),
-    rep_len(.0, nrow(rect)),
-    width,
-    as.integer(color)
-  )
-}
-
-#' Add rounded rectangles
-#'
-#' @param rect A double matrix where each row is a rectangle
+#' @param xywh A double matrix where each row is a rectangle
 #' XYWH (left, top, right, bottom).
 #' @param radii A double matrix where each row is a pair of axis lengths
 #' on X-axis and Y-axis of oval describing rounded corners.
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export
-add_rounded_rect <- function(img,
-                             rect, radii,
-                             ...,
-                             props = paint()) {
+add_rect <- function(img,
+                     xywh, radii = matrix(0, nrow(xywh), 2),
+                     ...,
+                     props = paint()) {
   dots <- rlang::list2(...)
   width <- dots[["width"]]
   if (is.null(width)) {
-    width <- rep(props[["width"]], nrow(rect))
+    width <- rep(props[["width"]], nrow(xywh))
   }
   color <- dots[["color"]]
   if (is.null(color)) {
-    color <- rep(props[["color"]], nrow(rect))
+    color <- rep(props[["color"]], nrow(xywh))
   }
   validate_length(
-    length(width),
-    rect[, 1],
-    radii[, 1]
+    nrow(xywh),
+    radii[, 1], radii[, 2], width
   )
   sk_draw_rounded_rect(
     props[["canvas_size"]],
     img,
     props[["transform"]],
     as_paint_attrs(props),
-    rect[, 1],
-    rect[, 2],
-    rect[, 3],
-    rect[, 4],
+    t(xywh[, 1:4]),
     radii[, 1],
     radii[, 2],
     width,
@@ -103,26 +64,24 @@ add_diff_rect <- function(img,
   if (is.null(color)) {
     color <- rep(props[["color"]], nrow(outer))
   }
+  if (nrow(outer) != nrow(inner)) {
+    rlang::abort("outer and inner must have the same number of rows.")
+  }
   validate_length(
-    length(width),
-    outer[, 1], outer_radii[, 1],
-    inner[, 1], inner_radii[, 1]
+    nrow(outer),
+    outer_radii[, 1], outer_radii[, 2],
+    inner_radii[, 1], inner_radii[, 2],
+    width
   )
   sk_draw_diff_rect(
     props[["canvas_size"]],
     img,
     props[["transform"]],
     as_paint_attrs(props),
-    outer[, 1],
-    outer[, 2],
-    outer[, 3],
-    outer[, 4],
+    t(outer[, 1:4]),
     outer_radii[, 1],
     outer_radii[, 2],
-    inner[, 1],
-    inner[, 2],
-    inner[, 3],
-    inner[, 4],
+    t(inner[, 1:4]),
     inner_radii[, 1],
     inner_radii[, 2],
     width,

@@ -1,7 +1,5 @@
 use savvy::{savvy, savvy_err, NumericSexp, StringSexp};
 
-// TODO: implement as_rects and refactor add_*_rect
-
 /// Returns Vec<skia_safe::Point>
 pub fn as_points(x: &NumericSexp, y: &NumericSexp) -> Vec<skia_safe::Point> {
     let points = std::iter::zip(x.iter_f64(), y.iter_f64())
@@ -10,7 +8,29 @@ pub fn as_points(x: &NumericSexp, y: &NumericSexp) -> Vec<skia_safe::Point> {
     points
 }
 
-/// Converts NumericSexp to Vec<skia_safe::Matrix>.
+/// Converts NumericSexp to Vec<skia_safe::Rect>
+pub fn as_rects(rect: &NumericSexp) -> Option<Vec<skia_safe::Rect>> {
+    let data = rect.as_slice_f64();
+    let mut ret: Vec<skia_safe::Rect> = Vec::new();
+    for chunk in data.chunks(4) {
+        if chunk.len() == 4 {
+            let out = skia_safe::Rect::new(
+                chunk[0] as f32,
+                chunk[1] as f32,
+                chunk[2] as f32,
+                chunk[3] as f32,
+            );
+            ret.push(out);
+        }
+    }
+    if ret.is_empty() {
+        None
+    } else {
+        Some(ret)
+    }
+}
+
+/// Converts NumericSexp to Vec<skia_safe::Matrix>
 pub fn as_matrix(mat: &NumericSexp) -> Option<Vec<skia_safe::Matrix>> {
     let mat = mat.as_slice_f64();
     let mut ret: Vec<skia_safe::Matrix> = Vec::new();
@@ -37,7 +57,7 @@ pub fn as_matrix(mat: &NumericSexp) -> Option<Vec<skia_safe::Matrix>> {
     }
 }
 
-// Converts NumericSexp to Vec<skia_safe::RSXform>
+/// Converts NumericSexp to Vec<skia_safe::RSXform>
 pub fn as_rsx_trans(rsx_trans: &NumericSexp) -> Option<Vec<skia_safe::RSXform>> {
     let data = rsx_trans.as_slice_f64();
     let mut ret: Vec<skia_safe::RSXform> = Vec::new();

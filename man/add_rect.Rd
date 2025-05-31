@@ -4,13 +4,16 @@
 \alias{add_rect}
 \title{Add rectangles}
 \usage{
-add_rect(img, rect, ..., props = paint())
+add_rect(img, xywh, radii = matrix(0, nrow(xywh), 2), ..., props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{rect}{A double matrix where each row is a rectangle
+\item{xywh}{A double matrix where each row is a rectangle
 XYWH (left, top, right, bottom).}
+
+\item{radii}{A double matrix where each row is a pair of axis lengths
+on X-axis and Y-axis of oval describing rounded corners.}
 
 \item{...}{For some drawing functions, you can specify \code{width} and \code{color} as named arguments.
 \itemize{

@@ -5,7 +5,7 @@ mod runtime_effect;
 
 use canvas::{read_picture_bytes, SkiaCanvas};
 use paint_attrs::{font, PaintAttrs};
-use path_transform::{as_matrix, as_points};
+use path_transform::{as_matrix, as_points, as_rects};
 
 use savvy::{savvy, savvy_err, IntegerSexp, NumericSexp, StringSexp};
 use skia_safe::{Data, Image, Paint};
@@ -372,10 +372,7 @@ unsafe fn sk_draw_circle(
 /// @param curr_bytes Current canvas state.
 /// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
-/// @param left X coordinates of the left edge of the rectangles.
-/// @param top Y coordinates of the top edge of the rectangles.
-/// @param right X coordinates of the right edge of the rectangles.
-/// @param bottom Y coordinates of the bottom edge of the rectangles.
+/// @param xywh Rectangles.
 /// @param rx Axis lengths on X-axis of oval describing rounded corners.
 /// @param ry Axis lengths on Y-axis of oval describing rounded corners.
 /// @param width Stroke width.
@@ -388,28 +385,23 @@ unsafe fn sk_draw_rounded_rect(
     curr_bytes: savvy::RawSexp,
     mat: NumericSexp,
     props: PaintAttrs,
-    left: NumericSexp,
-    top: NumericSexp,
-    right: NumericSexp,
-    bottom: NumericSexp,
+    xywh: NumericSexp,
     rx: NumericSexp,
     ry: NumericSexp,
     width: NumericSexp,
     color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    let left = left.as_slice_f64();
-    let top = top.as_slice_f64();
-    let right = right.as_slice_f64();
-    let bottom = bottom.as_slice_f64();
+    let rects = as_rects(&xywh).ok_or_else(|| return savvy_err!("Failed to parse xywh"))?;
     let rx = rx.as_slice_f64();
     let ry = ry.as_slice_f64();
+    let width = width.as_slice_f64();
     let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
         // if matrix is too small to take color, implicitly use paint color
         let mut ret: Vec<skia_safe::Color> = Vec::new();
         ret.resize(width.len(), props.paint.color());
         ret
     });
-    paint_attrs::assert_len("color", color.len(), width.len())?;
+    paint_attrs::assert_len("color", color.len(), rects.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
@@ -419,16 +411,10 @@ unsafe fn sk_draw_rounded_rect(
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
 
-    for (i, w) in width.iter_f64().enumerate() {
-        props.reset_width(w);
+    for (i, rect) in rects.iter().enumerate() {
+        props.reset_width(width[i]);
         props.reset_color(color[i]);
-        let rect = skia_safe::Rect::new(
-            left[i] as f32,
-            top[i] as f32,
-            right[i] as f32,
-            bottom[i] as f32,
-        );
-        canvas.draw_round_rect(&rect, rx[i] as f32, ry[i] as f32, &props.paint);
+        canvas.draw_round_rect(rect, rx[i] as f32, ry[i] as f32, &props.paint);
     }
     let picture = recorder.finish_recording()?;
     Ok(picture.into())
@@ -440,16 +426,10 @@ unsafe fn sk_draw_rounded_rect(
 /// @param curr_bytes Current canvas state.
 /// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
-/// @param outer_left X coordinates of the left edge of the outer rectangle.
-/// @param outer_top Y coordinates of the top edge of the outer rectangle.
-/// @param outer_right X coordinates of the right edge of the outer rectangle.
-/// @param outer_bottom Y coordinates of the bottom edge of the outer rectangle.
+/// @param outer_xywh Outer rectangles.
 /// @param outer_rx Axis lengths on X-axis of outer oval describing rounded corners.
 /// @param outer_ry Axis lengths on Y-axis of outer oval describing rounded corners.
-/// @param inner_left X coordinates of the left edge of the inner rectangle.
-/// @param inner_top Y coordinates of the top edge of the inner rectangle.
-/// @param inner_right X coordinates of the right edge of the inner rectangle.
-/// @param inner_bottom Y coordinates of the bottom edge of the inner rectangle.
+/// @param inner_xywh Inner rectangles.
 /// @param inner_rx Axis lengths on X-axis of inner oval describing rounded corners.
 /// @param inner_ry Axis lengths on Y-axis of inner oval describing rounded corners.
 /// @param width Stroke width.
@@ -462,42 +442,31 @@ unsafe fn sk_draw_diff_rect(
     curr_bytes: savvy::RawSexp,
     mat: NumericSexp,
     props: PaintAttrs,
-    outer_left: NumericSexp,
-    outer_top: NumericSexp,
-    outer_right: NumericSexp,
-    outer_bottom: NumericSexp,
+    outer_xywh: NumericSexp,
     outer_rx: NumericSexp,
     outer_ry: NumericSexp,
-    inner_left: NumericSexp,
-    inner_top: NumericSexp,
-    inner_right: NumericSexp,
-    inner_bottom: NumericSexp,
+    inner_xywh: NumericSexp,
     inner_rx: NumericSexp,
     inner_ry: NumericSexp,
     width: NumericSexp,
     color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    let outer_left = outer_left.as_slice_f64();
-    let outer_top = outer_top.as_slice_f64();
-    let outer_right = outer_right.as_slice_f64();
-    let outer_bottom = outer_bottom.as_slice_f64();
+    let outer =
+        as_rects(&outer_xywh).ok_or_else(|| return savvy_err!("Failed to parse outer xywh"))?;
+    let inner =
+        as_rects(&inner_xywh).ok_or_else(|| return savvy_err!("Failed to parse inner xywh"))?;
     let outer_rx = outer_rx.as_slice_f64();
     let outer_ry = outer_ry.as_slice_f64();
-
-    let inner_left = inner_left.as_slice_f64();
-    let inner_top = inner_top.as_slice_f64();
-    let inner_right = inner_right.as_slice_f64();
-    let inner_bottom = inner_bottom.as_slice_f64();
     let inner_rx = inner_rx.as_slice_f64();
     let inner_ry = inner_ry.as_slice_f64();
-
+    let width = width.as_slice_f64();
     let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
         // if matrix is too small to take color, implicitly use paint color
         let mut ret: Vec<skia_safe::Color> = Vec::new();
         ret.resize(width.len(), props.paint.color());
         ret
     });
-    paint_attrs::assert_len("color", color.len(), width.len())?;
+    paint_attrs::assert_len("color", color.len(), outer.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
@@ -507,22 +476,10 @@ unsafe fn sk_draw_diff_rect(
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
 
-    for (i, w) in width.iter_f64().enumerate() {
-        props.reset_width(w);
+    for (i, (outer, inner)) in outer.iter().zip(inner.iter()).enumerate() {
+        props.reset_width(width[i]);
         props.reset_color(color[i]);
-        let outer = skia_safe::Rect::new(
-            outer_left[i] as f32,
-            outer_top[i] as f32,
-            outer_right[i] as f32,
-            outer_bottom[i] as f32,
-        );
         let outer = skia_safe::RRect::new_rect_xy(outer, outer_rx[i] as f32, outer_ry[i] as f32);
-        let inner = skia_safe::Rect::new(
-            inner_left[i] as f32,
-            inner_top[i] as f32,
-            inner_right[i] as f32,
-            inner_bottom[i] as f32,
-        );
         let inner = skia_safe::RRect::new_rect_xy(inner, inner_rx[i] as f32, inner_ry[i] as f32);
         canvas.draw_drrect(&outer, &inner, &props.paint);
     }
