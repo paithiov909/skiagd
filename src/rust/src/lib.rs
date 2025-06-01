@@ -4,7 +4,7 @@ mod path_transform;
 mod runtime_effect;
 
 use canvas::{read_picture_bytes, SkiaCanvas};
-use paint_attrs::PaintAttrs;
+use paint_attrs::{assert_len, PaintAttrs};
 use path_transform::as_matrix;
 
 use savvy::{savvy, savvy_err, IntegerSexp, NumericSexp, StringSexp};
@@ -46,9 +46,8 @@ unsafe fn sk_as_png(
     curr_bytes: savvy::RawSexp,
     mat: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    if size.len() != 2 {
-        return Err(savvy_err!("Invalid canvas size. Expected 2 elements"));
-    }
+    assert_len("size", 2, size.len())?;
+
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let size = size.to_vec();
@@ -79,9 +78,8 @@ unsafe fn sk_draw_png(
     png_bytes: savvy::RawSexp,
     left_top: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    if left_top.len() != 2 {
-        return Err(savvy_err!("Invalid left_top. Expected 2 elements"));
-    }
+    assert_len("left_top", 2, left_top.len())?;
+
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
 
@@ -136,8 +134,6 @@ unsafe fn sk_draw_path(
     });
     let transforms = path_transform::as_rsx_trans(&rsx_trans)
         .ok_or_else(|| return savvy_err!("Failed to parse rsx_trans"))?;
-    paint_attrs::assert_len("color", color.len(), width.len())?;
-    paint_attrs::assert_len("rsx_trans", transforms.len(), width.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
@@ -192,7 +188,6 @@ unsafe fn sk_draw_text(
     });
     let transforms = path_transform::as_rsx_trans(&rsx_trans)
         .ok_or_else(|| return savvy_err!("Failed to parse rsx_trans"))?;
-    paint_attrs::assert_len("color", color.len(), text.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
@@ -295,7 +290,6 @@ unsafe fn sk_draw_line(
         ret.resize(width.len(), props.paint.color());
         ret
     });
-    paint_attrs::assert_len("color", color.len(), width.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
@@ -347,8 +341,6 @@ unsafe fn sk_draw_circle(
         ret.resize(width.len(), props.paint.color());
         ret
     });
-    paint_attrs::assert_len("center", center.len(), width.len())?;
-    paint_attrs::assert_len("color", color.len(), width.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
@@ -407,8 +399,6 @@ unsafe fn sk_draw_rounded_rect(
     });
     let transforms = path_transform::as_rsx_trans(&rsx_trans)
         .ok_or_else(|| return savvy_err!("Failed to parse rsx_trans"))?;
-    paint_attrs::assert_len("color", color.len(), rects.len())?;
-    paint_attrs::assert_len("rsx_trans", transforms.len(), rects.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
@@ -477,8 +467,6 @@ unsafe fn sk_draw_diff_rect(
     });
     let transforms = path_transform::as_rsx_trans(&rsx_trans)
         .ok_or_else(|| return savvy_err!("Failed to parse rsx_trans"))?;
-    paint_attrs::assert_len("color", color.len(), outer.len())?;
-    paint_attrs::assert_len("rsx_trans", transforms.len(), outer.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
@@ -594,8 +582,6 @@ unsafe fn sk_draw_vertices(
         ret.resize(positions.len(), props.paint.color());
         ret
     });
-    paint_attrs::assert_len("color", color.len(), positions.len())?;
-
     let vertices = skia_safe::Vertices::new_copy(mode, &positions, &positions, &color, None);
 
     let picture = read_picture_bytes(&curr_bytes)?;

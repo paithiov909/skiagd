@@ -1,3 +1,5 @@
+use crate::paint_attrs::assert_len;
+
 use savvy::savvy_err;
 use skia_safe::{Picture, PictureRecorder};
 
@@ -17,9 +19,8 @@ pub struct SkiaCanvas {
 impl SkiaCanvas {
     #[allow(unused_mut)]
     pub fn setup(size: &savvy::IntegerSexp) -> anyhow::Result<SkiaCanvas, savvy::Error> {
-        if size.len() != 2 {
-            return Err(savvy_err!("Failed to setup canvas. Invalid canvas size"));
-        }
+        assert_len("size", 2, size.len())?;
+
         let size = size.as_slice();
         let mut recorder = skia_safe::PictureRecorder::new();
         Ok(SkiaCanvas {

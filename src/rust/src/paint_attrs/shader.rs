@@ -1,4 +1,4 @@
-use super::num2colors;
+use super::{assert_len, num2colors};
 use crate::canvas::read_picture_bytes;
 use crate::path_transform::as_matrix;
 use crate::runtime_effect;
@@ -59,9 +59,9 @@ impl Shader {
         seed: NumericScalar,
         tile_size: NumericSexp,
     ) -> savvy::Result<Self> {
-        if freq.len() != 2 || tile_size.len() != 2 {
-            return Err(savvy_err!("Invalid arguments"));
-        }
+        assert_len("freq", 2, freq.len())?;
+        assert_len("tile_size", 2, tile_size.len())?;
+
         let freq = freq.as_slice_f64();
         let octaves = octaves.as_usize()?;
         let seed = seed.as_f64();
@@ -86,9 +86,9 @@ impl Shader {
         seed: NumericScalar,
         tile_size: NumericSexp,
     ) -> savvy::Result<Self> {
-        if freq.len() != 2 || tile_size.len() != 2 {
-            return Err(savvy_err!("Invalid arguments"));
-        }
+        assert_len("freq", 2, freq.len())?;
+        assert_len("tile_size", 2, tile_size.len())?;
+
         let freq = freq.as_slice_f64();
         let octaves = octaves.as_usize()?;
         let seed = seed.as_f64();
@@ -145,9 +145,8 @@ impl Shader {
         tile_size: NumericSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
-        if tile_size.len() != 2 {
-            return Err(savvy_err!("Invalid arguments"));
-        }
+        assert_len("tile_size", 2, tile_size.len())?;
+
         let tile_size = tile_size.as_slice_f64();
         let mat =
             as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
@@ -177,9 +176,11 @@ impl Shader {
         flags: LogicalSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
-        if start.len() != 2 || end.len() != 2 || from.len() != 4 || to.len() != 4 {
-            return Err(savvy_err!("Invalid arguments"));
-        }
+        assert_len("start", 2, start.len())?;
+        assert_len("end", 2, end.len())?;
+        assert_len("from", 4, from.len())?;
+        assert_len("to", 4, to.len())?;
+
         let mat =
             as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let start = start.as_slice_f64();
@@ -224,9 +225,10 @@ impl Shader {
         flags: LogicalSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
-        if center.len() != 2 || from.len() != 4 || to.len() != 4 {
-            return Err(savvy_err!("Invalid arguments"));
-        }
+        assert_len("center", 2, center.len())?;
+        assert_len("from", 4, from.len())?;
+        assert_len("to", 4, to.len())?;
+
         let mat =
             as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let center = center.as_slice_f64();
@@ -270,14 +272,12 @@ impl Shader {
         flags: LogicalSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
-        if start.len() != 2
-            || end.len() != 2
-            || radii.len() != 2
-            || from.len() != 4
-            || to.len() != 4
-        {
-            return Err(savvy_err!("Invalid arguments"));
-        }
+        assert_len("start", 2, start.len())?;
+        assert_len("end", 2, end.len())?;
+        assert_len("radii", 2, radii.len())?;
+        assert_len("from", 4, from.len())?;
+        assert_len("to", 4, to.len())?;
+
         let mat =
             as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let start = start.as_slice_f64();
@@ -324,9 +324,10 @@ impl Shader {
         flags: LogicalSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
-        if center.len() != 2 || from.len() != 4 || to.len() != 4 {
-            return Err(savvy_err!("Invalid arguments"));
-        }
+        assert_len("center", 2, center.len())?;
+        assert_len("from", 4, from.len())?;
+        assert_len("to", 4, to.len())?;
+
         let mat =
             as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let center = center.as_slice_f64();

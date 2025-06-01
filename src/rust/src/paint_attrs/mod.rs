@@ -119,13 +119,10 @@ pub fn num2colors(color: &NumericSexp) -> Option<Vec<skia_safe::Color>> {
     }
 }
 
-/// If the length of first argument are not fit to the other argument, throws an error
-pub fn assert_len(name: &str, actual: usize, expected: usize) -> anyhow::Result<(), savvy::Error> {
+/// If actual length is not equal to expected, raises an error
+pub fn assert_len(name: &str, expected: usize, actual: usize) -> anyhow::Result<(), savvy::Error> {
     if actual != expected {
-        Err(savvy_err!(
-            "{} must have the same length as other arguments",
-            name
-        ))
+        Err(savvy_err!("{} must have {} elements", name, expected))
     } else {
         Ok(())
     }
