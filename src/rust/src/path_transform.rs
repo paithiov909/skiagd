@@ -8,24 +8,91 @@ pub fn as_points(x: &NumericSexp, y: &NumericSexp) -> Vec<skia_safe::Point> {
     points
 }
 
-/// Returns a skia_safe::Matrix
-pub fn as_matrix(mat: &NumericSexp) -> anyhow::Result<skia_safe::Matrix, savvy::Error> {
-    if mat.len() != 9 {
-        return Err(savvy_err!("Invalid matrix. Expected 9 elements"));
+/// Converts NumericSexp to Vec<skia_safe::RRect>
+pub fn as_rrects(
+    rect: &NumericSexp,
+    rx: &NumericSexp,
+    ry: &NumericSexp,
+) -> Option<Vec<skia_safe::RRect>> {
+    let data = rect.as_slice_f64();
+    let rx = rx.as_slice_f64();
+    let ry = ry.as_slice_f64();
+    let mut ret: Vec<skia_safe::RRect> = Vec::new();
+    for (i, chunk) in data.chunks(4).enumerate() {
+        if chunk.len() == 4 {
+            let out = skia_safe::Rect::new(
+                chunk[0] as f32,
+                chunk[1] as f32,
+                chunk[2] as f32,
+                chunk[3] as f32,
+            );
+            ret.push(skia_safe::RRect::new_rect_xy(
+                out,
+                rx[i] as f32,
+                ry[i] as f32,
+            ));
+        }
     }
+    if ret.is_empty() {
+        None
+    } else {
+        Some(ret)
+    }
+}
+
+/// Converts NumericSexp to Vec<skia_safe::Matrix>
+pub fn as_matrix(mat: &NumericSexp) -> Option<Vec<skia_safe::Matrix>> {
     let mat = mat.as_slice_f64();
-    let out = skia_safe::Matrix::new_all(
-        mat[0] as f32,
-        mat[1] as f32,
-        mat[2] as f32,
-        mat[3] as f32,
-        mat[4] as f32,
-        mat[5] as f32,
-        mat[6] as f32,
-        mat[7] as f32,
-        mat[8] as f32,
-    );
-    Ok(out)
+    let mut ret: Vec<skia_safe::Matrix> = Vec::new();
+    for chunk in mat.chunks(9) {
+        if chunk.len() == 9 {
+            let out = skia_safe::Matrix::new_all(
+                chunk[0] as f32,
+                chunk[1] as f32,
+                chunk[2] as f32,
+                chunk[3] as f32,
+                chunk[4] as f32,
+                chunk[5] as f32,
+                chunk[6] as f32,
+                chunk[7] as f32,
+                chunk[8] as f32,
+            );
+            ret.push(out);
+        }
+    }
+    if ret.is_empty() {
+        None
+    } else {
+        Some(ret)
+    }
+}
+
+/// Converts NumericSexp to Vec<skia_safe::RSXform>
+pub fn as_rsx_trans(rsx_trans: &NumericSexp) -> Option<Vec<skia_safe::RSXform>> {
+    let data = rsx_trans.as_slice_f64();
+    let mut ret: Vec<skia_safe::RSXform> = Vec::new();
+    for chunk in data.chunks(6) {
+        if chunk.len() == 6 {
+            let scale = chunk[0];
+            let radians = chunk[1];
+            let tx = chunk[2];
+            let ty = chunk[3];
+            let anchor_x = chunk[4];
+            let anchor_y = chunk[5];
+            let trans = skia_safe::RSXform::from_radians(
+                scale as f32,
+                radians as f32,
+                (tx as f32, ty as f32),
+                (anchor_x as f32, anchor_y as f32),
+            );
+            ret.push(trans);
+        }
+    }
+    if ret.is_empty() {
+        None
+    } else {
+        Some(ret)
+    }
 }
 
 /// Creates a matrix for mapping points
@@ -66,12 +133,12 @@ fn sk_matrix_map_point(
 /// @noRd
 #[savvy]
 fn sk_path_transform(svg: StringSexp, mat: NumericSexp) -> savvy::Result<savvy::Sexp> {
-    let mat = as_matrix(&mat)?;
+    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let mut out = savvy::OwnedStringSexp::new(svg.len())?;
     for (i, s) in svg.iter().enumerate() {
         let path = skia_safe::utils::parse_path::from_svg(s)
             .ok_or_else(|| return savvy_err!("Failed to parse svg at {}", i + 1))?
-            .with_transform(&mat);
+            .with_transform(&mat[0]);
         let s = skia_safe::utils::parse_path::to_svg(&path);
         out.set_elt(i, &s)?;
     }

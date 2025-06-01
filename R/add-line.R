@@ -15,7 +15,12 @@ add_line <- function(img, from, to, ..., props = paint()) {
   if (is.null(color)) {
     color <- rep(props[["color"]], nrow(from))
   }
-  validate_length(length(width), from[, 1], to[, 1])
+  validate_length(
+    nrow(from),
+    nrow(to),
+    length(width),
+    ncol(color)
+  )
 
   sk_draw_line(
     props[["canvas_size"]],

@@ -1,106 +1,66 @@
 #' Add text
 #'
-#' @description
-#' Draws text as textblobs.
-#'
-#' The return value is often a large object
+#' @note
+#' * `rsx_trans` for `add_text()` must have
+#' the same number of rows as the total number of characters to be drawn;
+#' not just the length of `text`.
+#' * Since textblobs do not have font fallback mechanism,
+#' characters out of the specified font are not drawn correctly.
+#' * The return value is often a large object
 #' because the specified font is embedded in the returned picture.
 #' Note that you should almost always [freeze()] the picture after drawing text.
 #'
-#' You can use `text_layout_horizontal()` and `text_layout_vertical()`
-#' to create a `point` matrix
-#' and `text_width()` to get widths of textblobs.
-#'
-#' @details
-#' Since textblobs do not have font fallback mechanism,
-#' characters out of the specified font are not drawn correctly.
-#'
 #' @param text Characters to be drawn.
-#' @param point `NULL` or a double matrix where each row is the point
-#' at which each character in `text` is drawn.
-#' For example, if `text` is a character vector of 5 and 3 length strings,
-#' `point` must contain 8 points.
-#' If `NULL`, `text` is drawn at `c(0, props[["fontsize"]])` naturally.
 #' @inheritParams param-img-and-props
-#' @returns For `add_text()`, a raw vector of picture.
+#' @inheritParams param-rsx-trans
+#' @returns A raw vector of picture.
 #' @export
-add_text <- function(img, text, point = NULL, ..., props = paint()) {
+add_text <- function(img, text, rsx_trans, ..., props = paint()) {
   if (anyNA(text)) {
     rlang::abort("`text` cannot contain NA.")
   }
-  if (is.null(point)) {
-    add_text_impl(img, text, props, ...)
-  } else {
-    add_textblob_impl(img, text, point, props, ...)
-  }
-}
-
-add_text_impl <- function(img, text, props = paint(), ...) {
   dots <- rlang::list2(...)
   color <- dots[["color"]]
   if (is.null(color)) {
     color <- rep(props[["color"]], length(text))
   }
+  validate_length(
+    length(text),
+    ncol(color)
+  )
+
   sk_draw_text(
     props[["canvas_size"]],
     img,
     props[["transform"]],
     as_paint_attrs(props),
     text,
-    color
+    t(rsx_trans[, 1:6]),
+    as.integer(color)
   )
 }
 
-add_textblob_impl <- function(img, text, point, props = paint(), ...) {
-  if (sum(nchar(text)) != nrow(point)) {
-    rlang::abort("Total number of characters in `text` and number of rows in `point` must be the same.")
-  }
-  dots <- rlang::list2(...)
-  color <- dots[["color"]]
-  if (is.null(color)) {
-    color <- rep(props[["color"]], length(text))
-  }
-  sk_draw_textblob(
-    props[["canvas_size"]],
-    img,
-    props[["transform"]],
-    as_paint_attrs(props),
-    text,
-    point[, 1],
-    point[, 2],
-    color
-  )
-}
-
-#' @rdname add_text
+#' Get width and number of characters
+#'
+#' Returns information about text strings
+#' when they are drawn naturally as a textblob with `props`.
+#'
+#' @param text Text strings.
+#' @param props A list of painting attributes out of [paint()].
+#' @returns A data frame.
 #' @export
-text_layout_horizontal <- function(text, props = paint()) {
-  n_chars <- sum(nchar(text))
-  vec <- c(
-    seq(props[["fontsize"]] / 4, props[["fontsize"]] * n_chars, by = props[["fontsize"]]),
-    rep_len(props[["fontsize"]], n_chars),
-    rep_len(1, n_chars)
-  )
-  matrix(vec, ncol = 3)
-}
-
-#' @rdname add_text
-#' @export
-text_layout_vertical <- function(text, props = paint()) {
-  n_chars <- sum(nchar(text))
-  vec <- c(
-    rep_len(props[["fontsize"]], n_chars),
-    seq(props[["fontsize"]] / 4, props[["fontsize"]] * n_chars, by = props[["fontsize"]]),
-    rep_len(1, n_chars)
-  )
-  matrix(vec, ncol = 3)
-}
-
-#' @rdname add_text
-#' @export
-text_width <- function(text, props = paint()) {
-  sk_get_text_width(
-    text,
-    as_paint_attrs(props)
-  )
+text_info <- function(text, props = paint()) {
+  ret <-
+    sk_get_text_info(
+      text,
+      as_paint_attrs(props)
+    )
+  out <-
+    data.frame(
+      id = ret[["id"]] + 1L,
+      n_chars = ret[["n_chars"]],
+      width = ret[["width"]]
+    )
+  class(out) <- c("tbl_df", "tbl", "data.frame")
+  out
 }

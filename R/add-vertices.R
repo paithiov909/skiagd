@@ -1,6 +1,6 @@
 #' Add vertices
 #'
-#' @details
+#' @note
 #' When `color` is explicitly provided, they will be combined with
 #' `props[["shader"]]` if present or opaque `props[["color"]]` if not.
 #'
@@ -23,6 +23,11 @@ add_vertices <- function(img, vertices, ..., props = paint()) {
   if (is.null(color)) {
     color <- rep(props[["color"]], nrow(vertices))
   }
+  validate_length(
+    nrow(vertices),
+    ncol(color)
+  )
+
   sk_draw_vertices(
     props[["canvas_size"]],
     img,
