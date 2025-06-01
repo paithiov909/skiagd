@@ -30,7 +30,7 @@ A raw vector of picture.
 \description{
 Add vertices
 }
-\details{
+\note{
 When \code{color} is explicitly provided, they will be combined with
 \code{props[["shader"]]} if present or opaque \code{props[["color"]]} if not.
 

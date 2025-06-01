@@ -23,20 +23,17 @@ test_that("add_rect works", {
       ) |>
       as_recordedplot()
   )
-})
-
-test_that("add_rounded_rect works", {
   vdiffr::expect_doppelganger(
     "rounded_rect",
     canvas("tomato") |>
-      add_rounded_rect(
+      add_rect(
         matrix(c(120, 40, 440, 480), ncol = 4),
-        matrix(c(160, 160), ncol = 2),
+        radii = matrix(c(160, 160), ncol = 2),
         props = paint(color = "snow", width = 16, style = Style$Stroke)
       ) |>
-      add_rounded_rect(
+      add_rect(
         matrix(c(160, 200, 480, 300, 240, 80, 360, 440), nrow = 2, byrow = TRUE),
-        matrix(c(24, 48, 24, 48), ncol = 2),
+        radii = matrix(c(24, 48, 24, 48), ncol = 2),
         props = paint(color = "yellow", width = 16, style = Style$Stroke)
       ) |>
       as_recordedplot()
@@ -49,9 +46,9 @@ test_that("add_diff_rect works", {
     canvas("coral") |>
       add_diff_rect(
         matrix(c(120, 40, 440, 480), ncol = 4),
-        matrix(c(48, 48), ncol = 2),
         matrix(c(240, 80, 360, 440), ncol = 4),
-        matrix(c(16, 16), ncol = 2),
+        outer_radii = matrix(c(48, 48), ncol = 2),
+        inner_radii = matrix(c(16, 16), ncol = 2),
         props = paint(color = "snow", width = 16, style = Style$Fill)
       ) |>
       as_recordedplot()
@@ -129,20 +126,20 @@ test_that("add_path with PathEffect$trim work", {
     canvas("limegreen") |>
       add_path(
         star,
-        transform = c(1, 0, 256, 0, 1, 128, 0, 0, 1),
+        rsx_trans = matrix(c(1, 0, 256, 128, 0, 0), ncol = 6),
         props = paint(color = "yellow")
       ) |>
       add_path(
         star,
-        transform = c(0.707, -0.707, 256, 0.707, 0.707, 128, 0, 0, 1),
+        rsx_trans = matrix(c(1, pi / 4, 256, 128, 0, 0), ncol = 6),
         props = paint(color = "yellow", blend_mode = BlendMode$Exclusion)
       ) |>
       add_path(
         star,
-        transform = c(0.707, -0.707, 256, 0.707, 0.707, 128, 0, 0, 1),
+        rsx_trans = matrix(c(1, pi / 4, 256, 128, 0, 0), ncol = 6),
         props = paint(
-          color = "black", width = 16, style = Style$Stroke
-          , path_effect = PathEffect$trim(0.2, 0.9)
+          color = "black", width = 16, style = Style$Stroke,
+          path_effect = PathEffect$trim(0.2, 0.9)
         )
       ) |>
       as_recordedplot()

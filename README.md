@@ -27,19 +27,18 @@ graphics device for R 😓
   canvas, actually ***adds*** some shapes to there, and then returns a
   `raw` object again.
 
-## Future plan
+## Roadmap
 
 I’m planning to re-implement features like [React Native
 Skia](https://shopify.github.io/react-native-skia/).
 
-### Maybe in the near future??
+### Implemented
 
 - Shapes
   - Path
     - [x] SVG notation (path)
   - Polygons
-    - [x] Rect
-    - [x] RoundedRect (round_rect)
+    - [x] Rect (round_rect)
     - [x] DiffRect (drrect)
     - [x] Line
     - [x] Points (points; not point)
@@ -53,8 +52,6 @@ Skia](https://shopify.github.io/react-native-skia/).
 - Images
   - [x] PNG
 - Text
-  - [ ] Paragraph
-  - [x] Text Path (unstable yet)
   - [x] Text Blob
 - Painting Attributes
   ([Paint](https://rust-skia.github.io/doc/skia_safe/type.Paint.html))
@@ -67,10 +64,13 @@ Skia](https://shopify.github.io/react-native-skia/).
     - [uniforms](https://rust-skia.github.io/doc/skia_safe/runtime_effect/type.RuntimeShaderBuilder.html#method.set_uniform_int)
       support
 
-### Possibly in the future??
+### Not planned
 
 - Shapes
   - Patch
+- Text
+  - Paragraph
+  - Text Path
 - Fitting Images (needs to re-implement
   [this](https://github.com/Shopify/react-native-skia/blob/4192f839d7ffc5cb0aba91c0f0f97e595d5c8409/packages/skia/cpp/api/recorder/ImageFit.h))
 - [Group](https://shopify.github.io/react-native-skia/docs/group/) /
@@ -80,8 +80,7 @@ Skia](https://shopify.github.io/react-native-skia/).
 
 ## Showcase
 
-It’s still in early alpha stage. The API is subject to (maybe drastic)
-change.
+It’s still in early stage. The API is subject to change.
 
 ``` r
 pkgload::load_all(export_all = FALSE)
@@ -110,15 +109,30 @@ img_data <-
   ) |>
   add_path(
     "M 128 0 L 168 80 L 256 93 L 192 155 L 207 244 L 128 202 L 49 244 L 64 155 L 0 93 L 88 80 L 128 0 Z",
-    transform = c(1, 0, (size[1] / 2 - 128), 0, 1, (size[2] / 2 - 128), 0, 0, 1),
+    rsx_trans = matrix(c(1, 0, size[1] / 2 - 128, size[2] / 2 - 128, 0, 0), ncol = 6),
     props = paint(color = "gold")
   ) |>
   add_png(
     canvas("transparent") |>
-      add_text("Hello, skiagd♪", props = paint(fontsize = 96, fontface = FontStyle$Bold, color = "maroon")) |>
+      add_text(
+        "Hello, skiagd!",
+        rsx_trans = text_info("Hello, skiagd!", props = paint(fontsize = 96, family = "mono")) |>
+          dplyr::reframe(
+            sc = rep_len(1, n_chars),
+            rot = rep_len(0, n_chars),
+            x = width / n_chars * (seq_len(n_chars) - 1),
+            y = rep_len(96, n_chars),
+            ax = rep_len(0, n_chars),
+            ay = rep_len(0, n_chars),
+            .by = id
+          ) |>
+          dplyr::select(!"id") |>
+          as.matrix(),
+        props = paint(fontsize = 96, family = "mono", fontface = FontStyle$Bold, color = "maroon")
+      ) |>
       as_png(),
-    left = size[1] / 2 - text_width("Hello, skiagd", props = paint(fontsize = 96)) / 2,
-    top = size[2] * 5 / 7
+    left = size[1] / 2 - text_info("Hello, skiagd!", props = paint(fontsize = 96))[["width"]] / 2,
+    top = size[2] / 9 * 6
   ) |>
   as_png()
 
@@ -183,8 +197,8 @@ magick::image_read(img_data) |>
 
 ![README-test-plot-2](man/figures/README-test-plot-2.jpg)
 
-The following is a short animation of ‘Mystery rose’. The code is
-based on [this
+The following is a short animation of ‘Mystery rose’. The code is based
+on [this
 post](https://georgemsavva.github.io/creativecoding/posts/mystery/).
 
 ``` r

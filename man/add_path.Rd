@@ -4,17 +4,29 @@
 \alias{add_path}
 \title{Add paths}
 \usage{
-add_path(img, path, transform = diag(1, 3), ..., props = paint())
+add_path(
+  img,
+  path,
+  rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), length(path), 6, byrow = TRUE),
+  ...,
+  props = paint()
+)
 }
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{path}{Characters of SVG notations
-like \code{"M10 10 H 90 V 90 H 10 L 10 10"}.}
+\item{path}{Characters of SVG notations like \code{"M10 10 H 90 V 90 H 10 L 10 10"}.}
 
-\item{transform}{Numerics of length 9
-to apply affine transformations to the path themselves.
-See \link{transform-matrix} for affine transformations.}
+\item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
+Each column of the matrix corresponds to:
+\itemize{
+\item scale
+\item angle of rotation (in radians)
+\item amount of translation in the X-axis direction
+\item amount of translation in the Y-axis direction
+\item X coordinate of the anchor point
+\item Y coordinate of the anchor point
+}}
 
 \item{...}{For some drawing functions, you can specify \code{width} and \code{color} as named arguments.
 \itemize{

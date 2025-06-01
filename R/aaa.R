@@ -14,6 +14,21 @@
 #' @keywords internal
 NULL
 
+#' RSX transform
+#'
+#' @rdname skiagd-params
+#' @name param-rsx-trans
+#' @param rsx_trans A double matrix with 6 columns where each row represents an RSX transform.
+#' Each column of the matrix corresponds to:
+#' * scale
+#' * angle of rotation (in radians)
+#' * amount of translation in the X-axis direction
+#' * amount of translation in the Y-axis direction
+#' * X coordinate of the anchor point
+#' * Y coordinate of the anchor point
+#' @keywords internal
+NULL
+
 #' Pictures
 #'
 #' @description
@@ -32,7 +47,7 @@ NULL
 #' with the [Skia debugger](https://skia.org/docs/dev/tools/debugger/)
 #' if they are compatible with the version.
 #'
-#' @section Notes:
+#' @note
 #' * A serialized picture can hold only up to 100 drawing operations.
 #' If you need more, you can save the capacity by using [freeze()] as needed.
 #'

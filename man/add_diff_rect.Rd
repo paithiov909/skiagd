@@ -7,9 +7,10 @@
 add_diff_rect(
   img,
   outer,
-  outer_radii,
   inner,
-  inner_radii,
+  rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), nrow(outer), 6, byrow = TRUE),
+  outer_radii = matrix(0, nrow(outer), 2),
+  inner_radii = matrix(0, nrow(inner), 2),
   ...,
   props = paint()
 )
@@ -17,17 +18,22 @@ add_diff_rect(
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{outer}{A double matrix where each row is an outer rectangle
+\item{outer, inner}{A double matrix where each row is a rectangle
 XYWH (left, top, right, bottom).}
 
-\item{outer_radii}{A double matrix where each row is a pair of axis lengths
-on X-axis and Y-axis of outer oval describing rounded corners.}
+\item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
+Each column of the matrix corresponds to:
+\itemize{
+\item scale
+\item angle of rotation (in radians)
+\item amount of translation in the X-axis direction
+\item amount of translation in the Y-axis direction
+\item X coordinate of the anchor point
+\item Y coordinate of the anchor point
+}}
 
-\item{inner}{A double matrix where each row is an inner rectangle
-XYWH (left, top, right, bottom).}
-
-\item{inner_radii}{A double matrix where each row is a pair of axis lengths
-on X-axis and Y-axis of inner oval describing rounded corners.}
+\item{outer_radii, inner_radii}{A double matrix where each row is a pair of axis lengths
+on X-axis and Y-axis of oval describing rounded corners.}
 
 \item{...}{For some drawing functions, you can specify \code{width} and \code{color} as named arguments.
 \itemize{

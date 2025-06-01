@@ -1,4 +1,4 @@
-use super::num2colors;
+use super::{assert_len, num2colors};
 use crate::canvas::read_picture_bytes;
 use crate::path_transform::as_matrix;
 use crate::runtime_effect;
@@ -59,9 +59,9 @@ impl Shader {
         seed: NumericScalar,
         tile_size: NumericSexp,
     ) -> savvy::Result<Self> {
-        if freq.len() != 2 || tile_size.len() != 2 {
-            return Err(savvy_err!("Invalid arguments"));
-        }
+        assert_len("freq", 2, freq.len())?;
+        assert_len("tile_size", 2, tile_size.len())?;
+
         let freq = freq.as_slice_f64();
         let octaves = octaves.as_usize()?;
         let seed = seed.as_f64();
@@ -86,9 +86,9 @@ impl Shader {
         seed: NumericScalar,
         tile_size: NumericSexp,
     ) -> savvy::Result<Self> {
-        if freq.len() != 2 || tile_size.len() != 2 {
-            return Err(savvy_err!("Invalid arguments"));
-        }
+        assert_len("freq", 2, freq.len())?;
+        assert_len("tile_size", 2, tile_size.len())?;
+
         let freq = freq.as_slice_f64();
         let octaves = octaves.as_usize()?;
         let seed = seed.as_f64();
@@ -112,7 +112,8 @@ impl Shader {
         mode: &TileMode,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
-        let mat = as_matrix(&transform)?;
+        let mat =
+            as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let input = Data::new_bytes(png_bytes.as_slice());
         let image = Image::from_encoded_with_alpha_type(input, skia_safe::AlphaType::Premul)
             .ok_or_else(|| return savvy_err!("Failed to read PNG as image"))?;
@@ -121,7 +122,7 @@ impl Shader {
             shader: image.to_shader(
                 Some((sk_tile_mode(&mode), sk_tile_mode(&mode))),
                 skia_safe::SamplingOptions::default(),
-                &mat,
+                &mat[0],
             ),
         })
     }
@@ -144,18 +145,18 @@ impl Shader {
         tile_size: NumericSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
-        if tile_size.len() != 2 {
-            return Err(savvy_err!("Invalid arguments"));
-        }
+        assert_len("tile_size", 2, tile_size.len())?;
+
         let tile_size = tile_size.as_slice_f64();
-        let mat = as_matrix(&transform)?;
+        let mat =
+            as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let picture = read_picture_bytes(&img)?;
         Ok(Shader {
             label: "picture".to_string(),
             shader: Some(picture.to_shader(
                 Some((sk_tile_mode(&mode), sk_tile_mode(&mode))),
                 skia_safe::FilterMode::Nearest,
-                &mat,
+                &mat[0],
                 Some(&skia_safe::Rect::new(
                     0.0,
                     0.0,
@@ -175,10 +176,13 @@ impl Shader {
         flags: LogicalSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
-        if start.len() != 2 || end.len() != 2 || from.len() != 4 || to.len() != 4 {
-            return Err(savvy_err!("Invalid arguments"));
-        }
-        let mat = as_matrix(&transform)?;
+        assert_len("start", 2, start.len())?;
+        assert_len("end", 2, end.len())?;
+        assert_len("from", 4, from.len())?;
+        assert_len("to", 4, to.len())?;
+
+        let mat =
+            as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let start = start.as_slice_f64();
         let end = end.as_slice_f64();
         let from = from.as_slice_f64();
@@ -204,7 +208,7 @@ impl Shader {
             None,
             sk_tile_mode(&mode),
             skia_safe::gradient_shader::Flags::from_bits(flags as u32).or(None),
-            Some(&mat),
+            Some(&mat[0]),
         );
         Ok(Shader {
             label: "linear_gradient".to_string(),
@@ -221,10 +225,12 @@ impl Shader {
         flags: LogicalSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
-        if center.len() != 2 || from.len() != 4 || to.len() != 4 {
-            return Err(savvy_err!("Invalid arguments"));
-        }
-        let mat = as_matrix(&transform)?;
+        assert_len("center", 2, center.len())?;
+        assert_len("from", 4, from.len())?;
+        assert_len("to", 4, to.len())?;
+
+        let mat =
+            as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let center = center.as_slice_f64();
         let from = from.as_slice_f64();
         let to = to.as_slice_f64();
@@ -248,7 +254,7 @@ impl Shader {
             None,
             sk_tile_mode(&mode),
             skia_safe::gradient_shader::Flags::from_bits(flags as u32).or(None),
-            Some(&mat),
+            Some(&mat[0]),
         );
         Ok(Shader {
             label: "radial_gradient".to_string(),
@@ -266,15 +272,14 @@ impl Shader {
         flags: LogicalSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
-        if start.len() != 2
-            || end.len() != 2
-            || radii.len() != 2
-            || from.len() != 4
-            || to.len() != 4
-        {
-            return Err(savvy_err!("Invalid arguments"));
-        }
-        let mat = as_matrix(&transform)?;
+        assert_len("start", 2, start.len())?;
+        assert_len("end", 2, end.len())?;
+        assert_len("radii", 2, radii.len())?;
+        assert_len("from", 4, from.len())?;
+        assert_len("to", 4, to.len())?;
+
+        let mat =
+            as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let start = start.as_slice_f64();
         let end = end.as_slice_f64();
         let radii = radii.as_slice_f64();
@@ -301,7 +306,7 @@ impl Shader {
             None,
             sk_tile_mode(&mode),
             skia_safe::gradient_shader::Flags::from_bits(flags as u32).or(None),
-            Some(&mat),
+            Some(&mat[0]),
         );
         Ok(Shader {
             label: "conical_gradient".to_string(),
@@ -319,10 +324,12 @@ impl Shader {
         flags: LogicalSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
-        if center.len() != 2 || from.len() != 4 || to.len() != 4 {
-            return Err(savvy_err!("Invalid arguments"));
-        }
-        let mat = as_matrix(&transform)?;
+        assert_len("center", 2, center.len())?;
+        assert_len("from", 4, from.len())?;
+        assert_len("to", 4, to.len())?;
+
+        let mat =
+            as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let center = center.as_slice_f64();
         let from = from.as_slice_f64();
         let to = to.as_slice_f64();
@@ -347,7 +354,7 @@ impl Shader {
             sk_tile_mode(&mode),
             Some((start as f32, end as f32)),
             skia_safe::gradient_shader::Flags::from_bits(flags as u32).or(None),
-            Some(&mat),
+            Some(&mat[0]),
         );
         Ok(Shader {
             label: "sweep_gradient".to_string(),
