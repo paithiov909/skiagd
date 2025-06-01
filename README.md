@@ -44,8 +44,7 @@ Skia](https://shopify.github.io/react-native-skia/).
     - [x] Points (points; not point)
   - Ellipses
     - [x] Circle
-    - [ ] Oval (oval)
-    - [ ] Arc (arc)
+    - [x] Oval / Arc
   - Others
     - [x] Vertices
     - [x] Atlas

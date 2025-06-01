@@ -58,6 +58,26 @@ NULL
   .Call(savvy_sk_as_png__impl, `size`, `curr_bytes`, `mat`)
 }
 
+#' Draws arcs
+#'
+#' @param size Canvas size.
+#' @param curr_bytes Current canvas state.
+#' @param mat Matrix for transforming picture.
+#' @param props PaintAttrs.
+#' @param xywh Rectangles.
+#' @param r Corners radius. This actually doesn't affect the result.
+#' @param use_center Whether to draw a wedge that includes lines from oval center to arc end points.
+#' @param angle Start angle and sweep angle.
+#' @param rsx_trans RSX transform for each rectangle.
+#' @param width Stroke width.
+#' @param color Colors.
+#' @returns A raw vector of picture.
+#' @noRd
+`sk_draw_arc` <- function(`size`, `curr_bytes`, `mat`, `props`, `xywh`, `r`, `use_center`, `angle`, `rsx_trans`, `width`, `color`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  .Call(savvy_sk_draw_arc__impl, `size`, `curr_bytes`, `mat`, `props`, `xywh`, `r`, `use_center`, `angle`, `rsx_trans`, `width`, `color`)
+}
+
 #' Draws atlas
 #'
 #' This function doesn't take `sprites` (offsets for the sprites) argument.

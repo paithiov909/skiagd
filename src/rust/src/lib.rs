@@ -7,7 +7,7 @@ use canvas::{read_picture_bytes, SkiaCanvas};
 use paint_attrs::{assert_len, PaintAttrs};
 use path_transform::as_matrix;
 
-use savvy::{savvy, savvy_err, IntegerSexp, NumericSexp, StringSexp};
+use savvy::{savvy, savvy_err, IntegerSexp, LogicalSexp, NumericSexp, StringSexp};
 use skia_safe::{Data, Image, Paint};
 
 /// For internal use. See `sk_as_png()`
@@ -359,7 +359,78 @@ unsafe fn sk_draw_circle(
     Ok(picture.into())
 }
 
-// TODO: sk_draw_arc and oval
+/// Draws arcs
+///
+/// @param size Canvas size.
+/// @param curr_bytes Current canvas state.
+/// @param mat Matrix for transforming picture.
+/// @param props PaintAttrs.
+/// @param xywh Rectangles.
+/// @param r Corners radius. This actually doesn't affect the result.
+/// @param use_center Whether to draw a wedge that includes lines from oval center to arc end points.
+/// @param angle Start angle and sweep angle.
+/// @param rsx_trans RSX transform for each rectangle.
+/// @param width Stroke width.
+/// @param color Colors.
+/// @returns A raw vector of picture.
+/// @noRd
+#[savvy]
+unsafe fn sk_draw_arc(
+    size: IntegerSexp,
+    curr_bytes: savvy::RawSexp,
+    mat: NumericSexp,
+    props: PaintAttrs,
+    xywh: NumericSexp,
+    r: NumericSexp,
+    use_center: LogicalSexp,
+    angle: NumericSexp,
+    rsx_trans: NumericSexp,
+    width: NumericSexp,
+    color: NumericSexp,
+) -> savvy::Result<savvy::Sexp> {
+    let rects = path_transform::as_rrects(&xywh, &r, &r)
+        .ok_or_else(|| return savvy_err!("Failed to parse xywh"))?;
+    let angle = angle.as_slice_f64();
+    let width = width.as_slice_f64();
+    let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
+        // if matrix is too small to take color, implicitly use paint color
+        let mut ret: Vec<skia_safe::Color> = Vec::new();
+        ret.resize(width.len(), props.paint.color());
+        ret
+    });
+    let transforms = path_transform::as_rsx_trans(&rsx_trans)
+        .ok_or_else(|| return savvy_err!("Failed to parse rsx_trans"))?;
+    let use_center = use_center.to_vec()[0];
+
+    let picture = read_picture_bytes(&curr_bytes)?;
+    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
+    let mut props = props.clone();
+
+    let mut recorder = SkiaCanvas::setup(&size)?;
+    let canvas = recorder.start_recording();
+    canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
+
+    for (i, (rect, angle)) in rects.iter().zip(angle.chunks(2)).enumerate() {
+        if angle.len() != 2 {
+            break;
+        }
+        props.reset_width(width[i]);
+        props.reset_color(color[i]);
+        let rect = rect
+            .clone()
+            .transform(&skia_safe::Matrix::default().set_rsxform(&transforms[i]))
+            .ok_or_else(|| return savvy_err!("Failed to transform rrect at index {}", i))?;
+        canvas.draw_arc(
+            rect.bounds(),
+            angle[0] as f32,
+            angle[1] as f32,
+            use_center,
+            &props.paint,
+        );
+    }
+    let picture = recorder.finish_recording()?;
+    Ok(picture.into())
+}
 
 /// Draws rounded rectangles
 ///

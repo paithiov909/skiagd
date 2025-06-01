@@ -46,8 +46,7 @@ I'm planning to re-implement features like [React Native Skia](https://shopify.g
     - [x] Points (points; not point)
   - Ellipses
     - [x] Circle
-    - [ ] Oval (oval)
-    - [ ] Arc (arc)
+    - [x] Oval / Arc
   - Others
     - [x] Vertices
     - [x] Atlas
