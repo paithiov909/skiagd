@@ -20,9 +20,15 @@ add_rect(
 XYWH (left, top, right, bottom).}
 
 \item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
-Each column of the matrix corresponds to the scale, the angle of rotation (in radians),
-the amount of translation in the X-axis direction and in the Y-axis direction,
-and the X and Y coordinates of the transformation origin.}
+Each column of the matrix corresponds to:
+\itemize{
+\item scale
+\item angle of rotation (in radians)
+\item amount of translation in the X-axis direction
+\item amount of translation in the Y-axis direction
+\item X coordinate of the anchor point
+\item Y coordinate of the anchor point
+}}
 
 \item{radii}{A double matrix where each row is a pair of axis lengths
 on X-axis and Y-axis of oval describing rounded corners.}

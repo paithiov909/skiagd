@@ -19,9 +19,13 @@ NULL
 #' @rdname skiagd-params
 #' @name param-rsx-trans
 #' @param rsx_trans A double matrix with 6 columns where each row represents an RSX transform.
-#' Each column of the matrix corresponds to the scale, the angle of rotation (in radians),
-#' the amount of translation in the X-axis direction and in the Y-axis direction,
-#' and the X and Y coordinates of the transformation origin.
+#' Each column of the matrix corresponds to:
+#' * scale
+#' * angle of rotation (in radians)
+#' * amount of translation in the X-axis direction
+#' * amount of translation in the Y-axis direction
+#' * X coordinate of the anchor point
+#' * Y coordinate of the anchor point
 #' @keywords internal
 NULL
 
