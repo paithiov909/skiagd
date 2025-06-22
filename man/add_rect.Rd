@@ -6,9 +6,9 @@
 \usage{
 add_rect(
   img,
-  xywh,
-  rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), nrow(xywh), 6, byrow = TRUE),
-  radii = matrix(0, nrow(xywh), 2),
+  ltrb,
+  rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), nrow(ltrb), 6, byrow = TRUE),
+  radii = matrix(0, nrow(ltrb), 2),
   ...,
   props = paint()
 )
@@ -16,8 +16,8 @@ add_rect(
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{xywh}{A double matrix where each row is a rectangle
-XYWH (left, top, right, bottom).}
+\item{ltrb}{A double matrix where each row is a rectangle
+LTRB (left, top, right, bottom).}
 
 \item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
 Each column of the matrix corresponds to:

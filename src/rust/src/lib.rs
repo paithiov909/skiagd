@@ -365,7 +365,7 @@ unsafe fn sk_draw_circle(
 /// @param curr_bytes Current canvas state.
 /// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
-/// @param xywh Rectangles.
+/// @param ltrb Rectangles.
 /// @param r Corners radius. This actually doesn't affect the result.
 /// @param use_center Whether to draw a wedge that includes lines from oval center to arc end points.
 /// @param angle Start angle and sweep angle.
@@ -380,7 +380,7 @@ unsafe fn sk_draw_arc(
     curr_bytes: savvy::RawSexp,
     mat: NumericSexp,
     props: PaintAttrs,
-    xywh: NumericSexp,
+    ltrb: NumericSexp,
     r: NumericSexp,
     use_center: LogicalSexp,
     angle: NumericSexp,
@@ -388,8 +388,8 @@ unsafe fn sk_draw_arc(
     width: NumericSexp,
     color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    let rects = path_transform::as_rrects(&xywh, &r, &r)
-        .ok_or_else(|| return savvy_err!("Failed to parse xywh"))?;
+    let rects = path_transform::as_rrects(&ltrb, &r, &r)
+        .ok_or_else(|| return savvy_err!("Failed to parse ltrb"))?;
     let angle = angle.as_slice_f64();
     let width = width.as_slice_f64();
     let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
@@ -438,7 +438,7 @@ unsafe fn sk_draw_arc(
 /// @param curr_bytes Current canvas state.
 /// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
-/// @param xywh Rectangles.
+/// @param ltrb Rectangles.
 /// @param rx Axis lengths on X-axis of oval describing rounded corners.
 /// @param ry Axis lengths on Y-axis of oval describing rounded corners.
 /// @param rsx_trans RSX transform for each rectangle.
@@ -452,15 +452,15 @@ unsafe fn sk_draw_rounded_rect(
     curr_bytes: savvy::RawSexp,
     mat: NumericSexp,
     props: PaintAttrs,
-    xywh: NumericSexp,
+    ltrb: NumericSexp,
     rx: NumericSexp,
     ry: NumericSexp,
     rsx_trans: NumericSexp,
     width: NumericSexp,
     color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    let rects = path_transform::as_rrects(&xywh, &rx, &ry)
-        .ok_or_else(|| return savvy_err!("Failed to parse xywh"))?;
+    let rects = path_transform::as_rrects(&ltrb, &rx, &ry)
+        .ok_or_else(|| return savvy_err!("Failed to parse ltrb"))?;
     let width = width.as_slice_f64();
     let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
         // if matrix is too small to take color, implicitly use paint color
@@ -498,10 +498,10 @@ unsafe fn sk_draw_rounded_rect(
 /// @param curr_bytes Current canvas state.
 /// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
-/// @param outer_xywh Outer rectangles.
+/// @param outer_ltrb Outer rectangles.
 /// @param outer_rx Axis lengths on X-axis of outer oval describing rounded corners.
 /// @param outer_ry Axis lengths on Y-axis of outer oval describing rounded corners.
-/// @param inner_xywh Inner rectangles.
+/// @param inner_ltrb Inner rectangles.
 /// @param inner_rx Axis lengths on X-axis of inner oval describing rounded corners.
 /// @param inner_ry Axis lengths on Y-axis of inner oval describing rounded corners.
 /// @param rsx_trans RSX transform for each rectangle.
@@ -515,20 +515,20 @@ unsafe fn sk_draw_diff_rect(
     curr_bytes: savvy::RawSexp,
     mat: NumericSexp,
     props: PaintAttrs,
-    outer_xywh: NumericSexp,
+    outer_ltrb: NumericSexp,
     outer_rx: NumericSexp,
     outer_ry: NumericSexp,
-    inner_xywh: NumericSexp,
+    inner_ltrb: NumericSexp,
     inner_rx: NumericSexp,
     inner_ry: NumericSexp,
     rsx_trans: NumericSexp,
     width: NumericSexp,
     color: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    let outer = path_transform::as_rrects(&outer_xywh, &outer_rx, &outer_ry)
-        .ok_or_else(|| return savvy_err!("Failed to parse outer xywh"))?;
-    let inner = path_transform::as_rrects(&inner_xywh, &inner_rx, &inner_ry)
-        .ok_or_else(|| return savvy_err!("Failed to parse inner xywh"))?;
+    let outer = path_transform::as_rrects(&outer_ltrb, &outer_rx, &outer_ry)
+        .ok_or_else(|| return savvy_err!("Failed to parse outer ltrb"))?;
+    let inner = path_transform::as_rrects(&inner_ltrb, &inner_rx, &inner_ry)
+        .ok_or_else(|| return savvy_err!("Failed to parse inner ltrb"))?;
     let width = width.as_slice_f64();
     let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
         // if matrix is too small to take color, implicitly use paint color

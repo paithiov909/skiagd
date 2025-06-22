@@ -64,7 +64,7 @@ NULL
 #' @param curr_bytes Current canvas state.
 #' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
-#' @param xywh Rectangles.
+#' @param ltrb Rectangles.
 #' @param r Corners radius. This actually doesn't affect the result.
 #' @param use_center Whether to draw a wedge that includes lines from oval center to arc end points.
 #' @param angle Start angle and sweep angle.
@@ -73,9 +73,9 @@ NULL
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_arc` <- function(`size`, `curr_bytes`, `mat`, `props`, `xywh`, `r`, `use_center`, `angle`, `rsx_trans`, `width`, `color`) {
+`sk_draw_arc` <- function(`size`, `curr_bytes`, `mat`, `props`, `ltrb`, `r`, `use_center`, `angle`, `rsx_trans`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_arc__impl, `size`, `curr_bytes`, `mat`, `props`, `xywh`, `r`, `use_center`, `angle`, `rsx_trans`, `width`, `color`)
+  .Call(savvy_sk_draw_arc__impl, `size`, `curr_bytes`, `mat`, `props`, `ltrb`, `r`, `use_center`, `angle`, `rsx_trans`, `width`, `color`)
 }
 
 #' Draws atlas
@@ -120,10 +120,10 @@ NULL
 #' @param curr_bytes Current canvas state.
 #' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
-#' @param outer_xywh Outer rectangles.
+#' @param outer_ltrb Outer rectangles.
 #' @param outer_rx Axis lengths on X-axis of outer oval describing rounded corners.
 #' @param outer_ry Axis lengths on Y-axis of outer oval describing rounded corners.
-#' @param inner_xywh Inner rectangles.
+#' @param inner_ltrb Inner rectangles.
 #' @param inner_rx Axis lengths on X-axis of inner oval describing rounded corners.
 #' @param inner_ry Axis lengths on Y-axis of inner oval describing rounded corners.
 #' @param rsx_trans RSX transform for each rectangle.
@@ -131,9 +131,9 @@ NULL
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_diff_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `outer_xywh`, `outer_rx`, `outer_ry`, `inner_xywh`, `inner_rx`, `inner_ry`, `rsx_trans`, `width`, `color`) {
+`sk_draw_diff_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `outer_ltrb`, `outer_rx`, `outer_ry`, `inner_ltrb`, `inner_rx`, `inner_ry`, `rsx_trans`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_diff_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `outer_xywh`, `outer_rx`, `outer_ry`, `inner_xywh`, `inner_rx`, `inner_ry`, `rsx_trans`, `width`, `color`)
+  .Call(savvy_sk_draw_diff_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `outer_ltrb`, `outer_rx`, `outer_ry`, `inner_ltrb`, `inner_rx`, `inner_ry`, `rsx_trans`, `width`, `color`)
 }
 
 #' Draws lines
@@ -212,7 +212,7 @@ NULL
 #' @param curr_bytes Current canvas state.
 #' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
-#' @param xywh Rectangles.
+#' @param ltrb Rectangles.
 #' @param rx Axis lengths on X-axis of oval describing rounded corners.
 #' @param ry Axis lengths on Y-axis of oval describing rounded corners.
 #' @param rsx_trans RSX transform for each rectangle.
@@ -220,9 +220,9 @@ NULL
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_rounded_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `xywh`, `rx`, `ry`, `rsx_trans`, `width`, `color`) {
+`sk_draw_rounded_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `ltrb`, `rx`, `ry`, `rsx_trans`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_rounded_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `xywh`, `rx`, `ry`, `rsx_trans`, `width`, `color`)
+  .Call(savvy_sk_draw_rounded_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `ltrb`, `rx`, `ry`, `rsx_trans`, `width`, `color`)
 }
 
 #' Draws text as textblobs

@@ -1,29 +1,29 @@
 #' Add rectangles
 #'
-#' @param xywh A double matrix where each row is a rectangle
-#' XYWH (left, top, right, bottom).
+#' @param ltrb A double matrix where each row is a rectangle
+#' LTRB (left, top, right, bottom).
 #' @param radii A double matrix where each row is a pair of axis lengths
 #' on X-axis and Y-axis of oval describing rounded corners.
 #' @inheritParams param-img-and-props
 #' @inheritParams param-rsx-trans
 #' @returns A raw vector of picture.
 #' @export
-add_rect <- function(img, xywh,
-                     rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), nrow(xywh), 6, byrow = TRUE),
-                     radii = matrix(0, nrow(xywh), 2),
+add_rect <- function(img, ltrb,
+                     rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), nrow(ltrb), 6, byrow = TRUE),
+                     radii = matrix(0, nrow(ltrb), 2),
                      ...,
                      props = paint()) {
   dots <- rlang::list2(...)
   width <- dots[["width"]]
   if (is.null(width)) {
-    width <- rep(props[["width"]], nrow(xywh))
+    width <- rep(props[["width"]], nrow(ltrb))
   }
   color <- dots[["color"]]
   if (is.null(color)) {
-    color <- rep(props[["color"]], nrow(xywh))
+    color <- rep(props[["color"]], nrow(ltrb))
   }
   validate_length(
-    nrow(xywh),
+    nrow(ltrb),
     nrow(rsx_trans),
     nrow(radii),
     length(width),
@@ -35,7 +35,7 @@ add_rect <- function(img, xywh,
     img,
     props[["transform"]],
     as_paint_attrs(props),
-    t(xywh[, 1:4]),
+    t(ltrb[, 1:4]),
     radii[, 1],
     radii[, 2],
     t(rsx_trans[, 1:6]),
@@ -47,7 +47,7 @@ add_rect <- function(img, xywh,
 #' Add difference rectangles
 #'
 #' @param outer,inner A double matrix where each row is a rectangle
-#' XYWH (left, top, right, bottom).
+#' LTRB (left, top, right, bottom).
 #' @param outer_radii,inner_radii A double matrix where each row is a pair of axis lengths
 #' on X-axis and Y-axis of oval describing rounded corners.
 #' @inheritParams param-img-and-props

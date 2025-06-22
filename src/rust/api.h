@@ -1,14 +1,14 @@
 SEXP savvy_sk_absolute_fill__ffi(SEXP c_arg__size, SEXP c_arg__fill);
 SEXP savvy_sk_as_png__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat);
-SEXP savvy_sk_draw_arc__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__xywh, SEXP c_arg__r, SEXP c_arg__use_center, SEXP c_arg__angle, SEXP c_arg__rsx_trans, SEXP c_arg__width, SEXP c_arg__color);
+SEXP savvy_sk_draw_arc__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__ltrb, SEXP c_arg__r, SEXP c_arg__use_center, SEXP c_arg__angle, SEXP c_arg__rsx_trans, SEXP c_arg__width, SEXP c_arg__color);
 SEXP savvy_sk_draw_atlas__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__png_bytes, SEXP c_arg__rsx_trans);
 SEXP savvy_sk_draw_circle__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__x, SEXP c_arg__y, SEXP c_arg__radius, SEXP c_arg__width, SEXP c_arg__color);
-SEXP savvy_sk_draw_diff_rect__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__outer_xywh, SEXP c_arg__outer_rx, SEXP c_arg__outer_ry, SEXP c_arg__inner_xywh, SEXP c_arg__inner_rx, SEXP c_arg__inner_ry, SEXP c_arg__rsx_trans, SEXP c_arg__width, SEXP c_arg__color);
+SEXP savvy_sk_draw_diff_rect__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__outer_ltrb, SEXP c_arg__outer_rx, SEXP c_arg__outer_ry, SEXP c_arg__inner_ltrb, SEXP c_arg__inner_rx, SEXP c_arg__inner_ry, SEXP c_arg__rsx_trans, SEXP c_arg__width, SEXP c_arg__color);
 SEXP savvy_sk_draw_line__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__from_x, SEXP c_arg__from_y, SEXP c_arg__to_x, SEXP c_arg__to_y, SEXP c_arg__width, SEXP c_arg__color);
 SEXP savvy_sk_draw_path__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__svg, SEXP c_arg__rsx_trans, SEXP c_arg__width, SEXP c_arg__color, SEXP c_arg__fill_type);
 SEXP savvy_sk_draw_png__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__png_bytes, SEXP c_arg__left_top);
 SEXP savvy_sk_draw_points__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__x, SEXP c_arg__y, SEXP c_arg__mode);
-SEXP savvy_sk_draw_rounded_rect__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__xywh, SEXP c_arg__rx, SEXP c_arg__ry, SEXP c_arg__rsx_trans, SEXP c_arg__width, SEXP c_arg__color);
+SEXP savvy_sk_draw_rounded_rect__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__ltrb, SEXP c_arg__rx, SEXP c_arg__ry, SEXP c_arg__rsx_trans, SEXP c_arg__width, SEXP c_arg__color);
 SEXP savvy_sk_draw_text__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__text, SEXP c_arg__rsx_trans, SEXP c_arg__color);
 SEXP savvy_sk_draw_vertices__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__x, SEXP c_arg__y, SEXP c_arg__color, SEXP c_arg__mode);
 SEXP savvy_sk_get_text_info__ffi(SEXP c_arg__text, SEXP c_arg__props);

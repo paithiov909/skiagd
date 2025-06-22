@@ -19,7 +19,7 @@ add_diff_rect(
 \item{img}{A raw vector of picture.}
 
 \item{outer, inner}{A double matrix where each row is a rectangle
-XYWH (left, top, right, bottom).}
+LTRB (left, top, right, bottom).}
 
 \item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
 Each column of the matrix corresponds to:
