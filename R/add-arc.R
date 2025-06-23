@@ -16,6 +16,10 @@ add_arc <- function(img, ltrb,
                     ...,
                     props = paint()) {
   dots <- rlang::list2(...)
+  sigma <- dots[["sigma"]]
+  if (is.null(sigma)) {
+    sigma <- rep(props[["sigma"]], nrow(ltrb))
+  }
   width <- dots[["width"]]
   if (is.null(width)) {
     width <- rep(props[["width"]], nrow(ltrb))
@@ -28,6 +32,7 @@ add_arc <- function(img, ltrb,
     nrow(ltrb),
     nrow(rsx_trans),
     nrow(angle),
+    length(sigma),
     length(width),
     ncol(color)
   )
@@ -42,6 +47,7 @@ add_arc <- function(img, ltrb,
     use_center,
     t(angle[, 1:2]),
     t(rsx_trans[, 1:6]),
+    sigma,
     width,
     as.integer(color)
   )

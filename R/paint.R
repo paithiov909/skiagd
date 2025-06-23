@@ -21,6 +21,8 @@
 #' * `fontsize`: A numeric scalar (font size).
 #' * `family`: Font family name.
 #' * `fontface`: Font face. See [FontStyle].
+#' * `sigma`: Default value for blur sigma.
+#' * `blur_style`: [BlurStyle] for a blur mask filter applied to the shape.
 #' * `blend_mode`: See [BlendMode].
 #' * `path_effect`: See [PathEffect].
 #' * `shader`: See [Shader].
@@ -48,7 +50,7 @@ paint <- function(...) {
 }
 
 dev_new_if_needed <- function() {
-  if (grDevices::dev.cur() == 1) {
+  if (grDevices::dev.cur() == 1) { ## FIXME: Do we need `is.interactive()` here?
     rlang::warn("No device has been open. Opened a new one with `grid.null()`.")
     grid::grid.null()
   }
@@ -114,6 +116,8 @@ default_attrs <- function() {
       "6" = env_get(FontStyle, "Italic"), # "cyrillic.oblique"
       "7" = env_get(FontStyle, "Normal") # "EUC"
     ),
+    sigma = 0,
+    blur_style = env_get(BlurStyle, "Normal"),
     blend_mode = env_get(BlendMode, "SrcOver"),
     path_effect = PathEffect$no_effect(),
     shader = Shader$no_shader(),
@@ -137,6 +141,7 @@ as_paint_attrs <- function(p) {
     p[["family"]],
     p[["fontface"]],
     p[["blend_mode"]],
+    p[["blur_style"]],
     p[["path_effect"]],
     p[["shader"]],
     p[["image_filter"]]

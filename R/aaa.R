@@ -4,8 +4,10 @@
 #' @name param-img-and-props
 #' @param img A raw vector of picture.
 #' @param props A list of painting attributes out of [paint()].
-#' @param ... For some drawing functions, you can specify `width` and `color` as named arguments.
+#' @param ... For some drawing functions, you can specify
+#' `sigma`, `width` and `color` as named arguments.
 #'
+#' * `sigma` must be a numeric vector of blur sigmas for each shape.
 #' * `width` must be a numeric vector of stroke widths for each shape.
 #' * `color` must be an integer matrix where each ***column*** is an RGBA color for each shape.
 #'

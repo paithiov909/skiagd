@@ -10,6 +10,10 @@ add_path <- function(img, path,
                      ...,
                      props = paint()) {
   dots <- rlang::list2(...)
+  sigma <- dots[["sigma"]]
+  if (is.null(sigma)) {
+    sigma <- rep(props[["sigma"]], length(path))
+  }
   width <- dots[["width"]]
   if (is.null(width)) {
     width <- rep(props[["width"]], length(path))
@@ -21,6 +25,7 @@ add_path <- function(img, path,
   validate_length(
     length(path),
     nrow(rsx_trans),
+    length(sigma),
     length(width),
     ncol(color)
   )
@@ -32,6 +37,7 @@ add_path <- function(img, path,
     as_paint_attrs(props),
     path,
     t(rsx_trans),
+    sigma,
     width,
     as.integer(color),
     props[["fill_type"]]

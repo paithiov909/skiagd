@@ -26,6 +26,7 @@ The following joins are available:
 
 Other paint-attributes: 
 \code{\link{BlendMode}},
+\code{\link{BlurStyle}},
 \code{\link{Cap}},
 \code{\link{FillType}},
 \code{\link{FontStyle}},

@@ -51,6 +51,7 @@ The following blend modes are available in Skia:
 \href{https://rust-skia.github.io/doc/skia_safe/enum.BlendMode.html}{BlendMode in skia_safe - Rust}
 
 Other paint-attributes: 
+\code{\link{BlurStyle}},
 \code{\link{Cap}},
 \code{\link{FillType}},
 \code{\link{FontStyle}},

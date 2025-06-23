@@ -55,7 +55,7 @@ Skia](https://shopify.github.io/react-native-skia/).
 - Painting Attributes
   ([Paint](https://rust-skia.github.io/doc/skia_safe/type.Paint.html))
   - [x] Path Effects
-  - [ ] Mask Filter (blur)
+  - [x] Mask Filter (blur)
   - [ ] Color Filters
   - [x] Shaders
   - [ ] Image Filters / Runtime Shaders

@@ -7,6 +7,10 @@
 #' @export
 add_line <- function(img, from, to, ..., props = paint()) {
   dots <- rlang::list2(...)
+  sigma <- dots[["sigma"]]
+  if (is.null(sigma)) {
+    sigma <- rep(props[["sigma"]], nrow(from))
+  }
   width <- dots[["width"]]
   if (is.null(width)) {
     width <- rep(props[["width"]], nrow(from))
@@ -18,6 +22,7 @@ add_line <- function(img, from, to, ..., props = paint()) {
   validate_length(
     nrow(from),
     nrow(to),
+    length(sigma),
     length(width),
     ncol(color)
   )
@@ -31,6 +36,7 @@ add_line <- function(img, from, to, ..., props = paint()) {
     from[, 2],
     to[, 1],
     to[, 2],
+    sigma,
     width,
     as.integer(color)
   )

@@ -12,6 +12,7 @@ add_point <- function(img, point, ..., props = paint()) {
     as_paint_attrs(props),
     point[, 1],
     point[, 2],
+    props[["sigma"]],
     props[["point_mode"]]
   )
 }
