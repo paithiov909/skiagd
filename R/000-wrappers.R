@@ -69,13 +69,14 @@ NULL
 #' @param use_center Whether to draw a wedge that includes lines from oval center to arc end points.
 #' @param angle Start angle and sweep angle.
 #' @param rsx_trans RSX transform for each rectangle.
+#' @param sigma Blur sigma.
 #' @param width Stroke width.
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_arc` <- function(`size`, `curr_bytes`, `mat`, `props`, `ltrb`, `r`, `use_center`, `angle`, `rsx_trans`, `width`, `color`) {
+`sk_draw_arc` <- function(`size`, `curr_bytes`, `mat`, `props`, `ltrb`, `r`, `use_center`, `angle`, `rsx_trans`, `sigma`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_arc__impl, `size`, `curr_bytes`, `mat`, `props`, `ltrb`, `r`, `use_center`, `angle`, `rsx_trans`, `width`, `color`)
+  .Call(savvy_sk_draw_arc__impl, `size`, `curr_bytes`, `mat`, `props`, `ltrb`, `r`, `use_center`, `angle`, `rsx_trans`, `sigma`, `width`, `color`)
 }
 
 #' Draws atlas
@@ -105,13 +106,14 @@ NULL
 #' @param x X coordinates of center.
 #' @param y Y coordinates of center.
 #' @param radius Circle radius.
+#' @param sigma Blur sigma.
 #' @param width Stroke width.
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_circle` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`, `width`, `color`) {
+`sk_draw_circle` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`, `sigma`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_circle__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`, `width`, `color`)
+  .Call(savvy_sk_draw_circle__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`, `sigma`, `width`, `color`)
 }
 
 #' Draws outer and inner rounded rectangles
@@ -127,13 +129,14 @@ NULL
 #' @param inner_rx Axis lengths on X-axis of inner oval describing rounded corners.
 #' @param inner_ry Axis lengths on Y-axis of inner oval describing rounded corners.
 #' @param rsx_trans RSX transform for each rectangle.
+#' @param sigma Blur sigma.
 #' @param width Stroke width.
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_diff_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `outer_ltrb`, `outer_rx`, `outer_ry`, `inner_ltrb`, `inner_rx`, `inner_ry`, `rsx_trans`, `width`, `color`) {
+`sk_draw_diff_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `outer_ltrb`, `outer_rx`, `outer_ry`, `inner_ltrb`, `inner_rx`, `inner_ry`, `rsx_trans`, `sigma`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_diff_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `outer_ltrb`, `outer_rx`, `outer_ry`, `inner_ltrb`, `inner_rx`, `inner_ry`, `rsx_trans`, `width`, `color`)
+  .Call(savvy_sk_draw_diff_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `outer_ltrb`, `outer_rx`, `outer_ry`, `inner_ltrb`, `inner_rx`, `inner_ry`, `rsx_trans`, `sigma`, `width`, `color`)
 }
 
 #' Draws lines
@@ -148,11 +151,12 @@ NULL
 #' @param to_y Y coordinates of end points.
 #' @param width Stroke width.
 #' @param color Colors.
+#' @param sigma Blur sigma.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_line` <- function(`size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`, `width`, `color`) {
+`sk_draw_line` <- function(`size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`, `sigma`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_line__impl, `size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`, `width`, `color`)
+  .Call(savvy_sk_draw_line__impl, `size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`, `sigma`, `width`, `color`)
 }
 
 #' Draws SVG paths
@@ -163,15 +167,16 @@ NULL
 #' @param props PaintAttrs.
 #' @param svg SVG strings to draw.
 #' @param rsx_trans RSX transform for each path.
+#' @param sigma Blur sigma.
 #' @param width Stroke width.
 #' @param color Colors.
 #' @param fill_type FillType.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_path` <- function(`size`, `curr_bytes`, `mat`, `props`, `svg`, `rsx_trans`, `width`, `color`, `fill_type`) {
+`sk_draw_path` <- function(`size`, `curr_bytes`, `mat`, `props`, `svg`, `rsx_trans`, `sigma`, `width`, `color`, `fill_type`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   `fill_type` <- .savvy_extract_ptr(`fill_type`, "FillType")
-  .Call(savvy_sk_draw_path__impl, `size`, `curr_bytes`, `mat`, `props`, `svg`, `rsx_trans`, `width`, `color`, `fill_type`)
+  .Call(savvy_sk_draw_path__impl, `size`, `curr_bytes`, `mat`, `props`, `svg`, `rsx_trans`, `sigma`, `width`, `color`, `fill_type`)
 }
 
 #' Draws PNG data as an image on canvas
@@ -197,13 +202,14 @@ NULL
 #' @param props PaintAttrs.
 #' @param x X coordinates of points.
 #' @param y Y coordinates of points.
+#' @param sigma Blur sigma (scalar).
 #' @param mode PointMode.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_points` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `mode`) {
+`sk_draw_points` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `sigma`, `mode`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   `mode` <- .savvy_extract_ptr(`mode`, "PointMode")
-  .Call(savvy_sk_draw_points__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `mode`)
+  .Call(savvy_sk_draw_points__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `sigma`, `mode`)
 }
 
 #' Draws rounded rectangles
@@ -216,13 +222,14 @@ NULL
 #' @param rx Axis lengths on X-axis of oval describing rounded corners.
 #' @param ry Axis lengths on Y-axis of oval describing rounded corners.
 #' @param rsx_trans RSX transform for each rectangle.
+#' @param sigma Blur sigma.
 #' @param width Stroke width.
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_rounded_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `ltrb`, `rx`, `ry`, `rsx_trans`, `width`, `color`) {
+`sk_draw_rounded_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `ltrb`, `rx`, `ry`, `rsx_trans`, `sigma`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_rounded_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `ltrb`, `rx`, `ry`, `rsx_trans`, `width`, `color`)
+  .Call(savvy_sk_draw_rounded_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `ltrb`, `rx`, `ry`, `rsx_trans`, `sigma`, `width`, `color`)
 }
 
 #' Draws text as textblobs
@@ -233,12 +240,13 @@ NULL
 #' @param props PaintAttrs.
 #' @param text Text strings.
 #' @param rsx_trans RSX transform for each character.
+#' @param sigma Blur sigma.
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_text` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `rsx_trans`, `color`) {
+`sk_draw_text` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `rsx_trans`, `sigma`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_text__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `rsx_trans`, `color`)
+  .Call(savvy_sk_draw_text__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `rsx_trans`, `sigma`, `color`)
 }
 
 #' Draws vertices
@@ -249,14 +257,15 @@ NULL
 #' @param props PaintAttrs.
 #' @param x X coordinates of points.
 #' @param y Y coordinates of points.
+#' @param sigma Blur sigma (scalar).
 #' @param color Colors of vertices.
 #' @param mode VertexMode.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_vertices` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `color`, `mode`) {
+`sk_draw_vertices` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `sigma`, `color`, `mode`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   `mode` <- .savvy_extract_ptr(`mode`, "VertexMode")
-  .Call(savvy_sk_draw_vertices__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `color`, `mode`)
+  .Call(savvy_sk_draw_vertices__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `sigma`, `color`, `mode`)
 }
 
 #' Get width and number of characters
@@ -445,6 +454,86 @@ class(`BlendMode`) <- c("BlendMode__bundle", "savvy_skiagd__sealed")
 #' @export
 `print.BlendMode__bundle` <- function(x, ...) {
   cat('BlendMode\n')
+}
+
+### wrapper functions for BlurStyle
+
+
+`.savvy_wrap_BlurStyle` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+
+
+  class(e) <- c("BlurStyle", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' BlurStyle (0-3)
+#'
+#' `BlurStyle` controls how a blur mask filter is applied to the shape.
+#'
+#' @details
+#' The following `BlurStyle` are available:
+#'
+#' * `Normal`: Normal blur.
+#' * `Solid`: Solid blur.
+#' * `Outer`: Outer blur.
+#' * `Inner`: Inner blur.
+#'
+#' @seealso
+#' [BlurStyle in skia_safe - Rust](https://rust-skia.github.io/doc/skia_safe/enum.BlurStyle.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-blurstyle
+#' @export
+`BlurStyle` <- new.env(parent = emptyenv())
+`BlurStyle`$`Normal` <- .savvy_wrap_BlurStyle(0L)
+`BlurStyle`$`Solid` <- .savvy_wrap_BlurStyle(1L)
+`BlurStyle`$`Outer` <- .savvy_wrap_BlurStyle(2L)
+`BlurStyle`$`Inner` <- .savvy_wrap_BlurStyle(3L)
+
+#' @export
+`$.BlurStyle__bundle` <- function(x, name) {
+  if (!name %in% c("Normal", "Solid", "Outer", "Inner")) {
+    stop(paste0("Unknown variant: ", name), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`[[.BlurStyle__bundle` <- function(x, i) {
+  if (is.numeric(i)) {
+    stop("BlurStyle cannot be subset by index", call. = FALSE)
+  }
+
+  if (!i %in% c("Normal", "Solid", "Outer", "Inner")) {
+    stop(paste0("Unknown variant: ", i), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`print.BlurStyle` <- function(x, ...) {
+  idx <- x$.ptr + 1L
+  label <- c("Normal", "Solid", "Outer", "Inner")[idx]
+  if (is.na(label)) {
+    stop("Unexpected value for BlurStyle", call. = TRUE)
+  }
+  cat("BlurStyle::", label, "\n", sep = "")
+}
+
+
+### associated functions for BlurStyle
+
+
+
+class(`BlurStyle`) <- c("BlurStyle__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.BlurStyle__bundle` <- function(x, ...) {
+  cat('BlurStyle\n')
 }
 
 ### wrapper functions for Cap
@@ -836,6 +925,7 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
 #' * family: Font family name
 #' * fontface: FontStyle.
 #' * blend_mode: BlendMode.
+#' * blur_style: BlurStyle.
 #' * path_effect: PathEffect.
 #' * shader: Shader.
 #' * image_filter: ImageFilter.
@@ -845,16 +935,17 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
 
 ### associated functions for PaintAttrs
 
-`PaintAttrs`$`set_attrs` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `fontsize`, `family`, `fontface`, `blend_mode`, `path_effect`, `shader`, `image_filter`) {
+`PaintAttrs`$`set_attrs` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `fontsize`, `family`, `fontface`, `blend_mode`, `blur_style`, `path_effect`, `shader`, `image_filter`) {
   `style` <- .savvy_extract_ptr(`style`, "Style")
   `join` <- .savvy_extract_ptr(`join`, "Join")
   `cap` <- .savvy_extract_ptr(`cap`, "Cap")
   `fontface` <- .savvy_extract_ptr(`fontface`, "FontStyle")
   `blend_mode` <- .savvy_extract_ptr(`blend_mode`, "BlendMode")
+  `blur_style` <- .savvy_extract_ptr(`blur_style`, "BlurStyle")
   `path_effect` <- .savvy_extract_ptr(`path_effect`, "PathEffect")
   `shader` <- .savvy_extract_ptr(`shader`, "Shader")
   `image_filter` <- .savvy_extract_ptr(`image_filter`, "ImageFilter")
-  .savvy_wrap_PaintAttrs(.Call(savvy_PaintAttrs_set_attrs__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `fontsize`, `family`, `fontface`, `blend_mode`, `path_effect`, `shader`, `image_filter`))
+  .savvy_wrap_PaintAttrs(.Call(savvy_PaintAttrs_set_attrs__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `fontsize`, `family`, `fontface`, `blend_mode`, `blur_style`, `path_effect`, `shader`, `image_filter`))
 }
 
 

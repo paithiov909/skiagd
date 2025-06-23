@@ -32,6 +32,8 @@ The following painting attributes can be specified:
 \item \code{fontsize}: A numeric scalar (font size).
 \item \code{family}: Font family name.
 \item \code{fontface}: Font face. See \link{FontStyle}.
+\item \code{sigma}: Default value for blur sigma.
+\item \code{blur_style}: \link{BlurStyle} for a blur mask filter applied to the shape.
 \item \code{blend_mode}: See \link{BlendMode}.
 \item \code{path_effect}: See \link{PathEffect}.
 \item \code{shader}: See \link{Shader}.

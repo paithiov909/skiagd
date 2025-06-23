@@ -26,6 +26,7 @@ use skia_safe::Paint;
 /// * family: Font family name
 /// * fontface: FontStyle.
 /// * blend_mode: BlendMode.
+/// * blur_style: BlurStyle.
 /// * path_effect: PathEffect.
 /// * shader: Shader.
 /// * image_filter: ImageFilter.
@@ -38,6 +39,7 @@ pub struct PaintAttrs {
     pub font_size: f32,
     pub font_family: String,
     pub font_face: skia_safe::FontStyle,
+    pub blur_style: skia_safe::BlurStyle,
 }
 
 #[savvy]
@@ -53,6 +55,7 @@ impl PaintAttrs {
         family: StringSexp,
         fontface: &font::FontStyle,
         blend_mode: &shader::BlendMode,
+        blur_style: &BlurStyle,
         path_effect: &path_effect::PathEffect,
         shader: &shader::Shader,
         image_filter: &image_filter::ImageFilter,
@@ -85,6 +88,7 @@ impl PaintAttrs {
             font_size: fontsize.as_f64() as f32,
             font_family: family.to_vec()[0].to_string(),
             font_face: font::sk_font_style(fontface),
+            blur_style: sk_blur_style(blur_style),
         })
     }
 }
@@ -95,6 +99,12 @@ impl PaintAttrs {
     }
     pub fn reset_width(&mut self, width: f64) {
         self.paint.set_stroke_width(width as f32);
+    }
+    pub fn reset_blur(&mut self, sigma: f64) {
+        // NOTE: `skia_safe::MaskFilter::blur` returns an option. `None` is returned if the sigma is less than 0.
+        self.paint.set_mask_filter(
+            skia_safe::MaskFilter::blur(self.blur_style, sigma as f32, false)
+        );
     }
 }
 
@@ -162,6 +172,31 @@ fn sk_get_text_info(text: savvy::StringSexp, props: PaintAttrs) -> savvy::Result
     out.set_name_and_value(1, "n_chars", n_chars)?;
     out.set_name_and_value(2, "width", width)?;
     Ok(out.into())
+}
+
+/// BlurStyle (0-3)
+///
+/// `BlurStyle` controls how a blur mask filter is applied to the shape.
+///
+/// @details
+/// The following `BlurStyle` are available:
+///
+/// * `Normal`: Normal blur.
+/// * `Solid`: Solid blur.
+/// * `Outer`: Outer blur.
+/// * `Inner`: Inner blur.
+///
+/// @seealso
+/// [BlurStyle in skia_safe - Rust](https://rust-skia.github.io/doc/skia_safe/enum.BlurStyle.html)
+/// @family paint-attributes
+/// @rdname skiagd-attrs-blurstyle
+/// @export
+#[savvy]
+pub enum BlurStyle {
+    Normal,
+    Solid,
+    Outer,
+    Inner,
 }
 
 /// PointMode (0-2)
@@ -236,6 +271,15 @@ pub enum FillType {
     EvenOdd,
     InverseWinding,
     InverseEvenOdd,
+}
+
+fn sk_blur_style(style: &BlurStyle) -> skia_safe::BlurStyle {
+    match style {
+        BlurStyle::Normal => skia_safe::BlurStyle::Normal,
+        BlurStyle::Solid => skia_safe::BlurStyle::Solid,
+        BlurStyle::Outer => skia_safe::BlurStyle::Outer,
+        BlurStyle::Inner => skia_safe::BlurStyle::Inner,
+    }
 }
 
 pub fn sk_point_mode(mode: &PointMode) -> skia_safe::canvas::PointMode {

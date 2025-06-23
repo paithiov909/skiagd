@@ -7,6 +7,10 @@
 #' @export
 add_circle <- function(img, center, radius, ..., props = paint()) {
   dots <- rlang::list2(...)
+  sigma <- dots[["sigma"]]
+  if (is.null(sigma)) {
+    sigma <- rep(props[["sigma"]], nrow(center))
+  }
   width <- dots[["width"]]
   if (is.null(width)) {
     width <- rep(props[["width"]], nrow(center))
@@ -18,6 +22,7 @@ add_circle <- function(img, center, radius, ..., props = paint()) {
   validate_length(
     nrow(center),
     length(radius),
+    length(sigma),
     length(width),
     ncol(color)
   )
@@ -30,6 +35,7 @@ add_circle <- function(img, center, radius, ..., props = paint()) {
     center[, 1],
     center[, 2],
     radius,
+    sigma,
     width,
     as.integer(color)
   )

@@ -14,6 +14,10 @@ add_rect <- function(img, ltrb,
                      ...,
                      props = paint()) {
   dots <- rlang::list2(...)
+  sigma <- dots[["sigma"]]
+  if (is.null(sigma)) {
+    sigma <- rep(props[["sigma"]], nrow(ltrb))
+  }
   width <- dots[["width"]]
   if (is.null(width)) {
     width <- rep(props[["width"]], nrow(ltrb))
@@ -26,6 +30,7 @@ add_rect <- function(img, ltrb,
     nrow(ltrb),
     nrow(rsx_trans),
     nrow(radii),
+    length(sigma),
     length(width),
     ncol(color)
   )
@@ -39,6 +44,7 @@ add_rect <- function(img, ltrb,
     radii[, 1],
     radii[, 2],
     t(rsx_trans[, 1:6]),
+    sigma,
     width,
     as.integer(color)
   )
@@ -61,6 +67,10 @@ add_diff_rect <- function(img, outer, inner,
                           ...,
                           props = paint()) {
   dots <- rlang::list2(...)
+  sigma <- dots[["sigma"]]
+  if (is.null(sigma)) {
+    sigma <- rep(props[["sigma"]], nrow(outer))
+  }
   width <- dots[["width"]]
   if (is.null(width)) {
     width <- rep(props[["width"]], nrow(outer))
@@ -75,6 +85,7 @@ add_diff_rect <- function(img, outer, inner,
     nrow(rsx_trans),
     nrow(outer_radii),
     nrow(inner_radii),
+    length(sigma),
     length(width),
     ncol(color)
   )
@@ -91,6 +102,7 @@ add_diff_rect <- function(img, outer, inner,
     inner_radii[, 1],
     inner_radii[, 2],
     t(rsx_trans[, 1:6]),
+    sigma,
     width,
     as.integer(color)
   )

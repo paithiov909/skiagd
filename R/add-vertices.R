@@ -35,6 +35,7 @@ add_vertices <- function(img, vertices, ..., props = paint()) {
     as_paint_attrs(props),
     vertices[, 1],
     vertices[, 2],
+    props[["sigma"]],
     as.integer(color),
     props[["vertex_mode"]]
   )

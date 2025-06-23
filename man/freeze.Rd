@@ -17,8 +17,10 @@ freeze(img, left = 0, top = 0, fill = "transparent", ..., props = paint())
 This can be specified using named colors or hexadecimal color codes,
 which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.}
 
-\item{...}{For some drawing functions, you can specify \code{width} and \code{color} as named arguments.
+\item{...}{For some drawing functions, you can specify
+\code{sigma}, \code{width} and \code{color} as named arguments.
 \itemize{
+\item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
 \item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
 }

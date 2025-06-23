@@ -20,12 +20,17 @@ add_text <- function(img, text, rsx_trans, ..., props = paint()) {
     rlang::abort("`text` cannot contain NA.")
   }
   dots <- rlang::list2(...)
+  sigma <- dots[["sigma"]]
+  if (is.null(sigma)) {
+    sigma <- rep(props[["sigma"]], length(text))
+  }
   color <- dots[["color"]]
   if (is.null(color)) {
     color <- rep(props[["color"]], length(text))
   }
   validate_length(
     length(text),
+    length(sigma),
     ncol(color)
   )
 
@@ -36,6 +41,7 @@ add_text <- function(img, text, rsx_trans, ..., props = paint()) {
     as_paint_attrs(props),
     text,
     t(rsx_trans[, 1:6]),
+    sigma,
     as.integer(color)
   )
 }

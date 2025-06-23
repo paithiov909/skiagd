@@ -26,6 +26,7 @@ The following caps are available:
 
 Other paint-attributes: 
 \code{\link{BlendMode}},
+\code{\link{BlurStyle}},
 \code{\link{FillType}},
 \code{\link{FontStyle}},
 \code{\link{ImageFilter}},
