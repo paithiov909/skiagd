@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![rust-skia-version](https://img.shields.io/badge/skia--bindings-v0.82.0-orange)](https://github.com/rust-skia/rust-skia/releases/tag/0.82.0)
+[![rust-skia-version](https://img.shields.io/badge/skia--bindings-v0.86.1-orange)](https://github.com/rust-skia/rust-skia/releases/tag/0.86.1)
 [![R-CMD-check](https://github.com/paithiov909/skiagd/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/paithiov909/skiagd/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -20,7 +20,7 @@ graphics device for R 😓
 ## Design notes
 
 - This is not a graphics device. skiagd does not allow R’s session to
-  hold a reference to a Canvas object on Rust side.
+  hold a reference to a canvas object on Rust side.
 - Drawing functions return a
   [picture](https://shopify.github.io/react-native-skia/docs/shapes/pictures/)
   as a `raw` object every time it’s called. `add_*` puts those data onto

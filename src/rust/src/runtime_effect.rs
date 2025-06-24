@@ -10,7 +10,6 @@ struct RuntimeEffect {
 impl RuntimeEffect {
     fn make(sksl: savvy::StringSexp) -> savvy::Result<Self> {
         let sksl = sksl.to_vec()[0];
-        // NOTE: This does not work with v0.84.0 above
         let effect = skia_safe::RuntimeEffect::make_for_shader(sksl, None)
             .map_err(|e| savvy_err!("Failed to create RuntimeEffect:\n {}", e))?;
         Ok(RuntimeEffect {

@@ -15,7 +15,7 @@ knitr:
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 <!-- badges: start -->
-[![rust-skia-version](https://img.shields.io/badge/skia--bindings-v0.82.0-orange)](https://github.com/rust-skia/rust-skia/releases/tag/0.82.0)
+[![rust-skia-version](https://img.shields.io/badge/skia--bindings-v0.86.1-orange)](https://github.com/rust-skia/rust-skia/releases/tag/0.86.1)
 [![R-CMD-check](https://github.com/paithiov909/skiagd/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/paithiov909/skiagd/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -26,7 +26,7 @@ Despite its name, this package is intended as a drawing library, not a graphics 
 
 ## Design notes
 
-- This is not a graphics device. skiagd does not allow R's session to hold a reference to a Canvas object on Rust side.
+- This is not a graphics device. skiagd does not allow R's session to hold a reference to a canvas object on Rust side.
 - Drawing functions return a [picture](https://shopify.github.io/react-native-skia/docs/shapes/pictures/) as a `raw` object every time it's called. `add_*` puts those data onto canvas, actually ***adds*** some shapes to there, and then returns a `raw` object again.
 
 
