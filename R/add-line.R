@@ -16,8 +16,8 @@ add_line <- function(img, from, to, ..., props = paint()) {
     width <- rep(props[["width"]], nrow(from))
   }
   color <- dots[["color"]]
-  if (is.null(color)) {
-    color <- rep(props[["color"]], nrow(from))
+  if (is.null(color) || !is_color_mat(color)) {
+    color <- matrix(rep(props[["color"]], nrow(from)), nrow = 4)
   }
   validate_length(
     nrow(from),

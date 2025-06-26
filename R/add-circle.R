@@ -16,8 +16,8 @@ add_circle <- function(img, center, radius, ..., props = paint()) {
     width <- rep(props[["width"]], nrow(center))
   }
   color <- dots[["color"]]
-  if (is.null(color)) {
-    color <- rep(props[["color"]], nrow(center))
+  if (is.null(color) || !is_color_mat(color)) {
+    color <- matrix(rep(props[["color"]], nrow(center)), nrow = 4)
   }
   validate_length(
     nrow(center),

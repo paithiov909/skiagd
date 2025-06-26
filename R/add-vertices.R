@@ -20,8 +20,8 @@ add_vertices <- function(img, vertices, ..., props = paint()) {
   }
   dots <- rlang::list2(...)
   color <- dots[["color"]]
-  if (is.null(color)) {
-    color <- rep(props[["color"]], nrow(vertices))
+  if (is.null(color) || !is_color_mat(color)) {
+    color <- matrix(rep(props[["color"]], nrow(vertices)), nrow = 4)
   }
   validate_length(
     nrow(vertices),

@@ -23,8 +23,8 @@ add_rect <- function(img, ltrb,
     width <- rep(props[["width"]], nrow(ltrb))
   }
   color <- dots[["color"]]
-  if (is.null(color)) {
-    color <- rep(props[["color"]], nrow(ltrb))
+  if (is.null(color) || !is_color_mat(color)) {
+    color <- matrix(rep(props[["color"]], nrow(ltrb)), nrow = 4)
   }
   validate_length(
     nrow(ltrb),
@@ -76,8 +76,8 @@ add_diff_rect <- function(img, outer, inner,
     width <- rep(props[["width"]], nrow(outer))
   }
   color <- dots[["color"]]
-  if (is.null(color)) {
-    color <- rep(props[["color"]], nrow(outer))
+  if (is.null(color) || !is_color_mat(color)) {
+    color <- matrix(rep(props[["color"]], nrow(outer)), nrow = 4)
   }
   validate_length(
     nrow(outer),

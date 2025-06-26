@@ -25,8 +25,8 @@ add_text <- function(img, text, rsx_trans, ..., props = paint()) {
     sigma <- rep(props[["sigma"]], length(text))
   }
   color <- dots[["color"]]
-  if (is.null(color)) {
-    color <- rep(props[["color"]], length(text))
+  if (is.null(color) || !is_color_mat(color)) {
+    color <- matrix(rep(props[["color"]], length(text)), nrow = 4)
   }
   validate_length(
     length(text),

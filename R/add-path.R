@@ -19,8 +19,8 @@ add_path <- function(img, path,
     width <- rep(props[["width"]], length(path))
   }
   color <- dots[["color"]]
-  if (is.null(color)) {
-    color <- rep(props[["color"]], length(path))
+  if (is.null(color) || !is_color_mat(color)) {
+    color <- matrix(rep(props[["color"]], length(path)), nrow = 4)
   }
   validate_length(
     length(path),

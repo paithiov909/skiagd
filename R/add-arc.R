@@ -25,8 +25,8 @@ add_arc <- function(img, ltrb,
     width <- rep(props[["width"]], nrow(ltrb))
   }
   color <- dots[["color"]]
-  if (is.null(color)) {
-    color <- rep(props[["color"]], nrow(ltrb))
+  if (is.null(color) || !is_color_mat(color)) {
+    color <- matrix(rep(props[["color"]], nrow(ltrb)), nrow = 4)
   }
   validate_length(
     nrow(ltrb),
