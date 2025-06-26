@@ -39,6 +39,8 @@
 
 #' Check that all arguments have the expected length
 #'
+#' Aborts the call if any argument does not have the expected length.
+#'
 #' @param ... Numeric vectors.
 #' @noRd
 validate_length <- function(expected, ...) {
@@ -47,4 +49,17 @@ validate_length <- function(expected, ...) {
     rlang::abort("Some arguments have different lengths than others.")
   }
   TRUE
+}
+
+#' Check if x looks like a color matrix
+#'
+#' @param x An object to be checked.
+#' @returns A logical scalar.
+#' @noRd
+is_color_mat <- function(x) {
+  ret <- is.matrix(x) && nrow(x) == 4
+  if (!ret) {
+    rlang::warn("`color` does not seem to be a color matrix. Falling back to the default color of `paint()`.")
+  }
+  ret
 }

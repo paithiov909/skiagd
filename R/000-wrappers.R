@@ -149,9 +149,9 @@ NULL
 #' @param from_y Y coordinates of start points.
 #' @param to_x X coordinates of end points.
 #' @param to_y Y coordinates of end points.
+#' @param sigma Blur sigma.
 #' @param width Stroke width.
 #' @param color Colors.
-#' @param sigma Blur sigma.
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_line` <- function(`size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`, `sigma`, `width`, `color`) {
@@ -202,14 +202,17 @@ NULL
 #' @param props PaintAttrs.
 #' @param x X coordinates of points.
 #' @param y Y coordinates of points.
-#' @param sigma Blur sigma (scalar).
+#' @param group Grouping index for points where each group is drawn at the same time.
+#' @param sigma Blur sigma.
+#' @param width Stroke width.
+#' @param color Colors.
 #' @param mode PointMode.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_points` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `sigma`, `mode`) {
+`sk_draw_points` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `group`, `sigma`, `width`, `color`, `mode`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   `mode` <- .savvy_extract_ptr(`mode`, "PointMode")
-  .Call(savvy_sk_draw_points__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `sigma`, `mode`)
+  .Call(savvy_sk_draw_points__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `group`, `sigma`, `width`, `color`, `mode`)
 }
 
 #' Draws rounded rectangles

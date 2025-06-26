@@ -233,7 +233,10 @@ unsafe fn sk_draw_text(
 /// @param props PaintAttrs.
 /// @param x X coordinates of points.
 /// @param y Y coordinates of points.
-/// @param sigma Blur sigma (scalar).
+/// @param group Grouping index for points where each group is drawn at the same time.
+/// @param sigma Blur sigma.
+/// @param width Stroke width.
+/// @param color Colors.
 /// @param mode PointMode.
 /// @returns A raw vector of picture.
 /// @noRd
@@ -245,12 +248,23 @@ unsafe fn sk_draw_points(
     props: PaintAttrs,
     x: NumericSexp,
     y: NumericSexp,
-    sigma: NumericScalar,
+    group: NumericSexp,
+    sigma: NumericSexp,
+    width: NumericSexp,
+    color: NumericSexp,
     mode: &paint_attrs::PointMode,
 ) -> savvy::Result<savvy::Sexp> {
     let mode = paint_attrs::sk_point_mode(&mode);
-    let points = path_transform::as_points(&x, &y);
-    let sigma = sigma.as_f64();
+    let x = x.as_slice_f64();
+    let y = y.as_slice_f64();
+    let sigma = sigma.as_slice_f64();
+    let width = width.as_slice_f64();
+    let color = paint_attrs::num2colors(&color).unwrap_or_else(|| {
+        // if matrix is too small to take color, implicitly use paint color
+        let mut ret: Vec<skia_safe::Color> = Vec::new();
+        ret.resize(width.len(), props.paint.color());
+        ret
+    });
 
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
@@ -260,8 +274,22 @@ unsafe fn sk_draw_points(
     let canvas = recorder.start_recording();
     canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
 
-    props.reset_blur(sigma);
-    canvas.draw_points(mode, &points, &props.paint);
+    let points = x.iter().zip(y.iter());
+    let mut offset = 0;
+    for (i, grp) in group.iter_usize().enumerate() {
+        let grp = grp?;
+        let p = points
+            .clone()
+            .skip(offset)
+            .take(grp)
+            .map(|(x, y)| skia_safe::Point::new(*x as f32, *y as f32))
+            .collect::<Vec<_>>();
+        props.reset_blur(sigma[i]);
+        props.reset_width(width[i]);
+        props.reset_color(color[i]);
+        canvas.draw_points(mode, &p, &props.paint);
+        offset += grp;
+    }
     let picture = recorder.finish_recording()?;
     Ok(picture.into())
 }
@@ -276,9 +304,9 @@ unsafe fn sk_draw_points(
 /// @param from_y Y coordinates of start points.
 /// @param to_x X coordinates of end points.
 /// @param to_y Y coordinates of end points.
+/// @param sigma Blur sigma.
 /// @param width Stroke width.
 /// @param color Colors.
-/// @param sigma Blur sigma.
 /// @returns A raw vector of picture.
 /// @noRd
 #[allow(unused_mut)]

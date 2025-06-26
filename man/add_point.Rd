@@ -4,12 +4,14 @@
 \alias{add_point}
 \title{Add points}
 \usage{
-add_point(img, point, ..., props = paint())
+add_point(img, point, group = rep_len(1, nrow(point)), ..., props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
 
 \item{point}{A double matrix where each row is a point.}
+
+\item{group}{Grouping index for \code{point}. Each group of points is drawn at the same time.}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.
@@ -29,4 +31,8 @@ A raw vector of picture.
 }
 \description{
 Add points
+}
+\note{
+\code{sigma}, \code{width}, and \code{color} are applied by each \code{group} for this function.
+They are expected to have the same length as \code{group}, not the same length as \code{point}.
 }

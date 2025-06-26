@@ -103,6 +103,9 @@ test_that("add_point works", {
     canvas("snow") |>
       add_point(
         mat,
+        group = rep(1:20, each = 18),
+        color = grDevices::hsv(seq(0, 1, length.out = 20), 0.65, 1, alpha = 1) |>
+          grDevices::col2rgb(alpha = TRUE),
         props = paint(color = "red", width = 8, point_mode = PointMode$Lines)
       ) |>
       as_recordedplot()
