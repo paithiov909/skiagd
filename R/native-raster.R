@@ -25,14 +25,9 @@ as_nativeraster <- function(img, ..., props = paint()) {
 #' See [grDevices::recordPlot()] for details.
 #' @export
 as_recordedplot <- function(img, ..., props = paint()) {
-  rast <- if (requireNamespace("fastpng", quietly = TRUE)) {
-    as_png(img, props = props) |>
-      fastpng::read_png(type = "nativeraster", rgba = TRUE)
-  } else {
-    as_nativeraster(img, props = props)
-  }
+  rast <- as_nativeraster(img, props = props)
   grid::grid.newpage(recording = FALSE)
-  grid::grid.raster(rast)
+  grid::grid.raster(rast, interpolate = TRUE)
   invisible(grDevices::recordPlot())
 }
 
