@@ -1,6 +1,6 @@
 Package: skiagd
 Title: R Wrapper for 'rust-skia'
-Version: 0.0.0.9004
+Version: 0.0.0.9005
 Authors@R: c(
     person("Akiru", "Kato", , "paithiov909@gmail.com", role = c("aut", "cre")),
     person("Jeroen", "Ooms", role = "cph"))
@@ -11,13 +11,11 @@ License: MIT + file LICENSE
 Depends:
     R (>= 4.2)
 Imports:
-    grDevices,
     grid,
     purrr,
     rlang
 Suggests:
     dplyr,
-    fastpng,
     testthat (>= 3.0.0),
     vdiffr
 Config/testthat/edition: 3

@@ -1,7 +1,7 @@
 #' Add points
 #'
 #' @note
-#' `sigma`, `width`, and `color` are applied by each `group` for this function.
+#' * `sigma`, `width`, and `color` are applied by each `group` for this function.
 #' They are expected to have the same length as `group`, not the same length as `point`.
 #'
 #' @param point A double matrix where each row is a point.

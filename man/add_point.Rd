@@ -33,6 +33,8 @@ A raw vector of picture.
 Add points
 }
 \note{
-\code{sigma}, \code{width}, and \code{color} are applied by each \code{group} for this function.
+\itemize{
+\item \code{sigma}, \code{width}, and \code{color} are applied by each \code{group} for this function.
 They are expected to have the same length as \code{group}, not the same length as \code{point}.
+}
 }
