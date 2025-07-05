@@ -39,6 +39,11 @@ SEXP savvy_sk_absolute_fill__impl(SEXP c_arg__size, SEXP c_arg__fill) {
     return handle_result(res);
 }
 
+SEXP savvy_sk_as_nativeraster__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat) {
+    SEXP res = savvy_sk_as_nativeraster__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat);
+    return handle_result(res);
+}
+
 SEXP savvy_sk_as_png__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat) {
     SEXP res = savvy_sk_as_png__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat);
     return handle_result(res);
@@ -287,6 +292,7 @@ SEXP savvy_Shader_turbulence__impl(SEXP c_arg__freq, SEXP c_arg__octaves, SEXP c
 
 static const R_CallMethodDef CallEntries[] = {
     {"savvy_sk_absolute_fill__impl", (DL_FUNC) &savvy_sk_absolute_fill__impl, 2},
+    {"savvy_sk_as_nativeraster__impl", (DL_FUNC) &savvy_sk_as_nativeraster__impl, 3},
     {"savvy_sk_as_png__impl", (DL_FUNC) &savvy_sk_as_png__impl, 3},
     {"savvy_sk_draw_arc__impl", (DL_FUNC) &savvy_sk_draw_arc__impl, 12},
     {"savvy_sk_draw_atlas__impl", (DL_FUNC) &savvy_sk_draw_atlas__impl, 6},

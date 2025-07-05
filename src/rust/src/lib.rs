@@ -10,27 +10,64 @@ use path_transform::as_matrix;
 use savvy::{savvy, savvy_err, IntegerSexp, LogicalSexp, NumericScalar, NumericSexp, StringSexp};
 use skia_safe::{Data, Image, Paint};
 
-/// For internal use. See `sk_as_png()`
-unsafe fn as_png_data(
-    width: i32,
-    height: i32,
-    picture: &skia_safe::Picture,
-    mat: &skia_safe::Matrix,
-) -> savvy::Result<Data> {
-    let mut surface = skia_safe::surfaces::raster_n32_premul((width, height))
+/// Takes a raw vector of picture and returns a native raster
+///
+/// @param size Canvas size.
+/// @param curr_bytes Current canvas state.
+/// @param mat Matrix for transforming picture.
+/// @returns An integer matrix that represents a native raster.
+/// @noRd
+#[savvy]
+unsafe fn sk_as_nativeraster(
+    size: IntegerSexp,
+    curr_bytes: savvy::RawSexp,
+    mat: NumericSexp,
+) -> savvy::Result<savvy::Sexp> {
+    assert_len("size", 2, size.len())?;
+
+    let picture = read_picture_bytes(&curr_bytes)?;
+    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
+    let size = size.to_vec();
+
+    let mut surface = skia_safe::surfaces::raster_n32_premul((size[0], size[1]))
         .unwrap_or_else(|| skia_safe::surfaces::raster_n32_premul((720, 576)).unwrap());
     surface.canvas().clear(skia_safe::Color::TRANSPARENT);
     surface
         .canvas()
-        .draw_picture(&picture, Some(&mat), Some(&Paint::default()));
+        .draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
 
     let image = surface.image_snapshot();
-    let mut context = surface.direct_context();
-    let dat = image
-        .encode(context.as_mut(), skia_safe::EncodedImageFormat::PNG, None)
-        .unwrap();
 
-    Ok(dat)
+    // NOTE: Here we assume the ColorType is BGRA8888 with premultiplied alpha.
+    let pixmap = image
+        .peek_pixels()
+        .ok_or_else(|| return savvy_err!("Failed to peek pixels."))?;
+    let width = pixmap.width() as usize;
+    let row_pixels = (pixmap.row_bytes() as usize) / std::mem::size_of::<u32>();
+
+    let pixels = pixmap
+        .pixels::<u32>()
+        .ok_or_else(|| return savvy_err!("Failed to read pixels"))?;
+    let data: Vec<i32> = pixels
+        .chunks(row_pixels)
+        .take(width)
+        .flat_map(|row| {
+            row.iter().map(|&px| {
+                let a = px >> 24;
+                let r = (px >> 16) & 0xFF;
+                let g = (px >> 8) & 0xFF;
+                let b = px & 0xFF;
+                let col = (a << 24) | (b << 16) | (g << 8) | r;
+                col as i32
+            })
+        })
+        .collect();
+
+    let mut out = savvy::OwnedIntegerSexp::try_from_slice(data.as_slice())?;
+    out.set_dim(vec![image.height(), image.width()].as_slice())?;
+    out.set_class(vec!["nativeRaster"])?;
+
+    Ok(out.into())
 }
 
 /// Takes a raw vector of picture and returns PNG data
@@ -51,7 +88,18 @@ unsafe fn sk_as_png(
     let picture = read_picture_bytes(&curr_bytes)?;
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let size = size.to_vec();
-    let data = as_png_data(size[0], size[1], &picture, &mat[0])?;
+    let mut surface = skia_safe::surfaces::raster_n32_premul((size[0], size[1]))
+        .unwrap_or_else(|| skia_safe::surfaces::raster_n32_premul((720, 576)).unwrap());
+    surface.canvas().clear(skia_safe::Color::TRANSPARENT);
+    surface
+        .canvas()
+        .draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
+
+    let image = surface.image_snapshot();
+    let mut context = surface.direct_context();
+    let data = image
+        .encode(context.as_mut(), skia_safe::EncodedImageFormat::PNG, None)
+        .unwrap();
     let mut ret = savvy::OwnedRawSexp::new(data.len())?;
     for (i, b) in data.as_bytes().iter().enumerate() {
         ret.set_elt(i, *b)?;

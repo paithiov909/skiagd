@@ -26,42 +26,6 @@ as_png <- function(img, ..., props = paint()) {
   sk_as_png(props[["canvas_size"]], img, props[["transform"]])
 }
 
-#' Convert picture into recorded plot
-#'
-#' This is mainly for testing purposes.
-#'
-#' @inheritParams param-img-and-props
-#' @returns
-#' A `recordedplot` object is invisibly returned.
-#' See [grDevices::recordPlot()] for details.
-#' @export
-as_recordedplot <- function(img, ..., props = paint()) {
-  if (!requireNamespace("fastpng", quietly = TRUE)) {
-    rlang::abort("fastpng package is required")
-  }
-  png <- as_png(img, props = props) |>
-    fastpng::read_png(type = "nativeraster", rgba = TRUE)
-  grid::grid.newpage(recording = FALSE)
-  grid::grid.raster(png)
-  invisible(grDevices::recordPlot())
-}
-
-#' Plot picture as a raster
-#'
-#' @inheritParams param-img-and-props
-#' @returns `img` is returned invisibly.
-#' @export
-draw_img <- function(img, ..., props = paint()) {
-  if (!requireNamespace("fastpng", quietly = TRUE)) {
-    rlang::abort("fastpng package is required")
-  }
-  png <- as_png(img, props = props) |>
-    fastpng::read_png(type = "nativeraster", rgba = TRUE)
-  grid::grid.newpage(recording = FALSE)
-  grid::grid.raster(png)
-  invisible(img)
-}
-
 #' Freeze picture
 #'
 #' `as_png(img, props)` and then adds it to a new canvas

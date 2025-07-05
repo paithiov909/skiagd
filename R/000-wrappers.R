@@ -47,6 +47,17 @@ NULL
   .Call(savvy_sk_absolute_fill__impl, `size`, `fill`)
 }
 
+#' Takes a raw vector of picture and returns a native raster
+#'
+#' @param size Canvas size.
+#' @param curr_bytes Current canvas state.
+#' @param mat Matrix for transforming picture.
+#' @returns An integer matrix that represents a native raster.
+#' @noRd
+`sk_as_nativeraster` <- function(`size`, `curr_bytes`, `mat`) {
+  .Call(savvy_sk_as_nativeraster__impl, `size`, `curr_bytes`, `mat`)
+}
+
 #' Takes a raw vector of picture and returns PNG data
 #'
 #' @param size Canvas size.
