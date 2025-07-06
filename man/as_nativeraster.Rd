@@ -23,13 +23,13 @@ If the function does not matter them,  \code{...} is simply ignored.}
 \item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector of PNG image.
+A native raster.
 }
 \description{
 Convert picture into native raster
 }
 \note{
-This function returns integer matrices with the \code{nativeRaster} class,
+This function returns integer matrices of \code{nativeRaster} class,
 but they do not strictly conform to R's native raster specification.
 
 Since skiagd internally uses premultiplied alpha,

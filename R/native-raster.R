@@ -1,7 +1,7 @@
 #' Convert picture into native raster
 #'
 #' @note
-#' This function returns integer matrices with the `nativeRaster` class,
+#' This function returns integer matrices of `nativeRaster` class,
 #' but they do not strictly conform to R's native raster specification.
 #'
 #' Since skiagd internally uses premultiplied alpha,
@@ -9,7 +9,7 @@
 #' than the expected PNG image if the alpha channel is not fully opaque.
 #'
 #' @inheritParams param-img-and-props
-#' @returns A raw vector of PNG image.
+#' @returns A native raster.
 #' @export
 as_nativeraster <- function(img, ..., props = paint()) {
   sk_as_nativeraster(props[["canvas_size"]], img, props[["transform"]])
