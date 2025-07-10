@@ -6,16 +6,17 @@
 #' not just the length of `text`.
 #' * Since textblobs do not have font fallback mechanism,
 #' characters out of the specified font are not drawn correctly.
-#' * The return value is often a large object
+#' * If `freeze` is `FALSE`, the return value would be a large object
 #' because the specified font is embedded in the returned picture.
-#' Note that you should almost always [freeze()] the picture after drawing text.
+#' Note that you should almost always freeze the picture when drawing text.
 #'
 #' @param text Characters to be drawn.
+#' @param freeze Whether to freeze the picture after drawing text.
 #' @inheritParams param-img-and-props
 #' @inheritParams param-rsx-trans
 #' @returns A raw vector of picture.
 #' @export
-add_text <- function(img, text, rsx_trans, ..., props = paint()) {
+add_text <- function(img, text, rsx_trans, freeze = TRUE, ..., props = paint()) {
   if (anyNA(text)) {
     rlang::abort("`text` cannot contain NA.")
   }
@@ -40,6 +41,7 @@ add_text <- function(img, text, rsx_trans, ..., props = paint()) {
     props[["transform"]],
     as_paint_attrs(props),
     text,
+    freeze,
     t(rsx_trans[, 1:6]),
     sigma,
     as.integer(color)

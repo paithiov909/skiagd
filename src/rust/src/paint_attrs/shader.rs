@@ -139,7 +139,7 @@ impl Shader {
             shader: Some(shader),
         })
     }
-    unsafe fn from_picture(
+    fn from_picture(
         img: savvy::RawSexp,
         mode: &TileMode,
         tile_size: NumericSexp,

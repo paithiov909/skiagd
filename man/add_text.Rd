@@ -4,7 +4,7 @@
 \alias{add_text}
 \title{Add text}
 \usage{
-add_text(img, text, rsx_trans, ..., props = paint())
+add_text(img, text, rsx_trans, freeze = TRUE, ..., props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
@@ -21,6 +21,8 @@ Each column of the matrix corresponds to:
 \item X coordinate of the anchor point
 \item Y coordinate of the anchor point
 }}
+
+\item{freeze}{Whether to freeze the picture after drawing text.}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.
@@ -48,8 +50,8 @@ the same number of rows as the total number of characters to be drawn;
 not just the length of \code{text}.
 \item Since textblobs do not have font fallback mechanism,
 characters out of the specified font are not drawn correctly.
-\item The return value is often a large object
+\item If \code{freeze} is \code{FALSE}, the return value would be a large object
 because the specified font is embedded in the returned picture.
-Note that you should almost always \code{\link[=freeze]{freeze()}} the picture after drawing text.
+Note that you should almost always freeze the picture when drawing text.
 }
 }

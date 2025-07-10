@@ -253,14 +253,15 @@ NULL
 #' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param text Text strings.
+#' @param freeze Whether to freeze textblobs.
 #' @param rsx_trans RSX transform for each character.
 #' @param sigma Blur sigma.
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_text` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `rsx_trans`, `sigma`, `color`) {
+`sk_draw_text` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `freeze`, `rsx_trans`, `sigma`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_text__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `rsx_trans`, `sigma`, `color`)
+  .Call(savvy_sk_draw_text__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `freeze`, `rsx_trans`, `sigma`, `color`)
 }
 
 #' Draws vertices
