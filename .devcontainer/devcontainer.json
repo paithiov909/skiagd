@@ -1,4 +1,4 @@
 {
 	"name": "WebR",
-	"image": "ghcr.io/r-wasm/webr:v0.4.2"
+	"image": "ghcr.io/r-wasm/webr:latest"
 }
