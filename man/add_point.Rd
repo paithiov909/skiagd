@@ -4,18 +4,37 @@
 \alias{add_point}
 \title{Add points}
 \usage{
-add_point(img, point, props = paint())
+add_point(img, point, group = rep_len(1, nrow(point)), ..., props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
 
 \item{point}{A double matrix where each row is a point.}
 
-\item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
+\item{group}{Grouping index for \code{point}. Each group of points is drawn at the same time.}
+
+\item{...}{For some drawing functions, you can specify
+\code{sigma}, \code{width} and \code{color} as named arguments.
+\itemize{
+\item \code{sigma} must be a numeric vector of blur sigmas for each shape.
+\item \code{width} must be a numeric vector of stroke widths for each shape.
+\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+}
+
+If they are not provided as named arguments, they will be taken from \code{props}.
+If the function does not matter them,  \code{...} is simply ignored.}
+
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.
 }
 \description{
 Add points
+}
+\note{
+\itemize{
+\item \code{sigma}, \code{width}, and \code{color} are applied by each \code{group} for this function.
+They are expected to have the same length as \code{group}, not the same length as \code{point}.
+}
 }

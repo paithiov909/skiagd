@@ -37,7 +37,7 @@ NULL
   stop(class, " cannot be modified", call. = FALSE)
 }
 
-#' Fills canvas with color
+#' Fills canvas with the specified color
 #'
 #' @param size Canvas size.
 #' @param fill Integers of length 4 (RGBA).
@@ -45,6 +45,17 @@ NULL
 #' @noRd
 `sk_absolute_fill` <- function(`size`, `fill`) {
   .Call(savvy_sk_absolute_fill__impl, `size`, `fill`)
+}
+
+#' Takes a raw vector of picture and returns a native raster
+#'
+#' @param size Canvas size.
+#' @param curr_bytes Current canvas state.
+#' @param mat Matrix for transforming picture.
+#' @returns An integer matrix that represents a native raster.
+#' @noRd
+`sk_as_nativeraster` <- function(`size`, `curr_bytes`, `mat`) {
+  .Call(savvy_sk_as_nativeraster__impl, `size`, `curr_bytes`, `mat`)
 }
 
 #' Takes a raw vector of picture and returns PNG data
@@ -58,39 +69,88 @@ NULL
   .Call(savvy_sk_as_png__impl, `size`, `curr_bytes`, `mat`)
 }
 
-#' Draws circle on canvas
-#'
-#' @param size Canvas size.
-#' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
-#' @param x X coordinates of center.
-#' @param y Y coordinates of center.
-#' @param radius Circle radius.
-#' @returns A raw vector of picture.
-#' @noRd
-`sk_draw_circle` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_circle__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`)
-}
-
-#' Draws rectangle on canvas
+#' Draws arcs
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
 #' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
-#' @param left X coordinates of the left edge of the rectangles.
-#' @param top Y coordinates of the top edge of the rectangles.
-#' @param right X coordinates of the right edge of the rectangles.
-#' @param bottom Y coordinates of the bottom edge of the rectangles.
+#' @param ltrb Rectangles.
+#' @param r Corners radius. This actually doesn't affect the result.
+#' @param use_center Whether to draw a wedge that includes lines from oval center to arc end points.
+#' @param angle Start angle and sweep angle.
+#' @param rsx_trans RSX transform for each rectangle.
+#' @param sigma Blur sigma.
+#' @param width Stroke width.
+#' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_irect` <- function(`size`, `curr_bytes`, `mat`, `props`, `left`, `top`, `right`, `bottom`) {
+`sk_draw_arc` <- function(`size`, `curr_bytes`, `mat`, `props`, `ltrb`, `r`, `use_center`, `angle`, `rsx_trans`, `sigma`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_irect__impl, `size`, `curr_bytes`, `mat`, `props`, `left`, `top`, `right`, `bottom`)
+  .Call(savvy_sk_draw_arc__impl, `size`, `curr_bytes`, `mat`, `props`, `ltrb`, `r`, `use_center`, `angle`, `rsx_trans`, `sigma`, `width`, `color`)
 }
 
-#' Draws lines on canvas
+#' Draws atlas
+#'
+#' This function doesn't take `sprites` (offsets for the sprites) argument.
+#' The entire image is always used as a sprite.
+#'
+#' @param size Canvas size.
+#' @param curr_bytes Current canvas state.
+#' @param mat Matrix for transforming picture.
+#' @param props PaintAttrs.
+#' @param png_bytes PNG bytes.
+#' @param rsx_trans RSX transforms for each sprite.
+#' @returns A raw vector of picture.
+#' @noRd
+`sk_draw_atlas` <- function(`size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `rsx_trans`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  .Call(savvy_sk_draw_atlas__impl, `size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `rsx_trans`)
+}
+
+#' Draws circles
+#'
+#' @param size Canvas size.
+#' @param curr_bytes Current canvas state.
+#' @param mat Matrix for transforming picture.
+#' @param props PaintAttrs.
+#' @param x X coordinates of center.
+#' @param y Y coordinates of center.
+#' @param radius Circle radius.
+#' @param sigma Blur sigma.
+#' @param width Stroke width.
+#' @param color Colors.
+#' @returns A raw vector of picture.
+#' @noRd
+`sk_draw_circle` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`, `sigma`, `width`, `color`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  .Call(savvy_sk_draw_circle__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`, `sigma`, `width`, `color`)
+}
+
+#' Draws outer and inner rounded rectangles
+#'
+#' @param size Canvas size.
+#' @param curr_bytes Current canvas state.
+#' @param mat Matrix for transforming picture.
+#' @param props PaintAttrs.
+#' @param outer_ltrb Outer rectangles.
+#' @param outer_rx Axis lengths on X-axis of outer oval describing rounded corners.
+#' @param outer_ry Axis lengths on Y-axis of outer oval describing rounded corners.
+#' @param inner_ltrb Inner rectangles.
+#' @param inner_rx Axis lengths on X-axis of inner oval describing rounded corners.
+#' @param inner_ry Axis lengths on Y-axis of inner oval describing rounded corners.
+#' @param rsx_trans RSX transform for each rectangle.
+#' @param sigma Blur sigma.
+#' @param width Stroke width.
+#' @param color Colors.
+#' @returns A raw vector of picture.
+#' @noRd
+`sk_draw_diff_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `outer_ltrb`, `outer_rx`, `outer_ry`, `inner_ltrb`, `inner_rx`, `inner_ry`, `rsx_trans`, `sigma`, `width`, `color`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  .Call(savvy_sk_draw_diff_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `outer_ltrb`, `outer_rx`, `outer_ry`, `inner_ltrb`, `inner_rx`, `inner_ry`, `rsx_trans`, `sigma`, `width`, `color`)
+}
+
+#' Draws lines
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
@@ -100,28 +160,34 @@ NULL
 #' @param from_y Y coordinates of start points.
 #' @param to_x X coordinates of end points.
 #' @param to_y Y coordinates of end points.
+#' @param sigma Blur sigma.
+#' @param width Stroke width.
+#' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_line` <- function(`size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`) {
+`sk_draw_line` <- function(`size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`, `sigma`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  .Call(savvy_sk_draw_line__impl, `size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`)
+  .Call(savvy_sk_draw_line__impl, `size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`, `sigma`, `width`, `color`)
 }
 
-#' Draws SVG path on canvas
+#' Draws SVG paths
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat1 Matrix for transforming picture.
+#' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param svg SVG strings to draw.
-#' @param mat2 Matrix for transforming SVG path.
+#' @param rsx_trans RSX transform for each path.
+#' @param sigma Blur sigma.
+#' @param width Stroke width.
+#' @param color Colors.
 #' @param fill_type FillType.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_path` <- function(`size`, `curr_bytes`, `mat1`, `props`, `svg`, `mat2`, `fill_type`) {
+`sk_draw_path` <- function(`size`, `curr_bytes`, `mat`, `props`, `svg`, `rsx_trans`, `sigma`, `width`, `color`, `fill_type`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   `fill_type` <- .savvy_extract_ptr(`fill_type`, "FillType")
-  .Call(savvy_sk_draw_path__impl, `size`, `curr_bytes`, `mat1`, `props`, `svg`, `mat2`, `fill_type`)
+  .Call(savvy_sk_draw_path__impl, `size`, `curr_bytes`, `mat`, `props`, `svg`, `rsx_trans`, `sigma`, `width`, `color`, `fill_type`)
 }
 
 #' Draws PNG data as an image on canvas
@@ -147,25 +213,132 @@ NULL
 #' @param props PaintAttrs.
 #' @param x X coordinates of points.
 #' @param y Y coordinates of points.
+#' @param group Grouping index for points where each group is drawn at the same time.
+#' @param sigma Blur sigma.
+#' @param width Stroke width.
+#' @param color Colors.
 #' @param mode PointMode.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_points` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `mode`) {
+`sk_draw_points` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `group`, `sigma`, `width`, `color`, `mode`) {
   `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
   `mode` <- .savvy_extract_ptr(`mode`, "PointMode")
-  .Call(savvy_sk_draw_points__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `mode`)
+  .Call(savvy_sk_draw_points__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `group`, `sigma`, `width`, `color`, `mode`)
 }
 
-#' Returns default matrix as numerics
+#' Draws rounded rectangles
 #'
-#' @details
-#' Users should not touch matrix to transform pictures.
-#' For a `canvas.draw_picture()` call, pass `Paint::default()`.
+#' @param size Canvas size.
+#' @param curr_bytes Current canvas state.
+#' @param mat Matrix for transforming picture.
+#' @param props PaintAttrs.
+#' @param ltrb Rectangles.
+#' @param rx Axis lengths on X-axis of oval describing rounded corners.
+#' @param ry Axis lengths on Y-axis of oval describing rounded corners.
+#' @param rsx_trans RSX transform for each rectangle.
+#' @param sigma Blur sigma.
+#' @param width Stroke width.
+#' @param color Colors.
+#' @returns A raw vector of picture.
+#' @noRd
+`sk_draw_rounded_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `ltrb`, `rx`, `ry`, `rsx_trans`, `sigma`, `width`, `color`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  .Call(savvy_sk_draw_rounded_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `ltrb`, `rx`, `ry`, `rsx_trans`, `sigma`, `width`, `color`)
+}
+
+#' Draws text as textblobs
 #'
+#' @param size Canvas size.
+#' @param curr_bytes Current canvas state.
+#' @param mat Matrix for transforming picture.
+#' @param props PaintAttrs.
+#' @param text Text strings.
+#' @param freeze Whether to freeze textblobs.
+#' @param rsx_trans RSX transform for each character.
+#' @param sigma Blur sigma.
+#' @param color Colors.
+#' @returns A raw vector of picture.
+#' @noRd
+`sk_draw_text` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `freeze`, `rsx_trans`, `sigma`, `color`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  .Call(savvy_sk_draw_text__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `freeze`, `rsx_trans`, `sigma`, `color`)
+}
+
+#' Draws vertices
+#'
+#' @param size Canvas size.
+#' @param curr_bytes Current canvas state.
+#' @param mat Matrix for transforming picture.
+#' @param props PaintAttrs.
+#' @param x X coordinates of points.
+#' @param y Y coordinates of points.
+#' @param sigma Blur sigma (scalar).
+#' @param color Colors of vertices.
+#' @param mode VertexMode.
+#' @returns A raw vector of picture.
+#' @noRd
+`sk_draw_vertices` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `sigma`, `color`, `mode`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  `mode` <- .savvy_extract_ptr(`mode`, "VertexMode")
+  .Call(savvy_sk_draw_vertices__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `sigma`, `color`, `mode`)
+}
+
+#' Get width and number of characters
+#'
+#' @param text Text strings.
+#' @param props PaintAttrs.
+#' @returns A list.
+#' @noRd
+`sk_get_text_info` <- function(`text`, `props`) {
+  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  .Call(savvy_sk_get_text_info__impl, `text`, `props`)
+}
+
+
+`sk_list_families` <- function() {
+  .Call(savvy_sk_list_families__impl)
+}
+
+#' Creates a matrix for mapping points
+#'
+#' @param src_x X coordinates of source points.
+#' @param src_y Y coordinates of source points.
+#' @param dst_x X coordinates of destination points.
+#' @param dst_y Y coordinates of destination points.
 #' @returns A numeric vector of length 9.
 #' @noRd
-`sk_matrix_default` <- function() {
-  .Call(savvy_sk_matrix_default__impl)
+`sk_matrix_map_point` <- function(`src_x`, `src_y`, `dst_x`, `dst_y`) {
+  .Call(savvy_sk_matrix_map_point__impl, `src_x`, `src_y`, `dst_x`, `dst_y`)
+}
+
+#' Returns bounds of SVG paths
+#'
+#' @param svg SVG notations.
+#' @returns A list of numeric vectors.
+#' @noRd
+`sk_path_bounds` <- function(`svg`) {
+  .Call(savvy_sk_path_bounds__impl, `svg`)
+}
+
+#' Interpolates between two SVG paths
+#'
+#' @param value A numeric vector of weights.
+#' @param first SVG notation. The second or later elements will be ignored.
+#' @param second SVG notation. The second or later elements will be ignored.
+#' @returns A character vector.
+#' @noRd
+`sk_path_interpolate` <- function(`value`, `first`, `second`) {
+  .Call(savvy_sk_path_interpolate__impl, `value`, `first`, `second`)
+}
+
+#' Transforms SVG paths
+#'
+#' @param svg SVG notations to transform.
+#' @param mat Matrix for transforming SVG paths.
+#' @returns A character vector.
+#' @noRd
+`sk_path_transform` <- function(`svg`, `mat`) {
+  .Call(savvy_sk_path_transform__impl, `svg`, `mat`)
 }
 
 ### wrapper functions for BlendMode
@@ -220,6 +393,8 @@ NULL
 #'
 #' @seealso
 #' [BlendMode in skia_safe - Rust](https://rust-skia.github.io/doc/skia_safe/enum.BlendMode.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-blendmode
 #' @export
 `BlendMode` <- new.env(parent = emptyenv())
 `BlendMode`$`Clear` <- .savvy_wrap_BlendMode(0L)
@@ -296,6 +471,86 @@ class(`BlendMode`) <- c("BlendMode__bundle", "savvy_skiagd__sealed")
   cat('BlendMode\n')
 }
 
+### wrapper functions for BlurStyle
+
+
+`.savvy_wrap_BlurStyle` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+
+
+  class(e) <- c("BlurStyle", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' BlurStyle (0-3)
+#'
+#' `BlurStyle` controls how a blur mask filter is applied to the shape.
+#'
+#' @details
+#' The following `BlurStyle` are available:
+#'
+#' * `Normal`: Normal blur.
+#' * `Solid`: Solid blur.
+#' * `Outer`: Outer blur.
+#' * `Inner`: Inner blur.
+#'
+#' @seealso
+#' [BlurStyle in skia_safe - Rust](https://rust-skia.github.io/doc/skia_safe/enum.BlurStyle.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-blurstyle
+#' @export
+`BlurStyle` <- new.env(parent = emptyenv())
+`BlurStyle`$`Normal` <- .savvy_wrap_BlurStyle(0L)
+`BlurStyle`$`Solid` <- .savvy_wrap_BlurStyle(1L)
+`BlurStyle`$`Outer` <- .savvy_wrap_BlurStyle(2L)
+`BlurStyle`$`Inner` <- .savvy_wrap_BlurStyle(3L)
+
+#' @export
+`$.BlurStyle__bundle` <- function(x, name) {
+  if (!name %in% c("Normal", "Solid", "Outer", "Inner")) {
+    stop(paste0("Unknown variant: ", name), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`[[.BlurStyle__bundle` <- function(x, i) {
+  if (is.numeric(i)) {
+    stop("BlurStyle cannot be subset by index", call. = FALSE)
+  }
+
+  if (!i %in% c("Normal", "Solid", "Outer", "Inner")) {
+    stop(paste0("Unknown variant: ", i), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`print.BlurStyle` <- function(x, ...) {
+  idx <- x$.ptr + 1L
+  label <- c("Normal", "Solid", "Outer", "Inner")[idx]
+  if (is.na(label)) {
+    stop("Unexpected value for BlurStyle", call. = TRUE)
+  }
+  cat("BlurStyle::", label, "\n", sep = "")
+}
+
+
+### associated functions for BlurStyle
+
+
+
+class(`BlurStyle`) <- c("BlurStyle__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.BlurStyle__bundle` <- function(x, ...) {
+  cat('BlurStyle\n')
+}
+
 ### wrapper functions for Cap
 
 
@@ -322,6 +577,8 @@ class(`BlendMode`) <- c("BlendMode__bundle", "savvy_skiagd__sealed")
 #'
 #' @seealso
 #' [Cap in skia_safe::paint - Rust](https://rust-skia.github.io/doc/skia_safe/paint/enum.Cap.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-cap
 #' @export
 `Cap` <- new.env(parent = emptyenv())
 `Cap`$`Butt` <- .savvy_wrap_Cap(0L)
@@ -400,6 +657,8 @@ class(`Cap`) <- c("Cap__bundle", "savvy_skiagd__sealed")
 #'
 #' @seealso
 #' [FillType in skia_safe::path - Rust](https://rust-skia.github.io/doc/skia_safe/path/enum.FillType.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-filltype
 #' @export
 `FillType` <- new.env(parent = emptyenv())
 `FillType`$`Winding` <- .savvy_wrap_FillType(0L)
@@ -451,6 +710,126 @@ class(`FillType`) <- c("FillType__bundle", "savvy_skiagd__sealed")
   cat('FillType\n')
 }
 
+### wrapper functions for FontStyle
+
+
+`.savvy_wrap_FontStyle` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+
+
+  class(e) <- c("FontStyle", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' FontStyle (0-3)
+#'
+#' `FontStyle` determines the font style.
+#'
+#' @details
+#' The following styles are available:
+#'
+#' * `Normal`: Normal (plain).
+#' * `Bold`: Bold (bold).
+#' * `Italic`: Italic (italic).
+#' * `BoldItalic`: BoldItalic (bold.italic).
+#'
+#' @seealso
+#' [FontStyle in skia_safe - Rust](https://rust-skia.github.io/doc/skia_safe/struct.FontStyle.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-fontstyle
+#' @export
+`FontStyle` <- new.env(parent = emptyenv())
+`FontStyle`$`Normal` <- .savvy_wrap_FontStyle(0L)
+`FontStyle`$`Bold` <- .savvy_wrap_FontStyle(1L)
+`FontStyle`$`Italic` <- .savvy_wrap_FontStyle(2L)
+`FontStyle`$`BoldItalic` <- .savvy_wrap_FontStyle(3L)
+
+#' @export
+`$.FontStyle__bundle` <- function(x, name) {
+  if (!name %in% c("Normal", "Bold", "Italic", "BoldItalic")) {
+    stop(paste0("Unknown variant: ", name), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`[[.FontStyle__bundle` <- function(x, i) {
+  if (is.numeric(i)) {
+    stop("FontStyle cannot be subset by index", call. = FALSE)
+  }
+
+  if (!i %in% c("Normal", "Bold", "Italic", "BoldItalic")) {
+    stop(paste0("Unknown variant: ", i), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`print.FontStyle` <- function(x, ...) {
+  idx <- x$.ptr + 1L
+  label <- c("Normal", "Bold", "Italic", "BoldItalic")[idx]
+  if (is.na(label)) {
+    stop("Unexpected value for FontStyle", call. = TRUE)
+  }
+  cat("FontStyle::", label, "\n", sep = "")
+}
+
+
+### associated functions for FontStyle
+
+
+
+class(`FontStyle`) <- c("FontStyle__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.FontStyle__bundle` <- function(x, ...) {
+  cat('FontStyle\n')
+}
+
+### wrapper functions for ImageFilter
+
+`ImageFilter_get_label` <- function(self) {
+  function() {
+    .Call(savvy_ImageFilter_get_label__impl, `self`)
+  }
+}
+
+`.savvy_wrap_ImageFilter` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+  e$`get_label` <- `ImageFilter_get_label`(ptr)
+
+  class(e) <- c("ImageFilter", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' @export
+`ImageFilter` <- new.env(parent = emptyenv())
+
+### associated functions for ImageFilter
+
+`ImageFilter`$`no_filter` <- function() {
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_no_filter__impl))
+}
+
+`ImageFilter`$`runtime_shader` <- function(`source`, `uniforms`) {
+  `source` <- .savvy_extract_ptr(`source`, "RuntimeEffect")
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_runtime_shader__impl, `source`, `uniforms`))
+}
+
+
+class(`ImageFilter`) <- c("ImageFilter__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.ImageFilter__bundle` <- function(x, ...) {
+  cat('ImageFilter\n')
+}
+
 ### wrapper functions for Join
 
 
@@ -477,6 +856,8 @@ class(`FillType`) <- c("FillType__bundle", "savvy_skiagd__sealed")
 #'
 #' @seealso
 #' [Join in skia_safe::paint - Rust](https://rust-skia.github.io/doc/skia_safe/paint/enum.Join.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-join
 #' @export
 `Join` <- new.env(parent = emptyenv())
 `Join`$`Miter` <- .savvy_wrap_Join(0L)
@@ -543,7 +924,8 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
 #' PaintAttrs
 #'
 #' Internal impl that wraps `skia_safe::Paint`.
-#' Use `PaintAttrs$set_attrs()` to create a pointer to PaintAttrs.
+#' Use `PaintAttrs$set_attrs()` to create a new PaintAttrs
+#' each time it is required, since `props` is always moved.
 #'
 #' @details
 #' `PaintAttrs$set_attrs()` takes arguments below:
@@ -554,21 +936,31 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
 #' * cap: Cap (stroke cap).
 #' * width: Stroke width.
 #' * miter: Stroke miter.
+#' * fontsize: Font size.
+#' * family: Font family name
+#' * fontface: FontStyle.
 #' * blend_mode: BlendMode.
+#' * blur_style: BlurStyle.
 #' * path_effect: PathEffect.
+#' * shader: Shader.
+#' * image_filter: ImageFilter.
 #'
 #' @noRd
 `PaintAttrs` <- new.env(parent = emptyenv())
 
 ### associated functions for PaintAttrs
 
-`PaintAttrs`$`set_attrs` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`, `path_effect`) {
+`PaintAttrs`$`set_attrs` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `fontsize`, `family`, `fontface`, `blend_mode`, `blur_style`, `path_effect`, `shader`, `image_filter`) {
   `style` <- .savvy_extract_ptr(`style`, "Style")
   `join` <- .savvy_extract_ptr(`join`, "Join")
   `cap` <- .savvy_extract_ptr(`cap`, "Cap")
+  `fontface` <- .savvy_extract_ptr(`fontface`, "FontStyle")
   `blend_mode` <- .savvy_extract_ptr(`blend_mode`, "BlendMode")
+  `blur_style` <- .savvy_extract_ptr(`blur_style`, "BlurStyle")
   `path_effect` <- .savvy_extract_ptr(`path_effect`, "PathEffect")
-  .savvy_wrap_PaintAttrs(.Call(savvy_PaintAttrs_set_attrs__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `blend_mode`, `path_effect`))
+  `shader` <- .savvy_extract_ptr(`shader`, "Shader")
+  `image_filter` <- .savvy_extract_ptr(`image_filter`, "ImageFilter")
+  .savvy_wrap_PaintAttrs(.Call(savvy_PaintAttrs_set_attrs__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `fontsize`, `family`, `fontface`, `blend_mode`, `blur_style`, `path_effect`, `shader`, `image_filter`))
 }
 
 
@@ -597,26 +989,6 @@ class(`PaintAttrs`) <- c("PaintAttrs__bundle", "savvy_skiagd__sealed")
 }
 
 
-#' PathEffect
-#'
-#' `PathEffect` is a struct that offers a reference to `skia_safe::PathEffect`.
-#' You can apply a path effect to shapes via [paint()].
-#' Currently only single `PathEffect` can be specified; multiple effects are not supported.
-#'
-#' @details
-#' The following effects are available:
-#'
-#' * `no_effect()`: does not apply any path effect. This is the default effect for `paint()`.
-#' * `trim(start, end)`: trims the `start` and `end` of the path. `start` and `end` are in the range `[0, 1]`.
-#' * `discrete(length, deviation, seed)`: applies discrete path effect.
-#' * `dash(intervals, phase)`: applies dash path effect.
-#' * `corner(radius)`: applies corner path effect.
-#' * `path_1d(path, advance, phase, style)`: applies 1D path effect. `style` can be `"translate"`, `"rotate"`, or `"morph"`.
-#' * `path_2d(path, mat)`: applies 2D path effect.
-#' * `line_2d(width, mat)`: applies 2D line path effect.
-#'
-#' @seealso
-#' [Path Effects | React Native Skia](https://shopify.github.io/react-native-skia/docs/path-effects/)
 #' @export
 `PathEffect` <- new.env(parent = emptyenv())
 
@@ -634,8 +1006,8 @@ class(`PaintAttrs`) <- c("PaintAttrs__bundle", "savvy_skiagd__sealed")
   .savvy_wrap_PathEffect(.Call(savvy_PathEffect_discrete__impl, `length`, `deviation`, `seed`))
 }
 
-`PathEffect`$`line_2d` <- function(`width`, `mat`) {
-  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_line_2d__impl, `width`, `mat`))
+`PathEffect`$`line_2d` <- function(`width`, `transform`) {
+  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_line_2d__impl, `width`, `transform`))
 }
 
 `PathEffect`$`no_effect` <- function() {
@@ -646,8 +1018,14 @@ class(`PaintAttrs`) <- c("PaintAttrs__bundle", "savvy_skiagd__sealed")
   .savvy_wrap_PathEffect(.Call(savvy_PathEffect_path_1d__impl, `path`, `advance`, `phase`, `style`))
 }
 
-`PathEffect`$`path_2d` <- function(`path`, `mat`) {
-  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_path_2d__impl, `path`, `mat`))
+`PathEffect`$`path_2d` <- function(`path`, `transform`) {
+  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_path_2d__impl, `path`, `transform`))
+}
+
+`PathEffect`$`sum` <- function(`first`, `second`) {
+  `first` <- .savvy_extract_ptr(`first`, "PathEffect")
+  `second` <- .savvy_extract_ptr(`second`, "PathEffect")
+  .savvy_wrap_PathEffect(.Call(savvy_PathEffect_sum__impl, `first`, `second`))
 }
 
 `PathEffect`$`trim` <- function(`start`, `end`) {
@@ -689,6 +1067,8 @@ class(`PathEffect`) <- c("PathEffect__bundle", "savvy_skiagd__sealed")
 #'
 #' @seealso
 #' [PointMode in skia_safe::canvas - Rust](https://rust-skia.github.io/doc/skia_safe/canvas/enum.PointMode.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-pointmode
 #' @export
 `PointMode` <- new.env(parent = emptyenv())
 `PointMode`$`Points` <- .savvy_wrap_PointMode(0L)
@@ -739,6 +1119,130 @@ class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
   cat('PointMode\n')
 }
 
+### wrapper functions for RuntimeEffect
+
+`RuntimeEffect_source` <- function(self) {
+  function() {
+    .Call(savvy_RuntimeEffect_source__impl, `self`)
+  }
+}
+
+`.savvy_wrap_RuntimeEffect` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+  e$`source` <- `RuntimeEffect_source`(ptr)
+
+  class(e) <- c("RuntimeEffect", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' @export
+`RuntimeEffect` <- new.env(parent = emptyenv())
+
+### associated functions for RuntimeEffect
+
+`RuntimeEffect`$`make` <- function(`sksl`) {
+  .savvy_wrap_RuntimeEffect(.Call(savvy_RuntimeEffect_make__impl, `sksl`))
+}
+
+
+class(`RuntimeEffect`) <- c("RuntimeEffect__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.RuntimeEffect__bundle` <- function(x, ...) {
+  cat('RuntimeEffect\n')
+}
+
+### wrapper functions for Shader
+
+`Shader_get_label` <- function(self) {
+  function() {
+    .Call(savvy_Shader_get_label__impl, `self`)
+  }
+}
+
+`.savvy_wrap_Shader` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+  e$`get_label` <- `Shader_get_label`(ptr)
+
+  class(e) <- c("Shader", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' @export
+`Shader` <- new.env(parent = emptyenv())
+
+### associated functions for Shader
+
+`Shader`$`blend` <- function(`mode`, `dst`, `src`) {
+  `mode` <- .savvy_extract_ptr(`mode`, "BlendMode")
+  `dst` <- .savvy_extract_ptr(`dst`, "Shader")
+  `src` <- .savvy_extract_ptr(`src`, "Shader")
+  .savvy_wrap_Shader(.Call(savvy_Shader_blend__impl, `mode`, `dst`, `src`))
+}
+
+`Shader`$`color` <- function(`rgba`) {
+  .savvy_wrap_Shader(.Call(savvy_Shader_color__impl, `rgba`))
+}
+
+`Shader`$`conical_gradient` <- function(`start`, `end`, `radii`, `from`, `to`, `mode`, `flags`, `transform`) {
+  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  .savvy_wrap_Shader(.Call(savvy_Shader_conical_gradient__impl, `start`, `end`, `radii`, `from`, `to`, `mode`, `flags`, `transform`))
+}
+
+`Shader`$`fractal_noise` <- function(`freq`, `octaves`, `seed`, `tile_size`) {
+  .savvy_wrap_Shader(.Call(savvy_Shader_fractal_noise__impl, `freq`, `octaves`, `seed`, `tile_size`))
+}
+
+`Shader`$`from_picture` <- function(`img`, `mode`, `tile_size`, `transform`) {
+  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  .savvy_wrap_Shader(.Call(savvy_Shader_from_picture__impl, `img`, `mode`, `tile_size`, `transform`))
+}
+
+`Shader`$`from_png` <- function(`png_bytes`, `mode`, `transform`) {
+  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  .savvy_wrap_Shader(.Call(savvy_Shader_from_png__impl, `png_bytes`, `mode`, `transform`))
+}
+
+`Shader`$`from_runtime_effect` <- function(`source`, `uniforms`) {
+  `source` <- .savvy_extract_ptr(`source`, "RuntimeEffect")
+  .savvy_wrap_Shader(.Call(savvy_Shader_from_runtime_effect__impl, `source`, `uniforms`))
+}
+
+`Shader`$`linear_gradient` <- function(`start`, `end`, `from`, `to`, `mode`, `flags`, `transform`) {
+  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  .savvy_wrap_Shader(.Call(savvy_Shader_linear_gradient__impl, `start`, `end`, `from`, `to`, `mode`, `flags`, `transform`))
+}
+
+`Shader`$`no_shader` <- function() {
+  .savvy_wrap_Shader(.Call(savvy_Shader_no_shader__impl))
+}
+
+`Shader`$`radial_gradient` <- function(`center`, `radius`, `from`, `to`, `mode`, `flags`, `transform`) {
+  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  .savvy_wrap_Shader(.Call(savvy_Shader_radial_gradient__impl, `center`, `radius`, `from`, `to`, `mode`, `flags`, `transform`))
+}
+
+`Shader`$`sweep_gradient` <- function(`center`, `start_angle`, `end_angle`, `from`, `to`, `mode`, `flags`, `transform`) {
+  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  .savvy_wrap_Shader(.Call(savvy_Shader_sweep_gradient__impl, `center`, `start_angle`, `end_angle`, `from`, `to`, `mode`, `flags`, `transform`))
+}
+
+`Shader`$`turbulence` <- function(`freq`, `octaves`, `seed`, `tile_size`) {
+  .savvy_wrap_Shader(.Call(savvy_Shader_turbulence__impl, `freq`, `octaves`, `seed`, `tile_size`))
+}
+
+
+class(`Shader`) <- c("Shader__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.Shader__bundle` <- function(x, ...) {
+  cat('Shader\n')
+}
+
 ### wrapper functions for Style
 
 
@@ -765,6 +1269,8 @@ class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
 #'
 #' @seealso
 #' [Style in skia_safe::paint - Rust](https://rust-skia.github.io/doc/skia_safe/paint/enum.Style.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-style
 #' @export
 `Style` <- new.env(parent = emptyenv())
 `Style`$`StrokeAndFill` <- .savvy_wrap_Style(0L)
@@ -813,5 +1319,164 @@ class(`Style`) <- c("Style__bundle", "savvy_skiagd__sealed")
 #' @export
 `print.Style__bundle` <- function(x, ...) {
   cat('Style\n')
+}
+
+### wrapper functions for TileMode
+
+
+`.savvy_wrap_TileMode` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+
+
+  class(e) <- c("TileMode", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' TileMode (0-3)
+#'
+#' `TileMode` determines how the source is tiled for shaders.
+#' This is not a paint attribute. To specify `TileMode`, directly pass these pointers to shader functions.
+#'
+#' @details
+#' The following `TileMode` are available:
+#'
+#' * `Clamp`
+#' * `Repeat`
+#' * `Mirror`
+#' * `Decal`
+#'
+#' @seealso
+#' [TileMode in skia_safe - Rust](https://rust-skia.github.io/doc/skia_safe/enum.TileMode.html)
+#' @rdname skiagd-attrs-tilemode
+#' @export
+`TileMode` <- new.env(parent = emptyenv())
+`TileMode`$`Clamp` <- .savvy_wrap_TileMode(0L)
+`TileMode`$`Repeat` <- .savvy_wrap_TileMode(1L)
+`TileMode`$`Mirror` <- .savvy_wrap_TileMode(2L)
+`TileMode`$`Decal` <- .savvy_wrap_TileMode(3L)
+
+#' @export
+`$.TileMode__bundle` <- function(x, name) {
+  if (!name %in% c("Clamp", "Repeat", "Mirror", "Decal")) {
+    stop(paste0("Unknown variant: ", name), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`[[.TileMode__bundle` <- function(x, i) {
+  if (is.numeric(i)) {
+    stop("TileMode cannot be subset by index", call. = FALSE)
+  }
+
+  if (!i %in% c("Clamp", "Repeat", "Mirror", "Decal")) {
+    stop(paste0("Unknown variant: ", i), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`print.TileMode` <- function(x, ...) {
+  idx <- x$.ptr + 1L
+  label <- c("Clamp", "Repeat", "Mirror", "Decal")[idx]
+  if (is.na(label)) {
+    stop("Unexpected value for TileMode", call. = TRUE)
+  }
+  cat("TileMode::", label, "\n", sep = "")
+}
+
+
+### associated functions for TileMode
+
+
+
+class(`TileMode`) <- c("TileMode__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.TileMode__bundle` <- function(x, ...) {
+  cat('TileMode\n')
+}
+
+### wrapper functions for VertexMode
+
+
+`.savvy_wrap_VertexMode` <- function(ptr) {
+  e <- new.env(parent = emptyenv())
+  e$.ptr <- ptr
+
+
+  class(e) <- c("VertexMode", "savvy_skiagd__sealed")
+  e
+}
+
+
+#' VertexMode (0-2)
+#'
+#' `VertexMode` determines how vertices are drawn.
+#' This is for [add_vertices()] only. Not used in other functions.
+#'
+#' @details
+#' The following `VertexMode` are available:
+#'
+#' * `Triangles`
+#' * `TriangleStrip`
+#' * `TriangleFan`
+#'
+#' @seealso
+#' [VertexMode in skia_safe::vertices - Rust](https://rust-skia.github.io/doc/skia_safe/vertices/enum.VertexMode.html)
+#' @family paint-attributes
+#' @rdname skiagd-attrs-vertexmode
+#' @export
+`VertexMode` <- new.env(parent = emptyenv())
+`VertexMode`$`Triangles` <- .savvy_wrap_VertexMode(0L)
+`VertexMode`$`TriangleStrip` <- .savvy_wrap_VertexMode(1L)
+`VertexMode`$`TriangleFan` <- .savvy_wrap_VertexMode(2L)
+
+#' @export
+`$.VertexMode__bundle` <- function(x, name) {
+  if (!name %in% c("Triangles", "TriangleStrip", "TriangleFan")) {
+    stop(paste0("Unknown variant: ", name), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`[[.VertexMode__bundle` <- function(x, i) {
+  if (is.numeric(i)) {
+    stop("VertexMode cannot be subset by index", call. = FALSE)
+  }
+
+  if (!i %in% c("Triangles", "TriangleStrip", "TriangleFan")) {
+    stop(paste0("Unknown variant: ", i), call. = FALSE)
+  }
+
+  NextMethod()
+}
+
+#' @export
+`print.VertexMode` <- function(x, ...) {
+  idx <- x$.ptr + 1L
+  label <- c("Triangles", "TriangleStrip", "TriangleFan")[idx]
+  if (is.na(label)) {
+    stop("Unexpected value for VertexMode", call. = TRUE)
+  }
+  cat("VertexMode::", label, "\n", sep = "")
+}
+
+
+### associated functions for VertexMode
+
+
+
+class(`VertexMode`) <- c("VertexMode__bundle", "savvy_skiagd__sealed")
+
+#' @export
+`print.VertexMode__bundle` <- function(x, ...) {
+  cat('VertexMode\n')
 }
 

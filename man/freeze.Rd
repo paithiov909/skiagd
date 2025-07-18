@@ -2,20 +2,38 @@
 % Please edit documentation in R/png.R
 \name{freeze}
 \alias{freeze}
-\title{Freeze a picture}
+\title{Freeze picture}
 \usage{
-freeze(img, fill = "transparent", props = paint())
+freeze(img, left = 0, top = 0, fill = "transparent", ..., props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{fill}{A string; named colors or hexadecimal color codes.}
+\item{left}{Left offset for drawing PNG image.}
 
-\item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
+\item{top}{Top offset for drawing PNG image.}
+
+\item{fill}{RGBA representation of a color.
+This can be specified using named colors or hexadecimal color codes,
+which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.}
+
+\item{...}{For some drawing functions, you can specify
+\code{sigma}, \code{width} and \code{color} as named arguments.
+\itemize{
+\item \code{sigma} must be a numeric vector of blur sigmas for each shape.
+\item \code{width} must be a numeric vector of stroke widths for each shape.
+\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+}
+
+If they are not provided as named arguments, they will be taken from \code{props}.
+If the function does not matter them,  \code{...} is simply ignored.}
+
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.
 }
 \description{
-\code{as_png(img)} and then adds it to a new canvas.
+\code{as_png(img, props)} and then adds it to a new canvas
+with the default blend mode (\code{BlendMode$SrcOver}).
 }

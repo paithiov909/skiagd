@@ -1,13 +1,17 @@
-#' Create a canvas
+#' Create new canvas
 #'
 #' Creates a new canvas filled with specified color.
 #'
-#' @param fill A string; named colors or hexadecimal color codes.
-#' @param size An integer; canvas size.
+#' @param fill RGBA representation of a color.
+#' This can be specified using named colors or hexadecimal color codes,
+#' which are converted internally using [grDevices::col2rgb()].
+#' @param canvas_size Integers of length 2.
 #' @returns A raw vector of picture.
 #' @export
-canvas <- function(fill = "transparent", size = paint()[["canvas_size"]]) {
-  props <- getOption(".skiagd_paint_group")
-  size <- props[["canvas_size"]] %||% size
-  sk_absolute_fill(size, col2rgba(fill))
+canvas <- function(fill = "transparent",
+                   canvas_size = paint()[["canvas_size"]]) {
+  if (!is.numeric(fill)) {
+    fill <- col2rgba(fill)
+  }
+  sk_absolute_fill(canvas_size, fill)
 }

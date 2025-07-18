@@ -1,4 +1,6 @@
 .Rproj.user
 .vscode
 
+configure.log
+
 /.quarto/

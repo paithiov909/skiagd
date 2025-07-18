@@ -5,6 +5,11 @@ PROFILE = @PROFILE@
 # Add flags if necessary
 RUSTFLAGS =
 
+# This is passed fine to wasm-ld called by rwasm.
+# However, the build is failing with the current configuration.
+WASM_LDFLAGS = -fPIC -sERROR_ON_UNDEFINED_SYMBOLS=0 -sMAX_WEBGL_VERSION=2
+SDKTARGETSYSROOT = $(EMSDK)/upstream/emscripten/cache/sysroot
+
 TARGET_DIR = $(CURDIR)/rust/target
 LIBDIR = $(TARGET_DIR)/$(TARGET)/$(subst dev,debug,$(PROFILE))
 STATLIB = $(LIBDIR)/libskiagd.a
@@ -12,7 +17,7 @@ PKG_LIBS = -L$(LIBDIR) -lskiagd @libs@ $(@SYS@_LIBS)
 
 CARGO_BUILD_ARGS = --lib --profile $(PROFILE) --manifest-path=./rust/Cargo.toml --target-dir $(TARGET_DIR)
 
-all: C_clean
+all: $(SHLIB) clean_intermediate
 
 $(SHLIB): $(STATLIB)
 
@@ -21,19 +26,24 @@ $(STATLIB):
 	# to set it here to ensure cargo can be invoked. It is appended to PATH and
 	# therefore is only used if cargo is absent from the user's PATH.
 	export PATH="$(PATH):$(HOME)/.cargo/bin" && \
-	  export CC="$(CC)" && \
-	  export CFLAGS="$(CFLAGS)" && \
-	  export RUSTFLAGS="$(RUSTFLAGS)" && \
-	  if [ "$(TARGET)" != "wasm32-unknown-emscripten" ]; then \
-	    cargo build $(CARGO_BUILD_ARGS); \
-	  else \
-	    export CARGO_PROFILE_DEV_PANIC="abort" && \
-	    export CARGO_PROFILE_RELEASE_PANIC="abort" && \
-	    cargo +nightly build $(CARGO_BUILD_ARGS) --target $(TARGET) -Zbuild-std=panic_abort,std; \
-	  fi
+		export CC="$(CC)" && \
+		export CFLAGS="$(CFLAGS)" && \
+		export RUSTFLAGS="$(RUSTFLAGS)" && \
+		if [ "$(TARGET)" != "wasm32-unknown-emscripten" ]; then \
+			cargo build $(CARGO_BUILD_ARGS); \
+		else \
+			export CARGO_PROFILE_DEV_PANIC="abort" && \
+			export CARGO_PROFILE_RELEASE_PANIC="abort" && \
+			export RUSTFLAGS="$(RUSTFLAGS) -Zdefault-visibility=hidden" && \
+			export SDKTARGETSYSROOT=$(SDKTARGETSYSROOT) && \
+			export FORCE_SKIA_BUILD=1 && \
+			export SKIA_USE_SYSTEM_LIBRARIES=1 && \
+			export SKIA_GN_ARGS='cc="$(EMSDK)/upstream/bin/clang" cxx="$(EMSDK)/upstream/bin/clang++" extra_cflags=[] extra_cflags=["--target=$(TARGET)", "-I$(WEBR_ROOT)/wasm/include", "-I$(SDKTARGETSYSROOT)/include/c++/v1", "-I$(SDKTARGETSYSROOT)/include/compat", "-I$(SDKTARGETSYSROOT)/include", "-I$(EMSDK)/upstream/lib/clang/21/include"] extra_ldflags=["-L/opt/webr/wasm/lib"]' && \
+			cargo +nightly build $(CARGO_BUILD_ARGS) --target $(TARGET) -Zbuild-std=panic_abort,std; \
+		fi
 
-C_clean:
-	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS)
+clean_intermediate: $(SHLIB)
+	rm -f $(STATLIB)
 
 clean:
-	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) rust/target
+	rm -Rf $(SHLIB) $(OBJECTS) $(STATLIB) ./rust/target

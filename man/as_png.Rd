@@ -2,18 +2,29 @@
 % Please edit documentation in R/png.R
 \name{as_png}
 \alias{as_png}
-\title{Convert picture into PNG data}
+\title{Convert picture into PNG image}
 \usage{
-as_png(img, props = paint())
+as_png(img, ..., props = paint())
 }
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
+\item{...}{For some drawing functions, you can specify
+\code{sigma}, \code{width} and \code{color} as named arguments.
+\itemize{
+\item \code{sigma} must be a numeric vector of blur sigmas for each shape.
+\item \code{width} must be a numeric vector of stroke widths for each shape.
+\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+}
+
+If they are not provided as named arguments, they will be taken from \code{props}.
+If the function does not matter them,  \code{...} is simply ignored.}
+
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector of PNG data.
+A raw vector of PNG image.
 }
 \description{
-Convert picture into PNG data
+Convert picture into PNG image
 }

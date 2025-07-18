@@ -25,5 +25,19 @@ The following \code{FillType} are available:
 }
 \seealso{
 \href{https://rust-skia.github.io/doc/skia_safe/path/enum.FillType.html}{FillType in skia_safe::path - Rust}
+
+Other paint-attributes: 
+\code{\link{BlendMode}},
+\code{\link{BlurStyle}},
+\code{\link{Cap}},
+\code{\link{FontStyle}},
+\code{\link{ImageFilter}},
+\code{\link{Join}},
+\code{\link{PathEffect}},
+\code{\link{PointMode}},
+\code{\link{Shader}},
+\code{\link{Style}},
+\code{\link{VertexMode}}
 }
+\concept{paint-attributes}
 \keyword{datasets}

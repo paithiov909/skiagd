@@ -13,6 +13,8 @@ use savvy::savvy;
 ///
 /// @seealso
 /// [Style in skia_safe::paint - Rust](https://rust-skia.github.io/doc/skia_safe/paint/enum.Style.html)
+/// @family paint-attributes
+/// @rdname skiagd-attrs-style
 /// @export
 #[savvy]
 pub enum Style {
@@ -34,6 +36,8 @@ pub enum Style {
 ///
 /// @seealso
 /// [Join in skia_safe::paint - Rust](https://rust-skia.github.io/doc/skia_safe/paint/enum.Join.html)
+/// @family paint-attributes
+/// @rdname skiagd-attrs-join
 /// @export
 #[savvy]
 pub enum Join {
@@ -55,6 +59,8 @@ pub enum Join {
 ///
 /// @seealso
 /// [Cap in skia_safe::paint - Rust](https://rust-skia.github.io/doc/skia_safe/paint/enum.Cap.html)
+/// @family paint-attributes
+/// @rdname skiagd-attrs-cap
 /// @export
 #[savvy]
 pub enum Cap {
@@ -63,27 +69,26 @@ pub enum Cap {
     Square,
 }
 
-
 pub fn sk_style(style: &Style) -> skia_safe::PaintStyle {
-  match style {
-      Style::StrokeAndFill => skia_safe::PaintStyle::StrokeAndFill,
-      Style::Stroke => skia_safe::PaintStyle::Stroke,
-      Style::Fill => skia_safe::PaintStyle::Fill,
-  }
+    match style {
+        Style::StrokeAndFill => skia_safe::PaintStyle::StrokeAndFill,
+        Style::Stroke => skia_safe::PaintStyle::Stroke,
+        Style::Fill => skia_safe::PaintStyle::Fill,
+    }
 }
 
 pub fn sk_join(join: &Join) -> skia_safe::PaintJoin {
-  match join {
-      Join::Miter => skia_safe::PaintJoin::Miter,
-      Join::Round => skia_safe::PaintJoin::Round,
-      Join::Bevel => skia_safe::PaintJoin::Bevel,
-  }
+    match join {
+        Join::Miter => skia_safe::PaintJoin::Miter,
+        Join::Round => skia_safe::PaintJoin::Round,
+        Join::Bevel => skia_safe::PaintJoin::Bevel,
+    }
 }
 
 pub fn sk_cap(cap: &Cap) -> skia_safe::PaintCap {
-  match cap {
-      Cap::Butt => skia_safe::PaintCap::Butt,
-      Cap::Round => skia_safe::PaintCap::Round,
-      Cap::Square => skia_safe::PaintCap::Square,
-  }
+    match cap {
+        Cap::Butt => skia_safe::PaintCap::Butt,
+        Cap::Round => skia_safe::PaintCap::Round,
+        Cap::Square => skia_safe::PaintCap::Square,
+    }
 }

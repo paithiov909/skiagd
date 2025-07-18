@@ -4,15 +4,47 @@
 \alias{add_rect}
 \title{Add rectangles}
 \usage{
-add_rect(img, rect, props = paint())
+add_rect(
+  img,
+  ltrb,
+  rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), nrow(ltrb), 6, byrow = TRUE),
+  radii = matrix(0, nrow(ltrb), 2),
+  ...,
+  props = paint()
+)
 }
 \arguments{
 \item{img}{A raw vector of picture.}
 
-\item{rect}{A double matrix where each row is a rectangle
-XYWH (\verb{[left, top, right, bottom]}).}
+\item{ltrb}{A double matrix where each row is a rectangle
+LTRB (left, top, right, bottom).}
 
-\item{props}{A paint properties out of \code{\link[=paint]{paint()}}.}
+\item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
+Each column of the matrix corresponds to:
+\itemize{
+\item scale
+\item angle of rotation (in radians)
+\item amount of translation in the X-axis direction
+\item amount of translation in the Y-axis direction
+\item X coordinate of the anchor point
+\item Y coordinate of the anchor point
+}}
+
+\item{radii}{A double matrix where each row is a pair of axis lengths
+on X-axis and Y-axis of oval describing rounded corners.}
+
+\item{...}{For some drawing functions, you can specify
+\code{sigma}, \code{width} and \code{color} as named arguments.
+\itemize{
+\item \code{sigma} must be a numeric vector of blur sigmas for each shape.
+\item \code{width} must be a numeric vector of stroke widths for each shape.
+\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+}
+
+If they are not provided as named arguments, they will be taken from \code{props}.
+If the function does not matter them,  \code{...} is simply ignored.}
+
+\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
 A raw vector of picture.

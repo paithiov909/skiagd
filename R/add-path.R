@@ -1,24 +1,45 @@
 #' Add paths
 #'
-#' @param path A character vector of SVG notations
-#' like `M10 10 H 90 V 90 H 10 L 10 10`.
-#' @param transform A numeric vector of length 9
-#' to apply affine transformations to the path themselves.
-#' See [transform-matrix] for affine transformations.
+#' @param path Characters of SVG notations like `"M10 10 H 90 V 90 H 10 L 10 10"`.
 #' @inheritParams param-img-and-props
+#' @inheritParams param-rsx-trans
 #' @returns A raw vector of picture.
 #' @export
 add_path <- function(img, path,
-                     transform = c(1, 0, 0, 0, 1, 0, 0, 0, 1),
+                     rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), length(path), 6, byrow = TRUE),
+                     ...,
                      props = paint()) {
-  props <- getOption(".skiagd_paint_group") %||% props
+  dots <- rlang::list2(...)
+  sigma <- dots[["sigma"]]
+  if (is.null(sigma)) {
+    sigma <- rep(props[["sigma"]], length(path))
+  }
+  width <- dots[["width"]]
+  if (is.null(width)) {
+    width <- rep(props[["width"]], length(path))
+  }
+  color <- dots[["color"]]
+  if (is.null(color) || !is_color_mat(color)) {
+    color <- matrix(rep(props[["color"]], length(path)), nrow = 4)
+  }
+  validate_length(
+    length(path),
+    nrow(rsx_trans),
+    length(sigma),
+    length(width),
+    ncol(color)
+  )
+
   sk_draw_path(
     props[["canvas_size"]],
     img,
     props[["transform"]],
     as_paint_attrs(props),
     path,
-    transform,
+    t(rsx_trans),
+    sigma,
+    width,
+    as.integer(color),
     props[["fill_type"]]
   )
 }

@@ -3,11 +3,17 @@
 ^LICENSE\.md$
 ^README\.qmd$
 ^cran-comments\.md$
+^configure.log$
 
-^src/rust/.cargo$
-^src/rust/.vscode$
+^src/rust/\.vscode$
 ^src/rust/target$
 
+^\.devcontainer$
 ^\.github$
 ^\.vscode$
+^\.imgbotconfig$
 ^ninja-build$
+
+^src/rust/\.cargo$
+^src/Makevars$
+^src/Makevars\.win$
