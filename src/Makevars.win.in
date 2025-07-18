@@ -1,6 +1,7 @@
 TARGET = @TARGET@
 
 PROFILE = @PROFILE@
+FEATURE_FLAGS = @FEATURE_FLAGS@
 
 # Add flags if necessary
 RUSTFLAGS = --print=native-static-libs -C link-args=-static
@@ -36,7 +37,10 @@ $(STATLIB):
 	  export CC="$(CC)" && \
 	  export CFLAGS="$(CFLAGS)" && \
 	  export RUSTFLAGS="$(RUSTFLAGS)" && \
-	  cargo build --target $(TARGET) --lib --profile $(PROFILE) --manifest-path ./rust/Cargo.toml --target-dir $(TARGET_DIR) -vv
+		export FORCE_SKIA_BUILD=1 && \
+		export SKIA_USE_SYSTEM_LIBRARIES=1 && \
+		export SKIA_GN_ARGS='cc="$(CC)" cxx="$(CXX)"' && \
+	  cargo build --target $(TARGET) --lib --profile $(PROFILE) --manifest-path ./rust/Cargo.toml --target-dir $(TARGET_DIR) -v
 
 clean_intermediate: $(SHLIB)
 	rm -f $(STATLIB)
