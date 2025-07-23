@@ -39,7 +39,7 @@ $(STATLIB):
 	  export RUSTFLAGS="$(RUSTFLAGS)" && \
 		export HOST_CC="$(CC)" && \
 		export FORCE_SKIA_BUILD=1 && \
-		export SKIA_GN_ARGS='cc="$(CC)" cxx="$(CXX)" alink="$(CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER)" solink="$(CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER)"' && \
+		export SKIA_GN_ARGS='cc="$(CC)" cxx="$(CXX)" alink="$(CARGO_LINKER)" solink="$(CARGO_LINKER)"' && \
 	  cargo build --target $(TARGET) --lib --profile $(PROFILE) --manifest-path ./rust/Cargo.toml --target-dir $(TARGET_DIR) -v
 
 clean_intermediate: $(SHLIB)
