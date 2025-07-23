@@ -38,7 +38,6 @@ $(STATLIB):
 	  export CFLAGS="$(CFLAGS)" && \
 	  export RUSTFLAGS="$(RUSTFLAGS)" && \
 		export FORCE_SKIA_BUILD=1 && \
-		export SKIA_USE_SYSTEM_LIBRARIES=1 && \
 		export SKIA_GN_ARGS='cc="$(CC)" cxx="$(CXX)"' && \
 	  cargo build --target $(TARGET) --lib --profile $(PROFILE) --manifest-path ./rust/Cargo.toml --target-dir $(TARGET_DIR) -v
 
