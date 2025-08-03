@@ -26,8 +26,8 @@ impl Shader {
         let out = savvy::OwnedStringSexp::try_from_scalar(&label)?;
         Ok(out.into())
     }
-    fn color(rgba: NumericSexp) -> savvy::Result<Self> {
-        let color = num2colors(&rgba)
+    fn color(color: NumericSexp) -> savvy::Result<Self> {
+        let color = num2colors(&color)
             .ok_or_else(|| return savvy_err!("Invalid color. Expected 4 elements"))?;
         Ok(Shader {
             label: "color".to_string(),
@@ -169,8 +169,7 @@ impl Shader {
     fn linear_gradient(
         start: NumericSexp,
         end: NumericSexp,
-        from: NumericSexp,
-        to: NumericSexp,
+        color: NumericSexp,
         // pos: NumericSexp,
         mode: &TileMode,
         flags: LogicalSexp,
@@ -178,33 +177,20 @@ impl Shader {
     ) -> savvy::Result<Self> {
         assert_len("start", 2, start.len())?;
         assert_len("end", 2, end.len())?;
-        assert_len("from", 4, from.len())?;
-        assert_len("to", 4, to.len())?;
 
         let mat =
             as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let start = start.as_slice_f64();
         let end = end.as_slice_f64();
-        let from = from.as_slice_f64();
-        let to = to.as_slice_f64();
+        let color =
+            num2colors(&color).ok_or_else(|| return savvy_err!("Failed to parse color"))?;
         let flags = flags.to_vec()[0];
         let shader_linear_gradient = skia_safe::Shader::linear_gradient(
             (
                 (start[0] as f32, start[1] as f32),
                 (end[0] as f32, end[1] as f32),
             ),
-            skia_safe::gradient_shader::GradientShaderColors::from(
-                [
-                    skia_safe::Color::from_argb(
-                        from[3] as u8,
-                        from[0] as u8,
-                        from[1] as u8,
-                        from[2] as u8,
-                    ),
-                    skia_safe::Color::from_argb(to[3] as u8, to[0] as u8, to[1] as u8, to[2] as u8),
-                ]
-                .as_slice(),
-            ),
+            color.as_slice(),
             None,
             sk_tile_mode(&mode),
             skia_safe::gradient_shader::Flags::from_bits(flags as u32).or(None),
@@ -218,39 +204,25 @@ impl Shader {
     fn radial_gradient(
         center: NumericSexp,
         radius: NumericScalar,
-        from: NumericSexp,
-        to: NumericSexp,
+        color: NumericSexp,
         // pos: NumericSexp,
         mode: &TileMode,
         flags: LogicalSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
         assert_len("center", 2, center.len())?;
-        assert_len("from", 4, from.len())?;
-        assert_len("to", 4, to.len())?;
 
         let mat =
             as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let center = center.as_slice_f64();
-        let from = from.as_slice_f64();
-        let to = to.as_slice_f64();
         let radius = radius.as_f64();
+        let color =
+            num2colors(&color).ok_or_else(|| return savvy_err!("Failed to parse color"))?;
         let flags = flags.to_vec()[0];
         let shader_radial_gradient = skia_safe::Shader::radial_gradient(
             (center[0] as f32, center[1] as f32),
             radius as f32,
-            skia_safe::gradient_shader::GradientShaderColors::from(
-                [
-                    skia_safe::Color::from_argb(
-                        from[3] as u8,
-                        from[0] as u8,
-                        from[1] as u8,
-                        from[2] as u8,
-                    ),
-                    skia_safe::Color::from_argb(to[3] as u8, to[0] as u8, to[1] as u8, to[2] as u8),
-                ]
-                .as_slice(),
-            ),
+            color.as_slice(),
             None,
             sk_tile_mode(&mode),
             skia_safe::gradient_shader::Flags::from_bits(flags as u32).or(None),
@@ -265,8 +237,7 @@ impl Shader {
         start: NumericSexp,
         end: NumericSexp,
         radii: NumericSexp,
-        from: NumericSexp,
-        to: NumericSexp,
+        color: NumericSexp,
         // pos: NumericSexp,
         mode: &TileMode,
         flags: LogicalSexp,
@@ -275,34 +246,21 @@ impl Shader {
         assert_len("start", 2, start.len())?;
         assert_len("end", 2, end.len())?;
         assert_len("radii", 2, radii.len())?;
-        assert_len("from", 4, from.len())?;
-        assert_len("to", 4, to.len())?;
 
         let mat =
             as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let start = start.as_slice_f64();
         let end = end.as_slice_f64();
         let radii = radii.as_slice_f64();
-        let from = from.as_slice_f64();
-        let to = to.as_slice_f64();
+        let color =
+            num2colors(&color).ok_or_else(|| return savvy_err!("Failed to parse color"))?;
         let flags = flags.to_vec()[0];
         let shader_conical_gradient = skia_safe::Shader::two_point_conical_gradient(
             (start[0] as f32, start[1] as f32),
             radii[0] as f32,
             (end[0] as f32, end[1] as f32),
             radii[1] as f32,
-            skia_safe::gradient_shader::GradientShaderColors::from(
-                [
-                    skia_safe::Color::from_argb(
-                        from[3] as u8,
-                        from[0] as u8,
-                        from[1] as u8,
-                        from[2] as u8,
-                    ),
-                    skia_safe::Color::from_argb(to[3] as u8, to[0] as u8, to[1] as u8, to[2] as u8),
-                ]
-                .as_slice(),
-            ),
+            color.as_slice(),
             None,
             sk_tile_mode(&mode),
             skia_safe::gradient_shader::Flags::from_bits(flags as u32).or(None),
@@ -317,39 +275,25 @@ impl Shader {
         center: NumericSexp,
         start_angle: NumericScalar,
         end_angle: NumericScalar,
-        from: NumericSexp,
-        to: NumericSexp,
+        color: NumericSexp,
         // pos: NumericSexp,
         mode: &TileMode,
         flags: LogicalSexp,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
         assert_len("center", 2, center.len())?;
-        assert_len("from", 4, from.len())?;
-        assert_len("to", 4, to.len())?;
 
         let mat =
             as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let center = center.as_slice_f64();
-        let from = from.as_slice_f64();
-        let to = to.as_slice_f64();
+        let color =
+            num2colors(&color).ok_or_else(|| return savvy_err!("Failed to parse color"))?;
         let start = start_angle.as_f64();
         let end = end_angle.as_f64();
         let flags = flags.to_vec()[0];
         let shader_sweep_gradient = skia_safe::Shader::sweep_gradient(
             (center[0] as f32, center[1] as f32),
-            skia_safe::gradient_shader::GradientShaderColors::from(
-                [
-                    skia_safe::Color::from_argb(
-                        from[3] as u8,
-                        from[0] as u8,
-                        from[1] as u8,
-                        from[2] as u8,
-                    ),
-                    skia_safe::Color::from_argb(to[3] as u8, to[0] as u8, to[1] as u8, to[2] as u8),
-                ]
-                .as_slice(),
-            ),
+            color.as_slice(),
             None,
             sk_tile_mode(&mode),
             Some((start as f32, end as f32)),

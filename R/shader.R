@@ -27,14 +27,14 @@ c.Shader <- function(..., mode = paint()[["blend_mode"]]) {
 #' * `from_picture(img, mode, tile_size, transform)`: takes a picture and returns an image shader.
 #' * `from_png(png, mode, transform)`: takes a PNG image and returns an image shader.
 #' * `from_runtime_effect(source, uniforms)`: takes a [RuntimeEffect] and returns a shader.
-#' * `color(rgba)`: takes a color and returns a color shader.
+#' * `color(color)`: takes a color and returns a color shader.
 #' * `blend(mode, dst, src)`: returns a shader where the given shaders are combined with [BlendMode].
 #' * `fractal_noise(freq, octaves, seed, tile_size)`: fractal perlin noise shader.
 #' * `turbulence(freq, octaves, seed, tile_size)`: turbulence noise shader.
-#' * `linear_gradient(start, end, from, to, mode, flags, transform)`: linear gradient shader.
-#' * `radial_gradient(center, radius, from, to, mode, flags, transform)`: radial gradient shader.
-#' * `conical_gradient(start, end, radii, from, to, mode, flags, transform)`: conical gradient shader.
-#' * `sweep_gradient(center, start_angle, end_angle, from, to, mode, flags, transform)`: sweep gradient shader.
+#' * `linear_gradient(start, end, color, mode, flags, transform)`: linear gradient shader.
+#' * `radial_gradient(center, radius, color, mode, flags, transform)`: radial gradient shader.
+#' * `conical_gradient(start, end, radii, color, mode, flags, transform)`: conical gradient shader.
+#' * `sweep_gradient(center, start_angle, end_angle, color, mode, flags, transform)`: sweep gradient shader.
 #'
 #' @param img A raw vector of picture.
 #' @param mode For `blend()`, [BlendMode]. For others, [TileMode].
@@ -43,8 +43,7 @@ c.Shader <- function(..., mode = paint()[["blend_mode"]]) {
 #' @param png A raw vector of PNG image.
 #' @param source A [RuntimeEffect] object.
 #' @param uniforms A named list of numerics to be assigned to uniforms in `source`.
-#' @param rgba Integers of length 4 in range `[0, 255]`
-#' representing RGBA.
+#' @param color An integer matrix in range `[0, 255]` where each column is an RGBA color.
 #' @param dst A `Shader` object; destination shader.
 #' @param src A `Shader` object; source shader.
 #' @param freq Numerics of length 2; frequencies.
@@ -52,8 +51,6 @@ c.Shader <- function(..., mode = paint()[["blend_mode"]]) {
 #' @param seed Integer scalar; random seed.
 #' @param start Numerics of length 2; starting point (x, y).
 #' @param end Numerics of length 2; ending point (x, y).
-#' @param from Integers of lenth 4 in range `[0, 255]`; starting color.
-#' @param to Integers of length 4 in range `[0, 255]`; ending color.
 #' @param flags A logical scalar; typically, you can leave this as `FALSE`.
 #' See [here](https://shopify.github.io/react-native-skia/docs/shaders/gradients/#common-properties)
 #' for details.

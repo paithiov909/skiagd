@@ -66,17 +66,17 @@ SEXP savvy_RuntimeEffect_source__ffi(SEXP self__);
 
 // methods and associated functions for Shader
 SEXP savvy_Shader_blend__ffi(SEXP c_arg__mode, SEXP c_arg__dst, SEXP c_arg__src);
-SEXP savvy_Shader_color__ffi(SEXP c_arg__rgba);
-SEXP savvy_Shader_conical_gradient__ffi(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__radii, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform);
+SEXP savvy_Shader_color__ffi(SEXP c_arg__color);
+SEXP savvy_Shader_conical_gradient__ffi(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__radii, SEXP c_arg__color, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform);
 SEXP savvy_Shader_fractal_noise__ffi(SEXP c_arg__freq, SEXP c_arg__octaves, SEXP c_arg__seed, SEXP c_arg__tile_size);
 SEXP savvy_Shader_from_picture__ffi(SEXP c_arg__img, SEXP c_arg__mode, SEXP c_arg__tile_size, SEXP c_arg__transform);
 SEXP savvy_Shader_from_png__ffi(SEXP c_arg__png_bytes, SEXP c_arg__mode, SEXP c_arg__transform);
 SEXP savvy_Shader_from_runtime_effect__ffi(SEXP c_arg__source, SEXP c_arg__uniforms);
 SEXP savvy_Shader_get_label__ffi(SEXP self__);
-SEXP savvy_Shader_linear_gradient__ffi(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform);
+SEXP savvy_Shader_linear_gradient__ffi(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__color, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform);
 SEXP savvy_Shader_no_shader__ffi(void);
-SEXP savvy_Shader_radial_gradient__ffi(SEXP c_arg__center, SEXP c_arg__radius, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform);
-SEXP savvy_Shader_sweep_gradient__ffi(SEXP c_arg__center, SEXP c_arg__start_angle, SEXP c_arg__end_angle, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform);
+SEXP savvy_Shader_radial_gradient__ffi(SEXP c_arg__center, SEXP c_arg__radius, SEXP c_arg__color, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform);
+SEXP savvy_Shader_sweep_gradient__ffi(SEXP c_arg__center, SEXP c_arg__start_angle, SEXP c_arg__end_angle, SEXP c_arg__color, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform);
 SEXP savvy_Shader_turbulence__ffi(SEXP c_arg__freq, SEXP c_arg__octaves, SEXP c_arg__seed, SEXP c_arg__tile_size);
 
 // methods and associated functions for Style

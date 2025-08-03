@@ -18,8 +18,7 @@
 
 \item{uniforms}{A named list of numerics to be assigned to uniforms in \code{source}.}
 
-\item{rgba}{Integers of length 4 in range \verb{[0, 255]}
-representing RGBA.}
+\item{color}{An integer matrix in range \verb{[0, 255]} where each column is an RGBA color.}
 
 \item{dst}{A \code{Shader} object; destination shader.}
 
@@ -34,10 +33,6 @@ representing RGBA.}
 \item{start}{Numerics of length 2; starting point (x, y).}
 
 \item{end}{Numerics of length 2; ending point (x, y).}
-
-\item{from}{Integers of lenth 4 in range \verb{[0, 255]}; starting color.}
-
-\item{to}{Integers of length 4 in range \verb{[0, 255]}; ending color.}
 
 \item{flags}{A logical scalar; typically, you can leave this as \code{FALSE}.
 See \href{https://shopify.github.io/react-native-skia/docs/shaders/gradients/#common-properties}{here}
@@ -71,14 +66,14 @@ The following shaders are available:
 \item \code{from_picture(img, mode, tile_size, transform)}: takes a picture and returns an image shader.
 \item \code{from_png(png, mode, transform)}: takes a PNG image and returns an image shader.
 \item \code{from_runtime_effect(source, uniforms)}: takes a \link{RuntimeEffect} and returns a shader.
-\item \code{color(rgba)}: takes a color and returns a color shader.
+\item \code{color(color)}: takes a color and returns a color shader.
 \item \code{blend(mode, dst, src)}: returns a shader where the given shaders are combined with \link{BlendMode}.
 \item \code{fractal_noise(freq, octaves, seed, tile_size)}: fractal perlin noise shader.
 \item \code{turbulence(freq, octaves, seed, tile_size)}: turbulence noise shader.
-\item \code{linear_gradient(start, end, from, to, mode, flags, transform)}: linear gradient shader.
-\item \code{radial_gradient(center, radius, from, to, mode, flags, transform)}: radial gradient shader.
-\item \code{conical_gradient(start, end, radii, from, to, mode, flags, transform)}: conical gradient shader.
-\item \code{sweep_gradient(center, start_angle, end_angle, from, to, mode, flags, transform)}: sweep gradient shader.
+\item \code{linear_gradient(start, end, color, mode, flags, transform)}: linear gradient shader.
+\item \code{radial_gradient(center, radius, color, mode, flags, transform)}: radial gradient shader.
+\item \code{conical_gradient(start, end, radii, color, mode, flags, transform)}: conical gradient shader.
+\item \code{sweep_gradient(center, start_angle, end_angle, color, mode, flags, transform)}: sweep gradient shader.
 }
 }
 \seealso{

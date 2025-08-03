@@ -160,8 +160,7 @@ img_data <-
         c(size[1] / 2 * .8, size[2] / 2 * .8),
         c(size[1] / 2 * .2, size[2] / 2 * .2),
         c(size[1] / 2 * .8, size[1] / 2 * .2),
-        from = col2rgba("blueviolet"),
-        to = col2rgba("skyblue"),
+        color = grDevices::col2rgb(c("blueviolet", "skyblue"), alpha = TRUE),
         mode = TileMode$Clamp,
         flags = FALSE,
         transform = c(1, 0, 0, 0, 1, 0, 0, 0, 1)
@@ -178,8 +177,7 @@ img_data <-
       shader = Shader$sweep_gradient(
         c(size[1] / 2, size[2]),
         0, 360,
-        from = col2rgba("magenta"),
-        to = col2rgba("gold"),
+        color = grDevices::col2rgb(c("magenta", "gold"), alpha = TRUE),
         mode = TileMode$Clamp,
         flags = FALSE,
         transform = c(1, 0, 0, 0, 1, 0, 0, 0, 1)

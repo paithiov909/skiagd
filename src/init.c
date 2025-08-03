@@ -226,13 +226,13 @@ SEXP savvy_Shader_blend__impl(SEXP c_arg__mode, SEXP c_arg__dst, SEXP c_arg__src
     return handle_result(res);
 }
 
-SEXP savvy_Shader_color__impl(SEXP c_arg__rgba) {
-    SEXP res = savvy_Shader_color__ffi(c_arg__rgba);
+SEXP savvy_Shader_color__impl(SEXP c_arg__color) {
+    SEXP res = savvy_Shader_color__ffi(c_arg__color);
     return handle_result(res);
 }
 
-SEXP savvy_Shader_conical_gradient__impl(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__radii, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
-    SEXP res = savvy_Shader_conical_gradient__ffi(c_arg__start, c_arg__end, c_arg__radii, c_arg__from, c_arg__to, c_arg__mode, c_arg__flags, c_arg__transform);
+SEXP savvy_Shader_conical_gradient__impl(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__radii, SEXP c_arg__color, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
+    SEXP res = savvy_Shader_conical_gradient__ffi(c_arg__start, c_arg__end, c_arg__radii, c_arg__color, c_arg__mode, c_arg__flags, c_arg__transform);
     return handle_result(res);
 }
 
@@ -261,8 +261,8 @@ SEXP savvy_Shader_get_label__impl(SEXP self__) {
     return handle_result(res);
 }
 
-SEXP savvy_Shader_linear_gradient__impl(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
-    SEXP res = savvy_Shader_linear_gradient__ffi(c_arg__start, c_arg__end, c_arg__from, c_arg__to, c_arg__mode, c_arg__flags, c_arg__transform);
+SEXP savvy_Shader_linear_gradient__impl(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__color, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
+    SEXP res = savvy_Shader_linear_gradient__ffi(c_arg__start, c_arg__end, c_arg__color, c_arg__mode, c_arg__flags, c_arg__transform);
     return handle_result(res);
 }
 
@@ -271,13 +271,13 @@ SEXP savvy_Shader_no_shader__impl(void) {
     return handle_result(res);
 }
 
-SEXP savvy_Shader_radial_gradient__impl(SEXP c_arg__center, SEXP c_arg__radius, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
-    SEXP res = savvy_Shader_radial_gradient__ffi(c_arg__center, c_arg__radius, c_arg__from, c_arg__to, c_arg__mode, c_arg__flags, c_arg__transform);
+SEXP savvy_Shader_radial_gradient__impl(SEXP c_arg__center, SEXP c_arg__radius, SEXP c_arg__color, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
+    SEXP res = savvy_Shader_radial_gradient__ffi(c_arg__center, c_arg__radius, c_arg__color, c_arg__mode, c_arg__flags, c_arg__transform);
     return handle_result(res);
 }
 
-SEXP savvy_Shader_sweep_gradient__impl(SEXP c_arg__center, SEXP c_arg__start_angle, SEXP c_arg__end_angle, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
-    SEXP res = savvy_Shader_sweep_gradient__ffi(c_arg__center, c_arg__start_angle, c_arg__end_angle, c_arg__from, c_arg__to, c_arg__mode, c_arg__flags, c_arg__transform);
+SEXP savvy_Shader_sweep_gradient__impl(SEXP c_arg__center, SEXP c_arg__start_angle, SEXP c_arg__end_angle, SEXP c_arg__color, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
+    SEXP res = savvy_Shader_sweep_gradient__ffi(c_arg__center, c_arg__start_angle, c_arg__end_angle, c_arg__color, c_arg__mode, c_arg__flags, c_arg__transform);
     return handle_result(res);
 }
 
@@ -336,16 +336,16 @@ static const R_CallMethodDef CallEntries[] = {
     {"savvy_RuntimeEffect_source__impl", (DL_FUNC) &savvy_RuntimeEffect_source__impl, 1},
     {"savvy_Shader_blend__impl", (DL_FUNC) &savvy_Shader_blend__impl, 3},
     {"savvy_Shader_color__impl", (DL_FUNC) &savvy_Shader_color__impl, 1},
-    {"savvy_Shader_conical_gradient__impl", (DL_FUNC) &savvy_Shader_conical_gradient__impl, 8},
+    {"savvy_Shader_conical_gradient__impl", (DL_FUNC) &savvy_Shader_conical_gradient__impl, 7},
     {"savvy_Shader_fractal_noise__impl", (DL_FUNC) &savvy_Shader_fractal_noise__impl, 4},
     {"savvy_Shader_from_picture__impl", (DL_FUNC) &savvy_Shader_from_picture__impl, 4},
     {"savvy_Shader_from_png__impl", (DL_FUNC) &savvy_Shader_from_png__impl, 3},
     {"savvy_Shader_from_runtime_effect__impl", (DL_FUNC) &savvy_Shader_from_runtime_effect__impl, 2},
     {"savvy_Shader_get_label__impl", (DL_FUNC) &savvy_Shader_get_label__impl, 1},
-    {"savvy_Shader_linear_gradient__impl", (DL_FUNC) &savvy_Shader_linear_gradient__impl, 7},
+    {"savvy_Shader_linear_gradient__impl", (DL_FUNC) &savvy_Shader_linear_gradient__impl, 6},
     {"savvy_Shader_no_shader__impl", (DL_FUNC) &savvy_Shader_no_shader__impl, 0},
-    {"savvy_Shader_radial_gradient__impl", (DL_FUNC) &savvy_Shader_radial_gradient__impl, 7},
-    {"savvy_Shader_sweep_gradient__impl", (DL_FUNC) &savvy_Shader_sweep_gradient__impl, 8},
+    {"savvy_Shader_radial_gradient__impl", (DL_FUNC) &savvy_Shader_radial_gradient__impl, 6},
+    {"savvy_Shader_sweep_gradient__impl", (DL_FUNC) &savvy_Shader_sweep_gradient__impl, 7},
     {"savvy_Shader_turbulence__impl", (DL_FUNC) &savvy_Shader_turbulence__impl, 4},
 
 

@@ -1184,13 +1184,13 @@ class(`RuntimeEffect`) <- c("RuntimeEffect__bundle", "savvy_skiagd__sealed")
   .savvy_wrap_Shader(.Call(savvy_Shader_blend__impl, `mode`, `dst`, `src`))
 }
 
-`Shader`$`color` <- function(`rgba`) {
-  .savvy_wrap_Shader(.Call(savvy_Shader_color__impl, `rgba`))
+`Shader`$`color` <- function(`color`) {
+  .savvy_wrap_Shader(.Call(savvy_Shader_color__impl, `color`))
 }
 
-`Shader`$`conical_gradient` <- function(`start`, `end`, `radii`, `from`, `to`, `mode`, `flags`, `transform`) {
+`Shader`$`conical_gradient` <- function(`start`, `end`, `radii`, `color`, `mode`, `flags`, `transform`) {
   `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
-  .savvy_wrap_Shader(.Call(savvy_Shader_conical_gradient__impl, `start`, `end`, `radii`, `from`, `to`, `mode`, `flags`, `transform`))
+  .savvy_wrap_Shader(.Call(savvy_Shader_conical_gradient__impl, `start`, `end`, `radii`, `color`, `mode`, `flags`, `transform`))
 }
 
 `Shader`$`fractal_noise` <- function(`freq`, `octaves`, `seed`, `tile_size`) {
@@ -1212,23 +1212,23 @@ class(`RuntimeEffect`) <- c("RuntimeEffect__bundle", "savvy_skiagd__sealed")
   .savvy_wrap_Shader(.Call(savvy_Shader_from_runtime_effect__impl, `source`, `uniforms`))
 }
 
-`Shader`$`linear_gradient` <- function(`start`, `end`, `from`, `to`, `mode`, `flags`, `transform`) {
+`Shader`$`linear_gradient` <- function(`start`, `end`, `color`, `mode`, `flags`, `transform`) {
   `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
-  .savvy_wrap_Shader(.Call(savvy_Shader_linear_gradient__impl, `start`, `end`, `from`, `to`, `mode`, `flags`, `transform`))
+  .savvy_wrap_Shader(.Call(savvy_Shader_linear_gradient__impl, `start`, `end`, `color`, `mode`, `flags`, `transform`))
 }
 
 `Shader`$`no_shader` <- function() {
   .savvy_wrap_Shader(.Call(savvy_Shader_no_shader__impl))
 }
 
-`Shader`$`radial_gradient` <- function(`center`, `radius`, `from`, `to`, `mode`, `flags`, `transform`) {
+`Shader`$`radial_gradient` <- function(`center`, `radius`, `color`, `mode`, `flags`, `transform`) {
   `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
-  .savvy_wrap_Shader(.Call(savvy_Shader_radial_gradient__impl, `center`, `radius`, `from`, `to`, `mode`, `flags`, `transform`))
+  .savvy_wrap_Shader(.Call(savvy_Shader_radial_gradient__impl, `center`, `radius`, `color`, `mode`, `flags`, `transform`))
 }
 
-`Shader`$`sweep_gradient` <- function(`center`, `start_angle`, `end_angle`, `from`, `to`, `mode`, `flags`, `transform`) {
+`Shader`$`sweep_gradient` <- function(`center`, `start_angle`, `end_angle`, `color`, `mode`, `flags`, `transform`) {
   `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
-  .savvy_wrap_Shader(.Call(savvy_Shader_sweep_gradient__impl, `center`, `start_angle`, `end_angle`, `from`, `to`, `mode`, `flags`, `transform`))
+  .savvy_wrap_Shader(.Call(savvy_Shader_sweep_gradient__impl, `center`, `start_angle`, `end_angle`, `color`, `mode`, `flags`, `transform`))
 }
 
 `Shader`$`turbulence` <- function(`freq`, `octaves`, `seed`, `tile_size`) {
