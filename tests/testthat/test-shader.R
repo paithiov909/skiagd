@@ -32,13 +32,13 @@ test_that("Shader$from_picture works", {
 })
 
 test_that("Shader$from_png works", {
-  png <-
+  png_bytes <-
     canvas("white") |>
     add_circle(
       matrix(c(48, 48), ncol = 2), 24
     ) |>
     as_png()
-  expect_success(
-    Shader$from_png(png, mode = TileMode$Repeat, diag(3))
+  expect_no_error(
+    Shader$from_png(png_bytes, TileMode$Repeat, diag(3))
   )
 })
