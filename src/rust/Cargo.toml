@@ -9,8 +9,8 @@ crate-type = ["staticlib", "lib"]
 
 [dependencies]
 anyhow = "1.0.97"
-savvy = "0.8.11"
-skia-safe = { version = "0.87.0", features = ["textlayout"] }
+savvy = "0.8.13"
+skia-safe = { version = "=0.87.0", features = ["textlayout"] }
 
 [profile.release]
 # By default, on release build, savvy terminates the R session when a panic

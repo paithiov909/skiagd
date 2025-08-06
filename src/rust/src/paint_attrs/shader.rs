@@ -107,14 +107,14 @@ impl Shader {
             shader: shader_turbulence_noise,
         })
     }
-    unsafe fn from_png(
+    fn from_png(
         png_bytes: savvy::RawSexp,
         mode: &TileMode,
         transform: NumericSexp,
     ) -> savvy::Result<Self> {
         let mat =
             as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
-        let input = Data::new_bytes(png_bytes.as_slice());
+        let input = Data::new_copy(png_bytes.as_slice());
         let image = Image::from_encoded_with_alpha_type(input, skia_safe::AlphaType::Premul)
             .ok_or_else(|| return savvy_err!("Failed to read PNG as image"))?;
         Ok(Shader {
