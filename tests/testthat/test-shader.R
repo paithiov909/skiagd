@@ -30,3 +30,15 @@ test_that("Shader$from_picture works", {
       as_recordedplot()
   )
 })
+
+test_that("Shader$from_png works", {
+  png <-
+    canvas("white") |>
+    add_circle(
+      matrix(c(48, 48), ncol = 2), 24
+    ) |>
+    as_png()
+  expect_success(
+    Shader$from_png(png, mode = TileMode$Repeat, diag(3))
+  )
+})
