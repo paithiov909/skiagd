@@ -110,7 +110,7 @@ fn sk_as_png(
 /// @returns A raw vector of picture.
 /// @noRd
 #[savvy]
-unsafe fn sk_draw_png(
+fn sk_draw_png(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
     mat: NumericSexp,
@@ -124,7 +124,7 @@ unsafe fn sk_draw_png(
     let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let left_top = left_top.as_slice_f64();
 
-    let input = Data::new_bytes(png_bytes.as_slice());
+    let input = Data::new_copy(png_bytes.as_slice());
     let picture = canvas::put_png(input, size, picture, mat, left_top.to_vec(), props)?;
 
     Ok(picture.into())
@@ -697,7 +697,7 @@ fn sk_draw_diff_rect(
 /// @returns A raw vector of picture.
 /// @noRd
 #[savvy]
-unsafe fn sk_draw_atlas(
+fn sk_draw_atlas(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
     mat: NumericSexp,
@@ -705,7 +705,7 @@ unsafe fn sk_draw_atlas(
     png_bytes: savvy::RawSexp,
     rsx_trans: NumericSexp,
 ) -> savvy::Result<savvy::Sexp> {
-    let input = Data::new_bytes(png_bytes.as_slice());
+    let input = Data::new_copy(png_bytes.as_slice());
     let image = Image::from_encoded_with_alpha_type(input, skia_safe::AlphaType::Premul)
         .ok_or_else(|| return savvy_err!("Failed to read PNG as image"))?;
 
