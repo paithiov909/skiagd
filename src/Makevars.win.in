@@ -1,29 +1,30 @@
 TARGET = @TARGET@
 
 PROFILE = @PROFILE@
+FEATURE_FLAGS = @FEATURE_FLAGS@
 
 # Add flags if necessary
-RUSTFLAGS =
+RUSTFLAGS = --print=native-static-libs -C link-args=-static
 
 # NOTE: Windows support is limited due to lack of pre-built binaries for our target.
 TARGET_DIR = $(CURDIR)/rust/target
 LIBDIR = $(TARGET_DIR)/$(TARGET)/$(subst dev,debug,$(PROFILE))
 STATLIB = $(LIBDIR)/libskiagd.a
 
-# https://github.com/rust-skia/rust-skia/blob/master/skia-bindings/build_support/platform/windows.rs#L90-L101
+$(info using $(PKG_CONFIG_NAME) from Rtools)
 PKG_CONFIG_NAME = fontconfig
 PKG_CONFIG ?= $(BINPREF)pkg-config
-PKG_LIBS = -L$(LIBDIR) -lskiagd \
-	-ladvapi32 -luserenv -lbcrypt -lntdll \
-	-lusp10 -luser32 -lgdi32 -lfontsub \
+PKG_LIBS = -L$(LIBDIR) -lskiagd -lbcrypt \
+	-lusp10 -lole32 -luser32 -lgdi32 -lfontsub -lkernel32 -ladvapi32 -lntdll -luserenv -lws2_32 -ldbghelp \
 	$(shell $(PKG_CONFIG) --libs $(PKG_CONFIG_NAME))
-
-$(info using $(PKG_CONFIG_NAME) from Rtools)
-PKG_CPPFLAGS := $(shell $(PKG_CONFIG) --cflags $(PKG_CONFIG_NAME))
 
 # Rtools doesn't have the linker in the location that cargo expects, so we need
 # to overwrite it via configuration.
 CARGO_LINKER = x86_64-w64-mingw32.static.posix-gcc.exe
+ifeq "$(CARGO_HOME)" ""
+	CARGO_HOME = $(TARGET_DIR)
+endif
+$(info using $(CARGO_HOME) as cargo home)
 
 all: $(SHLIB) clean_intermediate
 
@@ -37,10 +38,13 @@ $(STATLIB):
 
 	export CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER="$(CARGO_LINKER)" && \
 	  export LIBRARY_PATH="$${LIBRARY_PATH};$(LIBDIR)/libgcc_mock" && \
-	  export CC="$(CC)" && \
+	  export CARGO_HOME="$(CARGO_HOME)" && \
+		export CC="$(CC)" && \
 	  export CFLAGS="$(CFLAGS)" && \
 	  export RUSTFLAGS="$(RUSTFLAGS)" && \
-	  cargo build --target $(TARGET) --lib --profile $(PROFILE) --manifest-path ./rust/Cargo.toml --target-dir $(TARGET_DIR)
+		export FORCE_SKIA_BUILD=1 && \
+		export SKIA_GN_ARGS='cc="$(CC)" cxx="$(CXX)" ar="$(AR)" extra_cflags=[] extra_cflags=["-static"] extra_ldflags=["-static"]' && \
+	  cargo build --target $(TARGET) --lib --profile $(PROFILE) --manifest-path ./rust/Cargo.toml --target-dir $(TARGET_DIR) -v
 
 clean_intermediate: $(SHLIB)
 	rm -f $(STATLIB)
