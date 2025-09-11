@@ -298,11 +298,11 @@ pub fn sk_vertex_mode(mode: &VertexMode) -> skia_safe::vertices::VertexMode {
     }
 }
 
-pub fn sk_fill_type(mode: &FillType) -> skia_safe::path::FillType {
+pub fn sk_fill_type(mode: &FillType) -> skia_safe::PathFillType {
     match mode {
-        FillType::Winding => skia_safe::path::FillType::Winding,
-        FillType::EvenOdd => skia_safe::path::FillType::EvenOdd,
-        FillType::InverseWinding => skia_safe::path::FillType::InverseWinding,
-        FillType::InverseEvenOdd => skia_safe::path::FillType::InverseEvenOdd,
+        FillType::Winding => skia_safe::PathFillType::Winding,
+        FillType::EvenOdd => skia_safe::PathFillType::EvenOdd,
+        FillType::InverseWinding => skia_safe::PathFillType::InverseWinding,
+        FillType::InverseEvenOdd => skia_safe::PathFillType::InverseEvenOdd,
     }
 }
