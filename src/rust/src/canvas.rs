@@ -33,7 +33,7 @@ impl SkiaCanvas {
     pub fn start_recording(&mut self) -> &skia_safe::Canvas {
         let canvas = self
             .recorder
-            .begin_recording(skia_safe::Rect::from_isize((self.width, self.height)), None);
+            .begin_recording(skia_safe::Rect::from_isize((self.width, self.height)), false);
         canvas.clear(skia_safe::Color::TRANSPARENT);
         canvas
     }
