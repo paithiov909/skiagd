@@ -3,7 +3,7 @@ TARGET = @TARGET@
 PROFILE = @PROFILE@
 
 # Add flags if necessary
-RUSTFLAGS =
+RUSTFLAGS = --print=native-static-libs # -Ctarget-feature=+crt-static
 
 # This is passed fine to wasm-ld called by rwasm.
 # However, the build is failing with the current configuration.
