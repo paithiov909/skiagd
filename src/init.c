@@ -139,6 +139,36 @@ SEXP savvy_sk_path_transform__impl(SEXP c_arg__svg, SEXP c_arg__mat) {
 
 
 
+SEXP savvy_ImageFilter_arithmetic__impl(SEXP c_arg__dst, SEXP c_arg__src, SEXP c_arg__coef, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_arithmetic__ffi(c_arg__dst, c_arg__src, c_arg__coef, c_arg__crop_rect);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_blend__impl(SEXP c_arg__dst, SEXP c_arg__src, SEXP c_arg__mode, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_blend__ffi(c_arg__dst, c_arg__src, c_arg__mode, c_arg__crop_rect);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_color_matrix__impl(SEXP c_arg__color_mat) {
+    SEXP res = savvy_ImageFilter_color_matrix__ffi(c_arg__color_mat);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_compose__impl(SEXP c_arg__outer, SEXP c_arg__inner) {
+    SEXP res = savvy_ImageFilter_compose__ffi(c_arg__outer, c_arg__inner);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_displacement_map__impl(SEXP c_arg__channels, SEXP c_arg__scale, SEXP c_arg__displacement, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_displacement_map__ffi(c_arg__channels, c_arg__scale, c_arg__displacement, c_arg__crop_rect);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_from_picture__impl(SEXP c_arg__img, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_from_picture__ffi(c_arg__img, c_arg__crop_rect);
+    return handle_result(res);
+}
+
 SEXP savvy_ImageFilter_get_label__impl(SEXP self__) {
     SEXP res = savvy_ImageFilter_get_label__ffi(self__);
     return handle_result(res);
@@ -316,6 +346,12 @@ static const R_CallMethodDef CallEntries[] = {
 
 
 
+    {"savvy_ImageFilter_arithmetic__impl", (DL_FUNC) &savvy_ImageFilter_arithmetic__impl, 4},
+    {"savvy_ImageFilter_blend__impl", (DL_FUNC) &savvy_ImageFilter_blend__impl, 4},
+    {"savvy_ImageFilter_color_matrix__impl", (DL_FUNC) &savvy_ImageFilter_color_matrix__impl, 1},
+    {"savvy_ImageFilter_compose__impl", (DL_FUNC) &savvy_ImageFilter_compose__impl, 2},
+    {"savvy_ImageFilter_displacement_map__impl", (DL_FUNC) &savvy_ImageFilter_displacement_map__impl, 4},
+    {"savvy_ImageFilter_from_picture__impl", (DL_FUNC) &savvy_ImageFilter_from_picture__impl, 2},
     {"savvy_ImageFilter_get_label__impl", (DL_FUNC) &savvy_ImageFilter_get_label__impl, 1},
     {"savvy_ImageFilter_no_filter__impl", (DL_FUNC) &savvy_ImageFilter_no_filter__impl, 0},
     {"savvy_ImageFilter_runtime_shader__impl", (DL_FUNC) &savvy_ImageFilter_runtime_shader__impl, 2},

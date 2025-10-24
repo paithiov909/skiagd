@@ -4,6 +4,30 @@
 \alias{ImageFilter}
 \title{ImageFilter}
 \arguments{
+\item{img}{A raw vector of picture.}
+
+\item{crop_rect}{Numerics of length 4 for cropping the filtered image.}
+
+\item{outer, inner}{\code{ImageFilter} objects.}
+
+\item{dst, src}{\code{ImageFilter} objects.}
+
+\item{mode}{\link{BlendMode}.}
+
+\item{coef}{Numerics that represents the coefficients \code{c(k1, k2, k3, k4)}.
+Each output pixel is the result of combining the corresponding \code{dst} and \code{src} pixels using these values.}
+
+\item{color_mat}{A 5x4 row-major numeric matrix that represents a color matrix.
+Every pixel's color value is multiplied by this matrix in the same way as the \href{https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feColorMatrix}{feColorMatrix} SVG filter.
+A playground to build color matrices is available \href{https://fecolormatrix.com/}{here}.}
+
+\item{channels}{Numerics of length 2 in range of \verb{[0, 3]} (corresponding to R, G, B, or A channel);
+color channels to be used along X and Y axes within the source image.}
+
+\item{scale}{A numeric scalar; displacement scale factor to be used.}
+
+\item{displacement}{An \code{ImageFilter} object that displaces the source image.}
+
 \item{source}{A \link{RuntimeEffect} object.}
 
 \item{uniforms}{A named list of numerics to be assigned to uniforms in \code{source}.}
@@ -19,11 +43,20 @@ You can apply an image filter to canvas via \code{\link[=paint]{paint()}}.
 The following filters are available:
 \itemize{
 \item \code{no_filter()}: does not apply any image filter. This is the default image filter for \code{\link[=paint]{paint()}}.
-\item \code{runtime_shader(source, uniforms)}: Creates an image filter from a \link{RuntimeEffect}.
+\item \code{from_picture(img, crop_rect)}: creates an image filter from a picture.
+\item \code{compose(outer, inner)}: composes two image filters.
+\item \code{blend(dst, src, mode, crop_rect)}: blends two image filters with a given blend mode.
+\item \code{arithmetic(dst, src, coef, crop_rect)}: applies an arithmetic operation to two image filters.
+\item \code{color_matrix(color_mat)}: creates an image filter from a color matrix.
+\item \code{displacement_map(channels, scale, displacement, crop_rect)}: creates a displacement map.
+\item \code{runtime_shader(source, uniforms)}: creates an image filter from a \link{RuntimeEffect}.
 }
 }
 \seealso{
-\href{https://shopify.github.io/react-native-skia/docs/image-filters/overview/}{Image Filters | React Native Skia}
+\itemize{
+\item \href{https://shopify.github.io/react-native-skia/docs/image-filters/overview/}{Image Filters | React Native Skia}
+\item \href{https://rust-skia.github.io/doc/skia_safe/image_filters/index.html}{skia_safe::image_filters - Rust}
+}
 
 Other paint-attributes: 
 \code{\link{BlendMode}},
