@@ -1,4 +1,7 @@
-use super::{assert_len, shader::sk_blend_mode, shader::BlendMode};
+use super::{
+    assert_len, num2colors, shader::sk_blend_mode, shader::sk_tile_mode, shader::BlendMode,
+    shader::TileMode,
+};
 use crate::canvas::read_picture_bytes;
 use crate::runtime_effect;
 use savvy::{savvy, savvy_err};
@@ -40,18 +43,33 @@ impl ImageFilter {
             ),
         })
     }
-    fn compose(outer: &ImageFilter, inner: &ImageFilter) -> savvy::Result<Self> {
-        let outer = outer
-            .filter
-            .clone()
-            .unwrap_or_else(|| skia_safe::image_filters::empty());
-        let inner = inner
-            .filter
-            .clone()
-            .unwrap_or_else(|| skia_safe::image_filters::empty());
+    fn arithmetic(
+        dst: &ImageFilter,
+        src: &ImageFilter,
+        coef: savvy::NumericSexp,
+        crop_rect: savvy::NumericSexp,
+    ) -> savvy::Result<Self> {
+        assert_len("coef", 4, coef.len())?;
+        assert_len("crop_rect", 4, crop_rect.len())?;
+        let coef = coef.as_slice_f64();
+        let crop_rect = crop_rect.as_slice_f64();
         Ok(ImageFilter {
-            label: "compose".to_string(),
-            filter: skia_safe::image_filters::compose(outer, inner),
+            label: "arithmetic".to_string(),
+            filter: skia_safe::image_filters::arithmetic(
+                coef[0] as f32,
+                coef[1] as f32,
+                coef[2] as f32,
+                coef[3] as f32,
+                true,
+                dst.filter.clone(),
+                src.filter.clone(),
+                skia_safe::Rect::new(
+                    crop_rect[0] as f32,
+                    crop_rect[1] as f32,
+                    crop_rect[2] as f32,
+                    crop_rect[3] as f32,
+                ),
+            ),
         })
     }
     fn blend(
@@ -79,26 +97,21 @@ impl ImageFilter {
             ),
         })
     }
-    fn arithmetic(
-        dst: &ImageFilter,
-        src: &ImageFilter,
-        coef: savvy::NumericSexp,
+    fn blur(
+        sigma: savvy::NumericSexp,
+        tile_mode: &TileMode,
         crop_rect: savvy::NumericSexp,
     ) -> savvy::Result<Self> {
-        assert_len("coef", 4, coef.len())?;
+        assert_len("sigma", 2, sigma.len())?;
         assert_len("crop_rect", 4, crop_rect.len())?;
-        let coef = coef.as_slice_f64();
+        let sigma = sigma.as_slice_f64();
         let crop_rect = crop_rect.as_slice_f64();
         Ok(ImageFilter {
-            label: "arithmetic".to_string(),
-            filter: skia_safe::image_filters::arithmetic(
-                coef[0] as f32,
-                coef[1] as f32,
-                coef[2] as f32,
-                coef[3] as f32,
-                true,
-                dst.filter.clone(),
-                src.filter.clone(),
+            label: "blur".to_string(),
+            filter: skia_safe::image_filters::blur(
+                (sigma[0] as f32, sigma[1] as f32),
+                sk_tile_mode(tile_mode),
+                None,
                 skia_safe::Rect::new(
                     crop_rect[0] as f32,
                     crop_rect[1] as f32,
@@ -140,6 +153,56 @@ impl ImageFilter {
             filter: skia_safe::image_filters::color_filter(imgf_color, None, None),
         })
     }
+    fn compose(outer: &ImageFilter, inner: &ImageFilter) -> savvy::Result<Self> {
+        let outer = outer
+            .filter
+            .clone()
+            .unwrap_or_else(|| skia_safe::image_filters::empty());
+        let inner = inner
+            .filter
+            .clone()
+            .unwrap_or_else(|| skia_safe::image_filters::empty());
+        Ok(ImageFilter {
+            label: "compose".to_string(),
+            filter: skia_safe::image_filters::compose(outer, inner),
+        })
+    }
+    fn crop(crop_rect: savvy::NumericSexp, tile_mode: &TileMode) -> savvy::Result<Self> {
+        assert_len("crop_rect", 4, crop_rect.len())?;
+        let crop_rect = crop_rect.as_slice_f64();
+        Ok(ImageFilter {
+            label: "crop".to_string(),
+            filter: skia_safe::image_filters::crop(
+                skia_safe::Rect::new(
+                    crop_rect[0] as f32,
+                    crop_rect[1] as f32,
+                    crop_rect[2] as f32,
+                    crop_rect[3] as f32,
+                ),
+                sk_tile_mode(tile_mode),
+                None,
+            ),
+        })
+    }
+    fn dilate(radius: savvy::NumericSexp, crop_rect: savvy::NumericSexp) -> savvy::Result<Self> {
+        assert_len("radius", 2, radius.len())?;
+        assert_len("crop_rect", 4, crop_rect.len())?;
+        let radius = radius.as_slice_f64();
+        let crop_rect = crop_rect.as_slice_f64();
+        Ok(ImageFilter {
+            label: "dilate".to_string(),
+            filter: skia_safe::image_filters::dilate(
+                (radius[0] as f32, radius[1] as f32),
+                None,
+                skia_safe::Rect::new(
+                    crop_rect[0] as f32,
+                    crop_rect[1] as f32,
+                    crop_rect[2] as f32,
+                    crop_rect[3] as f32,
+                ),
+            ),
+        })
+    }
     fn displacement_map(
         channels: savvy::NumericSexp,
         scale: savvy::NumericScalar,
@@ -158,6 +221,74 @@ impl ImageFilter {
                 scale as f32,
                 displacement.filter.clone(), // displacement
                 None,                        // color
+                skia_safe::Rect::new(
+                    crop_rect[0] as f32,
+                    crop_rect[1] as f32,
+                    crop_rect[2] as f32,
+                    crop_rect[3] as f32,
+                ),
+            ),
+        })
+    }
+    fn drop_shadow(
+        offset: savvy::NumericSexp,
+        sigma: savvy::NumericSexp,
+        color: savvy::NumericSexp,
+        crop_rect: savvy::NumericSexp,
+    ) -> savvy::Result<Self> {
+        assert_len("offset", 2, offset.len())?;
+        assert_len("sigma", 2, sigma.len())?;
+        assert_len("crop_rect", 4, crop_rect.len())?;
+        let color = num2colors(&color).ok_or_else(|| return savvy_err!("Failed to parse color"))?;
+        let offset = offset.as_slice_f64();
+        let sigma = sigma.as_slice_f64();
+        let crop_rect = crop_rect.as_slice_f64();
+        Ok(ImageFilter {
+            label: "drop_shadow".to_string(),
+            filter: skia_safe::image_filters::drop_shadow(
+                (offset[0] as f32, offset[1] as f32),
+                (sigma[0] as f32, sigma[1] as f32),
+                skia_safe::Color4f::from(color[0]),
+                None,
+                None,
+                skia_safe::Rect::new(
+                    crop_rect[0] as f32,
+                    crop_rect[1] as f32,
+                    crop_rect[2] as f32,
+                    crop_rect[3] as f32,
+                ),
+            ),
+        })
+    }
+    fn erode(raidus: savvy::NumericSexp, crop_rect: savvy::NumericSexp) -> savvy::Result<Self> {
+        assert_len("raidus", 2, raidus.len())?;
+        assert_len("crop_rect", 4, crop_rect.len())?;
+        let raidus = raidus.as_slice_f64();
+        let crop_rect = crop_rect.as_slice_f64();
+        Ok(ImageFilter {
+            label: "erode".to_string(),
+            filter: skia_safe::image_filters::erode(
+                (raidus[0] as f32, raidus[1] as f32),
+                None,
+                skia_safe::Rect::new(
+                    crop_rect[0] as f32,
+                    crop_rect[1] as f32,
+                    crop_rect[2] as f32,
+                    crop_rect[3] as f32,
+                ),
+            ),
+        })
+    }
+    fn offset(offset: savvy::NumericSexp, crop_rect: savvy::NumericSexp) -> savvy::Result<Self> {
+        assert_len("offset", 2, offset.len())?;
+        assert_len("crop_rect", 4, crop_rect.len())?;
+        let offset = offset.as_slice_f64();
+        let crop_rect = crop_rect.as_slice_f64();
+        Ok(ImageFilter {
+            label: "offset".to_string(),
+            filter: skia_safe::image_filters::offset(
+                (offset[0] as f32, offset[1] as f32),
+                None,
                 skia_safe::Rect::new(
                     crop_rect[0] as f32,
                     crop_rect[1] as f32,

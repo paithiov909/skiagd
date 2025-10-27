@@ -37,12 +37,18 @@ SEXP savvy_sk_path_transform__ffi(SEXP c_arg__svg, SEXP c_arg__mat);
 // methods and associated functions for ImageFilter
 SEXP savvy_ImageFilter_arithmetic__ffi(SEXP c_arg__dst, SEXP c_arg__src, SEXP c_arg__coef, SEXP c_arg__crop_rect);
 SEXP savvy_ImageFilter_blend__ffi(SEXP c_arg__dst, SEXP c_arg__src, SEXP c_arg__mode, SEXP c_arg__crop_rect);
+SEXP savvy_ImageFilter_blur__ffi(SEXP c_arg__sigma, SEXP c_arg__tile_mode, SEXP c_arg__crop_rect);
 SEXP savvy_ImageFilter_color_matrix__ffi(SEXP c_arg__color_mat);
 SEXP savvy_ImageFilter_compose__ffi(SEXP c_arg__outer, SEXP c_arg__inner);
+SEXP savvy_ImageFilter_crop__ffi(SEXP c_arg__crop_rect, SEXP c_arg__tile_mode);
+SEXP savvy_ImageFilter_dilate__ffi(SEXP c_arg__radius, SEXP c_arg__crop_rect);
 SEXP savvy_ImageFilter_displacement_map__ffi(SEXP c_arg__channels, SEXP c_arg__scale, SEXP c_arg__displacement, SEXP c_arg__crop_rect);
+SEXP savvy_ImageFilter_drop_shadow__ffi(SEXP c_arg__offset, SEXP c_arg__sigma, SEXP c_arg__color, SEXP c_arg__crop_rect);
+SEXP savvy_ImageFilter_erode__ffi(SEXP c_arg__raidus, SEXP c_arg__crop_rect);
 SEXP savvy_ImageFilter_from_picture__ffi(SEXP c_arg__img, SEXP c_arg__crop_rect);
 SEXP savvy_ImageFilter_get_label__ffi(SEXP self__);
 SEXP savvy_ImageFilter_no_filter__ffi(void);
+SEXP savvy_ImageFilter_offset__ffi(SEXP c_arg__offset, SEXP c_arg__crop_rect);
 SEXP savvy_ImageFilter_runtime_shader__ffi(SEXP c_arg__source, SEXP c_arg__uniforms);
 
 // methods and associated functions for Join

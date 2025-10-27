@@ -8,18 +8,24 @@
 
 \item{crop_rect}{Numerics of length 4 for cropping the filtered image.}
 
-\item{outer, inner}{\code{ImageFilter} objects.}
-
 \item{dst, src}{\code{ImageFilter} objects.}
-
-\item{mode}{\link{BlendMode}.}
 
 \item{coef}{Numerics that represents the coefficients \code{c(k1, k2, k3, k4)}.
 Each output pixel is the result of combining the corresponding \code{dst} and \code{src} pixels using these values.}
 
+\item{mode}{\link{BlendMode}.}
+
+\item{sigma}{Numerics of length 2 for blur sigma.}
+
+\item{tile_mode}{\link{TileMode}.}
+
 \item{color_mat}{A 5x4 row-major numeric matrix that represents a color matrix.
 Every pixel's color value is multiplied by this matrix in the same way as the \href{https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feColorMatrix}{feColorMatrix} SVG filter.
 A playground to build color matrices is available \href{https://fecolormatrix.com/}{here}.}
+
+\item{outer, inner}{\code{ImageFilter} objects.}
+
+\item{radius}{Numerics of length 2; radius of elipse for dilation and erosion.}
 
 \item{channels}{Numerics of length 2 in range of \verb{[0, 3]} (corresponding to R, G, B, or A channel);
 color channels to be used along X and Y axes within the source image.}
@@ -27,6 +33,8 @@ color channels to be used along X and Y axes within the source image.}
 \item{scale}{A numeric scalar; displacement scale factor to be used.}
 
 \item{displacement}{An \code{ImageFilter} object that displaces the source image.}
+
+\item{offset}{Numerics of length 2 for X and Y offsets.}
 
 \item{source}{A \link{RuntimeEffect} object.}
 
@@ -38,17 +46,27 @@ An \code{ImageFilter} object.
 \description{
 \code{ImageFilter} is a struct that offers a reference to \code{skia_safe::ImageFilter}.
 You can apply an image filter to canvas via \code{\link[=paint]{paint()}}.
+
+Concatenating image filters with \code{c()} is equivalent to sequentially compose them
+into a single filter using \code{ImageFilter$compose()}.
+For blending image filters, use \code{ImageFilter$blend()} explicitly.
 }
 \details{
 The following filters are available:
 \itemize{
 \item \code{no_filter()}: does not apply any image filter. This is the default image filter for \code{\link[=paint]{paint()}}.
 \item \code{from_picture(img, crop_rect)}: creates an image filter from a picture.
-\item \code{compose(outer, inner)}: composes two image filters.
-\item \code{blend(dst, src, mode, crop_rect)}: blends two image filters with a given blend mode.
 \item \code{arithmetic(dst, src, coef, crop_rect)}: applies an arithmetic operation to two image filters.
+\item \code{blend(dst, src, mode, crop_rect)}: blends two image filters with a given blend mode.
+\item \code{blur(sigma, tile_mode, crop_rect)}: creates a blur image filter.
 \item \code{color_matrix(color_mat)}: creates an image filter from a color matrix.
+\item \code{compose(outer, inner)}: composes two image filters.
+\item \code{crop(crop_rect, tile_mode)}: crops an image filter.
+\item \code{dilate(radius, crop_rect)}: dilates an image filter.
 \item \code{displacement_map(channels, scale, displacement, crop_rect)}: creates a displacement map.
+\item \code{drop_shadow(offset, sigma, color, crop_rect)}: creates a drop shadow image filter.
+\item \code{erode(raidus, crop_rect)}: erodes an image filter.
+\item \code{offset(offset, crop_rect)}: creates an offset image filter.
 \item \code{runtime_shader(source, uniforms)}: creates an image filter from a \link{RuntimeEffect}.
 }
 }

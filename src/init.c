@@ -149,6 +149,11 @@ SEXP savvy_ImageFilter_blend__impl(SEXP c_arg__dst, SEXP c_arg__src, SEXP c_arg_
     return handle_result(res);
 }
 
+SEXP savvy_ImageFilter_blur__impl(SEXP c_arg__sigma, SEXP c_arg__tile_mode, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_blur__ffi(c_arg__sigma, c_arg__tile_mode, c_arg__crop_rect);
+    return handle_result(res);
+}
+
 SEXP savvy_ImageFilter_color_matrix__impl(SEXP c_arg__color_mat) {
     SEXP res = savvy_ImageFilter_color_matrix__ffi(c_arg__color_mat);
     return handle_result(res);
@@ -159,8 +164,28 @@ SEXP savvy_ImageFilter_compose__impl(SEXP c_arg__outer, SEXP c_arg__inner) {
     return handle_result(res);
 }
 
+SEXP savvy_ImageFilter_crop__impl(SEXP c_arg__crop_rect, SEXP c_arg__tile_mode) {
+    SEXP res = savvy_ImageFilter_crop__ffi(c_arg__crop_rect, c_arg__tile_mode);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_dilate__impl(SEXP c_arg__radius, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_dilate__ffi(c_arg__radius, c_arg__crop_rect);
+    return handle_result(res);
+}
+
 SEXP savvy_ImageFilter_displacement_map__impl(SEXP c_arg__channels, SEXP c_arg__scale, SEXP c_arg__displacement, SEXP c_arg__crop_rect) {
     SEXP res = savvy_ImageFilter_displacement_map__ffi(c_arg__channels, c_arg__scale, c_arg__displacement, c_arg__crop_rect);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_drop_shadow__impl(SEXP c_arg__offset, SEXP c_arg__sigma, SEXP c_arg__color, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_drop_shadow__ffi(c_arg__offset, c_arg__sigma, c_arg__color, c_arg__crop_rect);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_erode__impl(SEXP c_arg__raidus, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_erode__ffi(c_arg__raidus, c_arg__crop_rect);
     return handle_result(res);
 }
 
@@ -176,6 +201,11 @@ SEXP savvy_ImageFilter_get_label__impl(SEXP self__) {
 
 SEXP savvy_ImageFilter_no_filter__impl(void) {
     SEXP res = savvy_ImageFilter_no_filter__ffi();
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_offset__impl(SEXP c_arg__offset, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_offset__ffi(c_arg__offset, c_arg__crop_rect);
     return handle_result(res);
 }
 
@@ -348,12 +378,18 @@ static const R_CallMethodDef CallEntries[] = {
 
     {"savvy_ImageFilter_arithmetic__impl", (DL_FUNC) &savvy_ImageFilter_arithmetic__impl, 4},
     {"savvy_ImageFilter_blend__impl", (DL_FUNC) &savvy_ImageFilter_blend__impl, 4},
+    {"savvy_ImageFilter_blur__impl", (DL_FUNC) &savvy_ImageFilter_blur__impl, 3},
     {"savvy_ImageFilter_color_matrix__impl", (DL_FUNC) &savvy_ImageFilter_color_matrix__impl, 1},
     {"savvy_ImageFilter_compose__impl", (DL_FUNC) &savvy_ImageFilter_compose__impl, 2},
+    {"savvy_ImageFilter_crop__impl", (DL_FUNC) &savvy_ImageFilter_crop__impl, 2},
+    {"savvy_ImageFilter_dilate__impl", (DL_FUNC) &savvy_ImageFilter_dilate__impl, 2},
     {"savvy_ImageFilter_displacement_map__impl", (DL_FUNC) &savvy_ImageFilter_displacement_map__impl, 4},
+    {"savvy_ImageFilter_drop_shadow__impl", (DL_FUNC) &savvy_ImageFilter_drop_shadow__impl, 4},
+    {"savvy_ImageFilter_erode__impl", (DL_FUNC) &savvy_ImageFilter_erode__impl, 2},
     {"savvy_ImageFilter_from_picture__impl", (DL_FUNC) &savvy_ImageFilter_from_picture__impl, 2},
     {"savvy_ImageFilter_get_label__impl", (DL_FUNC) &savvy_ImageFilter_get_label__impl, 1},
     {"savvy_ImageFilter_no_filter__impl", (DL_FUNC) &savvy_ImageFilter_no_filter__impl, 0},
+    {"savvy_ImageFilter_offset__impl", (DL_FUNC) &savvy_ImageFilter_offset__impl, 2},
     {"savvy_ImageFilter_runtime_shader__impl", (DL_FUNC) &savvy_ImageFilter_runtime_shader__impl, 2},
 
     {"savvy_PaintAttrs_set_attrs__impl", (DL_FUNC) &savvy_PaintAttrs_set_attrs__impl, 14},
