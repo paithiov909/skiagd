@@ -5,10 +5,13 @@
 #' @inheritParams param-rsx-trans
 #' @returns A raw vector of picture.
 #' @export
-add_path <- function(img, path,
-                     rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), length(path), 6, byrow = TRUE),
-                     ...,
-                     props = paint()) {
+add_path <- function(
+  img,
+  path,
+  rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), length(path), 6, byrow = TRUE),
+  ...,
+  props = paint()
+) {
   dots <- rlang::list2(...)
   sigma <- dots[["sigma"]]
   if (is.null(sigma)) {

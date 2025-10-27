@@ -9,7 +9,13 @@
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export
-add_point <- function(img, point, group = rep_len(1, nrow(point)), ..., props = paint()) {
+add_point <- function(
+  img,
+  point,
+  group = rep_len(1, nrow(point)),
+  ...,
+  props = paint()
+) {
   validate_length(
     nrow(point),
     length(group)

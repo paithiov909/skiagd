@@ -8,8 +8,10 @@
 #' @param canvas_size Integers of length 2.
 #' @returns A raw vector of picture.
 #' @export
-canvas <- function(fill = "transparent",
-                   canvas_size = paint()[["canvas_size"]]) {
+canvas <- function(
+  fill = "transparent",
+  canvas_size = paint()[["canvas_size"]]
+) {
   if (!is.numeric(fill)) {
     fill <- col2rgba(fill)
   }

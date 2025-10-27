@@ -50,7 +50,8 @@ paint <- function(...) {
 }
 
 dev_new_if_needed <- function() {
-  if (grDevices::dev.cur() == 1) { ## FIXME: Do we need `is.interactive()` here?
+  if (grDevices::dev.cur() == 1) {
+    ## FIXME: Do we need `is.interactive()` here?
     rlang::warn("No device has been open. Opened a new one with `grid.null()`.")
     grid::grid.null()
   }
@@ -90,12 +91,14 @@ default_attrs <- function() {
     } else {
       env_get(Style, "Fill")
     },
-    join = switch(props[["linejoin"]],
+    join = switch(
+      props[["linejoin"]],
       "round" = env_get(Join, "Round"),
       "mitre" = env_get(Join, "Miter"),
       "bevel" = env_get(Join, "Bevel")
     ),
-    cap = switch(props[["lineend"]],
+    cap = switch(
+      props[["lineend"]],
       "round" = env_get(Cap, "Round"),
       "butt" = env_get(Cap, "Butt"),
       "square" = env_get(Cap, "Square")
@@ -103,11 +106,9 @@ default_attrs <- function() {
     width = props[["lwd"]],
     miter = props[["linemitre"]],
     fontsize = props[["fontsize"]],
-    family = ifelse(props[["fontfamily"]] == "",
-      "sans",
-      props[["fontfamily"]]
-    ),
-    fontface = switch(as.character(props[["font"]]),
+    family = ifelse(props[["fontfamily"]] == "", "sans", props[["fontfamily"]]),
+    fontface = switch(
+      as.character(props[["font"]]),
       "1" = env_get(FontStyle, "Normal"),
       "2" = env_get(FontStyle, "Bold"),
       "3" = env_get(FontStyle, "Italic"), # "italic" or "oblique"

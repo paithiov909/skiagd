@@ -10,7 +10,8 @@ test_that("Shader$from_picture works", {
   pict <-
     canvas("pink") |>
     add_circle(
-      matrix(c(48, 48), ncol = 2), 24,
+      matrix(c(48, 48), ncol = 2),
+      24,
       props = paint(!!!props)
     )
   vdiffr::expect_doppelganger(
@@ -35,7 +36,8 @@ test_that("Shader$from_png works", {
   png_bytes <-
     canvas("white") |>
     add_circle(
-      matrix(c(48, 48), ncol = 2), 24
+      matrix(c(48, 48), ncol = 2),
+      24
     ) |>
     as_png()
   expect_no_error(

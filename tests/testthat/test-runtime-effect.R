@@ -4,7 +4,8 @@ on.exit(dev.off())
 
 test_that("ImageFilter$runtime_shader throws an error when uniforms are invalid or mismatched", {
   effect <-
-    RuntimeEffect$make(R"{
+    RuntimeEffect$make(
+      R"{
       uniform shader image;
       uniform vec2 resolution;
       uniform float4x4 mat;
@@ -12,7 +13,8 @@ test_that("ImageFilter$runtime_shader throws an error when uniforms are invalid 
         vec2 uv = fragCoord / resolution;
         return vec4(uv.x, uv.y, .6, 1.0);
       }
-    }")
+    }"
+    )
   # from `make_builder`
   expect_error(
     ImageFilter$runtime_shader(effect, list(foo = "bar")),
@@ -42,7 +44,8 @@ test_that("ImageFilter$runtime_shader works", {
 
   canvas_size <- dev_size()
 
-  effect <- RuntimeEffect$make(R"{
+  effect <- RuntimeEffect$make(
+    R"{
     uniform shader image;
     uniform vec2 resolution;
 
@@ -50,7 +53,8 @@ test_that("ImageFilter$runtime_shader works", {
       vec2 uv = fragCoord / resolution;
    		return distance(uv, vec2(.5)) > .2 ? image.eval(fragCoord).gbra : image.eval(fragCoord).rgba;
   	}
-  }")
+  }"
+  )
 
   imgf <-
     ImageFilter$runtime_shader(
@@ -71,8 +75,8 @@ test_that("ImageFilter$runtime_shader works", {
       as_recordedplot()
   )
 
-
-  effect <- RuntimeEffect$make(R"{
+  effect <- RuntimeEffect$make(
+    R"{
     uniform shader image;
     uniform vec2 resolution;
 
@@ -80,7 +84,8 @@ test_that("ImageFilter$runtime_shader works", {
       vec2 uv = fragCoord / resolution;
    		return uv.y < 0.5 ? image.eval(fragCoord).gbra : image.eval(fragCoord).rgba;
   	}
-  }")
+  }"
+  )
 
   imgf <-
     ImageFilter$runtime_shader(
@@ -109,13 +114,15 @@ test_that("Shader$from_runtime_effect works", {
   canvas_size <- dev_size()
 
   effect <-
-    RuntimeEffect$make(R"{
+    RuntimeEffect$make(
+      R"{
       uniform vec2 resolution;
       vec4 main(vec2 pos) {
         vec2 uv = pos/resolution;
         return vec4(uv.x, uv.y, 0.5, 1);
       }
-    }")
+    }"
+    )
 
   shdr <-
     Shader$from_runtime_effect(

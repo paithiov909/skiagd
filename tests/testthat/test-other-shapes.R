@@ -55,7 +55,7 @@ test_that("add_vertices works", {
         matrix(c(64, 0, 128, 256, 0, 256), ncol = 2, byrow = TRUE),
         color = col2rgb(c("#61dafb", "#fb61da", "#dafb61"), alpha = TRUE),
         props = paint(
-          transform = c(1, 0, 256, 0, 1, 0,  0, 0, 1),
+          transform = c(1, 0, 256, 0, 1, 0, 0, 0, 1),
           shader = Shader$fractal_noise(c(.05, .05), 4, 123, c(16, 16))
         )
       ) |>

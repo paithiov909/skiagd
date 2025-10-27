@@ -9,12 +9,15 @@
 #' @inheritParams param-rsx-trans
 #' @returns A raw vector of picture.
 #' @export
-add_arc <- function(img, ltrb,
-                    rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), nrow(ltrb), 6, byrow = TRUE),
-                    angle = matrix(c(0, 360), nrow(ltrb), 2, byrow = TRUE),
-                    use_center = TRUE,
-                    ...,
-                    props = paint()) {
+add_arc <- function(
+  img,
+  ltrb,
+  rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), nrow(ltrb), 6, byrow = TRUE),
+  angle = matrix(c(0, 360), nrow(ltrb), 2, byrow = TRUE),
+  use_center = TRUE,
+  ...,
+  props = paint()
+) {
   dots <- rlang::list2(...)
   sigma <- dots[["sigma"]]
   if (is.null(sigma)) {
