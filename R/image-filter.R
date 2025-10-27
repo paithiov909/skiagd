@@ -46,7 +46,7 @@ c.ImageFilter <- function(...) {
 #' @param mode [BlendMode].
 #' @param sigma Numerics of length 2 for blur sigma.
 #' @param tile_mode [TileMode].
-#' @param color_mat A 5x4 row-major numeric matrix that represents a color matrix.
+#' @param color_mat A 4x5 row-major numeric matrix that represents a color matrix.
 #' Every pixel's color value is multiplied by this matrix in the same way as the [feColorMatrix](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feColorMatrix) SVG filter.
 #' A playground to build color matrices is available [here](https://fecolormatrix.com/).
 #' @param outer,inner `ImageFilter` objects.

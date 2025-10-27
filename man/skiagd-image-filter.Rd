@@ -19,7 +19,7 @@ Each output pixel is the result of combining the corresponding \code{dst} and \c
 
 \item{tile_mode}{\link{TileMode}.}
 
-\item{color_mat}{A 5x4 row-major numeric matrix that represents a color matrix.
+\item{color_mat}{A 4x5 row-major numeric matrix that represents a color matrix.
 Every pixel's color value is multiplied by this matrix in the same way as the \href{https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feColorMatrix}{feColorMatrix} SVG filter.
 A playground to build color matrices is available \href{https://fecolormatrix.com/}{here}.}
 
