@@ -39,7 +39,14 @@ as_png <- function(img, ..., props = paint()) {
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export
-freeze <- function(img, left = 0, top = 0, fill = "transparent", ..., props = paint()) {
+freeze <- function(
+  img,
+  left = 0,
+  top = 0,
+  fill = "transparent",
+  ...,
+  props = paint()
+) {
   img |>
     as_png(props = props) |>
     add_png(

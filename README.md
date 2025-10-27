@@ -56,12 +56,12 @@ Skia](https://shopify.github.io/react-native-skia/).
   ([Paint](https://rust-skia.github.io/doc/skia_safe/type.Paint.html))
   - [x] Path Effects
   - [x] Mask Filter (blur)
-  - [ ] Color Filters
   - [x] Shaders
   - [ ] Image Filters / Runtime Shaders
-    - sksl support
-    - [uniforms](https://rust-skia.github.io/doc/skia_safe/runtime_effect/type.RuntimeShaderBuilder.html#method.set_uniform_int)
+    - [x] SkSL and
+      [uniforms](https://rust-skia.github.io/doc/skia_safe/runtime_effect/type.RuntimeShaderBuilder.html#method.set_uniform_int)
       support
+    - [ ] `*_lit_diffuse` and `*_lit_specular`
 
 ### Not planned
 
@@ -72,6 +72,9 @@ Skia](https://shopify.github.io/react-native-skia/).
   - Text Path
 - Fitting Images (needs to re-implement
   [this](https://github.com/Shopify/react-native-skia/blob/4192f839d7ffc5cb0aba91c0f0f97e595d5c8409/packages/skia/cpp/api/recorder/ImageFit.h))
+- [Color
+  Filters](https://shopify.github.io/react-native-skia/docs/color-filters)
+  (only `skia_safe::image_filters::color_filter` is available)
 - [Group](https://shopify.github.io/react-native-skia/docs/group/) /
   [Backdrop
   Filters](https://shopify.github.io/react-native-skia/docs/backdrops-filters)

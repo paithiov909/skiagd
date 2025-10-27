@@ -59,7 +59,9 @@ validate_length <- function(expected, ...) {
 is_color_mat <- function(x) {
   ret <- is.matrix(x) && nrow(x) == 4
   if (!ret) {
-    rlang::warn("`color` does not seem to be a color matrix. Falling back to the default color of `paint()`.")
+    rlang::warn(
+      "`color` does not seem to be a color matrix. Falling back to the default color of `paint()`."
+    )
   }
   ret
 }

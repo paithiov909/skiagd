@@ -8,20 +8,20 @@
 #' A quick overview of their differences
 #' can be found [here](https://github.com/google/skia/tree/main/src/sksl#readme).
 #'
-#' You can compile a SkSL source into a `RuntimeEffect`
+#' You can compile an SkSL source into a `RuntimeEffect`
 #' using `RuntimeEffect$make()`,
 #' and apply it as an [ImageFilter] or a [Shader].
 #'
 #' @details
 #' `RuntimeEffect` as an R environment exposes the following method:
 #'
-#' * `make(sksl)`: Takes a SkSL source and compiles it into a `RuntimeEffect`.
+#' * `make(sksl)`: Takes an SkSL source and compiles it into a `RuntimeEffect`.
 #'
 #' A `RuntimeEffect` object has the following method:
 #'
 #' * `source()`: Returns the original SkSL source as a string scalar.
 #'
-#' @param sksl A string scalar of SkSL source.
+#' @param sksl A string scalar of an SkSL source.
 #' For [ImageFilter], the fragment shader must receive
 #' the currently filtered image as `shader` uniform.
 #' @returns For `make()`, a `RuntimeEffect` object is returned

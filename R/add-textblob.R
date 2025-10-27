@@ -16,7 +16,14 @@
 #' @inheritParams param-rsx-trans
 #' @returns A raw vector of picture.
 #' @export
-add_text <- function(img, text, rsx_trans, freeze = TRUE, ..., props = paint()) {
+add_text <- function(
+  img,
+  text,
+  rsx_trans,
+  freeze = TRUE,
+  ...,
+  props = paint()
+) {
   if (anyNA(text)) {
     rlang::abort("`text` cannot contain NA.")
   }

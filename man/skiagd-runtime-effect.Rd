@@ -4,7 +4,7 @@
 \alias{RuntimeEffect}
 \title{RuntimeEffect}
 \arguments{
-\item{sksl}{A string scalar of SkSL source.
+\item{sksl}{A string scalar of an SkSL source.
 For \link{ImageFilter}, the fragment shader must receive
 the currently filtered image as \code{shader} uniform.}
 }
@@ -21,14 +21,14 @@ The syntax is similar to GLSL, but differs in minor details.
 A quick overview of their differences
 can be found \href{https://github.com/google/skia/tree/main/src/sksl#readme}{here}.
 
-You can compile a SkSL source into a \code{RuntimeEffect}
+You can compile an SkSL source into a \code{RuntimeEffect}
 using \code{RuntimeEffect$make()},
 and apply it as an \link{ImageFilter} or a \link{Shader}.
 }
 \details{
 \code{RuntimeEffect} as an R environment exposes the following method:
 \itemize{
-\item \code{make(sksl)}: Takes a SkSL source and compiles it into a \code{RuntimeEffect}.
+\item \code{make(sksl)}: Takes an SkSL source and compiles it into a \code{RuntimeEffect}.
 }
 
 A \code{RuntimeEffect} object has the following method:

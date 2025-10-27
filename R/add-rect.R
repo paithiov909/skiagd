@@ -8,11 +8,14 @@
 #' @inheritParams param-rsx-trans
 #' @returns A raw vector of picture.
 #' @export
-add_rect <- function(img, ltrb,
-                     rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), nrow(ltrb), 6, byrow = TRUE),
-                     radii = matrix(0, nrow(ltrb), 2),
-                     ...,
-                     props = paint()) {
+add_rect <- function(
+  img,
+  ltrb,
+  rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), nrow(ltrb), 6, byrow = TRUE),
+  radii = matrix(0, nrow(ltrb), 2),
+  ...,
+  props = paint()
+) {
   dots <- rlang::list2(...)
   sigma <- dots[["sigma"]]
   if (is.null(sigma)) {
@@ -60,12 +63,16 @@ add_rect <- function(img, ltrb,
 #' @inheritParams param-rsx-trans
 #' @returns A raw vector of picture.
 #' @export
-add_diff_rect <- function(img, outer, inner,
-                          rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), nrow(outer), 6, byrow = TRUE),
-                          outer_radii = matrix(0, nrow(outer), 2),
-                          inner_radii = matrix(0, nrow(inner), 2),
-                          ...,
-                          props = paint()) {
+add_diff_rect <- function(
+  img,
+  outer,
+  inner,
+  rsx_trans = matrix(c(1, 0, 0, 0, 0, 0), nrow(outer), 6, byrow = TRUE),
+  outer_radii = matrix(0, nrow(outer), 2),
+  inner_radii = matrix(0, nrow(inner), 2),
+  ...,
+  props = paint()
+) {
   dots <- rlang::list2(...)
   sigma <- dots[["sigma"]]
   if (is.null(sigma)) {

@@ -813,8 +813,66 @@ class(`FontStyle`) <- c("FontStyle__bundle", "savvy_skiagd__sealed")
 
 ### associated functions for ImageFilter
 
+`ImageFilter`$`arithmetic` <- function(`dst`, `src`, `coef`, `crop_rect`) {
+  `dst` <- .savvy_extract_ptr(`dst`, "ImageFilter")
+  `src` <- .savvy_extract_ptr(`src`, "ImageFilter")
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_arithmetic__impl, `dst`, `src`, `coef`, `crop_rect`))
+}
+
+`ImageFilter`$`blend` <- function(`dst`, `src`, `mode`, `crop_rect`) {
+  `dst` <- .savvy_extract_ptr(`dst`, "ImageFilter")
+  `src` <- .savvy_extract_ptr(`src`, "ImageFilter")
+  `mode` <- .savvy_extract_ptr(`mode`, "BlendMode")
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_blend__impl, `dst`, `src`, `mode`, `crop_rect`))
+}
+
+`ImageFilter`$`blur` <- function(`sigma`, `tile_mode`, `crop_rect`) {
+  `tile_mode` <- .savvy_extract_ptr(`tile_mode`, "TileMode")
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_blur__impl, `sigma`, `tile_mode`, `crop_rect`))
+}
+
+`ImageFilter`$`color_matrix` <- function(`color_mat`) {
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_color_matrix__impl, `color_mat`))
+}
+
+`ImageFilter`$`compose` <- function(`outer`, `inner`) {
+  `outer` <- .savvy_extract_ptr(`outer`, "ImageFilter")
+  `inner` <- .savvy_extract_ptr(`inner`, "ImageFilter")
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_compose__impl, `outer`, `inner`))
+}
+
+`ImageFilter`$`crop` <- function(`crop_rect`, `tile_mode`) {
+  `tile_mode` <- .savvy_extract_ptr(`tile_mode`, "TileMode")
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_crop__impl, `crop_rect`, `tile_mode`))
+}
+
+`ImageFilter`$`dilate` <- function(`radius`, `crop_rect`) {
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_dilate__impl, `radius`, `crop_rect`))
+}
+
+`ImageFilter`$`displacement_map` <- function(`channels`, `scale`, `displacement`, `crop_rect`) {
+  `displacement` <- .savvy_extract_ptr(`displacement`, "ImageFilter")
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_displacement_map__impl, `channels`, `scale`, `displacement`, `crop_rect`))
+}
+
+`ImageFilter`$`drop_shadow` <- function(`offset`, `sigma`, `color`, `crop_rect`) {
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_drop_shadow__impl, `offset`, `sigma`, `color`, `crop_rect`))
+}
+
+`ImageFilter`$`erode` <- function(`raidus`, `crop_rect`) {
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_erode__impl, `raidus`, `crop_rect`))
+}
+
+`ImageFilter`$`from_picture` <- function(`img`, `crop_rect`) {
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_from_picture__impl, `img`, `crop_rect`))
+}
+
 `ImageFilter`$`no_filter` <- function() {
   .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_no_filter__impl))
+}
+
+`ImageFilter`$`offset` <- function(`offset`, `crop_rect`) {
+  .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_offset__impl, `offset`, `crop_rect`))
 }
 
 `ImageFilter`$`runtime_shader` <- function(`source`, `uniforms`) {

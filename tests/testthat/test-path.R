@@ -11,15 +11,30 @@ test_that("add_rect works", {
     canvas("red") |>
       add_rect(
         matrix(c(120, 40, 440, 120), ncol = 4),
-        props = paint(color = "snow", width = 16, style = Style$Stroke, join = Join$Round)
+        props = paint(
+          color = "snow",
+          width = 16,
+          style = Style$Stroke,
+          join = Join$Round
+        )
       ) |>
       add_rect(
         matrix(c(160, 220, 480, 300), ncol = 4),
-        props = paint(color = "snow", width = 16, style = Style$Stroke, join = Join$Bevel)
+        props = paint(
+          color = "snow",
+          width = 16,
+          style = Style$Stroke,
+          join = Join$Bevel
+        )
       ) |>
       add_rect(
         matrix(c(200, 400, 520, 480), ncol = 4),
-        props = paint(color = "snow", width = 16, style = Style$Stroke, join = Join$Miter)
+        props = paint(
+          color = "snow",
+          width = 16,
+          style = Style$Stroke,
+          join = Join$Miter
+        )
       ) |>
       as_recordedplot()
   )
@@ -32,7 +47,11 @@ test_that("add_rect works", {
         props = paint(color = "snow", width = 16, style = Style$Stroke)
       ) |>
       add_rect(
-        matrix(c(160, 200, 480, 300, 240, 80, 360, 440), nrow = 2, byrow = TRUE),
+        matrix(
+          c(160, 200, 480, 300, 240, 80, 360, 440),
+          nrow = 2,
+          byrow = TRUE
+        ),
         radii = matrix(c(24, 48, 24, 48), ncol = 2),
         props = paint(color = "yellow", width = 16, style = Style$Stroke)
       ) |>
@@ -60,16 +79,29 @@ test_that("add_line works", {
     "line",
     canvas("white") |>
       add_line(
-        matrix(c(20, 20), ncol = 2), matrix(c(320, 320), ncol = 2),
+        matrix(c(20, 20), ncol = 2),
+        matrix(c(320, 320), ncol = 2),
         props = paint(color = "steelblue", width = 16, cap = Cap$Round)
       ) |>
       add_line(
-        matrix(c(20, 20), ncol = 2), matrix(c(320, 320), ncol = 2),
-        props = paint(color = "purple", width = 16, cap = Cap$Butt, transform = c(1, 0, 120, 0, 1, 0, 0, 0, 1))
+        matrix(c(20, 20), ncol = 2),
+        matrix(c(320, 320), ncol = 2),
+        props = paint(
+          color = "purple",
+          width = 16,
+          cap = Cap$Butt,
+          transform = c(1, 0, 120, 0, 1, 0, 0, 0, 1)
+        )
       ) |>
       add_line(
-        matrix(c(20, 20), ncol = 2), matrix(c(320, 320), ncol = 2),
-        props = paint(color = "blue", width = 16, cap = Cap$Square, transform = c(1, 0, 120, 0, 1, 0, 0, 0, 1))
+        matrix(c(20, 20), ncol = 2),
+        matrix(c(320, 320), ncol = 2),
+        props = paint(
+          color = "blue",
+          width = 16,
+          cap = Cap$Square,
+          transform = c(1, 0, 120, 0, 1, 0, 0, 0, 1)
+        )
       ) |>
       as_recordedplot()
   )
@@ -104,7 +136,12 @@ test_that("add_point works", {
       add_point(
         mat,
         group = rep(1:20, each = 18),
-        color = grDevices::hsv(seq(0, 1, length.out = 20), 0.65, 1, alpha = 1) |>
+        color = grDevices::hsv(
+          seq(0, 1, length.out = 20),
+          0.65,
+          1,
+          alpha = 1
+        ) |>
           grDevices::col2rgb(alpha = TRUE),
         props = paint(color = "red", width = 8, point_mode = PointMode$Lines)
       ) |>
@@ -141,7 +178,9 @@ test_that("add_path with PathEffect$trim work", {
         star,
         rsx_trans = matrix(c(1, pi / 4, 256, 128, 0, 0), ncol = 6),
         props = paint(
-          color = "black", width = 16, style = Style$Stroke,
+          color = "black",
+          width = 16,
+          style = Style$Stroke,
           path_effect = PathEffect$trim(0.2, 0.9)
         )
       ) |>
