@@ -1,11 +1,11 @@
-#' Transform SVG path
+#' Transform SVG paths
 #'
 #' @param path Characters of SVG notations.
 #' @param transform Numerics of length 9.
 #' @returns A character vector of SVG notations.
 #' @export
 #' @family path-utils
-path_transform <- function(path, transform) {
+svg_transform <- function(path, transform) {
   sk_path_transform(path, transform)
 }
 
@@ -21,7 +21,7 @@ path_transform <- function(path, transform) {
 #' @returns A character vector of SVG notations interpolated.
 #' @export
 #' @family path-utils
-path_interpolate <- function(t, first, second) {
+svg_interpolate <- function(t, first, second) {
   sk_path_interpolate(t, first, second)
 }
 
@@ -31,7 +31,7 @@ path_interpolate <- function(t, first, second) {
 #' @returns A tibble.
 #' @export
 #' @family path-utils
-path_bounds <- function(path) {
+svg_bounds <- function(path) {
   ret <- sk_path_bounds(path) |>
     as.data.frame()
   ret[["id"]] <- ret[["id"]] + 1

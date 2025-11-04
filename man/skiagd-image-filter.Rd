@@ -61,11 +61,11 @@ The following filters are available:
 \item \code{blur(sigma, tile_mode, crop_rect)}: creates a blur image filter.
 \item \code{color_matrix(color_mat)}: creates an image filter from a color matrix.
 \item \code{compose(outer, inner)}: composes two image filters.
-\item \code{crop(crop_rect, tile_mode)}: crops an image filter.
-\item \code{dilate(radius, crop_rect)}: dilates an image filter.
+\item \code{crop(crop_rect, tile_mode)}: crops the source image.
+\item \code{dilate(radius, crop_rect)}: dilates the source image.
 \item \code{displacement_map(channels, scale, displacement, crop_rect)}: creates a displacement map.
 \item \code{drop_shadow(offset, sigma, color, crop_rect)}: creates a drop shadow image filter.
-\item \code{erode(raidus, crop_rect)}: erodes an image filter.
+\item \code{erode(raidus, crop_rect)}: erodes the source image.
 \item \code{offset(offset, crop_rect)}: creates an offset image filter.
 \item \code{runtime_shader(source, uniforms)}: creates an image filter from a \link{RuntimeEffect}.
 }

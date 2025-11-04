@@ -30,11 +30,11 @@ c.ImageFilter <- function(...) {
 #' * `blur(sigma, tile_mode, crop_rect)`: creates a blur image filter.
 #' * `color_matrix(color_mat)`: creates an image filter from a color matrix.
 #' * `compose(outer, inner)`: composes two image filters.
-#' * `crop(crop_rect, tile_mode)`: crops an image filter.
-#' * `dilate(radius, crop_rect)`: dilates an image filter.
+#' * `crop(crop_rect, tile_mode)`: crops the source image.
+#' * `dilate(radius, crop_rect)`: dilates the source image.
 #' * `displacement_map(channels, scale, displacement, crop_rect)`: creates a displacement map.
 #' * `drop_shadow(offset, sigma, color, crop_rect)`: creates a drop shadow image filter.
-#' * `erode(raidus, crop_rect)`: erodes an image filter.
+#' * `erode(raidus, crop_rect)`: erodes the source image.
 #' * `offset(offset, crop_rect)`: creates an offset image filter.
 #' * `runtime_shader(source, uniforms)`: creates an image filter from a [RuntimeEffect].
 #'
