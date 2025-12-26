@@ -62,7 +62,7 @@ add_text <- function(
 #'
 #' @param text Text strings.
 #' @param props A list of painting attributes out of [paint()].
-#' @returns A data frame.
+#' @returns A tibble containing `id`, `n_chars` and `width`.
 #' @export
 text_info <- function(text, props = paint()) {
   ret <-

@@ -29,13 +29,13 @@ test_that("drawing functions can take width and color", {
       add_circle(
         matrix(c(Re(z), Im(z), rep_len(1, length(z))), ncol = 3) %*% trans,
         rep_len(2, length(z)),
-        color = grDevices::col2rgb(colors, alpha = TRUE)
+        color = col2rgba(colors)
       ) |>
       add_line(
         matrix(c(Re(z), Im(z), rep_len(1, length(z))), ncol = 3) %*% trans,
         matrix(c(Re(z2), Im(z2), rep_len(1, length(z))), ncol = 3) %*% trans,
         width = rep(0.1 + seq(0, 1, length.out = length(z) / 10), each = 10),
-        color = grDevices::col2rgb(colors, alpha = TRUE)
+        color = col2rgba(colors)
       ) |>
       as_recordedplot()
   )

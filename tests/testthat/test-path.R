@@ -142,7 +142,7 @@ test_that("add_point works", {
           1,
           alpha = 1
         ) |>
-          grDevices::col2rgb(alpha = TRUE),
+          col2rgba(),
         props = paint(color = "red", width = 8, point_mode = PointMode$Lines)
       ) |>
       as_recordedplot()

@@ -34,8 +34,8 @@ as_png <- function(img, ..., props = paint()) {
 #' @param left Left offset for drawing PNG image.
 #' @param top Top offset for drawing PNG image.
 #' @param fill RGBA representation of a color.
-#' This can be specified using named colors or hexadecimal color codes,
-#' which are converted internally using [grDevices::col2rgb()].
+#'  This can be specified using named colors or hexadecimal color codes,
+#'  which are converted internally using [colorfast::col_to_rgb()].
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export

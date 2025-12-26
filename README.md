@@ -163,7 +163,7 @@ img_data <-
         c(size[1] / 2 * .8, size[2] / 2 * .8),
         c(size[1] / 2 * .2, size[2] / 2 * .2),
         c(size[1] / 2 * .8, size[1] / 2 * .2),
-        color = grDevices::col2rgb(c("blueviolet", "skyblue"), alpha = TRUE),
+        color = col2rgba(c("blueviolet", "skyblue")),
         mode = TileMode$Clamp,
         flags = FALSE,
         transform = c(1, 0, 0, 0, 1, 0, 0, 0, 1)
@@ -180,7 +180,7 @@ img_data <-
       shader = Shader$sweep_gradient(
         c(size[1] / 2, size[2]),
         0, 360,
-        color = grDevices::col2rgb(c("magenta", "gold"), alpha = TRUE),
+        color = col2rgba(c("magenta", "gold")),
         mode = TileMode$Clamp,
         flags = FALSE,
         transform = c(1, 0, 0, 0, 1, 0, 0, 0, 1)
@@ -228,13 +228,13 @@ save_gif(lapply(seq_along(li), function(ai) {
     add_circle(
       matrix(c(Re(z), Im(z), rep_len(1, length(z))), ncol = 3) %*% trans,
       rep_len(2, length(z)),
-      color = grDevices::col2rgb(colors, alpha = TRUE)
+      color = col2rgba(colors)
     ) |>
     add_line(
       matrix(c(Re(z), Im(z), rep_len(1, length(z))), ncol = 3) %*% trans,
       matrix(c(Re(z2), Im(z2), rep_len(1, length(z))), ncol = 3) %*% trans,
       width = rep(0.1 + seq(0, 1, length.out = length(z) / 10), each = 10),
-      color = grDevices::col2rgb(colors, alpha = TRUE)
+      color = col2rgba(colors)
     ) |>
     draw_img()
 

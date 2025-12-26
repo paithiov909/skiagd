@@ -45,7 +45,7 @@ test_that("add_vertices works", {
     canvas("snow") |>
       add_vertices(
         matrix(c(64, 0, 128, 256, 0, 256), ncol = 2, byrow = TRUE),
-        color = col2rgb("violetred", alpha = TRUE) |>
+        color = col2rgba("violetred") |>
           kronecker(matrix(1, 1, 3)),
         props = paint(
           shader = Shader$fractal_noise(c(.05, .05), 4, 123, c(16, 16))
@@ -53,7 +53,7 @@ test_that("add_vertices works", {
       ) |>
       add_vertices(
         matrix(c(64, 0, 128, 256, 0, 256), ncol = 2, byrow = TRUE),
-        color = col2rgb(c("#61dafb", "#fb61da", "#dafb61"), alpha = TRUE),
+        color = col2rgba(c("#61dafb", "#fb61da", "#dafb61")),
         props = paint(
           transform = c(1, 0, 256, 0, 1, 0, 0, 0, 1),
           shader = Shader$fractal_noise(c(.05, .05), 4, 123, c(16, 16))

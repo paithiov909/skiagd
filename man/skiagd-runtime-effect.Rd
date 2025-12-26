@@ -37,7 +37,7 @@ A \code{RuntimeEffect} object has the following method:
 }
 }
 \examples{
-\donttest{
+\dontrun{
 effect <-
   RuntimeEffect$make(R"{
     uniform shader image;

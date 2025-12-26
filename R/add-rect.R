@@ -1,9 +1,9 @@
 #' Add rectangles
 #'
 #' @param ltrb A double matrix where each row is a rectangle
-#' LTRB (left, top, right, bottom).
+#'  LTRB (left, top, right, bottom).
 #' @param radii A double matrix where each row is a pair of axis lengths
-#' on X-axis and Y-axis of oval describing rounded corners.
+#'  on X-axis and Y-axis of oval describing rounded corners.
 #' @inheritParams param-img-and-props
 #' @inheritParams param-rsx-trans
 #' @returns A raw vector of picture.
@@ -56,9 +56,9 @@ add_rect <- function(
 #' Add difference rectangles
 #'
 #' @param outer,inner A double matrix where each row is a rectangle
-#' LTRB (left, top, right, bottom).
+#'  LTRB (left, top, right, bottom).
 #' @param outer_radii,inner_radii A double matrix where each row is a pair of axis lengths
-#' on X-axis and Y-axis of oval describing rounded corners.
+#'  on X-axis and Y-axis of oval describing rounded corners.
 #' @inheritParams param-img-and-props
 #' @inheritParams param-rsx-trans
 #' @returns A raw vector of picture.

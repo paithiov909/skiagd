@@ -12,7 +12,7 @@ text_info(text, props = paint())
 \item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
 }
 \value{
-A data frame.
+A tibble containing \code{id}, \code{n_chars} and \code{width}.
 }
 \description{
 Returns information about text strings

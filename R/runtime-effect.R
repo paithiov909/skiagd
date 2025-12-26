@@ -22,14 +22,14 @@
 #' * `source()`: Returns the original SkSL source as a string scalar.
 #'
 #' @param sksl A string scalar of an SkSL source.
-#' For [ImageFilter], the fragment shader must receive
-#' the currently filtered image as `shader` uniform.
+#'  For [ImageFilter], the fragment shader must receive
+#'  the currently filtered image as `shader` uniform.
 #' @returns For `make()`, a `RuntimeEffect` object is returned
-#' if the SkSL source is successfully compiled.
-#' Otherwise, an error is thrown with the compilation error message.
+#'  if the SkSL source is successfully compiled.
+#'  Otherwise, an error is thrown with the compilation error message.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' effect <-
 #'   RuntimeEffect$make(R"{
 #'     uniform shader image;

@@ -9,7 +9,7 @@ canvas(fill = "transparent", canvas_size = paint()[["canvas_size"]])
 \arguments{
 \item{fill}{RGBA representation of a color.
 This can be specified using named colors or hexadecimal color codes,
-which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.}
+which are converted internally using \code{\link[colorfast:col_to_rgb]{colorfast::col_to_rgb()}}.}
 
 \item{canvas_size}{Integers of length 2.}
 }

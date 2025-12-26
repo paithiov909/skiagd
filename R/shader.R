@@ -52,14 +52,14 @@ c.Shader <- function(..., mode = paint()[["blend_mode"]]) {
 #' @param start Numerics of length 2; starting point (x, y).
 #' @param end Numerics of length 2; ending point (x, y).
 #' @param flags A logical scalar; typically, you can leave this as `FALSE`.
-#' See [here](https://shopify.github.io/react-native-skia/docs/shaders/gradients/#common-properties)
-#' for details.
+#'  See [here](https://shopify.github.io/react-native-skia/docs/shaders/gradients/#common-properties)
+#'  for details.
 #' @param radii Numerics of length 2; radii of start and end circles.
 #' @param center Numerics of length 2; center of the gradient.
 #' @param start_angle A numeric scalar in range `[0, 360]`;
-#' starting angle. For default, set `0`.
+#'  starting angle. For default, set `0`.
 #' @param end_angle A numeric scalar in range `[0, 360]`;
-#' ending angle. For default, set `360`.
+#'  ending angle. For default, set `360`.
 #'
 #' @returns A `Shader` object.
 #' @seealso

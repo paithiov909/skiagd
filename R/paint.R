@@ -12,7 +12,7 @@
 #' The following painting attributes can be specified:
 #'
 #' * `canvas_size`: Integers of length 2 (width, height).
-#' * `color`: RGBA representation of a color. This can be specified using named colors or hexadecimal color codes, which are converted internally using [grDevices::col2rgb()].
+#' * `color`: RGBA representation of a color. This can be specified using named colors or hexadecimal color codes, which are converted internally using [colorfast::col_to_rgb()].
 #' * `style`: Paint style. See [Style].
 #' * `join`: Stroke join. See [Join].
 #' * `cap`: Stroke cap. See [Cap].
@@ -52,9 +52,13 @@ paint <- function(...) {
 dev_new_if_needed <- function() {
   if (grDevices::dev.cur() == 1) {
     ## FIXME: Do we need `is.interactive()` here?
-    rlang::warn("No device has been open. Opened a new one with `grid.null()`.")
+    rlang::warn(
+      "No device has been open. Opened a new one with `grid.null()`.",
+      call = rlang::caller_env()
+    )
     grid::grid.null()
   }
+  invisible(NULL)
 }
 
 #' Device size
@@ -71,13 +75,13 @@ dev_size <- function(units = "px") {
 
 #' Color to RGBA
 #'
-#' A wrapper of [grDevices::col2rgb()].
+#' A wrapper of [colorfast::col_to_rgb()].
 #'
-#' @param color `col` for [grDevices::col2rgb()].
+#' @param color `col` for [colorfast::col_to_rgb()].
 #' @returns An integer vector of length 4.
 #' @export
 col2rgba <- function(color) {
-  as.vector(grDevices::col2rgb(color, alpha = TRUE))[1:4]
+  colorfast::col_to_rgb(color)
 }
 
 default_attrs <- function() {

@@ -14,7 +14,7 @@
 #' registered by the [systemfonts](https://systemfonts.r-lib.org/) package
 #' cannot be specified as the `family` in [paint()].
 #'
-#' @returns A tibble.
+#' @returns A tibble containing `family`.
 #' @export
 list_font_families <- function() {
   ret <- data.frame(

@@ -23,7 +23,7 @@ such as color, stroke width, and transformations.
 The following painting attributes can be specified:
 \itemize{
 \item \code{canvas_size}: Integers of length 2 (width, height).
-\item \code{color}: RGBA representation of a color. This can be specified using named colors or hexadecimal color codes, which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.
+\item \code{color}: RGBA representation of a color. This can be specified using named colors or hexadecimal color codes, which are converted internally using \code{\link[colorfast:col_to_rgb]{colorfast::col_to_rgb()}}.
 \item \code{style}: Paint style. See \link{Style}.
 \item \code{join}: Stroke join. See \link{Join}.
 \item \code{cap}: Stroke cap. See \link{Cap}.

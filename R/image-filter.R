@@ -42,17 +42,17 @@ c.ImageFilter <- function(...) {
 #' @param crop_rect Numerics of length 4 for cropping the filtered image.
 #' @param dst,src `ImageFilter` objects.
 #' @param coef Numerics that represents the coefficients `c(k1, k2, k3, k4)`.
-#' Each output pixel is the result of combining the corresponding `dst` and `src` pixels using these values.
+#'  Each output pixel is the result of combining the corresponding `dst` and `src` pixels using these values.
 #' @param mode [BlendMode].
 #' @param sigma Numerics of length 2 for blur sigma.
 #' @param tile_mode [TileMode].
 #' @param color_mat A 4x5 row-major numeric matrix that represents a color matrix.
-#' Every pixel's color value is multiplied by this matrix in the same way as the [feColorMatrix](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feColorMatrix) SVG filter.
-#' A playground to build color matrices is available [here](https://fecolormatrix.com/).
+#'  Every pixel's color value is multiplied by this matrix in the same way as the [feColorMatrix](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feColorMatrix) SVG filter.
+#'  A playground to build color matrices is available [here](https://fecolormatrix.com/).
 #' @param outer,inner `ImageFilter` objects.
 #' @param radius Numerics of length 2; radius of elipse for dilation and erosion.
 #' @param channels Numerics of length 2 in range of `[0, 3]` (corresponding to R, G, B, or A channel);
-#' color channels to be used along X and Y axes within the source image.
+#'  color channels to be used along X and Y axes within the source image.
 #' @param scale A numeric scalar; displacement scale factor to be used.
 #' @param displacement An `ImageFilter` object that displaces the source image.
 #' @param offset Numerics of length 2 for X and Y offsets.

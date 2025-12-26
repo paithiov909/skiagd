@@ -8,8 +8,8 @@
 #' you must specify a shader as `paint(shader = Shader$color(...))`.
 #'
 #' @param vertices A double matrix where each row is a point.
-#' If `nrow(vertices)` is not a multiple of 3,
-#' the last `nrow(vertices) %% 3` points are ignored.
+#'  If `nrow(vertices)` is not a multiple of 3,
+#'  the last `nrow(vertices) %% 3` points are ignored.
 #' @inheritParams param-img-and-props
 #' @returns A raw vector of picture.
 #' @export

@@ -15,7 +15,7 @@ freeze(img, left = 0, top = 0, fill = "transparent", ..., props = paint())
 
 \item{fill}{RGBA representation of a color.
 This can be specified using named colors or hexadecimal color codes,
-which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.}
+which are converted internally using \code{\link[colorfast:col_to_rgb]{colorfast::col_to_rgb()}}.}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.

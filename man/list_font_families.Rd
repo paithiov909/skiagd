@@ -7,7 +7,7 @@
 list_font_families()
 }
 \value{
-A tibble.
+A tibble containing \code{family}.
 }
 \description{
 Returns font families available on the system.

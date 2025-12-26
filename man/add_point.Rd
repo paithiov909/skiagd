@@ -35,6 +35,6 @@ Add points
 \note{
 \itemize{
 \item \code{sigma}, \code{width}, and \code{color} are applied by each \code{group} for this function.
-They are expected to have the same length as \code{group}, not the same length as \code{point}.
+They are expected to have the same length as \code{unique(group)}, not the same length as \code{point}.
 }
 }

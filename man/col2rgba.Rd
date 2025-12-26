@@ -7,11 +7,11 @@
 col2rgba(color)
 }
 \arguments{
-\item{color}{\code{col} for \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.}
+\item{color}{\code{col} for \code{\link[colorfast:col_to_rgb]{colorfast::col_to_rgb()}}.}
 }
 \value{
 An integer vector of length 4.
 }
 \description{
-A wrapper of \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.
+A wrapper of \code{\link[colorfast:col_to_rgb]{colorfast::col_to_rgb()}}.
 }

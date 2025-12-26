@@ -1,8 +1,8 @@
 #' Add arcs
 #'
 #' @param ltrb A double matrix where each row is a rectangle
-#' LTRB (left, top, right, bottom).
-#' Each rectangle bounds the area of oval containing arc to draw.
+#'  LTRB (left, top, right, bottom).
+#'  Each rectangle bounds the area of oval containing arc to draw.
 #' @param angle A double matrix where each row is a pair of sweeping angles (in degrees).
 #' @param use_center Whether to draw a wedge that includes lines from oval center to arc end points.
 #' @inheritParams param-img-and-props

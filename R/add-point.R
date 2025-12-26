@@ -2,7 +2,7 @@
 #'
 #' @note
 #' * `sigma`, `width`, and `color` are applied by each `group` for this function.
-#' They are expected to have the same length as `group`, not the same length as `point`.
+#' They are expected to have the same length as `unique(group)`, not the same length as `point`.
 #'
 #' @param point A double matrix where each row is a point.
 #' @param group Grouping index for `point`. Each group of points is drawn at the same time.

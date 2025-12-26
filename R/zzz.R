@@ -46,7 +46,10 @@
 validate_length <- function(expected, ...) {
   len <- c(...)
   if (!all(len == expected)) {
-    rlang::abort("Some arguments have different lengths than others.")
+    rlang::abort(
+      "Some arguments have different lengths than others.",
+      call = rlang::caller_env()
+    )
   }
   TRUE
 }
@@ -60,7 +63,8 @@ is_color_mat <- function(x) {
   ret <- is.matrix(x) && nrow(x) == 4
   if (!ret) {
     rlang::warn(
-      "`color` does not seem to be a color matrix. Falling back to the default color of `paint()`."
+      "`color` does not seem to be a color matrix. Falling back to the default color of `paint()`.",
+      call = rlang::caller_env()
     )
   }
   ret
