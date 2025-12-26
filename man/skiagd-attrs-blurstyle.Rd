@@ -5,7 +5,7 @@
 \alias{BlurStyle}
 \title{BlurStyle (0-3)}
 \format{
-An object of class \code{BlurStyle__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 4.
+An object of class \code{skiagd::BlurStyle__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 4.
 }
 \usage{
 BlurStyle

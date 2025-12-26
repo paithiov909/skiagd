@@ -5,7 +5,7 @@
 \alias{Style}
 \title{Style (0-2)}
 \format{
-An object of class \code{Style__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 3.
+An object of class \code{skiagd::Style__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 3.
 }
 \usage{
 Style

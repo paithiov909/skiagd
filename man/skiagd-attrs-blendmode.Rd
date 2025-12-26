@@ -5,7 +5,7 @@
 \alias{BlendMode}
 \title{BlendMode (0-28)}
 \format{
-An object of class \code{BlendMode__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 29.
+An object of class \code{skiagd::BlendMode__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 29.
 }
 \usage{
 BlendMode

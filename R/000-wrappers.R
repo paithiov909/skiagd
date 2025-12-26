@@ -86,7 +86,7 @@ NULL
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_arc` <- function(`size`, `curr_bytes`, `mat`, `props`, `ltrb`, `r`, `use_center`, `angle`, `rsx_trans`, `sigma`, `width`, `color`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
   .Call(savvy_sk_draw_arc__impl, `size`, `curr_bytes`, `mat`, `props`, `ltrb`, `r`, `use_center`, `angle`, `rsx_trans`, `sigma`, `width`, `color`)
 }
 
@@ -104,7 +104,7 @@ NULL
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_atlas` <- function(`size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `rsx_trans`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
   .Call(savvy_sk_draw_atlas__impl, `size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `rsx_trans`)
 }
 
@@ -123,7 +123,7 @@ NULL
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_circle` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`, `sigma`, `width`, `color`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
   .Call(savvy_sk_draw_circle__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`, `sigma`, `width`, `color`)
 }
 
@@ -146,7 +146,7 @@ NULL
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_diff_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `outer_ltrb`, `outer_rx`, `outer_ry`, `inner_ltrb`, `inner_rx`, `inner_ry`, `rsx_trans`, `sigma`, `width`, `color`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
   .Call(savvy_sk_draw_diff_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `outer_ltrb`, `outer_rx`, `outer_ry`, `inner_ltrb`, `inner_rx`, `inner_ry`, `rsx_trans`, `sigma`, `width`, `color`)
 }
 
@@ -166,7 +166,7 @@ NULL
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_line` <- function(`size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`, `sigma`, `width`, `color`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
   .Call(savvy_sk_draw_line__impl, `size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`, `sigma`, `width`, `color`)
 }
 
@@ -185,8 +185,8 @@ NULL
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_path` <- function(`size`, `curr_bytes`, `mat`, `props`, `svg`, `rsx_trans`, `sigma`, `width`, `color`, `fill_type`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  `fill_type` <- .savvy_extract_ptr(`fill_type`, "FillType")
+  `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
+  `fill_type` <- .savvy_extract_ptr(`fill_type`, "skiagd::FillType")
   .Call(savvy_sk_draw_path__impl, `size`, `curr_bytes`, `mat`, `props`, `svg`, `rsx_trans`, `sigma`, `width`, `color`, `fill_type`)
 }
 
@@ -201,7 +201,7 @@ NULL
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_png` <- function(`size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `left_top`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
   .Call(savvy_sk_draw_png__impl, `size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `left_top`)
 }
 
@@ -221,8 +221,8 @@ NULL
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_points` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `group`, `sigma`, `width`, `color`, `mode`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  `mode` <- .savvy_extract_ptr(`mode`, "PointMode")
+  `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
+  `mode` <- .savvy_extract_ptr(`mode`, "skiagd::PointMode")
   .Call(savvy_sk_draw_points__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `group`, `sigma`, `width`, `color`, `mode`)
 }
 
@@ -242,7 +242,7 @@ NULL
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_rounded_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `ltrb`, `rx`, `ry`, `rsx_trans`, `sigma`, `width`, `color`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
   .Call(savvy_sk_draw_rounded_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `ltrb`, `rx`, `ry`, `rsx_trans`, `sigma`, `width`, `color`)
 }
 
@@ -260,7 +260,7 @@ NULL
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_text` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `freeze`, `rsx_trans`, `sigma`, `color`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
   .Call(savvy_sk_draw_text__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `freeze`, `rsx_trans`, `sigma`, `color`)
 }
 
@@ -278,8 +278,8 @@ NULL
 #' @returns A raw vector of picture.
 #' @noRd
 `sk_draw_vertices` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `sigma`, `color`, `mode`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
-  `mode` <- .savvy_extract_ptr(`mode`, "VertexMode")
+  `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
+  `mode` <- .savvy_extract_ptr(`mode`, "skiagd::VertexMode")
   .Call(savvy_sk_draw_vertices__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `sigma`, `color`, `mode`)
 }
 
@@ -290,7 +290,7 @@ NULL
 #' @returns A list.
 #' @noRd
 `sk_get_text_info` <- function(`text`, `props`) {
-  `props` <- .savvy_extract_ptr(`props`, "PaintAttrs")
+  `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
   .Call(savvy_sk_get_text_info__impl, `text`, `props`)
 }
 
@@ -349,7 +349,7 @@ NULL
   e$.ptr <- ptr
 
 
-  class(e) <- c("BlendMode", "savvy_skiagd__sealed")
+  class(e) <- c("skiagd::BlendMode", "BlendMode", "savvy_skiagd__sealed")
   e
 }
 
@@ -428,7 +428,7 @@ NULL
 `BlendMode`$`Luminosity` <- .savvy_wrap_BlendMode(28L)
 
 #' @export
-`$.BlendMode__bundle` <- function(x, name) {
+`$.skiagd::BlendMode__bundle` <- function(x, name) {
   if (!name %in% c("Clear", "Src", "Dst", "SrcOver", "DstOver", "SrcIn", "DstIn", "SrcOut", "DstOut", "SrcATop", "DstATop", "Xor", "Plus", "Modulate", "Screen", "Overlay", "Darken", "Lighten", "ColorDodge", "ColorBurn", "HardLight", "SoftLight", "Difference", "Exclusion", "Multiply", "Hue", "Saturation", "Color", "Luminosity")) {
     stop(paste0("Unknown variant: ", name), call. = FALSE)
   }
@@ -437,7 +437,7 @@ NULL
 }
 
 #' @export
-`[[.BlendMode__bundle` <- function(x, i) {
+`[[.skiagd::BlendMode__bundle` <- function(x, i) {
   if (is.numeric(i)) {
     stop("BlendMode cannot be subset by index", call. = FALSE)
   }
@@ -450,7 +450,7 @@ NULL
 }
 
 #' @export
-`print.BlendMode` <- function(x, ...) {
+`print.skiagd::BlendMode` <- function(x, ...) {
   idx <- x$.ptr + 1L
   label <- c("Clear", "Src", "Dst", "SrcOver", "DstOver", "SrcIn", "DstIn", "SrcOut", "DstOut", "SrcATop", "DstATop", "Xor", "Plus", "Modulate", "Screen", "Overlay", "Darken", "Lighten", "ColorDodge", "ColorBurn", "HardLight", "SoftLight", "Difference", "Exclusion", "Multiply", "Hue", "Saturation", "Color", "Luminosity")[idx]
   if (is.na(label)) {
@@ -464,11 +464,11 @@ NULL
 
 
 
-class(`BlendMode`) <- c("BlendMode__bundle", "savvy_skiagd__sealed")
+class(`BlendMode`) <- c("skiagd::BlendMode__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.BlendMode__bundle` <- function(x, ...) {
-  cat('BlendMode\n')
+`print.skiagd::BlendMode__bundle` <- function(x, ...) {
+  cat('skiagd::BlendMode\n')
 }
 
 ### wrapper functions for BlurStyle
@@ -479,7 +479,7 @@ class(`BlendMode`) <- c("BlendMode__bundle", "savvy_skiagd__sealed")
   e$.ptr <- ptr
 
 
-  class(e) <- c("BlurStyle", "savvy_skiagd__sealed")
+  class(e) <- c("skiagd::BlurStyle", "BlurStyle", "savvy_skiagd__sealed")
   e
 }
 
@@ -508,7 +508,7 @@ class(`BlendMode`) <- c("BlendMode__bundle", "savvy_skiagd__sealed")
 `BlurStyle`$`Inner` <- .savvy_wrap_BlurStyle(3L)
 
 #' @export
-`$.BlurStyle__bundle` <- function(x, name) {
+`$.skiagd::BlurStyle__bundle` <- function(x, name) {
   if (!name %in% c("Normal", "Solid", "Outer", "Inner")) {
     stop(paste0("Unknown variant: ", name), call. = FALSE)
   }
@@ -517,7 +517,7 @@ class(`BlendMode`) <- c("BlendMode__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`[[.BlurStyle__bundle` <- function(x, i) {
+`[[.skiagd::BlurStyle__bundle` <- function(x, i) {
   if (is.numeric(i)) {
     stop("BlurStyle cannot be subset by index", call. = FALSE)
   }
@@ -530,7 +530,7 @@ class(`BlendMode`) <- c("BlendMode__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`print.BlurStyle` <- function(x, ...) {
+`print.skiagd::BlurStyle` <- function(x, ...) {
   idx <- x$.ptr + 1L
   label <- c("Normal", "Solid", "Outer", "Inner")[idx]
   if (is.na(label)) {
@@ -544,11 +544,11 @@ class(`BlendMode`) <- c("BlendMode__bundle", "savvy_skiagd__sealed")
 
 
 
-class(`BlurStyle`) <- c("BlurStyle__bundle", "savvy_skiagd__sealed")
+class(`BlurStyle`) <- c("skiagd::BlurStyle__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.BlurStyle__bundle` <- function(x, ...) {
-  cat('BlurStyle\n')
+`print.skiagd::BlurStyle__bundle` <- function(x, ...) {
+  cat('skiagd::BlurStyle\n')
 }
 
 ### wrapper functions for Cap
@@ -559,7 +559,7 @@ class(`BlurStyle`) <- c("BlurStyle__bundle", "savvy_skiagd__sealed")
   e$.ptr <- ptr
 
 
-  class(e) <- c("Cap", "savvy_skiagd__sealed")
+  class(e) <- c("skiagd::Cap", "Cap", "savvy_skiagd__sealed")
   e
 }
 
@@ -586,7 +586,7 @@ class(`BlurStyle`) <- c("BlurStyle__bundle", "savvy_skiagd__sealed")
 `Cap`$`Square` <- .savvy_wrap_Cap(2L)
 
 #' @export
-`$.Cap__bundle` <- function(x, name) {
+`$.skiagd::Cap__bundle` <- function(x, name) {
   if (!name %in% c("Butt", "Round", "Square")) {
     stop(paste0("Unknown variant: ", name), call. = FALSE)
   }
@@ -595,7 +595,7 @@ class(`BlurStyle`) <- c("BlurStyle__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`[[.Cap__bundle` <- function(x, i) {
+`[[.skiagd::Cap__bundle` <- function(x, i) {
   if (is.numeric(i)) {
     stop("Cap cannot be subset by index", call. = FALSE)
   }
@@ -608,7 +608,7 @@ class(`BlurStyle`) <- c("BlurStyle__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`print.Cap` <- function(x, ...) {
+`print.skiagd::Cap` <- function(x, ...) {
   idx <- x$.ptr + 1L
   label <- c("Butt", "Round", "Square")[idx]
   if (is.na(label)) {
@@ -622,11 +622,11 @@ class(`BlurStyle`) <- c("BlurStyle__bundle", "savvy_skiagd__sealed")
 
 
 
-class(`Cap`) <- c("Cap__bundle", "savvy_skiagd__sealed")
+class(`Cap`) <- c("skiagd::Cap__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.Cap__bundle` <- function(x, ...) {
-  cat('Cap\n')
+`print.skiagd::Cap__bundle` <- function(x, ...) {
+  cat('skiagd::Cap\n')
 }
 
 ### wrapper functions for FillType
@@ -637,7 +637,7 @@ class(`Cap`) <- c("Cap__bundle", "savvy_skiagd__sealed")
   e$.ptr <- ptr
 
 
-  class(e) <- c("FillType", "savvy_skiagd__sealed")
+  class(e) <- c("skiagd::FillType", "FillType", "savvy_skiagd__sealed")
   e
 }
 
@@ -667,7 +667,7 @@ class(`Cap`) <- c("Cap__bundle", "savvy_skiagd__sealed")
 `FillType`$`InverseEvenOdd` <- .savvy_wrap_FillType(3L)
 
 #' @export
-`$.FillType__bundle` <- function(x, name) {
+`$.skiagd::FillType__bundle` <- function(x, name) {
   if (!name %in% c("Winding", "EvenOdd", "InverseWinding", "InverseEvenOdd")) {
     stop(paste0("Unknown variant: ", name), call. = FALSE)
   }
@@ -676,7 +676,7 @@ class(`Cap`) <- c("Cap__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`[[.FillType__bundle` <- function(x, i) {
+`[[.skiagd::FillType__bundle` <- function(x, i) {
   if (is.numeric(i)) {
     stop("FillType cannot be subset by index", call. = FALSE)
   }
@@ -689,7 +689,7 @@ class(`Cap`) <- c("Cap__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`print.FillType` <- function(x, ...) {
+`print.skiagd::FillType` <- function(x, ...) {
   idx <- x$.ptr + 1L
   label <- c("Winding", "EvenOdd", "InverseWinding", "InverseEvenOdd")[idx]
   if (is.na(label)) {
@@ -703,11 +703,11 @@ class(`Cap`) <- c("Cap__bundle", "savvy_skiagd__sealed")
 
 
 
-class(`FillType`) <- c("FillType__bundle", "savvy_skiagd__sealed")
+class(`FillType`) <- c("skiagd::FillType__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.FillType__bundle` <- function(x, ...) {
-  cat('FillType\n')
+`print.skiagd::FillType__bundle` <- function(x, ...) {
+  cat('skiagd::FillType\n')
 }
 
 ### wrapper functions for FontStyle
@@ -718,7 +718,7 @@ class(`FillType`) <- c("FillType__bundle", "savvy_skiagd__sealed")
   e$.ptr <- ptr
 
 
-  class(e) <- c("FontStyle", "savvy_skiagd__sealed")
+  class(e) <- c("skiagd::FontStyle", "FontStyle", "savvy_skiagd__sealed")
   e
 }
 
@@ -747,7 +747,7 @@ class(`FillType`) <- c("FillType__bundle", "savvy_skiagd__sealed")
 `FontStyle`$`BoldItalic` <- .savvy_wrap_FontStyle(3L)
 
 #' @export
-`$.FontStyle__bundle` <- function(x, name) {
+`$.skiagd::FontStyle__bundle` <- function(x, name) {
   if (!name %in% c("Normal", "Bold", "Italic", "BoldItalic")) {
     stop(paste0("Unknown variant: ", name), call. = FALSE)
   }
@@ -756,7 +756,7 @@ class(`FillType`) <- c("FillType__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`[[.FontStyle__bundle` <- function(x, i) {
+`[[.skiagd::FontStyle__bundle` <- function(x, i) {
   if (is.numeric(i)) {
     stop("FontStyle cannot be subset by index", call. = FALSE)
   }
@@ -769,7 +769,7 @@ class(`FillType`) <- c("FillType__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`print.FontStyle` <- function(x, ...) {
+`print.skiagd::FontStyle` <- function(x, ...) {
   idx <- x$.ptr + 1L
   label <- c("Normal", "Bold", "Italic", "BoldItalic")[idx]
   if (is.na(label)) {
@@ -783,11 +783,11 @@ class(`FillType`) <- c("FillType__bundle", "savvy_skiagd__sealed")
 
 
 
-class(`FontStyle`) <- c("FontStyle__bundle", "savvy_skiagd__sealed")
+class(`FontStyle`) <- c("skiagd::FontStyle__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.FontStyle__bundle` <- function(x, ...) {
-  cat('FontStyle\n')
+`print.skiagd::FontStyle__bundle` <- function(x, ...) {
+  cat('skiagd::FontStyle\n')
 }
 
 ### wrapper functions for ImageFilter
@@ -803,7 +803,7 @@ class(`FontStyle`) <- c("FontStyle__bundle", "savvy_skiagd__sealed")
   e$.ptr <- ptr
   e$`get_label` <- `ImageFilter_get_label`(ptr)
 
-  class(e) <- c("ImageFilter", "savvy_skiagd__sealed")
+  class(e) <- c("skiagd::ImageFilter", "ImageFilter", "savvy_skiagd__sealed")
   e
 }
 
@@ -814,20 +814,20 @@ class(`FontStyle`) <- c("FontStyle__bundle", "savvy_skiagd__sealed")
 ### associated functions for ImageFilter
 
 `ImageFilter`$`arithmetic` <- function(`dst`, `src`, `coef`, `crop_rect`) {
-  `dst` <- .savvy_extract_ptr(`dst`, "ImageFilter")
-  `src` <- .savvy_extract_ptr(`src`, "ImageFilter")
+  `dst` <- .savvy_extract_ptr(`dst`, "skiagd::ImageFilter")
+  `src` <- .savvy_extract_ptr(`src`, "skiagd::ImageFilter")
   .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_arithmetic__impl, `dst`, `src`, `coef`, `crop_rect`))
 }
 
 `ImageFilter`$`blend` <- function(`dst`, `src`, `mode`, `crop_rect`) {
-  `dst` <- .savvy_extract_ptr(`dst`, "ImageFilter")
-  `src` <- .savvy_extract_ptr(`src`, "ImageFilter")
-  `mode` <- .savvy_extract_ptr(`mode`, "BlendMode")
+  `dst` <- .savvy_extract_ptr(`dst`, "skiagd::ImageFilter")
+  `src` <- .savvy_extract_ptr(`src`, "skiagd::ImageFilter")
+  `mode` <- .savvy_extract_ptr(`mode`, "skiagd::BlendMode")
   .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_blend__impl, `dst`, `src`, `mode`, `crop_rect`))
 }
 
 `ImageFilter`$`blur` <- function(`sigma`, `tile_mode`, `crop_rect`) {
-  `tile_mode` <- .savvy_extract_ptr(`tile_mode`, "TileMode")
+  `tile_mode` <- .savvy_extract_ptr(`tile_mode`, "skiagd::TileMode")
   .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_blur__impl, `sigma`, `tile_mode`, `crop_rect`))
 }
 
@@ -836,13 +836,13 @@ class(`FontStyle`) <- c("FontStyle__bundle", "savvy_skiagd__sealed")
 }
 
 `ImageFilter`$`compose` <- function(`outer`, `inner`) {
-  `outer` <- .savvy_extract_ptr(`outer`, "ImageFilter")
-  `inner` <- .savvy_extract_ptr(`inner`, "ImageFilter")
+  `outer` <- .savvy_extract_ptr(`outer`, "skiagd::ImageFilter")
+  `inner` <- .savvy_extract_ptr(`inner`, "skiagd::ImageFilter")
   .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_compose__impl, `outer`, `inner`))
 }
 
 `ImageFilter`$`crop` <- function(`crop_rect`, `tile_mode`) {
-  `tile_mode` <- .savvy_extract_ptr(`tile_mode`, "TileMode")
+  `tile_mode` <- .savvy_extract_ptr(`tile_mode`, "skiagd::TileMode")
   .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_crop__impl, `crop_rect`, `tile_mode`))
 }
 
@@ -851,7 +851,7 @@ class(`FontStyle`) <- c("FontStyle__bundle", "savvy_skiagd__sealed")
 }
 
 `ImageFilter`$`displacement_map` <- function(`channels`, `scale`, `displacement`, `crop_rect`) {
-  `displacement` <- .savvy_extract_ptr(`displacement`, "ImageFilter")
+  `displacement` <- .savvy_extract_ptr(`displacement`, "skiagd::ImageFilter")
   .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_displacement_map__impl, `channels`, `scale`, `displacement`, `crop_rect`))
 }
 
@@ -876,16 +876,16 @@ class(`FontStyle`) <- c("FontStyle__bundle", "savvy_skiagd__sealed")
 }
 
 `ImageFilter`$`runtime_shader` <- function(`source`, `uniforms`) {
-  `source` <- .savvy_extract_ptr(`source`, "RuntimeEffect")
+  `source` <- .savvy_extract_ptr(`source`, "skiagd::RuntimeEffect")
   .savvy_wrap_ImageFilter(.Call(savvy_ImageFilter_runtime_shader__impl, `source`, `uniforms`))
 }
 
 
-class(`ImageFilter`) <- c("ImageFilter__bundle", "savvy_skiagd__sealed")
+class(`ImageFilter`) <- c("skiagd::ImageFilter__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.ImageFilter__bundle` <- function(x, ...) {
-  cat('ImageFilter\n')
+`print.skiagd::ImageFilter__bundle` <- function(x, ...) {
+  cat('skiagd::ImageFilter\n')
 }
 
 ### wrapper functions for Join
@@ -896,7 +896,7 @@ class(`ImageFilter`) <- c("ImageFilter__bundle", "savvy_skiagd__sealed")
   e$.ptr <- ptr
 
 
-  class(e) <- c("Join", "savvy_skiagd__sealed")
+  class(e) <- c("skiagd::Join", "Join", "savvy_skiagd__sealed")
   e
 }
 
@@ -923,7 +923,7 @@ class(`ImageFilter`) <- c("ImageFilter__bundle", "savvy_skiagd__sealed")
 `Join`$`Bevel` <- .savvy_wrap_Join(2L)
 
 #' @export
-`$.Join__bundle` <- function(x, name) {
+`$.skiagd::Join__bundle` <- function(x, name) {
   if (!name %in% c("Miter", "Round", "Bevel")) {
     stop(paste0("Unknown variant: ", name), call. = FALSE)
   }
@@ -932,7 +932,7 @@ class(`ImageFilter`) <- c("ImageFilter__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`[[.Join__bundle` <- function(x, i) {
+`[[.skiagd::Join__bundle` <- function(x, i) {
   if (is.numeric(i)) {
     stop("Join cannot be subset by index", call. = FALSE)
   }
@@ -945,7 +945,7 @@ class(`ImageFilter`) <- c("ImageFilter__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`print.Join` <- function(x, ...) {
+`print.skiagd::Join` <- function(x, ...) {
   idx <- x$.ptr + 1L
   label <- c("Miter", "Round", "Bevel")[idx]
   if (is.na(label)) {
@@ -959,11 +959,11 @@ class(`ImageFilter`) <- c("ImageFilter__bundle", "savvy_skiagd__sealed")
 
 
 
-class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
+class(`Join`) <- c("skiagd::Join__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.Join__bundle` <- function(x, ...) {
-  cat('Join\n')
+`print.skiagd::Join__bundle` <- function(x, ...) {
+  cat('skiagd::Join\n')
 }
 
 ### wrapper functions for PaintAttrs
@@ -974,7 +974,7 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
   e$.ptr <- ptr
 
 
-  class(e) <- c("PaintAttrs", "savvy_skiagd__sealed")
+  class(e) <- c("skiagd::PaintAttrs", "PaintAttrs", "savvy_skiagd__sealed")
   e
 }
 
@@ -1009,24 +1009,24 @@ class(`Join`) <- c("Join__bundle", "savvy_skiagd__sealed")
 ### associated functions for PaintAttrs
 
 `PaintAttrs`$`set_attrs` <- function(`color`, `style`, `join`, `cap`, `width`, `miter`, `fontsize`, `family`, `fontface`, `blend_mode`, `blur_style`, `path_effect`, `shader`, `image_filter`) {
-  `style` <- .savvy_extract_ptr(`style`, "Style")
-  `join` <- .savvy_extract_ptr(`join`, "Join")
-  `cap` <- .savvy_extract_ptr(`cap`, "Cap")
-  `fontface` <- .savvy_extract_ptr(`fontface`, "FontStyle")
-  `blend_mode` <- .savvy_extract_ptr(`blend_mode`, "BlendMode")
-  `blur_style` <- .savvy_extract_ptr(`blur_style`, "BlurStyle")
-  `path_effect` <- .savvy_extract_ptr(`path_effect`, "PathEffect")
-  `shader` <- .savvy_extract_ptr(`shader`, "Shader")
-  `image_filter` <- .savvy_extract_ptr(`image_filter`, "ImageFilter")
+  `style` <- .savvy_extract_ptr(`style`, "skiagd::Style")
+  `join` <- .savvy_extract_ptr(`join`, "skiagd::Join")
+  `cap` <- .savvy_extract_ptr(`cap`, "skiagd::Cap")
+  `fontface` <- .savvy_extract_ptr(`fontface`, "skiagd::FontStyle")
+  `blend_mode` <- .savvy_extract_ptr(`blend_mode`, "skiagd::BlendMode")
+  `blur_style` <- .savvy_extract_ptr(`blur_style`, "skiagd::BlurStyle")
+  `path_effect` <- .savvy_extract_ptr(`path_effect`, "skiagd::PathEffect")
+  `shader` <- .savvy_extract_ptr(`shader`, "skiagd::Shader")
+  `image_filter` <- .savvy_extract_ptr(`image_filter`, "skiagd::ImageFilter")
   .savvy_wrap_PaintAttrs(.Call(savvy_PaintAttrs_set_attrs__impl, `color`, `style`, `join`, `cap`, `width`, `miter`, `fontsize`, `family`, `fontface`, `blend_mode`, `blur_style`, `path_effect`, `shader`, `image_filter`))
 }
 
 
-class(`PaintAttrs`) <- c("PaintAttrs__bundle", "savvy_skiagd__sealed")
+class(`PaintAttrs`) <- c("skiagd::PaintAttrs__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.PaintAttrs__bundle` <- function(x, ...) {
-  cat('PaintAttrs\n')
+`print.skiagd::PaintAttrs__bundle` <- function(x, ...) {
+  cat('skiagd::PaintAttrs\n')
 }
 
 ### wrapper functions for PathEffect
@@ -1042,7 +1042,7 @@ class(`PaintAttrs`) <- c("PaintAttrs__bundle", "savvy_skiagd__sealed")
   e$.ptr <- ptr
   e$`get_label` <- `PathEffect_get_label`(ptr)
 
-  class(e) <- c("PathEffect", "savvy_skiagd__sealed")
+  class(e) <- c("skiagd::PathEffect", "PathEffect", "savvy_skiagd__sealed")
   e
 }
 
@@ -1081,8 +1081,8 @@ class(`PaintAttrs`) <- c("PaintAttrs__bundle", "savvy_skiagd__sealed")
 }
 
 `PathEffect`$`sum` <- function(`first`, `second`) {
-  `first` <- .savvy_extract_ptr(`first`, "PathEffect")
-  `second` <- .savvy_extract_ptr(`second`, "PathEffect")
+  `first` <- .savvy_extract_ptr(`first`, "skiagd::PathEffect")
+  `second` <- .savvy_extract_ptr(`second`, "skiagd::PathEffect")
   .savvy_wrap_PathEffect(.Call(savvy_PathEffect_sum__impl, `first`, `second`))
 }
 
@@ -1091,11 +1091,11 @@ class(`PaintAttrs`) <- c("PaintAttrs__bundle", "savvy_skiagd__sealed")
 }
 
 
-class(`PathEffect`) <- c("PathEffect__bundle", "savvy_skiagd__sealed")
+class(`PathEffect`) <- c("skiagd::PathEffect__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.PathEffect__bundle` <- function(x, ...) {
-  cat('PathEffect\n')
+`print.skiagd::PathEffect__bundle` <- function(x, ...) {
+  cat('skiagd::PathEffect\n')
 }
 
 ### wrapper functions for PointMode
@@ -1106,7 +1106,7 @@ class(`PathEffect`) <- c("PathEffect__bundle", "savvy_skiagd__sealed")
   e$.ptr <- ptr
 
 
-  class(e) <- c("PointMode", "savvy_skiagd__sealed")
+  class(e) <- c("skiagd::PointMode", "PointMode", "savvy_skiagd__sealed")
   e
 }
 
@@ -1134,7 +1134,7 @@ class(`PathEffect`) <- c("PathEffect__bundle", "savvy_skiagd__sealed")
 `PointMode`$`Polygon` <- .savvy_wrap_PointMode(2L)
 
 #' @export
-`$.PointMode__bundle` <- function(x, name) {
+`$.skiagd::PointMode__bundle` <- function(x, name) {
   if (!name %in% c("Points", "Lines", "Polygon")) {
     stop(paste0("Unknown variant: ", name), call. = FALSE)
   }
@@ -1143,7 +1143,7 @@ class(`PathEffect`) <- c("PathEffect__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`[[.PointMode__bundle` <- function(x, i) {
+`[[.skiagd::PointMode__bundle` <- function(x, i) {
   if (is.numeric(i)) {
     stop("PointMode cannot be subset by index", call. = FALSE)
   }
@@ -1156,7 +1156,7 @@ class(`PathEffect`) <- c("PathEffect__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`print.PointMode` <- function(x, ...) {
+`print.skiagd::PointMode` <- function(x, ...) {
   idx <- x$.ptr + 1L
   label <- c("Points", "Lines", "Polygon")[idx]
   if (is.na(label)) {
@@ -1170,11 +1170,11 @@ class(`PathEffect`) <- c("PathEffect__bundle", "savvy_skiagd__sealed")
 
 
 
-class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
+class(`PointMode`) <- c("skiagd::PointMode__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.PointMode__bundle` <- function(x, ...) {
-  cat('PointMode\n')
+`print.skiagd::PointMode__bundle` <- function(x, ...) {
+  cat('skiagd::PointMode\n')
 }
 
 ### wrapper functions for RuntimeEffect
@@ -1190,7 +1190,7 @@ class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
   e$.ptr <- ptr
   e$`source` <- `RuntimeEffect_source`(ptr)
 
-  class(e) <- c("RuntimeEffect", "savvy_skiagd__sealed")
+  class(e) <- c("skiagd::RuntimeEffect", "RuntimeEffect", "savvy_skiagd__sealed")
   e
 }
 
@@ -1205,11 +1205,11 @@ class(`PointMode`) <- c("PointMode__bundle", "savvy_skiagd__sealed")
 }
 
 
-class(`RuntimeEffect`) <- c("RuntimeEffect__bundle", "savvy_skiagd__sealed")
+class(`RuntimeEffect`) <- c("skiagd::RuntimeEffect__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.RuntimeEffect__bundle` <- function(x, ...) {
-  cat('RuntimeEffect\n')
+`print.skiagd::RuntimeEffect__bundle` <- function(x, ...) {
+  cat('skiagd::RuntimeEffect\n')
 }
 
 ### wrapper functions for Shader
@@ -1225,7 +1225,7 @@ class(`RuntimeEffect`) <- c("RuntimeEffect__bundle", "savvy_skiagd__sealed")
   e$.ptr <- ptr
   e$`get_label` <- `Shader_get_label`(ptr)
 
-  class(e) <- c("Shader", "savvy_skiagd__sealed")
+  class(e) <- c("skiagd::Shader", "Shader", "savvy_skiagd__sealed")
   e
 }
 
@@ -1236,9 +1236,9 @@ class(`RuntimeEffect`) <- c("RuntimeEffect__bundle", "savvy_skiagd__sealed")
 ### associated functions for Shader
 
 `Shader`$`blend` <- function(`mode`, `dst`, `src`) {
-  `mode` <- .savvy_extract_ptr(`mode`, "BlendMode")
-  `dst` <- .savvy_extract_ptr(`dst`, "Shader")
-  `src` <- .savvy_extract_ptr(`src`, "Shader")
+  `mode` <- .savvy_extract_ptr(`mode`, "skiagd::BlendMode")
+  `dst` <- .savvy_extract_ptr(`dst`, "skiagd::Shader")
+  `src` <- .savvy_extract_ptr(`src`, "skiagd::Shader")
   .savvy_wrap_Shader(.Call(savvy_Shader_blend__impl, `mode`, `dst`, `src`))
 }
 
@@ -1247,7 +1247,7 @@ class(`RuntimeEffect`) <- c("RuntimeEffect__bundle", "savvy_skiagd__sealed")
 }
 
 `Shader`$`conical_gradient` <- function(`start`, `end`, `radii`, `color`, `mode`, `flags`, `transform`) {
-  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  `mode` <- .savvy_extract_ptr(`mode`, "skiagd::TileMode")
   .savvy_wrap_Shader(.Call(savvy_Shader_conical_gradient__impl, `start`, `end`, `radii`, `color`, `mode`, `flags`, `transform`))
 }
 
@@ -1256,22 +1256,22 @@ class(`RuntimeEffect`) <- c("RuntimeEffect__bundle", "savvy_skiagd__sealed")
 }
 
 `Shader`$`from_picture` <- function(`img`, `mode`, `tile_size`, `transform`) {
-  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  `mode` <- .savvy_extract_ptr(`mode`, "skiagd::TileMode")
   .savvy_wrap_Shader(.Call(savvy_Shader_from_picture__impl, `img`, `mode`, `tile_size`, `transform`))
 }
 
 `Shader`$`from_png` <- function(`png_bytes`, `mode`, `transform`) {
-  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  `mode` <- .savvy_extract_ptr(`mode`, "skiagd::TileMode")
   .savvy_wrap_Shader(.Call(savvy_Shader_from_png__impl, `png_bytes`, `mode`, `transform`))
 }
 
 `Shader`$`from_runtime_effect` <- function(`source`, `uniforms`) {
-  `source` <- .savvy_extract_ptr(`source`, "RuntimeEffect")
+  `source` <- .savvy_extract_ptr(`source`, "skiagd::RuntimeEffect")
   .savvy_wrap_Shader(.Call(savvy_Shader_from_runtime_effect__impl, `source`, `uniforms`))
 }
 
 `Shader`$`linear_gradient` <- function(`start`, `end`, `color`, `mode`, `flags`, `transform`) {
-  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  `mode` <- .savvy_extract_ptr(`mode`, "skiagd::TileMode")
   .savvy_wrap_Shader(.Call(savvy_Shader_linear_gradient__impl, `start`, `end`, `color`, `mode`, `flags`, `transform`))
 }
 
@@ -1280,12 +1280,12 @@ class(`RuntimeEffect`) <- c("RuntimeEffect__bundle", "savvy_skiagd__sealed")
 }
 
 `Shader`$`radial_gradient` <- function(`center`, `radius`, `color`, `mode`, `flags`, `transform`) {
-  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  `mode` <- .savvy_extract_ptr(`mode`, "skiagd::TileMode")
   .savvy_wrap_Shader(.Call(savvy_Shader_radial_gradient__impl, `center`, `radius`, `color`, `mode`, `flags`, `transform`))
 }
 
 `Shader`$`sweep_gradient` <- function(`center`, `start_angle`, `end_angle`, `color`, `mode`, `flags`, `transform`) {
-  `mode` <- .savvy_extract_ptr(`mode`, "TileMode")
+  `mode` <- .savvy_extract_ptr(`mode`, "skiagd::TileMode")
   .savvy_wrap_Shader(.Call(savvy_Shader_sweep_gradient__impl, `center`, `start_angle`, `end_angle`, `color`, `mode`, `flags`, `transform`))
 }
 
@@ -1294,11 +1294,11 @@ class(`RuntimeEffect`) <- c("RuntimeEffect__bundle", "savvy_skiagd__sealed")
 }
 
 
-class(`Shader`) <- c("Shader__bundle", "savvy_skiagd__sealed")
+class(`Shader`) <- c("skiagd::Shader__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.Shader__bundle` <- function(x, ...) {
-  cat('Shader\n')
+`print.skiagd::Shader__bundle` <- function(x, ...) {
+  cat('skiagd::Shader\n')
 }
 
 ### wrapper functions for Style
@@ -1309,7 +1309,7 @@ class(`Shader`) <- c("Shader__bundle", "savvy_skiagd__sealed")
   e$.ptr <- ptr
 
 
-  class(e) <- c("Style", "savvy_skiagd__sealed")
+  class(e) <- c("skiagd::Style", "Style", "savvy_skiagd__sealed")
   e
 }
 
@@ -1336,7 +1336,7 @@ class(`Shader`) <- c("Shader__bundle", "savvy_skiagd__sealed")
 `Style`$`Fill` <- .savvy_wrap_Style(2L)
 
 #' @export
-`$.Style__bundle` <- function(x, name) {
+`$.skiagd::Style__bundle` <- function(x, name) {
   if (!name %in% c("StrokeAndFill", "Stroke", "Fill")) {
     stop(paste0("Unknown variant: ", name), call. = FALSE)
   }
@@ -1345,7 +1345,7 @@ class(`Shader`) <- c("Shader__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`[[.Style__bundle` <- function(x, i) {
+`[[.skiagd::Style__bundle` <- function(x, i) {
   if (is.numeric(i)) {
     stop("Style cannot be subset by index", call. = FALSE)
   }
@@ -1358,7 +1358,7 @@ class(`Shader`) <- c("Shader__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`print.Style` <- function(x, ...) {
+`print.skiagd::Style` <- function(x, ...) {
   idx <- x$.ptr + 1L
   label <- c("StrokeAndFill", "Stroke", "Fill")[idx]
   if (is.na(label)) {
@@ -1372,11 +1372,11 @@ class(`Shader`) <- c("Shader__bundle", "savvy_skiagd__sealed")
 
 
 
-class(`Style`) <- c("Style__bundle", "savvy_skiagd__sealed")
+class(`Style`) <- c("skiagd::Style__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.Style__bundle` <- function(x, ...) {
-  cat('Style\n')
+`print.skiagd::Style__bundle` <- function(x, ...) {
+  cat('skiagd::Style\n')
 }
 
 ### wrapper functions for TileMode
@@ -1387,7 +1387,7 @@ class(`Style`) <- c("Style__bundle", "savvy_skiagd__sealed")
   e$.ptr <- ptr
 
 
-  class(e) <- c("TileMode", "savvy_skiagd__sealed")
+  class(e) <- c("skiagd::TileMode", "TileMode", "savvy_skiagd__sealed")
   e
 }
 
@@ -1416,7 +1416,7 @@ class(`Style`) <- c("Style__bundle", "savvy_skiagd__sealed")
 `TileMode`$`Decal` <- .savvy_wrap_TileMode(3L)
 
 #' @export
-`$.TileMode__bundle` <- function(x, name) {
+`$.skiagd::TileMode__bundle` <- function(x, name) {
   if (!name %in% c("Clamp", "Repeat", "Mirror", "Decal")) {
     stop(paste0("Unknown variant: ", name), call. = FALSE)
   }
@@ -1425,7 +1425,7 @@ class(`Style`) <- c("Style__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`[[.TileMode__bundle` <- function(x, i) {
+`[[.skiagd::TileMode__bundle` <- function(x, i) {
   if (is.numeric(i)) {
     stop("TileMode cannot be subset by index", call. = FALSE)
   }
@@ -1438,7 +1438,7 @@ class(`Style`) <- c("Style__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`print.TileMode` <- function(x, ...) {
+`print.skiagd::TileMode` <- function(x, ...) {
   idx <- x$.ptr + 1L
   label <- c("Clamp", "Repeat", "Mirror", "Decal")[idx]
   if (is.na(label)) {
@@ -1452,11 +1452,11 @@ class(`Style`) <- c("Style__bundle", "savvy_skiagd__sealed")
 
 
 
-class(`TileMode`) <- c("TileMode__bundle", "savvy_skiagd__sealed")
+class(`TileMode`) <- c("skiagd::TileMode__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.TileMode__bundle` <- function(x, ...) {
-  cat('TileMode\n')
+`print.skiagd::TileMode__bundle` <- function(x, ...) {
+  cat('skiagd::TileMode\n')
 }
 
 ### wrapper functions for VertexMode
@@ -1467,7 +1467,7 @@ class(`TileMode`) <- c("TileMode__bundle", "savvy_skiagd__sealed")
   e$.ptr <- ptr
 
 
-  class(e) <- c("VertexMode", "savvy_skiagd__sealed")
+  class(e) <- c("skiagd::VertexMode", "VertexMode", "savvy_skiagd__sealed")
   e
 }
 
@@ -1495,7 +1495,7 @@ class(`TileMode`) <- c("TileMode__bundle", "savvy_skiagd__sealed")
 `VertexMode`$`TriangleFan` <- .savvy_wrap_VertexMode(2L)
 
 #' @export
-`$.VertexMode__bundle` <- function(x, name) {
+`$.skiagd::VertexMode__bundle` <- function(x, name) {
   if (!name %in% c("Triangles", "TriangleStrip", "TriangleFan")) {
     stop(paste0("Unknown variant: ", name), call. = FALSE)
   }
@@ -1504,7 +1504,7 @@ class(`TileMode`) <- c("TileMode__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`[[.VertexMode__bundle` <- function(x, i) {
+`[[.skiagd::VertexMode__bundle` <- function(x, i) {
   if (is.numeric(i)) {
     stop("VertexMode cannot be subset by index", call. = FALSE)
   }
@@ -1517,7 +1517,7 @@ class(`TileMode`) <- c("TileMode__bundle", "savvy_skiagd__sealed")
 }
 
 #' @export
-`print.VertexMode` <- function(x, ...) {
+`print.skiagd::VertexMode` <- function(x, ...) {
   idx <- x$.ptr + 1L
   label <- c("Triangles", "TriangleStrip", "TriangleFan")[idx]
   if (is.na(label)) {
@@ -1531,10 +1531,10 @@ class(`TileMode`) <- c("TileMode__bundle", "savvy_skiagd__sealed")
 
 
 
-class(`VertexMode`) <- c("VertexMode__bundle", "savvy_skiagd__sealed")
+class(`VertexMode`) <- c("skiagd::VertexMode__bundle", "savvy_skiagd__sealed")
 
 #' @export
-`print.VertexMode__bundle` <- function(x, ...) {
-  cat('VertexMode\n')
+`print.skiagd::VertexMode__bundle` <- function(x, ...) {
+  cat('skiagd::VertexMode\n')
 }
 

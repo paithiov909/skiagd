@@ -5,7 +5,7 @@
 \alias{FillType}
 \title{FillType (0-3)}
 \format{
-An object of class \code{FillType__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 4.
+An object of class \code{skiagd::FillType__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 4.
 }
 \usage{
 FillType

@@ -5,7 +5,7 @@
 \alias{PointMode}
 \title{PointMode (0-2)}
 \format{
-An object of class \code{PointMode__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 3.
+An object of class \code{skiagd::PointMode__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 3.
 }
 \usage{
 PointMode

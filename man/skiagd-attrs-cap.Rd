@@ -5,7 +5,7 @@
 \alias{Cap}
 \title{Cap (0-2)}
 \format{
-An object of class \code{Cap__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 3.
+An object of class \code{skiagd::Cap__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 3.
 }
 \usage{
 Cap

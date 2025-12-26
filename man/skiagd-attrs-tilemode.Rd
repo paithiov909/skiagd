@@ -5,7 +5,7 @@
 \alias{TileMode}
 \title{TileMode (0-3)}
 \format{
-An object of class \code{TileMode__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 4.
+An object of class \code{skiagd::TileMode__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 4.
 }
 \usage{
 TileMode

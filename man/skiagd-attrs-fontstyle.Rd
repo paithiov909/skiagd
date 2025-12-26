@@ -5,7 +5,7 @@
 \alias{FontStyle}
 \title{FontStyle (0-3)}
 \format{
-An object of class \code{FontStyle__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 4.
+An object of class \code{skiagd::FontStyle__bundle} (inherits from \code{savvy_skiagd__sealed}) of length 4.
 }
 \usage{
 FontStyle
