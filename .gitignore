@@ -4,3 +4,5 @@
 configure.log
 
 /.quarto/
+
+**/*.quarto_ipynb

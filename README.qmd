@@ -1,8 +1,8 @@
 ---
 title: skiagd
 format: gfm
-fig-width: 16
-fig-height: 9
+fig-width: 8
+fig-height: 4.5
 knitr:
   opts_chunk:
     dev: "ragg_png"
@@ -19,222 +19,159 @@ knitr:
 [![R-CMD-check](https://github.com/paithiov909/skiagd/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/paithiov909/skiagd/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-skiagd is a toy R wrapper for [rust-skia](https://github.com/rust-skia/rust-skia) (the Rust crate [skia_safe](https://rust-skia.github.io/doc/skia_safe/), a binding for [Skia](https://skia.org/)).
+[skiagd](https://github.com/paithiov909/skiagd) is an experimental drawing library for R that wraps [rust-skia](https://github.com/rust-skia/rust-skia) (the Rust crate [skia_safe](https://rust-skia.github.io/doc/skia_safe/), a binding for [Skia](https://skia.org/)).
 
-Despite its name, this package is intended as a drawing library, not a graphics device for R 😓
+## Installation
 
-
-## Design notes
-
-- This is not a graphics device. skiagd does not allow R's session to hold a reference to a canvas object on Rust side.
-- Drawing functions return a [picture](https://shopify.github.io/react-native-skia/docs/shapes/pictures/) as a `raw` object every time it's called. `add_*` puts those data onto canvas, actually ***adds*** some shapes to there, and then returns a `raw` object again.
-
-
-## Roadmap
-
-I'm planning to re-implement features like [React Native Skia](https://shopify.github.io/react-native-skia/).
-
-### Implemented
-
-- Shapes
-  - Path
-    - [x] SVG notation (path)
-  - Polygons
-    - [x] Rect (round_rect)
-    - [x] DiffRect (drrect)
-    - [x] Line
-    - [x] Points (points; not point)
-  - Ellipses
-    - [x] Circle
-    - [x] Oval / Arc
-  - Others
-    - [x] Vertices
-    - [x] Atlas
-- Images
-  - [x] PNG
-- Text
-  - [x] Text Blob
-- Painting Attributes ([Paint](https://rust-skia.github.io/doc/skia_safe/type.Paint.html))
-  - [x] Path Effects
-  - [x] Mask Filter (blur)
-  - [x] Shaders
-  - [ ] Image Filters / Runtime Shaders
-    - [x] SkSL and [uniforms](https://rust-skia.github.io/doc/skia_safe/runtime_effect/type.RuntimeShaderBuilder.html#method.set_uniform_int) support
-    - [ ] `*_lit_diffuse` and `*_lit_specular`
-
-### Not planned
-
-- Shapes
-  - Patch
-- Text
-  - Paragraph
-  - Text Path
-- Fitting Images (needs to re-implement [this](https://github.com/Shopify/react-native-skia/blob/4192f839d7ffc5cb0aba91c0f0f97e595d5c8409/packages/skia/cpp/api/recorder/ImageFit.h))
-- [Color Filters](https://shopify.github.io/react-native-skia/docs/color-filters) (only `skia_safe::image_filters::color_filter` is available)
-- [Group](https://shopify.github.io/react-native-skia/docs/group/) / [Backdrop Filters](https://shopify.github.io/react-native-skia/docs/backdrops-filters)
-- [Mask](https://shopify.github.io/react-native-skia/docs/mask/)
-
-
-## Showcase
-
-It's still in early stage. The API is subject to change.
-
-```{r}
-#| label: test-plot-1
-pkgload::load_all(export_all = FALSE)
-
-set.seed(1234)
-size <- dev_size("px")
-n_circles <- 250
-
-img_data <-
-  canvas("snow") |>
-  add_line(
-    matrix(c(runif(300, 0, size[1]), runif(300, 0, size[2])), ncol = 2),
-    matrix(c(runif(300, 0, size[1]), runif(300, 0, size[2])), ncol = 2),
-    props = paint(color = "#fff28166", width = 6)
-  ) |>
-  add_circle(
-    matrix(c(runif(n_circles, 0, size[1]), runif(n_circles, 0, size[2])), ncol = 2),
-    runif(n_circles, 6, 50),
-    props = paint(color = "#81ffb366", blend_mode = BlendMode$Multiply)
-  ) |>
-  add_circle(
-    matrix(c(runif(n_circles, 0, size[1]), runif(n_circles, 0, size[2])), ncol = 2),
-    runif(n_circles, 20, 60),
-    props = paint(color = "#f281ff66", blend_mode = BlendMode$Exclusion)
-  ) |>
-  add_path(
-    "M 128 0 L 168 80 L 256 93 L 192 155 L 207 244 L 128 202 L 49 244 L 64 155 L 0 93 L 88 80 L 128 0 Z",
-    rsx_trans = matrix(c(1, 0, size[1] / 2 - 128, size[2] / 2 - 128, 0, 0), ncol = 6),
-    props = paint(color = "gold")
-  ) |>
-  add_png(
-    canvas("transparent") |>
-      add_text(
-        "Hello, skiagd!",
-        rsx_trans = text_info("Hello, skiagd!", props = paint(fontsize = 96, family = "mono")) |>
-          dplyr::reframe(
-            sc = rep_len(1, n_chars),
-            rot = rep_len(0, n_chars),
-            x = width / n_chars * (seq_len(n_chars) - 1),
-            y = rep_len(96, n_chars),
-            ax = rep_len(0, n_chars),
-            ay = rep_len(0, n_chars),
-            .by = id
-          ) |>
-          dplyr::select(!"id") |>
-          as.matrix(),
-        props = paint(fontsize = 96, family = "mono", fontface = FontStyle$Bold, color = "maroon")
-      ) |>
-      as_png(),
-    left = size[1] / 2 - text_info("Hello, skiagd!", props = paint(fontsize = 96))[["width"]] / 2,
-    top = size[2] / 9 * 6
-  ) |>
-  as_png()
-
-## `as_png()` returns a PNG image with alpha channel as a raw vector.
-## You can save it to a PNG file using `writeBin()`.
-# writeBin(img_data, "man/figures/README-test-plot.png")
-
-## Here we convert it to JPEG to save file size.
-magick::image_read(img_data) |>
-  magick::image_scale("720") |>
-  magick::image_convert("jpeg") |>
-  magick::image_write("man/figures/README-test-plot-1.jpg")
-```
-
-![README-test-plot-1](man/figures/README-test-plot-1.jpg)
-
-
-```{r}
-#| label: test-plot-2
-img_data <-
-  canvas("darkslateblue") |>
-  add_rect(
-    matrix(c(0, 0, size[1], size[2]), ncol = 4),
-    props = paint(
-      blend_mode = BlendMode$Lighten,
-      sytle = Style$Fill,
-      shader = Shader$conical_gradient(
-        c(size[1] / 2 * .8, size[2] / 2 * .8),
-        c(size[1] / 2 * .2, size[2] / 2 * .2),
-        c(size[1] / 2 * .8, size[1] / 2 * .2),
-        color = col2rgba(c("blueviolet", "skyblue")),
-        mode = TileMode$Clamp,
-        flags = FALSE,
-        transform = c(1, 0, 0, 0, 1, 0, 0, 0, 1)
-      )
-    )
-  ) |>
-  add_circle(
-    matrix(c(size[1] / 2, size[2]), ncol = 2), size[1] * .4,
-    props = paint(
-      blend_mode = BlendMode$HardLight,
-      style = Style$Stroke,
-      cap = Cap$Square,
-      path_effect = PathEffect$line_2d(12, c(12, 0, 0, 0, 32, 0, 0, 0, 1)),
-      shader = Shader$sweep_gradient(
-        c(size[1] / 2, size[2]),
-        0, 360,
-        color = col2rgba(c("magenta", "gold")),
-        mode = TileMode$Clamp,
-        flags = FALSE,
-        transform = c(1, 0, 0, 0, 1, 0, 0, 0, 1)
-      )
-    )
-  ) |>
-  as_png()
-
-magick::image_read(img_data) |>
-  magick::image_scale("720") |>
-  magick::image_convert("jpeg") |>
-  magick::image_write("man/figures/README-test-plot-2.jpg")
-```
-
-![README-test-plot-2](man/figures/README-test-plot-2.jpg)
-
-
-The following is a short animation of 'Mystery rose'. The code is based on [this post](https://georgemsavva.github.io/creativecoding/posts/mystery/).
+Due to the limitation of the upstream prebuilt binaries, it is available only for Linux and macOS.
+To build from source, it requires freetype, fontconfig, and the Rust toolchain.
 
 ```r
-library(gifski)
-
-circle <- function(amp, freq, phase) {
-  amp * 1i^(freq * seq(0, 600, length.out = 260) + phase)
-}
-li <- seq(0, 1, length.out = 30)[-1]
-
-size <- c(120, 120) / 2
-trans <- matrix(c(20, 0, size[1], 0, 20, size[2], 0, 0, 1), ncol = 3)
-
-save_gif(lapply(seq_along(li), function(ai) {
-  a <- li[ai] * 5
-  l <- sin(pi * (2 * a - .5)) + 1
-
-  z <- circle(1, 1, 0) +
-    circle(l, ceiling(a), -8 * a) +
-    circle(l / 2 - 1, ceiling(((-a + 2.5) %% 5) - 5), -4 * a)
-  z2 <- c(z[-1], z[1])
-
-  hue <- (a + (Re(z / 10))) %% 1
-  colors <- grDevices::hsv(hue, 0.65, 1, alpha = 1)
-
-  canvas("#04010F") |>
-    add_circle(
-      matrix(c(Re(z), Im(z), rep_len(1, length(z))), ncol = 3) %*% trans,
-      rep_len(2, length(z)),
-      color = col2rgba(colors)
-    ) |>
-    add_line(
-      matrix(c(Re(z), Im(z), rep_len(1, length(z))), ncol = 3) %*% trans,
-      matrix(c(Re(z2), Im(z2), rep_len(1, length(z))), ncol = 3) %*% trans,
-      width = rep(0.1 + seq(0, 1, length.out = length(z) / 10), each = 10),
-      color = col2rgba(colors)
-    ) |>
-    draw_img()
-
-}), delay = 1 / 6, width = 120, height = 120, progress = TRUE)
+remotes::install_github("paithiov909/skiagd")
 ```
 
-<img src="man/figures/animation.gif" alt="mystery-rose" width="50%" />
+## Examples
+
+### Overview
+
+skiagd takes a pipeline‑oriented philosophy similar to [ggplot2](https://ggplot2.tidyverse.org/) but directs it at pure graphics rather than data visualisation.
+In a skiagd pipeline, there are three main steps to draw an image:
+
+1. **Create a canvas** with a background colour. The call `canvas()` returns a new [picture](https://shopify.github.io/react-native-skia/docs/shapes/pictures/) object that represents the drawing state.
+2. **Compose shapes** by piping calls to `add_*()` functions. Each `add_*()` call takes the current picture, adds shapes to it, and returns a new picture. The picture object always remains a recipe of drawing commands, no pixels are produced at this stage.
+3. **Render the picture**. To convert a picture into pixels you can call...
+   1. `draw_img()` to draw to the current graphics device
+   2. `as_nativeraster()` to obtain a nativeRaster for plotting in base R
+   3. `as_png()` to obtain a PNG as a raw vector
+
+Despite its name, skiagd presents itself as a toy wrapper and does not behave like an R graphics device. The package is meant to draw images independently of R's graphics device system.
+
+### Paiting Attributes
+
+Skia exposes a rich set of [painting attributes](https://rust-skia.github.io/doc/skia_safe/type.Paint.html) that control how shapes appear when drawn. In skiagd, you can specify these attributes via the `paint()` function and pass the resulting object to the `props` argument of `add_*()`.
+Unspecified attributes inherit defaults, many of which follow the current graphics device's settings.
+
+The following example illustrates a basic drawing pipeline.
+
+```{r}
+#| label: example-rose-curve
+library(skiagd)
+
+rad <- function(deg) deg * (pi / 180)
+
+# Canvas size in pixels (from the current graphics device)
+cv_size <- dev_size()
+
+# Generate coordinates for a rose curve
+rose <-
+  dplyr::tibble(
+    i = seq_len(360),
+    r = 120 * abs(sin(rad(4 * i)))
+  ) |>
+  dplyr::reframe(
+    x = r * cos(rad(360 * i / 360)) + cv_size[1] / 2,
+    y = r * sin(rad(360 * i / 360)) + cv_size[2] / 2,
+    z = 1
+  )
+
+canvas("violetred") |>
+  add_point(
+    as.matrix(rose),
+    props = paint(
+      color = "white",
+      width = 3,
+      point_mode = PointMode$Polygon,
+    )
+  ) |>
+  draw_img()
+```
+
+Here we first generate coordinates for a simple rose curve and then draw it with a single call to `add_point()`. We supply the points as a matrix and specify painting attributes via `paint()`. Here we set the colour to `"white"`, the line width to `3` pixels and use `PointMode$Polygon` to connect successive points. And finally, we call `draw_img()` to render the picture on the current device.
+
+### Showcase
+
+The following example, inspired by [this blog post](https://georgemsavva.github.io/creativecoding/posts/mystery/), demonstrates how skiagd can be used to create a more practical artwork.
+
+```{r}
+#| label: example-create-pngs
+#| fig-width: 8
+#| fig-height: 6
+cv_size <- dev_size()
+cv_size
+
+n_frames <- 720
+n_circles <- 50
+radius <- runif(n_circles, min = .25, max = 2) |> sort()
+trans <- matrix(c(60, 0, cv_size[1] / 2, 0, 60, cv_size[2] / 2, 0, 0, 1), ncol = 3)
+
+circle <- function(amp, freq, phase) {
+  amp * 1i^(freq * seq(0, 600, length.out = n_circles) + phase)
+}
+
+dir <- tempdir()
+imgs <- purrr::imap_chr(seq(0, 4 * pi, length.out = n_frames + 1)[-1], function(a, i) {
+  # Compute a stack of circles with changing amplitudes and phases
+  l <- sin(pi * (2 * a - .5)) + 1
+  z <- circle(pi / 6, -pi, 0) +
+    circle(l, ceiling(a), -9 * cos(a) + 1) +
+    circle(l / 2 - 1, ceiling((-a + (7 / 2)) %% 7) - 7, -7 * cos(a) + 1)
+  z2 <- c(z[-1], z[1])
+
+  hue <- (a + (Re(z / pi))) %% 1
+  colours <- grDevices::hsv(hue, .66, .75, alpha = 1)
+
+  # Build one frame
+  png <- canvas("#04010F") |>
+    add_circle(
+      cbind(Re(z), Im(z), 1) %*% trans,
+      radius = log(max(cv_size), exp(.5)) * radius,
+      color = col2rgba(colours),
+      props = paint(
+        style = Style$Fill,
+        blend_mode = BlendMode$Plus,
+      ),
+    ) |>
+    as_png()
+
+  fp <- file.path(dir, sprintf("%04d.png", i))
+  writeBin(png, fp)
+  fp
+})
+```
+
+The animation consists of multiple rotating circles whose radii and phases change over time. You don't need to understand the details of the trigonometry here, the key takeaway is that you can compute complex coordinates in R, pipe them into `add_circle()` and `add_line()`, and then assemble the frames into a GIF using [gifski](https://github.com/r-rust/gifski).
+
+```r
+# Combine frames into a GIF (30 fps)
+gifski::gifski(
+  imgs,
+  "mystery-circles.gif",
+  width  = cv_size[1],
+  height = cv_size[2],
+  delay  = 1 / 30
+)
+```
+
+The frames in the GIF look like this:
+
+```{r}
+#| label: example-mystery-curves
+#| fig-height: 12
+#| fig-width: 5
+#| echo: false
+library(ggplot2)
+showcase <-
+  purrr::imap(seq(1, n_frames, by = 30), \(f, i) {
+    png <- fastpng::read_png(imgs[f], type = "nativeraster")
+    patchwork::wrap_elements(full = png) +
+      labs(title = sprintf("Frame %d", i)) +
+      theme(plot.title = element_text(color = "hotpink"))
+  }) |>
+  patchwork::wrap_plots(ncol = 3, byrow = FALSE)
+
+print(showcase)
+```
+
+## License
+
+MIT License.
