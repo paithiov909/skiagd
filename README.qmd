@@ -174,7 +174,7 @@ showcase <-
 print(showcase)
 ```
 
-## Further readings
+## Further Readings
 
 * [Rediscover Fragment Shaders in R, with skiagd](https://paithiov909.github.io/shiryo/rediscover-shaders-in-r/)
 * [R言語でのアート制作・Rtistryを考える (Japanese)](https://zenn.dev/paithiov909/articles/skiagd-rtistry)

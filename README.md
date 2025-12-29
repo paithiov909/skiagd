@@ -181,7 +181,7 @@ The frames in the GIF look like this:
 style="width:100.0%"
 data-fig-alt="Frames of the mystery-circles GIF animation. Each frame consists of colorful circles that rotating over time in black background." />
 
-## Further readings
+## Further Readings
 
 - [Rediscover Fragment Shaders in R, with
   skiagd](https://paithiov909.github.io/shiryo/rediscover-shaders-in-r/)
