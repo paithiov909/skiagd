@@ -28,7 +28,5 @@ typically used for perspective transformations,
 though in most affine transformations, it remains as \code{c(0, 0, 1)}.
 }
 \seealso{
-\itemize{
-\item \href{https://rust-skia.github.io/doc/skia_safe/matrix/struct.Matrix.html}{Matrix in skia_safe::matrix - Rust}
-}
+\href{https://rust-skia.github.io/doc/skia_safe/matrix/struct.Matrix.html}{Matrix in skia_safe::matrix - Rust}
 }

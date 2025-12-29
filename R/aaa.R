@@ -87,7 +87,7 @@ NULL
 #' though in most affine transformations, it remains as `c(0, 0, 1)`.
 #'
 #' @seealso
-#' * [Matrix in skia_safe::matrix - Rust](https://rust-skia.github.io/doc/skia_safe/matrix/struct.Matrix.html)
+#' [Matrix in skia_safe::matrix - Rust](https://rust-skia.github.io/doc/skia_safe/matrix/struct.Matrix.html)
 #' @rdname transform-matrix
 #' @name transform-matrix
 NULL
