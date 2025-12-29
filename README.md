@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![rust-skia-version](https://img.shields.io/badge/skia--bindings-v0.88.0-orange)](https://github.com/rust-skia/rust-skia/releases/tag/0.88.0)
+[![rust-skia-version](https://img.shields.io/badge/skia--bindings-v0.91.1-orange)](https://github.com/rust-skia/rust-skia/releases/tag/0.91.1)
 [![R-CMD-check](https://github.com/paithiov909/skiagd/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/paithiov909/skiagd/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
