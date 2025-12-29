@@ -52,10 +52,10 @@ Despite its name, skiagd presents itself as a toy R wrapper for
 rust-skia and does not behave like a graphics device. The package is
 meant to draw images independently of R’s graphics device system.
 
-### Paiting Attributes
+### Painting Attributes
 
 Skia exposes a rich set of [painting
-attributes](https://rust-skia.github.io/doc/skia_safe/type.Paint.html)
+attributes](https://paithiov909.r-universe.dev/skiagd/doc/manual.html#paint)
 that control how shapes appear when drawn. In skiagd, you can specify
 these attributes via the `paint()` function and pass the resulting
 object to the `props` argument of `add_*()`. Unspecified attributes
@@ -67,7 +67,7 @@ The following example illustrates a basic drawing pipeline.
 ``` r
 library(skiagd)
 
-rad <- function(deg) deg * (pi / 180)
+rad <- \(deg) deg * (pi / 180)
 
 # Canvas size in pixels (from the current graphics device)
 cv_size <- dev_size()
@@ -105,7 +105,7 @@ it with a single call to `add_point()`. We supply the points as a matrix
 and specify painting attributes via `paint()`. Here we set the colour to
 `"white"`, the line width to `3` pixels and use `PointMode$Polygon` to
 connect successive points. And finally, we call `draw_img()` to render
-the picture on the current device.
+the picture on the current graphics device.
 
 ### Showcase
 
@@ -123,12 +123,12 @@ n_circles <- 50
 radius <- runif(n_circles, min = .25, max = 2) |> sort()
 trans <- matrix(c(60, 0, cv_size[1] / 2, 0, 60, cv_size[2] / 2, 0, 0, 1), ncol = 3)
 
-circle <- function(amp, freq, phase) {
+circle <- \(amp, freq, phase) {
   amp * 1i^(freq * seq(0, 600, length.out = n_circles) + phase)
 }
 
 dir <- tempdir()
-imgs <- purrr::imap_chr(seq(0, 4 * pi, length.out = n_frames + 1)[-1], function(a, i) {
+imgs <- purrr::imap_chr(seq(0, 4 * pi, length.out = n_frames + 1)[-1], \(a, i) {
   # Compute a stack of circles with changing amplitudes and phases
   l <- sin(pi * (2 * a - .5)) + 1
   z <- circle(pi / 6, -pi, 0) +
@@ -177,9 +177,16 @@ gifski::gifski(
 
 The frames in the GIF look like this:
 
-<img src="man/figures/README-example-mystery-curves-1.png"
+<img src="man/figures/README-example-mystery-circles-1.png"
 style="width:100.0%"
 data-fig-alt="Frames of the mystery-circles GIF animation. Each frame consists of colorful circles that rotating over time in black background." />
+
+## Further readings
+
+- [Rediscover Fragment Shaders in R, with
+  skiagd](https://paithiov909.github.io/shiryo/rediscover-shaders-in-r/)
+- [R言語でのアート制作・Rtistryを考える
+  (Japanese)](https://zenn.dev/paithiov909/articles/skiagd-rtistry)
 
 ## License
 
