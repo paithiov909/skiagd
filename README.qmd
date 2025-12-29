@@ -116,7 +116,6 @@ imgs <- purrr::imap_chr(seq(0, 4 * pi, length.out = n_frames + 1)[-1], \(a, i) {
   z <- circle(pi / 6, -pi, 0) +
     circle(l, ceiling(a), -9 * cos(a) + 1) +
     circle(l / 2 - 1, ceiling((-a + (7 / 2)) %% 7) - 7, -7 * cos(a) + 1)
-  z2 <- c(z[-1], z[1])
 
   hue <- (a + (Re(z / pi))) %% 1
   colours <- grDevices::hsv(hue, .66, .75, alpha = 1)
