@@ -164,7 +164,7 @@ showcase <-
   purrr::imap(seq(1, n_frames, by = 30), \(f, i) {
     png <- fastpng::read_png(imgs[f], type = "nativeraster")
     patchwork::wrap_elements(full = png) +
-      labs(title = sprintf("Frame %d", i)) +
+      labs(title = sprintf("Frame %d", f)) +
       theme(plot.title = element_text(color = "hotpink"))
   }) |>
   patchwork::wrap_plots(ncol = 3, byrow = FALSE)
