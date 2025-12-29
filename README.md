@@ -45,13 +45,12 @@ three main steps to draw an image:
 3.  **Render the picture**. To convert a picture into pixels you can
     call…
     1.  `draw_img()` to draw to the current graphics device
-    2.  `as_nativeraster()` to obtain a nativeRaster for plotting in
-        base R
+    2.  `as_nativeraster()` to obtain a nativeRaster
     3.  `as_png()` to obtain a PNG as a raw vector
 
-Despite its name, skiagd presents itself as a toy wrapper and does not
-behave like an R graphics device. The package is meant to draw images
-independently of R’s graphics device system.
+Despite its name, skiagd presents itself as a toy R wrapper for
+rust-skia and does not behave like a graphics device. The package is
+meant to draw images independently of R’s graphics device system.
 
 ### Paiting Attributes
 
