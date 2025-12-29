@@ -97,7 +97,8 @@ canvas("violetred") |>
 ```
 
 <img src="man/figures/README-example-rose-curve-1.png"
-style="width:100.0%" />
+style="width:100.0%"
+data-fig-alt="A white rose curve drawn with skiagd, in violetred background" />
 
 Here we first generate coordinates for a simple rose curve and then draw
 it with a single call to `add_point()`. We supply the points as a matrix
@@ -160,9 +161,8 @@ imgs <- purrr::imap_chr(seq(0, 4 * pi, length.out = n_frames + 1)[-1], function(
 The animation consists of multiple rotating circles whose radii and
 phases change over time. You don’t need to understand the details of the
 trigonometry here, the key takeaway is that you can compute complex
-coordinates in R, pipe them into `add_circle()` and `add_line()`, and
-then assemble the frames into a GIF using
-[gifski](https://github.com/r-rust/gifski).
+coordinates in R, pipe them into `add_circle()`, and then assemble the
+frames into a GIF using [gifski](https://github.com/r-rust/gifski).
 
 ``` r
 # Combine frames into a GIF (30 fps)
@@ -178,7 +178,8 @@ gifski::gifski(
 The frames in the GIF look like this:
 
 <img src="man/figures/README-example-mystery-curves-1.png"
-style="width:100.0%" />
+style="width:100.0%"
+data-fig-alt="Frames of the mystery-circles GIF animation. Each frame consists of colorful circles that rotating over time in black background." />
 
 ## License
 
