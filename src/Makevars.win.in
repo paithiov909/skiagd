@@ -13,7 +13,8 @@ STATLIB = $(LIBDIR)/libskiagd.a
 # https://github.com/rust-skia/rust-skia/blob/master/skia-bindings/build_support/platform/windows.rs#L90-L101
 PKG_CONFIG_NAME = fontconfig
 PKG_CONFIG ?= $(BINPREF)pkg-config
-PKG_LIBS = -L$(LIBDIR) -lskiagd \
+PKG_CPPFLAGS = -D_REENTRANT
+PKG_LIBS = -L$(LIBDIR) -lskiagd -lpthread \
 	-ladvapi32 -luserenv -lbcrypt -lntdll \
 	-lusp10 -luser32 -lgdi32 -lfontsub \
 	$(shell $(PKG_CONFIG) --libs $(PKG_CONFIG_NAME))
