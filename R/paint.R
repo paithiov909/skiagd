@@ -49,18 +49,6 @@ paint <- function(...) {
   ret
 }
 
-dev_new_if_needed <- function() {
-  if (grDevices::dev.cur() == 1) {
-    ## FIXME: Do we need `is.interactive()` here?
-    rlang::warn(
-      "No device has been open. Opened a new one with `grid.null()`.",
-      call = rlang::caller_env()
-    )
-    grid::grid.null()
-  }
-  invisible(NULL)
-}
-
 #' Device size
 #'
 #' Just returns the size of the current device as integers.
@@ -69,7 +57,6 @@ dev_new_if_needed <- function() {
 #' @returns An integer vector.
 #' @export
 dev_size <- function(units = "px") {
-  dev_new_if_needed()
   as.integer(grDevices::dev.size(units))
 }
 
@@ -85,7 +72,6 @@ col2rgba <- function(color) {
 }
 
 default_attrs <- function() {
-  dev_new_if_needed()
   props <- unclass(grid::get.gpar())
   list(
     canvas_size = dev_size(),
