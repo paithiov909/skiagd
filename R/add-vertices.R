@@ -16,7 +16,7 @@
 add_vertices <- function(img, vertices, ..., props = paint()) {
   vertices <- vertices[seq_len(nrow(vertices) - (nrow(vertices) %% 3)), ]
   if (rlang::is_empty(vertices)) {
-    rlang::abort("Requires at least 3 vertices.")
+    cli::cli_abort("Requires at least 3 vertices.")
   }
   dots <- rlang::list2(...)
   color <- dots[["color"]]

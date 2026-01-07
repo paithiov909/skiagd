@@ -25,7 +25,7 @@ add_text <- function(
   props = paint()
 ) {
   if (anyNA(text)) {
-    rlang::abort("`text` cannot contain NA.")
+    cli::cli_abort("`text` cannot contain NA.")
   }
   dots <- rlang::list2(...)
   sigma <- dots[["sigma"]]

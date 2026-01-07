@@ -31,7 +31,7 @@
   rlang::try_fetch(
     rlang::eval_tidy(lhs, data = list(time = time)),
     error = function(e) {
-      rlang::warn("Failed to evaluate lhs.", parent = e)
+      cli::cli_warn("Failed to evaluate lhs.", parent = e)
     }
   )
   invisible(ret)
@@ -46,7 +46,7 @@
 validate_length <- function(expected, ...) {
   len <- c(...)
   if (!all(len == expected)) {
-    rlang::abort(
+    cli::cli_abort(
       "Some arguments have different lengths than others.",
       call = rlang::caller_env()
     )
@@ -62,7 +62,7 @@ validate_length <- function(expected, ...) {
 is_color_mat <- function(x) {
   ret <- is.matrix(x) && nrow(x) == 4
   if (!ret) {
-    rlang::warn(
+    cli::cli_warn(
       "`color` does not seem to be a color matrix. Falling back to the default color of `paint()`.",
       call = rlang::caller_env()
     )
