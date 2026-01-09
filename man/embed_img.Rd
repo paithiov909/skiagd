@@ -2,15 +2,18 @@
 % Please edit documentation in R/png.R
 \name{embed_img}
 \alias{embed_img}
+\alias{data_uri}
 \title{Embed an image as HTML}
 \usage{
-embed_img(filename, max_size = 4 * 1024^2, browsable = TRUE, ...)
+embed_img(x, max_size = 4 * 1024^2, browsable = TRUE, ...)
+
+data_uri(x, max_size = 4 * 1024^2, ...)
 }
 \arguments{
-\item{filename}{Path to an image file.}
+\item{x}{File path or raw image data.}
 
 \item{max_size}{Maximum allowed file size in bytes.
-If \code{NULL}, file size checking is disabled.}
+If \code{NULL}, size checking is disabled.}
 
 \item{browsable}{Logical.
 Whether to wrap the result in \code{htmltools::browsable()}.}
@@ -18,16 +21,21 @@ Whether to wrap the result in \code{htmltools::browsable()}.}
 \item{...}{Additional attributes passed to \code{htmltools::tags$img()}.}
 }
 \value{
-An HTML object representing an embedded image.
+\itemize{
+\item \code{embed_img()} returns an HTML object.
+\item \code{data_uri()} returns a data URI string.
+}
 }
 \description{
 Embeds an image file as a base64-encoded HTML \verb{<img>} tag.
 
-The image file is read from disk, encoded as a data URI, and wrapped in a
-browsable HTML object.
+For string input, the image file is read from disk,
+encoded as a data URI, and wrapped in an HTML object.
+For raw input, the image data is directly embedded in an HTML object,
+assuming it is a valid PNG image data.
 }
 \details{
 This function is designed as a lightweight helper for visualization and
 documentation purposes. It does not perform any image decoding itself and
-relies on the file being readable by \code{base64enc::dataURI()}.
+relies on the input being readable by \code{base64enc::dataURI()}.
 }
