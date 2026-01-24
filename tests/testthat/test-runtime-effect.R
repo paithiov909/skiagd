@@ -1,5 +1,5 @@
 # to prevent opening default graphics device
-dev <- grDevices::png(tempfile(fileext = ".png"), width = 720, height = 576)
+dev <- grDevices::png(nullfile(), width = 720, height = 576)
 on.exit(dev.off())
 
 test_that("ImageFilter$runtime_shader throws an error when uniforms are invalid or mismatched", {
