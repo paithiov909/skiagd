@@ -130,7 +130,7 @@ imgs <- purrr::imap_chr(seq(0, 4 * pi, length.out = n_frames + 1)[-1], \(a, i) {
       props = paint(
         style = Style$Fill,
         blend_mode = BlendMode$Plus,
-      ),
+      )
     ) |>
     as_png()
 
