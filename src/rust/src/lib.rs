@@ -42,24 +42,20 @@ fn sk_as_nativeraster(
     let pixmap = image
         .peek_pixels()
         .ok_or_else(|| return savvy_err!("Failed to peek pixels."))?;
-    let width = pixmap.width() as usize;
-    let row_pixels = (pixmap.row_bytes() as usize) / std::mem::size_of::<u32>();
 
     let pixels = pixmap
-        .pixels::<u32>()
-        .ok_or_else(|| return savvy_err!("Failed to read pixels"))?;
+        .bytes()
+        .ok_or_else(|| return savvy_err!("Failed to read pixel bytes"))?;
+
     let data: Vec<i32> = pixels
-        .chunks(row_pixels)
-        .take(width)
-        .flat_map(|row| {
-            row.iter().map(|&px| {
-                let a = px >> 24;
-                let r = (px >> 16) & 0xFF;
-                let g = (px >> 8) & 0xFF;
-                let b = px & 0xFF;
-                let col = (a << 24) | (b << 16) | (g << 8) | r;
-                col as i32
-            })
+        .chunks(4)
+        .map(|p| {
+            let b = p[0] as u32;
+            let g = p[1] as u32;
+            let r = p[2] as u32;
+            let a = p[3] as u32;
+            let col: u32 = (a << 24) | (b << 16) | (g << 8) | r;
+            col as i32
         })
         .collect();
 
