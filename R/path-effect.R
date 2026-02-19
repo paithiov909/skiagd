@@ -48,7 +48,7 @@ c.PathEffect <- function(...) {
 #' @param path A string scalar of SVG notation to replicate.
 #' @param advance A numeric scalar; space between instances of path.
 #' @param style A string scalar; how to transform path at each point.
-#' Can be `"translate"`, `"rotate"`, or `"morph"`.
+#'  Can be `"translate"`, `"rotate"`, or `"morph"`.
 #' @param transform Numerics of length 9; transformation matrix.
 #' @param width A numeric scalar; width of the path to be stamped.
 #'

@@ -7,24 +7,33 @@
 draw_img(img, ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of picture.}
+\item{img}{A raw vector of a serialized Skia picture.}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
-\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+\item \code{color} must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
 \code{img} is returned invisibly.
 }
 \description{
-Plot picture as a raster
+Converts \code{img} to a \code{nativeRaster} and draws it using
+\code{\link[grid:grid.raster]{grid::grid.raster()}} with \code{interpolate = TRUE}.
+
+Linear interpolation is therefore applied by default. This produces
+smoother edges (e.g., for circles and diagonal shapes), at the cost of
+slightly slower rendering. If you prefer a faster but more blocky result,
+you can manually call \code{\link[grid:grid.raster]{grid::grid.raster()}} with \code{interpolate = FALSE}
+on the output of \code{\link[=as_nativeraster]{as_nativeraster()}}.
+
+See the examples in \code{\link[=as_nativeraster]{as_nativeraster()}} for a comparison.
 }

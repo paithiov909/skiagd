@@ -7,34 +7,108 @@
 add_point(img, point, group = rep_len(1, nrow(point)), ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of picture.}
+\item{img}{A raw vector of a serialized Skia picture.}
 
-\item{point}{A double matrix where each row is a point.}
+\item{point}{A numeric matrix (or a data-frame-like object) with two numeric
+columns (x and y), where each row is a point.}
 
-\item{group}{Grouping index for \code{point}. Each group of points is drawn at the same time.}
+\item{group}{A vector of grouping indices for \code{point}. Points are split into
+groups and drawn group-by-group. Note that grouping is based on consecutive
+runs of the same value (see Details).}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
-\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+\item \code{color} must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector of picture.
+A raw vector containing a serialized picture.
 }
 \description{
-Add points
+Draws grouped point sequences using Skia's batched point API.
 }
-\note{
+\details{
+This function draws one shape per group, where each group is a consecutive run
+in \code{group} (because grouping is implemented via \code{\link[=rle]{rle()}}). If the same group id
+appears in multiple non-consecutive runs, they are treated as separate groups.
+
+The drawing behavior for each group is controlled by \code{props[["point_mode"]]}:
 \itemize{
-\item \code{sigma}, \code{width}, and \code{color} are applied by each \code{group} for this function.
-They are expected to have the same length as \code{unique(group)}, not the same length as \code{point}.
+\item \code{PointMode$Points}: draws the group's points.
+\item \code{PointMode$Lines}: draws line segments through the group's points.
+\item \code{PointMode$Polygon}: draws a polygon from the group's points.
+}
+
+The attributes \code{sigma}, \code{width}, and \code{color} can be supplied via \code{...}.
+They are applied per group, so their lengths must match the number of groups
+(i.e., \code{length(rle(group)$values)}). If not supplied, they are taken from \code{props}
+and recycled to all groups.
+}
+\examples{
+\dontrun{
+rad <- \(deg) deg * (pi / 180)
+
+cv_size <- dev_size()
+
+# Generate coordinates for a rose curve
+rose <-
+  dplyr::tibble(
+    i = seq_len(360),
+    r = 120 * abs(sin(rad(4 * i)))
+  ) |>
+  dplyr::reframe(
+    id = i,
+    x = r * cos(rad(360 * i / 360)) + cv_size[1] / 2,
+    y = r * sin(rad(360 * i / 360)) + cv_size[2] / 2,
+    .by = id
+  )
+
+# Points (color per group; here, one point per group => color per point)
+canvas("white") |>
+  add_point(
+    dplyr::select(rose, x, y),
+    group = dplyr::pull(rose, id),
+    color = seq(0, 1, length.out = nrow(rose)) |>
+      grDevices::hsv(1, 1, 1) |>
+      col2rgba(),
+    props = paint(width = 3)
+  ) |>
+  draw_img()
+
+# Lines (one polyline per group)
+rose2 <-
+  dplyr::reframe(
+    rose,
+    x = c(cv_size[1] / 2, x),
+    y = c(cv_size[2] / 2, y),
+    .by = id
+  )
+canvas("white") |>
+  add_point(
+    dplyr::select(rose2, x, y),
+    group = dplyr::pull(rose2, id),
+    color = unique(dplyr::pull(rose2, id) / nrow(rose)) |>
+      grDevices::hsv(1, 1, 1) |>
+      col2rgba(),
+    props = paint(point_mode = PointMode$Lines, width = 1)
+  ) |>
+  draw_img()
+
+# Polygon (a single polygon from all points)
+canvas("white") |>
+  add_point(
+    dplyr::select(rose, x, y),
+    group = rep_len(1, nrow(rose)),
+    props = paint(point_mode = PointMode$Polygon, width = 3, color = "hotpink")
+  ) |>
+  draw_img()
 }
 }

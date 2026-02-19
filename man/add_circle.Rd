@@ -7,28 +7,54 @@
 add_circle(img, center, radius, ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of picture.}
+\item{img}{A raw vector of a serialized Skia picture.}
 
-\item{center}{A double matrix where each row is circle center.}
+\item{center}{A numeric matrix (or a data-frame-like object)
+with 2 columns (x and y),
+where each row represents the center of a circle.}
 
-\item{radius}{Numerics of circle radius.}
+\item{radius}{A numeric vector of radii, one for each circle.}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
-\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+\item \code{color} must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector of picture.
+A raw vector containing a serialized picture.
 }
 \description{
-Add circles
+Adds one or more circles to an existing picture.
+}
+\details{
+The number of circles is determined by \code{nrow(center)}. The length of \code{radius}
+must match this number.
+
+The drawing attributes \code{sigma}, \code{width}, and \code{color} can be supplied via \code{...}.
+If they are not supplied, they are taken from \code{props} and recycled to all circles.
+}
+\examples{
+\dontrun{
+circles <-
+ dplyr::tibble(
+   x = c(100, 300),
+   y = c(100, 200),
+   radius = c(40, 60)
+ )
+
+canvas("white") |>
+  add_circle(
+    center = dplyr::select(circles, x, y),
+    radius = dplyr::pull(circles, radius)
+  ) |>
+  draw_img()
+}
 }

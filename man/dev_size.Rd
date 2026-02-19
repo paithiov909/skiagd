@@ -2,7 +2,7 @@
 % Please edit documentation in R/paint.R
 \name{dev_size}
 \alias{dev_size}
-\title{Device size}
+\title{Get the size of the current graphics device}
 \usage{
 dev_size(units = "px")
 }
@@ -10,8 +10,8 @@ dev_size(units = "px")
 \item{units}{\code{units} for \code{\link[grDevices:dev.size]{grDevices::dev.size()}}.}
 }
 \value{
-An integer vector.
+An integer vector of length 2 (width, height).
 }
 \description{
-Just returns the size of the current device as integers.
+Just returns the size of the current graphics device as integers.
 }

@@ -12,16 +12,16 @@
 #' The following painting attributes can be specified:
 #'
 #' * `canvas_size`: Integers of length 2 (width, height).
-#' * `color`: RGBA representation of a color. This can be specified using named colors or hexadecimal color codes, which are converted internally using [colorfast::col_to_rgb()].
+#' * `color`: An RGBA color specification (integers of length 4). This can be also specified using named colors or hexadecimal color codes, which are converted using [col2rgba()].
 #' * `style`: Paint style. See [Style].
 #' * `join`: Stroke join. See [Join].
 #' * `cap`: Stroke cap. See [Cap].
 #' * `width`: A numeric scalar (stroke width).
 #' * `miter`: A numeric scalar (stroke miter).
 #' * `fontsize`: A numeric scalar (font size).
-#' * `family`: Font family name.
+#' * `family`: Font family name. You can list available font families using [list_font_families()].
 #' * `fontface`: Font face. See [FontStyle].
-#' * `sigma`: Default value for blur sigma.
+#' * `sigma`: A numeric scalar. Default value for blur sigma.
 #' * `blur_style`: [BlurStyle] for a blur mask filter applied to the shape.
 #' * `blend_mode`: See [BlendMode].
 #' * `path_effect`: See [PathEffect].
@@ -33,7 +33,7 @@
 #' * `transform`: Numerics of length 9. See [transform-matrix] for affine transformations.
 #'
 #' @returns A list containing the specified painting attributes,
-#' merged with default values.
+#'  merged with default values.
 #' @export
 paint <- function(...) {
   dots <- rlang::list2(...)
@@ -49,23 +49,23 @@ paint <- function(...) {
   ret
 }
 
-#' Device size
+#' Get the size of the current graphics device
 #'
-#' Just returns the size of the current device as integers.
+#' Just returns the size of the current graphics device as integers.
 #'
 #' @param units `units` for [grDevices::dev.size()].
-#' @returns An integer vector.
+#' @returns An integer vector of length 2 (width, height).
 #' @export
 dev_size <- function(units = "px") {
   as.integer(grDevices::dev.size(units))
 }
 
-#' Color to RGBA
+#' Convert colors to a matrix of RGBA integers
 #'
 #' A wrapper of [colorfast::col_to_rgb()].
 #'
 #' @param color `col` for [colorfast::col_to_rgb()].
-#' @returns An integer vector of length 4.
+#' @returns An integer matrix with 4 rows (RGBA) and N columns (the same length as `color`).
 #' @export
 col2rgba <- function(color) {
   colorfast::col_to_rgb(color)
@@ -96,7 +96,11 @@ default_attrs <- function() {
     width = props[["lwd"]],
     miter = props[["linemitre"]],
     fontsize = props[["fontsize"]],
-    family = ifelse(props[["fontfamily"]] == "", "sans", props[["fontfamily"]]),
+    family = if (props[["fontfamily"]] == "") {
+      "sans"
+    } else {
+      props[["fontfamily"]]
+    },
     fontface = switch(
       as.character(props[["font"]]),
       "1" = env_get(FontStyle, "Normal"),

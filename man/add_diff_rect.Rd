@@ -16,41 +16,115 @@ add_diff_rect(
 )
 }
 \arguments{
-\item{img}{A raw vector of picture.}
+\item{img}{A raw vector of a serialized Skia picture.}
 
-\item{outer, inner}{A double matrix where each row is a rectangle
-LTRB (left, top, right, bottom).}
+\item{outer, inner}{A numeric matrix (or a data-frame-like object)
+with 4 numeric columns (left, top, right, bottom),
+where each row represents a rectangle.}
 
-\item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
+\item{rsx_trans}{A numeric matrix (or a data-frame-like object)
+with 6 columns where each row represents an RSX transform.
 Each column of the matrix corresponds to:
 \itemize{
 \item scale
 \item angle of rotation (in radians)
 \item amount of translation in the X-axis direction
 \item amount of translation in the Y-axis direction
-\item X coordinate of the anchor point
-\item Y coordinate of the anchor point
+\item X coordinate offset for the anchor point
+\item Y coordinate offset for the anchor point
 }}
 
-\item{outer_radii, inner_radii}{A double matrix where each row is a pair of axis lengths
-on X-axis and Y-axis of oval describing rounded corners.}
+\item{outer_radii, inner_radii}{A numeric matrix (or data-frame-like object)
+with 2 numeric columns (x and y),
+where each row represents the corner radii of a rounded rectangle.}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
-\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+\item \code{color} must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector of picture.
+A raw vector containing a serialized picture.
 }
 \description{
-Add difference rectangles
+Adds one or more difference rectangles (outer minus inner), optionally with
+rounded corners.
+}
+\details{
+The number of shapes is determined by \code{nrow(outer)}. The numbers of rows of
+\code{inner}, \code{rsx_trans}, \code{outer_radii}, and \code{inner_radii},
+and the lengths of \code{sigma} and \code{width} (and the number of columns of \code{color}) must match this number.
+
+The drawing attributes \code{sigma}, \code{width}, and \code{color} can be supplied via \code{...}.
+If they are not supplied, they are taken from \code{props} and recycled to all shapes.
+}
+\note{
+\itemize{
+\item As with \code{\link[=add_rect]{add_rect()}}, Skia's rounded rectangle does not support rotation.
+If the rotation angle in \code{rsx_trans} is not zero, this function will error.
+To draw rotated rectangles or more general shapes, use \code{\link[=add_path]{add_path()}}.
+}
+}
+\examples{
+\dontrun{
+# Shift rectangles by modifying coordinates directly
+ltrb <-
+  dplyr::tibble(
+    lo = c(60, 280),
+    to = c(60, 60),
+    ro = c(240, 460),
+    bo = c(200, 200),
+    li = c(100, 320),
+    ti = c(100, 100),
+    ri = c(200, 420),
+    bi = c(160, 160)
+  )
+
+canvas("white") |>
+  add_diff_rect(
+    outer = dplyr::select(ltrb, lo, to, ro, bo),
+    inner = dplyr::select(ltrb, li, ti, ri, bi),
+    outer_radii = matrix(c(16, 16), nrow(ltrb), 2, byrow = TRUE),
+    inner_radii = matrix(c(8, 8), nrow(ltrb), 2, byrow = TRUE)
+  ) |>
+  draw_img()
+
+# Use the same geometry and translate via `rsx_trans`
+ltrb <-
+  dplyr::tibble(
+    lo = rep_len(60, 2),
+    to = rep_len(60, 2),
+    ro = rep_len(240, 2),
+    bo = rep_len(200, 2),
+    li = rep_len(100, 2),
+    ti = rep_len(100, 2),
+    ri = rep_len(200, 2),
+    bi = rep_len(160, 2)
+  )
+rsx_trans <-
+  dplyr::tibble(
+    sc = 1,
+    rot = 0,
+    tx = c(0, 220),
+    ty = c(0, 0),
+    ax = 0,
+    ay = 0
+  )
+
+canvas("white") |>
+  add_diff_rect(
+    outer = dplyr::select(ltrb, lo, to, ro, bo),
+    inner = dplyr::select(ltrb, li, ti, ri, bi),
+    rsx_trans = rsx_trans
+  ) |>
+  draw_img()
+}
 }

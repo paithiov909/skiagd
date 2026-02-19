@@ -5,30 +5,31 @@
 \alias{param-rsx-trans}
 \title{Params for drawing functions}
 \arguments{
-\item{img}{A raw vector of picture.}
+\item{img}{A raw vector of a serialized Skia picture.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
-\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+\item \code{color} must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
 
-\item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
+\item{rsx_trans}{A numeric matrix (or a data-frame-like object)
+with 6 columns where each row represents an RSX transform.
 Each column of the matrix corresponds to:
 \itemize{
 \item scale
 \item angle of rotation (in radians)
 \item amount of translation in the X-axis direction
 \item amount of translation in the Y-axis direction
-\item X coordinate of the anchor point
-\item Y coordinate of the anchor point
+\item X coordinate offset for the anchor point
+\item Y coordinate offset for the anchor point
 }}
 }
 \description{

@@ -7,33 +7,39 @@
 freeze(img, left = 0, top = 0, fill = "transparent", ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of picture.}
+\item{img}{A raw vector of a serialized Skia picture.}
 
-\item{left}{Left offset for drawing PNG image.}
+\item{left}{A numeric scalar giving the horizontal offset (in pixels) where the
+rasterized image is drawn on the new canvas. Negative values are allowed.}
 
-\item{top}{Top offset for drawing PNG image.}
+\item{top}{A numeric scalar giving the vertical offset (in pixels) where the
+rasterized image is drawn on the new canvas. Negative values are allowed.}
 
-\item{fill}{RGBA representation of a color.
-This can be specified using named colors or hexadecimal color codes,
-which are converted internally using \code{\link[colorfast:col_to_rgb]{colorfast::col_to_rgb()}}.}
+\item{fill}{An RGBA color specification for the background fill of the new canvas.
+You can provide a named color or a hexadecimal color code, which is converted
+using \code{\link[=col2rgba]{col2rgba()}}.}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
-\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+\item \code{color} must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector of picture.
+A raw vector containing a serialized picture.
 }
 \description{
-\code{as_png(img, props)} and then adds it to a new canvas
-with the default blend mode (\code{BlendMode$SrcOver}).
+Rasterizes a picture into a PNG and adds it to a new canvas.
+
+This is equivalent to \code{as_png(img, props = props)} and then drawing the
+resulting PNG onto a fresh canvas using \code{\link[=add_png]{add_png()}} with the default blend mode
+(\code{BlendMode$SrcOver}). It can be used to reduce the number of recorded drawing
+operations in a picture.
 }

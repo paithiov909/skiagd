@@ -7,19 +7,39 @@
 svg_interpolate(t, first, second)
 }
 \arguments{
-\item{t}{A numeric vector of weights in range \verb{(0, 1)}.
-If it is inbetween or outside the range, the path is interpolated.}
+\item{t}{A numeric vector of interpolation weights. Values between 0 and 1
+produce intermediate paths; values outside this range are wrapped.}
 
-\item{first}{A string scalar of SVG notation.}
+\item{first}{A string scalar of an SVG path notation (the \code{d} attribute syntax).}
 
-\item{second}{A string scalar of SVG notation.}
+\item{second}{A string scalar of an SVG path notation (the \code{d} attribute syntax).}
 }
 \value{
-A character vector of SVG notations interpolated.
+A character vector of SVG path notations interpolated.
 }
 \description{
-Interpolates between two SVG paths of equal length.
-If the paths are not interpolatable, an error is thrown.
+Interpolates between two SVG paths that are compatible for morphing.
+}
+\details{
+This function returns intermediate paths between \code{first} and \code{second} using
+weights \code{t}. Paths must be interpolatable (e.g., compatible command sequences);
+otherwise an error is thrown.
+}
+\examples{
+trans <- matrix(c(1, 0, -50, 0, 1, -50, 0, 0, 1), 3, 3)
+first <- svg_transform(R"(
+ M10 18 H40 M18 10 V40
+ M90 18 H60 M82 10 V40
+ M10 82 H40 M18 90 V60
+ M90 82 H60 M82 90 V60
+)", trans)
+second <- svg_transform(R"(
+ M12 22 H44 M22 12 V44
+ M88 22 H56 M78 12 V44
+ M12 78 H44 M22 88 V56
+ M88 78 H56 M78 88 V56
+)", trans)
+svg_interpolate(seq(-2, 2, length.out = 10), first, second)
 }
 \seealso{
 Other path-utils: 

@@ -7,30 +7,32 @@
 add_png(img, png, left = 0, top = 0, ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of picture.}
+\item{img}{A raw vector of a serialized Skia picture.}
 
-\item{png}{A raw vector of PNG image.}
+\item{png}{A raw vector of a PNG image.}
 
-\item{left}{Left offset for drawing PNG image.}
+\item{left}{A numeric scalar giving the horizontal offset (in pixels) of the
+PNG's top-left corner from the canvas origin. Negative values are allowed.}
 
-\item{top}{Top offset for drawing PNG image.}
+\item{top}{A numeric scalar giving the vertical offset (in pixels) of the
+PNG's top-left corner from the canvas origin. Negative values are allowed.}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
-\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+\item \code{color} must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector of picture.
+A raw vector containing a serialized picture.
 }
 \description{
-Add PNG image to canvas
+Draws a PNG image onto an existing picture.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/paint.R
 \name{col2rgba}
 \alias{col2rgba}
-\title{Color to RGBA}
+\title{Convert colors to a matrix of RGBA integers}
 \usage{
 col2rgba(color)
 }
@@ -10,7 +10,7 @@ col2rgba(color)
 \item{color}{\code{col} for \code{\link[colorfast:col_to_rgb]{colorfast::col_to_rgb()}}.}
 }
 \value{
-An integer vector of length 4.
+An integer matrix with 4 rows (RGBA) and N columns (the same length as \code{color}).
 }
 \description{
 A wrapper of \code{\link[colorfast:col_to_rgb]{colorfast::col_to_rgb()}}.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/add-path.R
 \name{add_path}
 \alias{add_path}
-\title{Add paths}
+\title{Add SVG paths}
 \usage{
 add_path(
   img,
@@ -13,19 +13,21 @@ add_path(
 )
 }
 \arguments{
-\item{img}{A raw vector of picture.}
+\item{img}{A raw vector of a serialized Skia picture.}
 
-\item{path}{Characters of SVG notations like \code{"M10 10 H 90 V 90 H 10 L 10 10"}.}
+\item{path}{A character vector of SVG path notations (the \code{d} attribute syntax),
+e.g. \code{"M45 10 H55 V45 H90 V55 H55 V90 H45 V55 H10 V45 H45 Z"}.}
 
-\item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
+\item{rsx_trans}{A numeric matrix (or a data-frame-like object)
+with 6 columns where each row represents an RSX transform.
 Each column of the matrix corresponds to:
 \itemize{
 \item scale
 \item angle of rotation (in radians)
 \item amount of translation in the X-axis direction
 \item amount of translation in the Y-axis direction
-\item X coordinate of the anchor point
-\item Y coordinate of the anchor point
+\item X coordinate offset for the anchor point
+\item Y coordinate offset for the anchor point
 }}
 
 \item{...}{For some drawing functions, you can specify
@@ -33,17 +35,55 @@ Each column of the matrix corresponds to:
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
-\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+\item \code{color} must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector of picture.
+A raw vector containing a serialized picture with the added paths.
 }
 \description{
-Add paths
+Adds one or more SVG paths to an existing picture.
+
+Each path is given as a string in the SVG \code{d}-attribute syntax, and can be
+positioned by providing an RSX transform per path via \code{rsx_trans}.
+}
+\details{
+The number of paths is determined by \code{length(path)}. The number of rows of
+\code{rsx_trans}, and the lengths of \code{sigma} and \code{width} (and the number of columns
+of \code{color}) must match this number.
+
+The drawing attributes \code{sigma}, \code{width}, and \code{color} can be supplied via \code{...}.
+If they are not supplied, they are taken from \code{props} and recycled to all paths.
+
+The \link{FillType} for closed paths is taken from \code{props[["fill_type"]]}
+and applied to all paths.
+}
+\examples{
+\dontrun{
+# Single path
+canvas("white") |>
+  add_path("M45 10 H55 V45 H90 V55 H55 V90 H45 V55 H10 V45 H45 Z") |>
+  draw_img()
+
+# Place the same path multiple times using `rsx_trans`
+path <- rep("M45 10 H55 V45 H90 V55 H55 V90 H45 V55 H10 V45 H45 Z", 3)
+rsx_trans <-
+  dplyr::tibble(
+    sc = 1,
+    rot = 0,
+    tx = c(0, 120, 0),
+    ty = c(0, 0, 120),
+    ax = 1,
+    ay = 1
+  )
+
+canvas("white") |>
+  add_path(path, rsx_trans = rsx_trans) |>
+  draw_img()
+}
 }

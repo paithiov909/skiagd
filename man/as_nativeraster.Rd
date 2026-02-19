@@ -2,37 +2,53 @@
 % Please edit documentation in R/native-raster.R
 \name{as_nativeraster}
 \alias{as_nativeraster}
-\title{Convert picture into native raster}
+\title{Convert picture into a native raster}
 \usage{
 as_nativeraster(img, ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of picture.}
+\item{img}{A raw vector of a serialized Skia picture.}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
-\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+\item \code{color} must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A native raster.
+A \code{nativeRaster} object.
 }
 \description{
-Convert picture into native raster
+Converts \code{img} to an integer matrix with class \code{nativeRaster}.
 }
-\note{
-This function returns integer matrices of \code{nativeRaster} class,
-but they do not strictly conform to R's native raster specification.
+\details{
+In base R, a \code{nativeRaster} object conventionally stores
+colors with \emph{\strong{non-premultiplied}} alpha
+(RGB channels are independent of the alpha channel).
 
-Since skiagd internally uses premultiplied alpha,
-these native raster objects may look different
-than the expected PNG image if the alpha channel is not fully opaque.
+In contrast, skiagd renders internally with \emph{\strong{premultiplied}} alpha,
+and the resulting pixel values are returned as-is.
+
+When such a raster is drawn onto an R graphics device
+(e.g., via \code{\link[grid:grid.raster]{grid::grid.raster()}}),
+the device composites the image with its background color.
+If the alpha channel is not fully opaque (< 255),
+this extra alpha blending can change the apparent colors compared
+with what you would expect from the output of \code{\link[=as_png]{as_png()}}.
+}
+\examples{
+\dontrun{
+img <- canvas("navy") |>
+ as_nativeraster()
+
+grid::grid.newpage()
+grid::grid.raster(img, interpolate = FALSE)
+}
 }

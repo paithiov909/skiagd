@@ -7,28 +7,59 @@
 add_line(img, from, to, ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of picture.}
+\item{img}{A raw vector of a serialized Skia picture.}
 
-\item{from}{A double matrix where each row is a start point.}
+\item{from}{A numeric matrix (or a data-frame-like object)
+with 2 columns (x and y)
+where each row represents the start point of a line segment.}
 
-\item{to}{A double matrix where each row is an end point.}
+\item{to}{A numeric matrix (or a data-frame-like object)
+with 2 columns (x and y),
+where each row represents the end point of a line segment.}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
-\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+\item \code{color} must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector of picture.
+A raw vector containing a serialized picture.
 }
 \description{
-Add lines
+Adds one or more line segments to an existing picture.
+}
+\details{
+The number of line segments is determined by \code{nrow(from)}. The number of rows
+of \code{to}, and the lengths of \code{sigma} and \code{width} (and the number of columns of
+\code{color}) must match this number.
+
+The drawing attributes \code{sigma}, \code{width}, and \code{color} can be supplied via \code{...}.
+If they are not supplied, they are taken from \code{props} and recycled to all line
+segments.
+}
+\examples{
+\dontrun{
+lines <-
+  dplyr::tibble(
+    x0 = c(50, 50),
+    y0 = c(50, 250),
+    x1 = c(350, 350),
+    y1 = c(50, 250)
+  )
+
+canvas("white") |>
+  add_line(
+    from = dplyr::select(lines, x0, y0),
+    to = dplyr::select(lines, x1, y1)
+  ) |>
+  draw_img()
+}
 }

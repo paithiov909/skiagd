@@ -15,43 +15,118 @@ add_arc(
 )
 }
 \arguments{
-\item{img}{A raw vector of picture.}
+\item{img}{A raw vector of a serialized Skia picture.}
 
-\item{ltrb}{A double matrix where each row is a rectangle
-LTRB (left, top, right, bottom).
-Each rectangle bounds the area of oval containing arc to draw.}
+\item{ltrb}{A numeric matrix (or a data-frame-like object)
+with 4 numeric columns (left, top, right, bottom),
+where each row defines the bounding box of the oval that contains the arc.}
 
-\item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
+\item{rsx_trans}{A numeric matrix (or a data-frame-like object)
+with 6 columns where each row represents an RSX transform.
 Each column of the matrix corresponds to:
 \itemize{
 \item scale
 \item angle of rotation (in radians)
 \item amount of translation in the X-axis direction
 \item amount of translation in the Y-axis direction
-\item X coordinate of the anchor point
-\item Y coordinate of the anchor point
+\item X coordinate offset for the anchor point
+\item Y coordinate offset for the anchor point
 }}
 
-\item{angle}{A double matrix where each row is a pair of sweeping angles (in degrees).}
+\item{angle}{A numeric matrix (or a data-frame-like object)
+with 2 numeric columns giving the sweep angles (in degrees) for each arc.}
 
-\item{use_center}{Whether to draw a wedge that includes lines from oval center to arc end points.}
+\item{use_center}{A logical value indicating whether to draw the wedge edges,
+i.e., lines from the oval center to the arc end points (like a "Pac-Man" wedge).}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
-\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+\item \code{color} must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector of picture.
+A raw vector containing a serialized picture.
 }
 \description{
-Add arcs
+Adds one or more elliptical arcs to an existing picture.
+}
+\details{
+The number of arcs is determined by \code{nrow(ltrb)}. The number of rows of
+\code{rsx_trans} and \code{angle}, and the lengths of \code{sigma} and \code{width} (and the number
+of columns of \code{color}) must match this number.
+
+The drawing attributes \code{sigma}, \code{width}, and \code{color} can be supplied via \code{...}.
+If they are not supplied, they are taken from \code{props} and recycled to all arcs.
+
+When \code{use_center = TRUE} and the sweep in \code{angle} describes a full circle
+(e.g., \code{c(0, 360)}), the geometry includes the wedge edges from the oval's
+rightmost point toward the center. Depending on \code{style}, this may be filled
+and thus not visually apparent.
+}
+\note{
+\itemize{
+\item Arcs are drawn from an oval specified by a rounded rectangle internally,
+and this geometry does not support rotation.
+If the rotation angle in \code{rsx_trans} is not zero, this function will error.
+To draw rotated arcs or more general shapes, use \code{\link[=add_path]{add_path()}} instead.
+}
+}
+\examples{
+\dontrun{
+# Arrange arcs by shifting coordinates in `ltrb`
+arcs <-
+ dplyr::tibble(
+   l = c(60, 260, 60),
+   t = c(60, 60, 240),
+   r = c(220, 420, 220),
+   b = c(200, 200, 380),
+   angle_start = c(0, 45, 0),
+   angle_end = c(270, 270, 360)
+ )
+
+canvas("white") |>
+  add_arc(
+    ltrb = dplyr::select(arcs, l, t, r, b),
+    angle = dplyr::select(arcs, angle_start, angle_end),
+    use_center = TRUE
+  ) |>
+  draw_img()
+
+# Arrange arcs by translating the same `ltrb` via `rsx_trans`
+arcs <-
+  dplyr::tibble(
+    l = 60,
+    t = 60,
+    r = 220,
+    b = 200,
+    angle_start = c(0, 0, 0),
+    angle_end = c(270, 180, 360)
+  )
+rsx_trans <-
+  dplyr::tibble(
+     sc = 1,
+     rot = 0,
+     tx = c(0, 200, 0),
+     ty = c(0, 0, 180),
+     ax = 0,
+     ay = 0
+  )
+
+canvas("white") |>
+  add_arc(
+    ltrb = dplyr::select(arcs, l, t, r, b),
+    rsx_trans = rsx_trans,
+    angle = dplyr::select(arcs, angle_start, angle_end),
+    use_center = TRUE
+  ) |>
+  draw_img()
+}
 }

@@ -2,17 +2,17 @@
 #'
 #' @rdname skiagd-params
 #' @name param-img-and-props
-#' @param img A raw vector of picture.
-#' @param props A list of painting attributes out of [paint()].
+#' @param img A raw vector of a serialized Skia picture.
+#' @param props A list of painting attributes created by [paint()].
 #' @param ... For some drawing functions, you can specify
-#' `sigma`, `width` and `color` as named arguments.
+#'  `sigma`, `width` and `color` as named arguments.
 #'
 #' * `sigma` must be a numeric vector of blur sigmas for each shape.
 #' * `width` must be a numeric vector of stroke widths for each shape.
-#' * `color` must be an integer matrix where each ***column*** is an RGBA color for each shape.
+#' * `color` must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 #'
-#' If they are not provided as named arguments, they will be taken from `props`.
-#' If the function does not matter them,  `...` is simply ignored.
+#'  If they are not provided as named arguments, they will be taken from `props`.
+#'  If the function does not matter them,  `...` is simply ignored.
 #' @keywords internal
 NULL
 
@@ -20,14 +20,16 @@ NULL
 #'
 #' @rdname skiagd-params
 #' @name param-rsx-trans
-#' @param rsx_trans A double matrix with 6 columns where each row represents an RSX transform.
-#' Each column of the matrix corresponds to:
+#' @param rsx_trans A numeric matrix (or a data-frame-like object)
+#'  with 6 columns where each row represents an RSX transform.
+#'  Each column of the matrix corresponds to:
+#'
 #' * scale
 #' * angle of rotation (in radians)
 #' * amount of translation in the X-axis direction
 #' * amount of translation in the Y-axis direction
-#' * X coordinate of the anchor point
-#' * Y coordinate of the anchor point
+#' * X coordinate offset for the anchor point
+#' * Y coordinate offset for the anchor point
 #' @keywords internal
 NULL
 
@@ -64,7 +66,7 @@ NULL
 #'
 #' @description
 #' When loading a picture into a canvas,
-#' you can apply an affine transformation
+#' you can apply an affine transformation to it
 #' by providing a numeric vector of length 9 to [paint()] as `transform`.
 #'
 #' @details

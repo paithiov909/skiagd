@@ -283,7 +283,7 @@ NULL
   .Call(savvy_sk_draw_vertices__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `sigma`, `color`, `mode`)
 }
 
-#' Get width and number of characters
+#' Get width, bbox and number of characters
 #'
 #' @param text Text strings.
 #' @param props PaintAttrs.

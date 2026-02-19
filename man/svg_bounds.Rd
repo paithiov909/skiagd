@@ -7,13 +7,18 @@
 svg_bounds(path)
 }
 \arguments{
-\item{path}{Characters of SVG notations.}
+\item{path}{A character vector of SVG path notations (the \code{d} attribute syntax).
+Each element is treated as a separate path.}
 }
 \value{
-A tibble.
+A tibble containing columns \code{id}, \code{left}, \code{top}, \code{right} and \code{bottom} for each path.
+\code{id} is a 1-based index corresponding to the input order of \code{path}.
 }
 \description{
-Retrieve bounding boxes of SVG paths
+Computes axis-aligned bounding boxes for one or more SVG paths.
+}
+\examples{
+svg_bounds("M45 10 H55 V45 H90 V55 H55 V90 H45 V55 H10 V45 H45 Z")
 }
 \seealso{
 Other path-utils: 

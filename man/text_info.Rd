@@ -2,19 +2,21 @@
 % Please edit documentation in R/add-textblob.R
 \name{text_info}
 \alias{text_info}
-\title{Get width and number of characters}
+\title{Get width, bounding box, and number of characters}
 \usage{
 text_info(text, props = paint())
 }
 \arguments{
-\item{text}{Text strings.}
+\item{text}{A character vector of text strings.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A tibble containing \code{id}, \code{n_chars} and \code{width}.
+A tibble containing one row per element of \code{text}, with columns:
+\code{id} (1-based index), \code{n_chars}, \code{width} (advance width),
+and \code{left}, \code{top}, \code{right}, \code{bottom} for the bounding box.
 }
 \description{
-Returns information about text strings
-when they are drawn naturally as a textblob with \code{props}.
+Returns metrics for text strings when they are shaped and drawn as a text blob
+with the given \code{props}.
 }

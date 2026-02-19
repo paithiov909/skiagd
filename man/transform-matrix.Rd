@@ -5,7 +5,7 @@
 \title{Applying affine transformations to the previous picture}
 \description{
 When loading a picture into a canvas,
-you can apply an affine transformation
+you can apply an affine transformation to it
 by providing a numeric vector of length 9 to \code{\link[=paint]{paint()}} as \code{transform}.
 }
 \details{

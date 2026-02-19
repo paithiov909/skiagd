@@ -140,7 +140,7 @@ pub fn assert_len(name: &str, expected: usize, actual: usize) -> anyhow::Result<
     }
 }
 
-/// Get width and number of characters
+/// Get width, bbox and number of characters
 ///
 /// @param text Text strings.
 /// @param props PaintAttrs.
@@ -151,21 +151,33 @@ fn sk_get_text_info(text: savvy::StringSexp, props: PaintAttrs) -> savvy::Result
     let typeface = font::match_family_style(props.font_family.as_str(), props.font_face)?;
     let font = skia_safe::Font::from_typeface(&typeface, props.font_size);
 
-    let mut width = savvy::OwnedRealSexp::new(text.len())?;
     let mut id = savvy::OwnedIntegerSexp::new(text.len())?;
     let mut n_chars = savvy::OwnedIntegerSexp::new(text.len())?;
-    for (i, t) in text.iter().enumerate() {
-        let glyph_ids = font.text_to_glyphs_vec(t.to_string());
-        let n = font.count_text(t.to_string());
-        let (w, _) = font.measure_text(glyph_ids.as_slice(), Some(&props.paint));
-        width.set_elt(i, w as f64)?;
+    let mut width = savvy::OwnedRealSexp::new(text.len())?;
+    let mut l = savvy::OwnedIntegerSexp::new(text.len())?;
+    let mut t = savvy::OwnedIntegerSexp::new(text.len())?;
+    let mut r = savvy::OwnedIntegerSexp::new(text.len())?;
+    let mut b = savvy::OwnedIntegerSexp::new(text.len())?;
+    for (i, txt) in text.iter().enumerate() {
+        let glyph_ids = font.text_to_glyphs_vec(txt.to_string());
+        let n = font.count_text(txt.to_string());
+        let (w, rect) = font.measure_text(glyph_ids.as_slice(), Some(&props.paint));
         id.set_elt(i, i as i32)?;
         n_chars.set_elt(i, n as i32)?;
+        width.set_elt(i, w as f64)?;
+        l.set_elt(i, rect.left() as i32)?;
+        t.set_elt(i, rect.top() as i32)?;
+        r.set_elt(i, rect.right() as i32)?;
+        b.set_elt(i, rect.bottom() as i32)?;
     }
-    let mut out = savvy::OwnedListSexp::new(3, true)?;
+    let mut out = savvy::OwnedListSexp::new(7, true)?;
     out.set_name_and_value(0, "id", id)?;
     out.set_name_and_value(1, "n_chars", n_chars)?;
-    out.set_name_and_value(2, "width", width)?;
+    out.set_name_and_value(2, "advance_width", width)?;
+    out.set_name_and_value(3, "l", l)?;
+    out.set_name_and_value(4, "t", t)?;
+    out.set_name_and_value(5, "r", r)?;
+    out.set_name_and_value(6, "b", b)?;
     Ok(out.into())
 }
 

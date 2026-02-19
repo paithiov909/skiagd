@@ -1,10 +1,14 @@
 #' Add PNG image to canvas
 #'
+#' Draws a PNG image onto an existing picture.
+#'
 #' @inheritParams param-img-and-props
-#' @param png A raw vector of PNG image.
-#' @param left Left offset for drawing PNG image.
-#' @param top Top offset for drawing PNG image.
-#' @returns A raw vector of picture.
+#' @param png A raw vector of a PNG image.
+#' @param left A numeric scalar giving the horizontal offset (in pixels) of the
+#'  PNG's top-left corner from the canvas origin. Negative values are allowed.
+#' @param top A numeric scalar giving the vertical offset (in pixels) of the
+#'  PNG's top-left corner from the canvas origin. Negative values are allowed.
+#' @returns A raw vector containing a serialized picture.
 #' @export
 add_png <- function(img, png, left = 0, top = 0, ..., props = paint()) {
   sk_draw_png(
@@ -19,25 +23,43 @@ add_png <- function(img, png, left = 0, top = 0, ..., props = paint()) {
 
 #' Convert picture into PNG image
 #'
+#' Renders a serialized picture to a PNG image.
+#'
 #' @inheritParams param-img-and-props
-#' @returns A raw vector of PNG image.
+#' @returns A raw vector of a PNG image.
 #' @export
+#' @examples
+#' \dontrun{
+#' png <-
+#'  canvas("navy") |>
+#'  as_png()
+#'
+#' # Write the PNG image to a file
+#' writeBin(png, "navy.png")
+#' }
 as_png <- function(img, ..., props = paint()) {
   sk_as_png(props[["canvas_size"]], img, props[["transform"]])
 }
 
 #' Freeze picture
 #'
-#' `as_png(img, props)` and then adds it to a new canvas
-#' with the default blend mode (`BlendMode$SrcOver`).
+#' @description
+#' Rasterizes a picture into a PNG and adds it to a new canvas.
 #'
-#' @param left Left offset for drawing PNG image.
-#' @param top Top offset for drawing PNG image.
-#' @param fill RGBA representation of a color.
-#'  This can be specified using named colors or hexadecimal color codes,
-#'  which are converted internally using [colorfast::col_to_rgb()].
+#' This is equivalent to `as_png(img, props = props)` and then drawing the
+#' resulting PNG onto a fresh canvas using [add_png()] with the default blend mode
+#' (`BlendMode$SrcOver`). It can be used to reduce the number of recorded drawing
+#' operations in a picture.
+#'
+#' @param left A numeric scalar giving the horizontal offset (in pixels) where the
+#'  rasterized image is drawn on the new canvas. Negative values are allowed.
+#' @param top A numeric scalar giving the vertical offset (in pixels) where the
+#'  rasterized image is drawn on the new canvas. Negative values are allowed.
+#' @param fill An RGBA color specification for the background fill of the new canvas.
+#'  You can provide a named color or a hexadecimal color code, which is converted
+#'  using [col2rgba()].
 #' @inheritParams param-img-and-props
-#' @returns A raw vector of picture.
+#' @returns A raw vector containing a serialized picture.
 #' @export
 freeze <- function(
   img,

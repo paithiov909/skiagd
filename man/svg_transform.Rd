@@ -7,15 +7,24 @@
 svg_transform(path, transform)
 }
 \arguments{
-\item{path}{Characters of SVG notations.}
+\item{path}{A character vector of SVG path notations (the \code{d} attribute syntax).
+Each element is treated as a separate path.}
 
-\item{transform}{Numerics of length 9.}
+\item{transform}{Numerics of length 9 representing a \link{transform-matrix}.
+This defines a 3x3 matrix for affine transformation.}
 }
 \value{
-A character vector of SVG notations.
+A character vector of transformed SVG path notations.
 }
 \description{
-Transform SVG paths
+Applies an affine transformation to SVG path notations.
+
+This is useful for translating, scaling, or skewing paths written in the
+SVG \code{d}-attribute syntax before placing them with \code{\link[=add_path]{add_path()}}.
+}
+\examples{
+trans <- matrix(c(1, 0, -50, 0, 1, -50, 0, 0, 1), 3, 3)
+svg_transform("M45 10 H55 V45 H90 V55 H55 V90 H45 V55 H10 V45 H45 Z", trans)
 }
 \seealso{
 Other path-utils: 

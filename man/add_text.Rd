@@ -7,51 +7,86 @@
 add_text(img, text, rsx_trans, freeze = TRUE, ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of picture.}
+\item{img}{A raw vector of a serialized Skia picture.}
 
-\item{text}{Characters to be drawn.}
+\item{text}{A character vector of text strings to be drawn. \code{NA_character_} is not allowed.
+Each element of \code{text} is handled as one text blob.}
 
-\item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
+\item{rsx_trans}{A numeric matrix (or a data-frame-like object)
+with 6 columns where each row represents an RSX transform.
 Each column of the matrix corresponds to:
 \itemize{
 \item scale
 \item angle of rotation (in radians)
 \item amount of translation in the X-axis direction
 \item amount of translation in the Y-axis direction
-\item X coordinate of the anchor point
-\item Y coordinate of the anchor point
+\item X coordinate offset for the anchor point
+\item Y coordinate offset for the anchor point
 }}
 
-\item{freeze}{Whether to freeze the picture after drawing text.}
+\item{freeze}{A logical value indicating whether to freeze the picture after drawing text.
+If \code{TRUE}, the result is rasterized and re-added to a new canvas (like \code{\link[=freeze]{freeze()}}).}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
-\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+\item \code{color} must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector of picture.
+A raw vector containing a serialized picture with the added text.
 }
 \description{
-Add text
+Draws text strings as text blobs.
+}
+\details{
+The placement of glyphs is controlled by \code{rsx_trans}. For \code{add_text()},
+\code{rsx_trans} must have the same number of rows as the total number of characters
+to be drawn, i.e. \code{sum(nchar(text))}, not \code{length(text)}.
+
+In contrast, \code{sigma} and \code{color} provided via \code{...} (or from \code{props}) are matched
+to \code{length(text)} (one value per text element). If you need per-character values
+for \code{sigma} or \code{color}, split your string into single characters and pass them
+as a character vector.
+
+The fill rule for closed glyph paths is taken from \code{props[["fill_type"]]}.
 }
 \note{
 \itemize{
-\item \code{rsx_trans} for \code{add_text()} must have
-the same number of rows as the total number of characters to be drawn;
-not just the length of \code{text}.
-\item Since textblobs do not have font fallback mechanism,
-characters out of the specified font are not drawn correctly.
-\item If \code{freeze} is \code{FALSE}, the return value would be a large object
-because the specified font is embedded in the returned picture.
-Note that you should almost always freeze the picture when drawing text.
+\item Text blobs do not have a font fallback mechanism. Characters not supported by
+the specified font may not render correctly.
+\item If \code{freeze = FALSE}, the returned picture can become large because font data may
+be embedded. In most cases, it is recommended to keep \code{freeze = TRUE}.
+}
+}
+\examples{
+\dontrun{
+if ("Noto Sans Mono" \%in\% list_font_families()[["family"]]) {
+  info <- text_info(
+    "Hello, skiagd!",
+    props = paint(family = "Noto Sans Mono", fontsize = 36)
+  )
+  canvas("white") |>
+    add_text(
+      "Hello, skiagd!",
+      rsx_trans = dplyr::tibble(
+        sc = 1,
+        rot = 0,
+        x = dev_size()[1] / 2 - info$width / 2 + seq(0, info$n_chars * (info$width / info$n_chars), length.out = info$n_chars),
+        y = dev_size()[2] / 2,
+        ax = 0,
+        ay = 0
+      ),
+      props = paint(family = "Noto Sans Mono", fontsize = 36)
+    ) |>
+    draw_img()
+}
 }
 }

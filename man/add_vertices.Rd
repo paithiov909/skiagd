@@ -7,35 +7,73 @@
 add_vertices(img, vertices, ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of picture.}
+\item{img}{A raw vector of a serialized Skia picture.}
 
-\item{vertices}{A double matrix where each row is a point.
-If \code{nrow(vertices)} is not a multiple of 3,
-the last \code{nrow(vertices) \%\% 3} points are ignored.}
+\item{vertices}{A numeric matrix (or a data-frame-like object)
+with 2 numeric columns (x and y),
+where each row is a vertex position.
+Vertices are consumed in groups of three (three rows per triangle).
+If \code{nrow(vertices)} is not a multiple of 3, the last \code{nrow(vertices) \%\% 3} vertices are ignored.}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
-\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+\item \code{color} must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector of picture.
+A raw vector containing a serialized picture.
 }
 \description{
-Add vertices
+Adds a vertex mesh to an existing picture.
+}
+\details{
+The vertex mode is taken from \code{props[["vertex_mode"]]}. The blur sigma is taken
+from \code{props[["sigma"]]}.
+
+Vertex colors are per-vertex attributes. If \code{color} is supplied via \code{...}, it
+must be an RGBA integer matrix with 4 rows and \code{nrow(vertices)} columns (one
+color per vertex). If \code{color} is not supplied, \code{props[["color"]]} is recycled
+to all vertices.
 }
 \note{
-When \code{color} is explicitly provided, they will be combined with
-\code{props[["shader"]]} if present or opaque \code{props[["color"]]} if not.
+When vertex colors are present, the paint's blend source is determined by:
+\itemize{
+\item \code{props[["shader"]]} if a shader is set, otherwise
+\item an opaque version of \code{props[["color"]]}.
+}
 
-Therefore, if you want to paint each vertex with a different color,
-you must specify a shader as \code{paint(shader = Shader$color(...))}.
+This source is then combined with the interpolated vertex colors. As a result,
+to paint each vertex with a different visible color, you typically need to set
+a \link{Shader} (see the examples below).
+}
+\examples{
+\dontrun{
+# A single triangle with per-vertex colors.
+# To make the vertex colors visible as-is, set a shader.
+canvas("white") |>
+  add_vertices(
+    dplyr::tibble(
+      x = c(128, 0, 128),
+      y = c(256, 256, 0)
+    ),
+    color = col2rgba(c("#61dafb", "#fb61da", "#dafb61")),
+    props = paint(
+      shader = Shader$from_picture(
+        canvas("#ffffff00"),
+        TileMode$Repeat,
+        dev_size(),
+        diag(3)
+      )
+    )
+  ) |>
+  draw_img()
+}
 }

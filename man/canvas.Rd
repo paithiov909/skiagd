@@ -2,20 +2,31 @@
 % Please edit documentation in R/canvas.R
 \name{canvas}
 \alias{canvas}
-\title{Create new canvas}
+\title{Create a new canvas}
 \usage{
 canvas(fill = "transparent", canvas_size = paint()[["canvas_size"]])
 }
 \arguments{
-\item{fill}{RGBA representation of a color.
-This can be specified using named colors or hexadecimal color codes,
-which are converted internally using \code{\link[colorfast:col_to_rgb]{colorfast::col_to_rgb()}}.}
+\item{fill}{An RGBA color specification for the background fill.
+You can also provide a named color or a hexadecimal color code, which is
+converted internally using \code{\link[colorfast:col_to_rgb]{colorfast::col_to_rgb()}}.}
 
-\item{canvas_size}{Integers of length 2.}
+\item{canvas_size}{An integer vector of length 2 specifying canvas width and height, in pixels.}
 }
 \value{
-A raw vector of picture.
+A raw vector containing a serialized Skia picture.
 }
 \description{
-Creates a new canvas filled with specified color.
+Creates a new serialized Skia picture (a single frame) with a canvas filled
+with the specified color.
+
+The coordinate system follows the usual image convention: the origin is at
+the top-left, the X axis increases to the right, and the Y axis increases
+downward. Units are pixels.
+}
+\examples{
+\dontrun{
+canvas("navy") |> draw_img()
+canvas(c(255, 0, 0, 255)) |> draw_img() # filled with red
+}
 }

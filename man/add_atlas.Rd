@@ -7,19 +7,22 @@
 add_atlas(img, png, rsx_trans, ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of picture.}
+\item{img}{A raw vector of a serialized Skia picture.}
 
-\item{png}{A raw vector of PNG image to be used as a sprite.}
+\item{png}{A raw vector of a PNG image to be used as a sprite. This can be
+created by \code{\link[=as_png]{as_png()}} from another picture, or read from a \code{.png} file using
+\code{\link[=readBin]{readBin()}}.}
 
-\item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
+\item{rsx_trans}{A numeric matrix (or a data-frame-like object)
+with 6 columns where each row represents an RSX transform.
 Each column of the matrix corresponds to:
 \itemize{
 \item scale
 \item angle of rotation (in radians)
 \item amount of translation in the X-axis direction
 \item amount of translation in the Y-axis direction
-\item X coordinate of the anchor point
-\item Y coordinate of the anchor point
+\item X coordinate offset for the anchor point
+\item Y coordinate offset for the anchor point
 }}
 
 \item{...}{For some drawing functions, you can specify
@@ -27,17 +30,85 @@ Each column of the matrix corresponds to:
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
-\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+\item \code{color} must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector of picture.
+A raw vector containing a serialized picture.
 }
 \description{
-Draws the same number of sprites as the number of rows in \code{rsx_trans}.
+Draws a PNG sprite multiple times (as an atlas) onto an existing picture.
+}
+\details{
+The number of sprites drawn is determined by \code{nrow(rsx_trans)}. Each row of
+\code{rsx_trans} specifies an RSX transform applied to the sprite (scale, rotation,
+translation, and anchor offsets).
+}
+\note{
+\itemize{
+\item To create sprites (or canvases) of a specific size,
+you may need to fix the size of the current graphics device (e.g., using a dummy device)
+or supply canvas_size via \code{props = paint(canvas_size = ...)},
+because drawing functions use \code{props[["canvas_size"]]} at each call.
+}
+}
+\examples{
+\dontrun{
+# To fix the canvas size to 48x16, open a dummy device
+png(nullfile(), width = 48, height = 16)
+
+# Create a simple arrow sprite (48x16) as a PNG
+arrow_png <-
+  canvas("transparent") |>
+  add_line(
+    from = matrix(c(4, 8), ncol = 2),
+    to = matrix(c(44, 8), ncol = 2)
+  ) |>
+  add_line(
+    from = matrix(c(
+      36, 4,
+      44, 8,
+      36, 12
+    ), ncol = 2, byrow = TRUE),
+    to = matrix(c(
+      44, 8,
+      36, 12,
+      44, 8
+    ), ncol = 2, byrow = TRUE)
+  ) |>
+  as_png()
+
+# Close the dummy device
+dev.off()
+
+# Place the sprite with different rotations and positions
+# (anchor offsets set to the sprite center: 24, 8)
+rsx_trans <-
+  dplyr::tibble(
+    sc = 1,
+    rot = c(0, pi / 6, pi / 3, pi / 2, pi * 3 / 4),
+    tx = c(100, 200, 300, 200, 100),
+    ty = c(100, 100, 100, 200, 200),
+    ax = 24,
+    ay = 8
+  )
+
+# Open a dummy device again
+png(nullfile(), width = 400, height = 300)
+
+img <-
+  canvas("white") |>
+  add_atlas(arrow_png, rsx_trans = rsx_trans)
+
+# Close the dummy device
+dev.off()
+
+# Draw the picture
+draw_img(img)
+}
 }

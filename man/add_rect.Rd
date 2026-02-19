@@ -14,41 +14,104 @@ add_rect(
 )
 }
 \arguments{
-\item{img}{A raw vector of picture.}
+\item{img}{A raw vector of a serialized Skia picture.}
 
-\item{ltrb}{A double matrix where each row is a rectangle
-LTRB (left, top, right, bottom).}
+\item{ltrb}{A numeric matrix (or a data-frame-like object)
+with 4 columns (left, top, right, bottom),
+where each row represents a rectangle.}
 
-\item{rsx_trans}{A double matrix with 6 columns where each row represents an RSX transform.
+\item{rsx_trans}{A numeric matrix (or a data-frame-like object)
+with 6 columns where each row represents an RSX transform.
 Each column of the matrix corresponds to:
 \itemize{
 \item scale
 \item angle of rotation (in radians)
 \item amount of translation in the X-axis direction
 \item amount of translation in the Y-axis direction
-\item X coordinate of the anchor point
-\item Y coordinate of the anchor point
+\item X coordinate offset for the anchor point
+\item Y coordinate offset for the anchor point
 }}
 
-\item{radii}{A double matrix where each row is a pair of axis lengths
-on X-axis and Y-axis of oval describing rounded corners.}
+\item{radii}{A numeric matrix (or data-frame-like object)
+with 2 columns (x and y),
+where each row represents the corner radii of a rounded rectangle.}
 
 \item{...}{For some drawing functions, you can specify
 \code{sigma}, \code{width} and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
-\item \code{color} must be an integer matrix where each \emph{\strong{column}} is an RGBA color for each shape.
+\item \code{color} must be an integer matrix with 4 rows (RGBA) and N columns (shapes).
 }
 
 If they are not provided as named arguments, they will be taken from \code{props}.
 If the function does not matter them,  \code{...} is simply ignored.}
 
-\item{props}{A list of painting attributes out of \code{\link[=paint]{paint()}}.}
+\item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector of picture.
+A raw vector containing a serialized picture.
 }
 \description{
-Add rectangles
+Adds one or more rounded rectangles to an existing picture.
+}
+\details{
+The number of rectangles is determined by \code{nrow(ltrb)}. The number of rows of
+\code{rsx_trans} and \code{radii}, and the lengths of \code{sigma} and \code{width}
+(and the number of columns of \code{color}) must match this number.
+
+The drawing attributes \code{sigma}, \code{width}, and \code{color} can be supplied via \code{...}.
+If they are not supplied, they are taken from \code{props} and recycled to all rectangles.
+}
+\note{
+\itemize{
+\item Skia's rounded rectangle does not support rotation. If the rotation
+angle in \code{rsx_trans} is not zero, this function will error. To draw rotated
+rectangles or more general shapes, use \code{\link[=add_path]{add_path()}} instead.
+}
+}
+\examples{
+\dontrun{
+# Arrange rectangles by shifting coordinates in `ltrb`
+ltrb <-
+  dplyr::tibble(
+    l = c(60, 220, 60),
+    t = c(60, 60, 180),
+    r = c(180, 340, 180),
+    b = c(140, 140, 260)
+  )
+
+canvas("white") |>
+  add_rect(
+    ltrb = ltrb,
+    radii = matrix(c(12, 12), nrow(ltrb), 2, byrow = TRUE)
+  ) |>
+  draw_img()
+
+# Arrange rectangles by translating the same `ltrb` via `rsx_trans`
+ltrb <-
+  dplyr::tibble(
+    l = rep_len(60, 3),
+    t = rep_len(60, 3),
+    r = rep_len(180, 3),
+    b = rep_len(140, 3)
+  )
+rsx_trans <-
+  dplyr::tibble(
+    sc = 1,
+    rot = 0,
+    tx = c(0, 160, 0),
+    ty = c(0, 0, 120),
+    ax = 0,
+    ay = 0
+  )
+
+canvas("white") |>
+  add_rect(
+    ltrb = ltrb,
+    rsx_trans = rsx_trans,
+    radii = matrix(c(12, 12), nrow(ltrb), 2, byrow = TRUE)
+  ) |>
+  draw_img()
+}
 }
