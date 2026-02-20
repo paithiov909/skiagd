@@ -55,8 +55,6 @@ In contrast, \code{sigma} and \code{color} provided via \code{...} (or from \cod
 to \code{length(text)} (one value per text element). If you need per-character values
 for \code{sigma} or \code{color}, split your string into single characters and pass them
 as a character vector.
-
-The fill rule for closed glyph paths is taken from \code{props[["fill_type"]]}.
 }
 \note{
 \itemize{
@@ -73,17 +71,20 @@ if ("Noto Sans Mono" \%in\% list_font_families()[["family"]]) {
     "Hello, skiagd!",
     props = paint(family = "Noto Sans Mono", fontsize = 36)
   )
+  offset <- seq(0, info$n_chars * (info$width / info$n_chars)
+  rsx_trans <-
+    dplyr::tibble(
+      sc = 1,
+      rot = 0,
+      x = (dev_size()[1] - info$width) / 2 + offset, length.out = info$n_chars),
+      y = dev_size()[2] / 2,
+      ax = 0,
+      ay = 0
+    )
   canvas("white") |>
     add_text(
       "Hello, skiagd!",
-      rsx_trans = dplyr::tibble(
-        sc = 1,
-        rot = 0,
-        x = dev_size()[1] / 2 - info$width / 2 + seq(0, info$n_chars * (info$width / info$n_chars), length.out = info$n_chars),
-        y = dev_size()[2] / 2,
-        ax = 0,
-        ay = 0
-      ),
+      rsx_trans = rsx_trans,
       props = paint(family = "Noto Sans Mono", fontsize = 36)
     ) |>
     draw_img()
