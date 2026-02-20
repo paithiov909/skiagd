@@ -1,0 +1,343 @@
+---
+title: "Getting Started with skiagd: A Creative Coding Pipeline for R"
+vignette: >
+  %\VignetteIndexEntry{Getting Started with skiagd: A Creative Coding Pipeline for R}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: '#>'
+    fig.width: 8
+    fig.height: 4.5
+    dev: 'jpeg'
+---
+
+## Overview
+
+**skiagd** is a *toy wrapper* around [rust-skia](https://github.com/rust-skia/rust-skia) designed for creative coding in R. Calling it a *toy wrapper* means the package is not intended to cover the entire Skia API. The goal is to offer a compact and expressive drawing toolkit.
+
+Instead of trying to expose every Skia feature, skiagd focuses on:
+
+* a simple and expressive drawing interface,
+* a rendering pipeline independent of base R graphics,
+* and a workflow suited to generative art and algorithmic illustration.
+
+With skiagd, you write R code in a style natural to R users while taking advantage of Skia's high-performance vector graphics engine.
+
+## Drawing Model in skiagd
+
+skiagd is designed so that generative artwork can be drawn simply and efficiently while relying on Skia for fast rendering. Because skiagd does not depend on base R graphics or the grid package, it allows more freedom, follows a model closer to a scene-graph pipeline, and can handle complex drawings efficiently.
+
+Suppose we have rose-curve data such as:
+
+```{r}
+#| label: rose_curve_data
+library(skiagd)
+
+deg2rad <- \(deg) deg * (pi / 180)
+
+cv_size <- dev_size() # Get the current graphics device size in pixels
+
+dat <-
+  dplyr::tibble(
+    i = seq_len(360),
+    r = 120 * abs(sin(deg2rad(4 * i)))
+  ) |>
+  dplyr::reframe(
+    x = r * cos(deg2rad(360 * i / 360)) + cv_size[1] / 2,
+    y = r * sin(deg2rad(360 * i / 360)) + cv_size[2] / 2,
+    d = 1
+  )
+```
+
+In skiagd, this curve can be drawn as follows.
+
+```{r}
+#| label: rose_curve_draw
+canvas("violetred") |>
+  add_point(
+    dat,
+    props = paint(
+      color = "snow",
+      width = 3,
+      point_mode = PointMode$Polygon
+    )
+  ) |>
+  draw_img()
+```
+
+Each `add_*()` function takes a picture as its first argument and data describing the placement of shapes. These calls are typically chained using the pipe operator.
+
+## How drawing works
+
+To start drawing, you first create a canvas:
+
+```{r}
+#| label: canvas_print
+canvas("violetred")
+```
+
+This returns a **picture**, which is a serialized representation of drawing operations stored as a raw vector.
+
+A picture is not a raster image. It is a compact list of instructions describing how to draw shapes. In other words, a skiagd pipeline does not draw pixels while you chain `canvas() |> add_*()`. Instead, each `add_*()` receives the previous picture, adds a batch of drawing commands, and returns a new picture.
+
+Rasterization happens only when you call functions such as:
+
+* `as_png()`: render the picture as a PNG and return the raw vector,
+* `freeze()`: rasterize the picture and place it on a new canvas,
+* `as_nativeraster()`: convert the picture to an R nativeRaster object,
+* `draw_img()`: convert to nativeRaster and display it in the graphics device.
+
+### Relationship with R's graphics device
+
+Here is another example.
+
+Suppose we create trifolium points as a double matrix:
+
+```{r}
+#| label: trifolium_data
+# trifolium curve (3-leaf rose)
+trifolium <- \(n, sc = 1) {
+  theta <- seq(-pi, pi, length.out = n)
+  r <- sc * cos(3 * theta)
+  cbind(
+    r * cos(theta),
+    r * sin(theta),
+    1
+  )
+}
+
+pos <- trifolium(100, sc = 100)
+```
+
+Using base R graphics (or ggplot2), you can plot this with clipping:
+
+```{r}
+#| label: trifolium_base_plot
+plot(pos[, 1], pos[, 2], type = "p")
+```
+
+In contrast, an `add_*()` call in skiagd places shapes exactly where the data indicates. If your data is symmetric around `c(0, 0)`, you will typically scale and translate it into the center of the current device by an affine transformation:
+
+```{r}
+#| label: trifolium_draw_1
+canvas("violetred") |>
+  add_circle(
+    pos %*%
+      matrix(c(
+        1, 0, cv_size[1] / 2,
+        0, 1, cv_size[2] / 2,
+        0, 0, 1
+      ), ncol = 3),
+    radius = rep_len(12, nrow(pos)),
+    props = paint(color = "snow")
+  ) |>
+  draw_img()
+```
+
+While skiagd does not use the graphics device for rendering, some default settings do depend on it. In particular:
+
+- `canvas_size` defaults to the current device size (in pixels).
+
+Because the picture is always replayed onto a canvas of size `canvas_size`, you may see unexpected scaling if:
+
+* you open a device of a different size,
+* you resize the device midway,
+* or you need fixed output dimensions.
+
+In such cases, specify these settings manually when calling `canvas()`, `paint()`, or `draw_img()`, as needed:
+
+```r
+cv_size <- c(768L, 576L)
+
+canvas("violetred", canvas_size = cv_size) |>
+  add_circle(
+    pos %*%
+      matrix(c(1, 0, cv_size[1] / 2,
+               0, 1, cv_size[2] / 2,
+               0, 0, 1), ncol = 3),
+    radius = rep_len(12, nrow(pos)),
+    props = paint(color = "snow", canvas_size = cv_size)
+  ) |>
+  draw_img(props = paint(canvas_size = cv_size))
+```
+
+Alternatively, you may open a dummy device of the desired size before beginning the drawing pipeline (e.g., `png(nullfile(), width = 768, height = 576)`).
+
+## Painting Attributes
+
+This section describes the idea behind **painting attributes** in skiagd.
+
+When Skia draws shapes, their appearance is controlled through painting attributes. In skiagd, you specify these attributes with `paint()`, and pass them to `add_*()` through the `props` argument.
+
+Common attributes include:
+
+* `color`: fill or stroke color,
+* `width`: stroke width,
+* `sigma`: blur amount,
+* `style`: fill, stroke, or both,
+* `blend_mode`: compositing mode.
+
+Some attributes apply only to specific drawing functions. For example, `point_mode` is meaningful only for `add_point()`.
+
+Painting attributes passed through `paint()` are merged with defaults automatically, so you only need to provide values you want to override.
+
+### Using `paint()` programmatically
+
+Arguments to `paint()` use [dynamic dots](https://rlang.r-lib.org/reference/dyn-dots.html), so you can splice lists programmatically.
+
+```{r}
+#| label: trifolium_draw_2
+cv_size <- dev_size()
+my_props <- list(width = 1, style = Style$Stroke, blend_mode = BlendMode$Screen)
+
+canvas("gray20") |>
+  add_circle(
+    pos %*%
+      matrix(c(
+        1, 0, cv_size[1] / 2,
+        0, 1, cv_size[2] / 2,
+        0, 0, 1
+      ), ncol = 3),
+    radius = rep_len(12, nrow(pos)),
+    color = (seq_len(nrow(pos)) / 100) |>
+      grDevices::hsv(.0083, 1, v = _, alpha = .8) |>
+      col2rgba(),
+    props = paint(
+      !!!my_props,
+      path_effect = PathEffect$discrete(2, 5, 3),
+    )
+  ) |>
+  draw_img()
+```
+
+Two points are important here.
+
+#### 1. Path effects, shaders, and image filters
+
+Skia supports various effects applied to shape outlines and textures. skiagd exposes these via:
+
+* `path_effect`: through `PathEffect`
+* `shader`: through `Shader`
+* `image_filter`: through `ImageFilter`
+
+You can pass these objects directly to `paint()` as needed.
+
+#### 2. Dynamic attributes and per-shape overrides
+
+Some drawing functions allow the use of `color`, `width`, and `sigma` as named arguments instead of specifying them inside `props`. This makes it possible to vary these attributes per shape. The behavior is similar to distinguishing aesthetics inside or outside `aes()` in ggplot2.
+
+Refer to the help pages of each `add_*()` function for details about expected vector lengths.
+
+## RSX Transformation
+
+If you want to draw rectangles using the same data points as before, you can use `rsx_trans`, an RSX transformation matrix.
+
+```{r}
+#| label: trifolium_draw_3
+ltrb <-
+  dplyr::tibble(
+    id = seq_len(100),
+    l = 0,
+    t = 0,
+    r = 12,
+    b = 12
+  )
+
+rsx_trans <-
+  dplyr::tibble(
+    sc = 1,
+    rot = 0,
+    tx = pos[, 1] + dev_size()[1] / 2,
+    ty = pos[, 2] + dev_size()[2] / 2,
+    ax = 6,
+    ay = 6
+  )
+
+canvas("gray20") |>
+  add_rect(
+    ltrb = dplyr::select(ltrb, l, t, r, b),
+    rsx_trans = rsx_trans,
+    props = paint(
+      !!!my_props,
+      color = "snow",
+    )
+  ) |>
+  draw_img()
+```
+
+Some drawing functions accept an `rsx_trans` data that specifies how each shape should be transformed. Each row corresponds to one shape and controls:
+
+* scaling (`sc`),
+* rotation (`rot`),
+* translation (`tx`, `ty`),
+* anchor coordinates (`ax`, `ay`).
+
+Note that Skia does not fully support rotating shapes defined only by rectangles, so in this example all rectangles are unrotated to avoid errors.
+
+## Freezing Pictures
+
+We have drawn several shapes, but what if we want to continue drawing without hitting operation limits? Consider this example using `add_rect()` repeatedly:
+
+```{r}
+#| label: trifolium_draw_4
+color <-
+  seq(.333, .773, length.out = 100) |>
+  grDevices::hsv(.0083, 1, v = _, alpha = .8) |>
+  col2rgba()
+
+canvas("gray20") |>
+  purrr::reduce(seq_len(150), \(cv, i) {
+    # Rotate `i` (in radians)
+    dat <-
+      trifolium(100, sc = i) %*%
+      matrix(
+        c(cos(i), sin(i), 0, -sin(i), cos(i), 0, 0, 0, 1),
+        nrow = 3
+      )
+
+    rsx_trans <-
+      dplyr::tibble(
+        sc = 2,
+        rot = 0,
+        tx = dat[, 1] + dev_size()[1] / 2,
+        ty = dat[, 2] + dev_size()[2] / 2,
+        ax = 6,
+        ay = 6
+      )
+
+    cv <- cv |>
+      add_rect(
+        ltrb = dplyr::select(ltrb, l, t, r, b),
+        rsx_trans = rsx_trans,
+        color = color,
+        props = paint(
+          !!!my_props,
+          sigma = 1,
+        )
+      )
+
+    if ((i %% 50) != 0) {
+      return(cv)
+    }
+    freeze(cv)
+  }, .init = _) |>
+  draw_img()
+```
+
+`freeze()` is used to **freeze** the picture when needed. It performs the following steps:
+
+1. rasterizes the current picture once,
+2. places it onto a new blank canvas as a single PNG with `add_png()`,
+3. returns a new picture you can continue drawing on.
+
+A single picture can contain only a limited number of drawing operations (around 100). One operation corresponds to a single `add_*()` call, regardless of the number of shapes within it. In the example above, the pipeline freezes the picture every 50th iteration to stay below this limit.
+
+# Conclusion
+
+skiagd provides a compact and flexible foundation for creative coding in R by combining familiar R idioms with the capabilities of the Skia graphics engine.
+
+Once you understand how pictures, painting attributes, transformations, and freeze cycles work together, you can build repeatable workflows for both simple sketches and complex layered compositions.
+
+The package is intentionally minimal, yet it supports a wide variety of drawing styles and generative techniques, making it a practical starting point for exploring algorithmic art within the R ecosystem.

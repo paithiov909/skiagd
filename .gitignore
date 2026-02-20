@@ -3,6 +3,6 @@
 
 configure.log
 
-/.quarto/
-
+**/.quarto/
 **/*.quarto_ipynb
+inst/doc

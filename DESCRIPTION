@@ -1,6 +1,6 @@
 Package: skiagd
 Title: R Wrapper for 'rust-skia'
-Version: 0.1.5.9000
+Version: 0.1.5.9001
 Authors@R: c(
     person("Akiru", "Kato", , "paithiov909@gmail.com", role = c("aut", "cre")),
     person("Jeroen", "Ooms", role = "cph")
@@ -21,8 +21,12 @@ Suggests:
     base64enc,
     dplyr,
     htmltools,
+    knitr,
+    quarto,
     testthat (>= 3.0.0),
     vdiffr
+VignetteBuilder:
+    quarto
 Config/testthat/edition: 3
 Encoding: UTF-8
 OS_type: unix

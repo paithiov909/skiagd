@@ -78,7 +78,7 @@ rose <-
 
 canvas("violetred") |>
   add_point(
-    as.matrix(rose),
+    rose,
     props = paint(
       color = "white",
       width = 3,
