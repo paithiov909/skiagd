@@ -7,7 +7,7 @@
 add_atlas(img, png, rsx_trans, ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of a serialized Skia picture.}
+\item{img}{A raw vector of a serialized picture.}
 
 \item{png}{A raw vector of a PNG image to be used as a sprite. This can be
 created by \code{\link[=as_png]{as_png()}} from another picture, or read from a \code{.png} file using
@@ -21,12 +21,12 @@ Each column of the matrix corresponds to:
 \item angle of rotation (in radians)
 \item amount of translation in the X-axis direction
 \item amount of translation in the Y-axis direction
-\item X coordinate offset for the anchor point
-\item Y coordinate offset for the anchor point
+\item offset for the anchor point in the X-axis direction
+\item offset for the anchor point in the Y-axis direction
 }}
 
 \item{...}{For some drawing functions, you can specify
-\code{sigma}, \code{width} and \code{color} as named arguments.
+\code{sigma}, \code{width}, and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
@@ -53,7 +53,7 @@ translation, and anchor offsets).
 \itemize{
 \item To create sprites (or canvases) of a specific size,
 you may need to fix the size of the current graphics device (e.g., using a dummy device)
-or supply canvas_size via \code{props = paint(canvas_size = ...)},
+or supply \code{canvas_size} via \code{props = paint(canvas_size = ...)},
 because drawing functions use \code{props[["canvas_size"]]} at each call.
 }
 }

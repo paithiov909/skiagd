@@ -7,7 +7,7 @@
 add_text(img, text, rsx_trans, freeze = TRUE, ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of a serialized Skia picture.}
+\item{img}{A raw vector of a serialized picture.}
 
 \item{text}{A character vector of text strings to be drawn. \code{NA_character_} is not allowed.
 Each element of \code{text} is handled as one text blob.}
@@ -20,15 +20,15 @@ Each column of the matrix corresponds to:
 \item angle of rotation (in radians)
 \item amount of translation in the X-axis direction
 \item amount of translation in the Y-axis direction
-\item X coordinate offset for the anchor point
-\item Y coordinate offset for the anchor point
+\item offset for the anchor point in the X-axis direction
+\item offset for the anchor point in the Y-axis direction
 }}
 
 \item{freeze}{A logical value indicating whether to freeze the picture after drawing text.
 If \code{TRUE}, the result is rasterized and re-added to a new canvas (like \code{\link[=freeze]{freeze()}}).}
 
 \item{...}{For some drawing functions, you can specify
-\code{sigma}, \code{width} and \code{color} as named arguments.
+\code{sigma}, \code{width}, and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
@@ -41,7 +41,7 @@ If the function does not matter them,  \code{...} is simply ignored.}
 \item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector containing a serialized picture with the added text.
+A raw vector containing a serialized picture.
 }
 \description{
 Draws text strings as text blobs.

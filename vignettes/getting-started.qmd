@@ -15,7 +15,7 @@ knitr:
 
 ## Overview
 
-**skiagd** is a *toy wrapper* around [rust-skia](https://github.com/rust-skia/rust-skia) designed for creative coding in R. Calling it a *toy wrapper* means the package is not intended to cover the entire Skia API. The goal is to offer a compact and expressive drawing toolkit.
+[skiagd](https://github.com/paithiov909/skiagd) is a *toy wrapper* around [rust-skia](https://github.com/rust-skia/rust-skia) designed for creative coding in R. Calling it a *toy wrapper* means the package is not intended to cover the entire Skia API. The goal is to offer a compact and expressive drawing toolkit.
 
 Instead of trying to expose every Skia feature, skiagd focuses on:
 
@@ -86,7 +86,7 @@ Rasterization happens only when you call functions such as:
 
 * `as_png()`: render the picture as a PNG and return the raw vector,
 * `freeze()`: rasterize the picture and place it on a new canvas,
-* `as_nativeraster()`: convert the picture to an R nativeRaster object,
+* `as_nativeraster()`: convert the picture to nativeRaster,
 * `draw_img()`: convert to nativeRaster and display it in the graphics device.
 
 ### Relationship with R's graphics device
@@ -202,7 +202,7 @@ canvas("gray20") |>
       ), ncol = 3),
     radius = rep_len(12, nrow(pos)),
     color = (seq_len(nrow(pos)) / 100) |>
-      grDevices::hsv(.0083, 1, v = _, alpha = .8) |>
+      grDevices::hsv(1, 1, alpha = .8) |>
       col2rgba(),
     props = paint(
       !!!my_props,
@@ -274,7 +274,7 @@ Some drawing functions accept an `rsx_trans` data that specifies how each shape 
 * translation (`tx`, `ty`),
 * anchor coordinates (`ax`, `ay`).
 
-Note that Skia does not fully support rotating shapes defined only by rectangles, so in this example all rectangles are unrotated to avoid errors.
+Note that Skia does not fully support rotating shapes defined by rectangles, so in this example all rectangles are unrotated to avoid errors.
 
 ## Freezing Pictures
 

@@ -40,15 +40,15 @@
 #'     }
 #'  }")
 #'
-#' canvas_size <- dev_size()
+#' cv_size <- dev_size()
 #' imgf <-
 #'   ImageFilter$runtime_shader(
 #'     effect,
-#'     list(resolution = as.double(canvas_size))
+#'     list(resolution = as.double(cv_size))
 #'   )
 #' canvas() |>
 #'   add_rect(
-#'     matrix(c(0, 0, canvas_size), ncol = 4),
+#'     matrix(c(0, 0, cv_size), ncol = 4),
 #'     props = paint(image_filter = imgf)
 #'   ) |>
 #'   draw_img()

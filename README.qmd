@@ -39,8 +39,8 @@ skiagd takes a pipeline‑oriented philosophy similar to [ggplot2](https://ggplo
 In a skiagd pipeline, there are three main steps to draw an image:
 
 1. **Create a canvas** with a background colour. The call `canvas()` returns a new [picture](https://shopify.github.io/react-native-skia/docs/shapes/pictures/) object that represents the drawing state.
-2. **Compose shapes** by piping calls to `add_*()` functions. Each `add_*()` call takes the current picture, adds shapes to it, and returns a new picture. The picture object always remains a recipe of drawing commands, no pixels are produced at this stage.
-3. **Render the picture**. To convert a picture into pixels you can call...
+2. **Compose shapes** by piping calls to `add_*()` functions. Each `add_*()` call takes the previous picture, adds shapes to it, and returns a new picture. The picture object always remains a recipe of drawing commands, no pixels are produced at this stage.
+3. **Render the picture**. To convert a picture into pixels you can call:
    1. `draw_img()` to draw to the current graphics device
    2. `as_nativeraster()` to obtain a nativeRaster
    3. `as_png()` to obtain a PNG as a raw vector

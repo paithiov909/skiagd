@@ -19,7 +19,7 @@ lockEnvironment(TileMode, bindings = TRUE)
 #' Enable autocomplete for painting attributes
 #'
 #' Enables autocomplete for painting attributes.
-#' To to this, this function simply assigns them to the current environment.
+#' To do this, this function simply assigns them to the current environment.
 #'
 #' @param env Environment to assign objects to.
 #' @returns Called for its side-effect.

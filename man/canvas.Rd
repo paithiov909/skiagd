@@ -2,7 +2,7 @@
 % Please edit documentation in R/canvas.R
 \name{canvas}
 \alias{canvas}
-\title{Create a new canvas}
+\title{Create new canvas}
 \usage{
 canvas(fill = "transparent", canvas_size = paint()[["canvas_size"]])
 }
@@ -17,7 +17,7 @@ converted internally using \code{\link[colorfast:col_to_rgb]{colorfast::col_to_r
 A raw vector containing a serialized Skia picture.
 }
 \description{
-Creates a new serialized Skia picture (a single frame) with a canvas filled
+Creates a new serialized picture (a single frame) with a canvas filled
 with the specified color.
 
 The coordinate system follows the usual image convention: the origin is at
@@ -27,6 +27,7 @@ downward. Units are pixels.
 \examples{
 \dontrun{
 canvas("navy") |> draw_img()
+
 canvas(c(255, 0, 0, 255)) |> draw_img() # filled with red
 }
 }

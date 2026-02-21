@@ -1,4 +1,4 @@
-#' Convert picture into a native raster
+#' Convert picture into native raster
 #'
 #' @description
 #' Converts `img` to an integer matrix with class `nativeRaster`.
@@ -35,13 +35,15 @@ as_nativeraster <- function(img, ..., props = paint()) {
 
 #' Convert picture into recorded plot
 #'
-#' This is mainly for testing.
+#' This function exists for testing purposes.
+#' You typically does not need to call this function.
 #'
 #' @inheritParams param-img-and-props
 #' @returns
 #' A `recordedplot` object is invisibly returned.
 #' See [grDevices::recordPlot()] for details.
 #' @export
+#' @keywords internal
 as_recordedplot <- function(img, ..., props = paint()) {
   rast <- as_nativeraster(img, props = props)
   grid::grid.newpage(recording = FALSE)
@@ -49,7 +51,7 @@ as_recordedplot <- function(img, ..., props = paint()) {
   invisible(grDevices::recordPlot())
 }
 
-#' Plot picture as a raster
+#' Plot picture as raster image
 #'
 #' @description
 #' Converts `img` to a `nativeRaster` and draws it using

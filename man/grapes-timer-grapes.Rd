@@ -19,7 +19,7 @@ An operator to evaluate an expression
 while logging its execution time for debugging.
 }
 \details{
-\code{lhs \%timer\% rhs} evaluates \code{rhs} inside a \link{system.time} call,
+\code{lhs \%timer\% rhs} evaluates \code{rhs} inside a \code{\link[=system.time]{system.time()}} call,
 assigns the execution time to the variable \code{time},
 and tries to evaluate \code{lhs} in an environment where \code{time} exists.
 In doing so, failure to evaluate the left-hand side
@@ -30,3 +30,4 @@ print(time) \%timer\% {
  rnorm(10) ^2
 }
 }
+\keyword{internal}

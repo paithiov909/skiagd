@@ -2,10 +2,10 @@
 #'
 #' @rdname skiagd-params
 #' @name param-img-and-props
-#' @param img A raw vector of a serialized Skia picture.
+#' @param img A raw vector of a serialized picture.
 #' @param props A list of painting attributes created by [paint()].
 #' @param ... For some drawing functions, you can specify
-#'  `sigma`, `width` and `color` as named arguments.
+#'  `sigma`, `width`, and `color` as named arguments.
 #'
 #' * `sigma` must be a numeric vector of blur sigmas for each shape.
 #' * `width` must be a numeric vector of stroke widths for each shape.
@@ -28,8 +28,8 @@ NULL
 #' * angle of rotation (in radians)
 #' * amount of translation in the X-axis direction
 #' * amount of translation in the Y-axis direction
-#' * X coordinate offset for the anchor point
-#' * Y coordinate offset for the anchor point
+#' * offset for the anchor point in the X-axis direction
+#' * offset for the anchor point in the Y-axis direction
 #' @keywords internal
 NULL
 

@@ -13,7 +13,7 @@ add_path(
 )
 }
 \arguments{
-\item{img}{A raw vector of a serialized Skia picture.}
+\item{img}{A raw vector of a serialized picture.}
 
 \item{path}{A character vector of SVG path notations (the \code{d} attribute syntax),
 e.g. \code{"M45 10 H55 V45 H90 V55 H55 V90 H45 V55 H10 V45 H45 Z"}.}
@@ -26,12 +26,12 @@ Each column of the matrix corresponds to:
 \item angle of rotation (in radians)
 \item amount of translation in the X-axis direction
 \item amount of translation in the Y-axis direction
-\item X coordinate offset for the anchor point
-\item Y coordinate offset for the anchor point
+\item offset for the anchor point in the X-axis direction
+\item offset for the anchor point in the Y-axis direction
 }}
 
 \item{...}{For some drawing functions, you can specify
-\code{sigma}, \code{width} and \code{color} as named arguments.
+\code{sigma}, \code{width}, and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
@@ -44,12 +44,12 @@ If the function does not matter them,  \code{...} is simply ignored.}
 \item{props}{A list of painting attributes created by \code{\link[=paint]{paint()}}.}
 }
 \value{
-A raw vector containing a serialized picture with the added paths.
+A raw vector containing a serialized picture.
 }
 \description{
 Adds one or more SVG paths to an existing picture.
 
-Each path is given as a string in the SVG \code{d}-attribute syntax, and can be
+Each path is given as a string in the SVG \code{d} attribute syntax, and can be
 positioned by providing an RSX transform per path via \code{rsx_trans}.
 }
 \details{

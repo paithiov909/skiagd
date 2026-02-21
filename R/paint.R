@@ -57,10 +57,11 @@ paint <- function(...) {
 #' @returns An integer vector of length 2 (width, height).
 #' @export
 dev_size <- function(units = "px") {
-  as.integer(grDevices::dev.size(units))
+  cv_size <- as.integer(grDevices::dev.size(units))
+  rlang::set_names(cv_size, c("width", "height"))
 }
 
-#' Convert colors to a matrix of RGBA integers
+#' Convert colors to matrix of RGBA integers
 #'
 #' A wrapper of [colorfast::col_to_rgb()].
 #'

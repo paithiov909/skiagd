@@ -7,7 +7,7 @@
 add_vertices(img, vertices, ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of a serialized Skia picture.}
+\item{img}{A raw vector of a serialized picture.}
 
 \item{vertices}{A numeric matrix (or a data-frame-like object)
 with 2 numeric columns (x and y),
@@ -16,7 +16,7 @@ Vertices are consumed in groups of three (three rows per triangle).
 If \code{nrow(vertices)} is not a multiple of 3, the last \code{nrow(vertices) \%\% 3} vertices are ignored.}
 
 \item{...}{For some drawing functions, you can specify
-\code{sigma}, \code{width} and \code{color} as named arguments.
+\code{sigma}, \code{width}, and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.

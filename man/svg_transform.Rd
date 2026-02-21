@@ -20,7 +20,7 @@ A character vector of transformed SVG path notations.
 Applies an affine transformation to SVG path notations.
 
 This is useful for translating, scaling, or skewing paths written in the
-SVG \code{d}-attribute syntax before placing them with \code{\link[=add_path]{add_path()}}.
+SVG \code{d} attribute syntax before placing them with \code{\link[=add_path]{add_path()}}.
 }
 \examples{
 trans <- matrix(c(1, 0, -50, 0, 1, -50, 0, 0, 1), 3, 3)

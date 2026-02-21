@@ -10,7 +10,7 @@
 #' @note
 #' * To create sprites (or canvases) of a specific size,
 #' you may need to fix the size of the current graphics device (e.g., using a dummy device)
-#' or supply canvas_size via `props = paint(canvas_size = ...)`,
+#' or supply `canvas_size` via `props = paint(canvas_size = ...)`,
 #' because drawing functions use `props[["canvas_size"]]` at each call.
 #'
 #' @param png A raw vector of a PNG image to be used as a sprite. This can be

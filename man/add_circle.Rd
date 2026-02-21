@@ -7,7 +7,7 @@
 add_circle(img, center, radius, ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of a serialized Skia picture.}
+\item{img}{A raw vector of a serialized picture.}
 
 \item{center}{A numeric matrix (or a data-frame-like object)
 with 2 columns (x and y),
@@ -16,7 +16,7 @@ where each row represents the center of a circle.}
 \item{radius}{A numeric vector of radii, one for each circle.}
 
 \item{...}{For some drawing functions, you can specify
-\code{sigma}, \code{width} and \code{color} as named arguments.
+\code{sigma}, \code{width}, and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.

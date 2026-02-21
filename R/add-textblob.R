@@ -25,7 +25,7 @@
 #' * If `freeze = FALSE`, the returned picture can become large because font data may
 #'   be embedded. In most cases, it is recommended to keep `freeze = TRUE`.
 #'
-#' @returns A raw vector containing a serialized picture with the added text.
+#' @returns A raw vector containing a serialized picture.
 #' @export
 #' @examples
 #' \dontrun{

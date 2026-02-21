@@ -15,7 +15,7 @@ add_arc(
 )
 }
 \arguments{
-\item{img}{A raw vector of a serialized Skia picture.}
+\item{img}{A raw vector of a serialized picture.}
 
 \item{ltrb}{A numeric matrix (or a data-frame-like object)
 with 4 numeric columns (left, top, right, bottom),
@@ -29,8 +29,8 @@ Each column of the matrix corresponds to:
 \item angle of rotation (in radians)
 \item amount of translation in the X-axis direction
 \item amount of translation in the Y-axis direction
-\item X coordinate offset for the anchor point
-\item Y coordinate offset for the anchor point
+\item offset for the anchor point in the X-axis direction
+\item offset for the anchor point in the Y-axis direction
 }}
 
 \item{angle}{A numeric matrix (or a data-frame-like object)
@@ -40,7 +40,7 @@ with 2 numeric columns giving the sweep angles (in degrees) for each arc.}
 i.e., lines from the oval center to the arc end points (like a "Pac-Man" wedge).}
 
 \item{...}{For some drawing functions, you can specify
-\code{sigma}, \code{width} and \code{color} as named arguments.
+\code{sigma}, \code{width}, and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.

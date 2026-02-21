@@ -3,7 +3,7 @@
 #' @description
 #' Adds one or more SVG paths to an existing picture.
 #'
-#' Each path is given as a string in the SVG `d`-attribute syntax, and can be
+#' Each path is given as a string in the SVG `d` attribute syntax, and can be
 #' positioned by providing an RSX transform per path via `rsx_trans`.
 #'
 #' @details
@@ -21,7 +21,7 @@
 #'  e.g. `"M45 10 H55 V45 H90 V55 H55 V90 H45 V55 H10 V45 H45 Z"`.
 #' @inheritParams param-img-and-props
 #' @inheritParams param-rsx-trans
-#' @returns A raw vector containing a serialized picture with the added paths.
+#' @returns A raw vector containing a serialized picture.
 #' @export
 #' @examples
 #' \dontrun{

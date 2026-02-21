@@ -7,10 +7,10 @@
 as_recordedplot(img, ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of a serialized Skia picture.}
+\item{img}{A raw vector of a serialized picture.}
 
 \item{...}{For some drawing functions, you can specify
-\code{sigma}, \code{width} and \code{color} as named arguments.
+\code{sigma}, \code{width}, and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.
@@ -27,5 +27,7 @@ A \code{recordedplot} object is invisibly returned.
 See \code{\link[grDevices:recordplot]{grDevices::recordPlot()}} for details.
 }
 \description{
-This is mainly for testing.
+This function exists for testing purposes.
+You typically does not need to call this function.
 }
+\keyword{internal}

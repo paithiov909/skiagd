@@ -2,7 +2,7 @@
 % Please edit documentation in R/paint.R
 \name{col2rgba}
 \alias{col2rgba}
-\title{Convert colors to a matrix of RGBA integers}
+\title{Convert colors to matrix of RGBA integers}
 \usage{
 col2rgba(color)
 }

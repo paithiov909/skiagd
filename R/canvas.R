@@ -1,7 +1,7 @@
-#' Create a new canvas
+#' Create new canvas
 #'
 #' @description
-#' Creates a new serialized Skia picture (a single frame) with a canvas filled
+#' Creates a new serialized picture (a single frame) with a canvas filled
 #' with the specified color.
 #'
 #' The coordinate system follows the usual image convention: the origin is at
@@ -17,6 +17,7 @@
 #' @examples
 #' \dontrun{
 #' canvas("navy") |> draw_img()
+#'
 #' canvas(c(255, 0, 0, 255)) |> draw_img() # filled with red
 #' }
 canvas <- function(

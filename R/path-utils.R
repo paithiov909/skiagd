@@ -4,7 +4,7 @@
 #' Applies an affine transformation to SVG path notations.
 #'
 #' This is useful for translating, scaling, or skewing paths written in the
-#' SVG `d`-attribute syntax before placing them with [add_path()].
+#' SVG `d` attribute syntax before placing them with [add_path()].
 #'
 #' @param path A character vector of SVG path notations (the `d` attribute syntax).
 #'  Each element is treated as a separate path.

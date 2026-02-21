@@ -7,7 +7,7 @@
 add_point(img, point, group = rep_len(1, nrow(point)), ..., props = paint())
 }
 \arguments{
-\item{img}{A raw vector of a serialized Skia picture.}
+\item{img}{A raw vector of a serialized picture.}
 
 \item{point}{A numeric matrix (or a data-frame-like object) with two numeric
 columns (x and y), where each row is a point.}
@@ -17,7 +17,7 @@ groups and drawn group-by-group. Note that grouping is based on consecutive
 runs of the same value (see Details).}
 
 \item{...}{For some drawing functions, you can specify
-\code{sigma}, \code{width} and \code{color} as named arguments.
+\code{sigma}, \code{width}, and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.

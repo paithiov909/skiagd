@@ -16,7 +16,7 @@ add_diff_rect(
 )
 }
 \arguments{
-\item{img}{A raw vector of a serialized Skia picture.}
+\item{img}{A raw vector of a serialized picture.}
 
 \item{outer, inner}{A numeric matrix (or a data-frame-like object)
 with 4 numeric columns (left, top, right, bottom),
@@ -30,8 +30,8 @@ Each column of the matrix corresponds to:
 \item angle of rotation (in radians)
 \item amount of translation in the X-axis direction
 \item amount of translation in the Y-axis direction
-\item X coordinate offset for the anchor point
-\item Y coordinate offset for the anchor point
+\item offset for the anchor point in the X-axis direction
+\item offset for the anchor point in the Y-axis direction
 }}
 
 \item{outer_radii, inner_radii}{A numeric matrix (or data-frame-like object)
@@ -39,7 +39,7 @@ with 2 numeric columns (x and y),
 where each row represents the corner radii of a rounded rectangle.}
 
 \item{...}{For some drawing functions, you can specify
-\code{sigma}, \code{width} and \code{color} as named arguments.
+\code{sigma}, \code{width}, and \code{color} as named arguments.
 \itemize{
 \item \code{sigma} must be a numeric vector of blur sigmas for each shape.
 \item \code{width} must be a numeric vector of stroke widths for each shape.

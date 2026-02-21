@@ -14,5 +14,5 @@ Called for its side-effect.
 }
 \description{
 Enables autocomplete for painting attributes.
-To to this, this function simply assigns them to the current environment.
+To do this, this function simply assigns them to the current environment.
 }

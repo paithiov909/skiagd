@@ -8,7 +8,7 @@
 #' while logging its execution time for debugging.
 #'
 #' @details
-#' `lhs %timer% rhs` evaluates `rhs` inside a [system.time] call,
+#' `lhs %timer% rhs` evaluates `rhs` inside a [system.time()] call,
 #' assigns the execution time to the variable `time`,
 #' and tries to evaluate `lhs` in an environment where `time` exists.
 #' In doing so, failure to evaluate the left-hand side
@@ -17,6 +17,7 @@
 #' @param lhs An expression.
 #' @param rhs An expression.
 #' @returns Values from evaluated `rhs` is returned invisibly.
+#' @keywords internal
 #' @export
 #' @examples
 #' print(time) %timer% {
