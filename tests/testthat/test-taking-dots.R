@@ -2,8 +2,8 @@ skip_on_cran()
 skip_on_ci()
 
 # to prevent opening default graphics device
-dev <- grDevices::png(nullfile(), width = 720, height = 576)
-on.exit(dev.off())
+dev <- grDevices::png(tempfile(), width = 720, height = 576)
+on.exit(dev.off(), add = TRUE)
 
 circle <- function(amp, freq, phase) {
   amp * 1i^(freq * seq(0, 600, length.out = 260) + phase)
