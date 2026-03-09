@@ -10,7 +10,7 @@
 
 \item{tile_size}{Numerics of length 2; tile size (width, height).}
 
-\item{transform}{Numerics of length 9; transformation matrix.}
+\item{transform}{Numerics of length 9; see \link{transform-matrix}.}
 
 \item{png}{A raw vector of PNG image.}
 

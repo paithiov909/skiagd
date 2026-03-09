@@ -10,7 +10,7 @@ svg_transform(path, transform)
 \item{path}{A character vector of SVG path notations (the \code{d} attribute syntax).
 Each element is treated as a separate path.}
 
-\item{transform}{Numerics of length 9 representing a 3x3 affine transform matrix.}
+\item{transform}{Numerics of length 9; see \link{transform-matrix}.}
 }
 \value{
 A character vector of transformed SVG path notations.
