@@ -3,7 +3,7 @@
 #' @description
 #' The `paint()` function allows users to specify
 #' various painting attributes for drawing shapes on the canvas,
-#' such as color, stroke width, and transformations.
+#' such as color and stroke width.
 #'
 #' @param ... <[`dynamic-dots`][rlang::dyn-dots]>
 #' Named arguments specifying painting attributes. See details.
@@ -30,13 +30,20 @@
 #' * `point_mode`: [PointMode] for [add_point()].
 #' * `vertex_mode`: [VertexMode] for [add_vertices()].
 #' * `fill_type`: [FillType] for [add_path()].
-#' * `transform`: Numerics of length 9. See [transform-matrix] for affine transformations.
 #'
 #' @returns A list containing the specified painting attributes,
 #'  merged with default values.
 #' @export
 paint <- function(...) {
   dots <- rlang::list2(...)
+  if ("transform" %in% names(dots)) {
+    cli::cli_abort(
+      paste(
+        "Transforming the previous picture has been removed.",
+        "Pre-transform the input coordinates or use a transform-specific API instead."
+      )
+    )
+  }
   if (all(!is.null(dots[["color"]]), !is.numeric(dots[["color"]]))) {
     dots[["color"]] <- col2rgba(dots[["color"]])
   }
@@ -120,8 +127,7 @@ default_attrs <- function() {
     image_filter = ImageFilter$no_filter(),
     point_mode = env_get(PointMode, "Points"),
     vertex_mode = env_get(VertexMode, "Triangles"),
-    fill_type = env_get(FillType, "Winding"),
-    transform = diag(1, 3)
+    fill_type = env_get(FillType, "Winding")
   )
 }
 

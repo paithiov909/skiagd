@@ -78,7 +78,6 @@ add_atlas <- function(img, png, rsx_trans, ..., props = paint()) {
   sk_draw_atlas(
     props[["canvas_size"]],
     img,
-    props[["transform"]],
     as_paint_attrs(props),
     png,
     t(rsx_trans[, 1:6, drop = FALSE])

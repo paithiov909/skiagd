@@ -30,7 +30,7 @@
 #' grid::grid.raster(img, interpolate = FALSE)
 #' }
 as_nativeraster <- function(img, ..., props = paint()) {
-  sk_as_nativeraster(props[["canvas_size"]], img, props[["transform"]])
+  sk_as_nativeraster(props[["canvas_size"]], img)
 }
 
 #' Convert picture into recorded plot

@@ -68,7 +68,6 @@ add_vertices <- function(img, vertices, ..., props = paint()) {
   sk_draw_vertices(
     props[["canvas_size"]],
     img,
-    props[["transform"]],
     as_paint_attrs(props),
     vertices[, 1, drop = TRUE],
     vertices[, 2, drop = TRUE],

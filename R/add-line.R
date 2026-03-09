@@ -62,7 +62,6 @@ add_line <- function(img, from, to, ..., props = paint()) {
   sk_draw_line(
     props[["canvas_size"]],
     img,
-    props[["transform"]],
     as_paint_attrs(props),
     from[, 1, drop = TRUE],
     from[, 2, drop = TRUE],

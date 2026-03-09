@@ -17,7 +17,7 @@ merged with default values.
 \description{
 The \code{paint()} function allows users to specify
 various painting attributes for drawing shapes on the canvas,
-such as color, stroke width, and transformations.
+such as color and stroke width.
 }
 \details{
 The following painting attributes can be specified:
@@ -41,6 +41,5 @@ The following painting attributes can be specified:
 \item \code{point_mode}: \link{PointMode} for \code{\link[=add_point]{add_point()}}.
 \item \code{vertex_mode}: \link{VertexMode} for \code{\link[=add_vertices]{add_vertices()}}.
 \item \code{fill_type}: \link{FillType} for \code{\link[=add_path]{add_path()}}.
-\item \code{transform}: Numerics of length 9. See \link{transform-matrix} for affine transformations.
 }
 }

@@ -40,6 +40,6 @@ Rasterizes a picture into a PNG and adds it to a new canvas.
 
 This is equivalent to \code{as_png(img, props = props)} and then drawing the
 resulting PNG onto a fresh canvas using \code{\link[=add_png]{add_png()}} with the default blend mode
-(\code{BlendMode$SrcOver}). It can be used to reduce the number of recorded drawing
-operations in a picture.
+(\code{BlendMode$SrcOver}). It can be used to flatten a picture before continuing
+to draw.
 }

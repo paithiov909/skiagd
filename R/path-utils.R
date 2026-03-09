@@ -8,8 +8,7 @@
 #'
 #' @param path A character vector of SVG path notations (the `d` attribute syntax).
 #'  Each element is treated as a separate path.
-#' @param transform Numerics of length 9 representing a [transform-matrix].
-#'  This defines a 3x3 matrix for affine transformation.
+#' @param transform Numerics of length 9 representing a 3x3 affine transform matrix.
 #' @returns A character vector of transformed SVG path notations.
 #' @export
 #' @family path-utils

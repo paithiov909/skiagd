@@ -14,7 +14,6 @@ add_png <- function(img, png, left = 0, top = 0, ..., props = paint()) {
   sk_draw_png(
     props[["canvas_size"]],
     img,
-    props[["transform"]],
     as_paint_attrs(props),
     png,
     as.integer(c(left, top))
@@ -38,7 +37,7 @@ add_png <- function(img, png, left = 0, top = 0, ..., props = paint()) {
 #' writeBin(png, "navy.png")
 #' }
 as_png <- function(img, ..., props = paint()) {
-  sk_as_png(props[["canvas_size"]], img, props[["transform"]])
+  sk_as_png(props[["canvas_size"]], img)
 }
 
 #' Freeze picture
@@ -48,8 +47,8 @@ as_png <- function(img, ..., props = paint()) {
 #'
 #' This is equivalent to `as_png(img, props = props)` and then drawing the
 #' resulting PNG onto a fresh canvas using [add_png()] with the default blend mode
-#' (`BlendMode$SrcOver`). It can be used to reduce the number of recorded drawing
-#' operations in a picture.
+#' (`BlendMode$SrcOver`). It can be used to flatten a picture before continuing
+#' to draw.
 #'
 #' @param left A numeric scalar giving the horizontal offset (in pixels) where the
 #'  rasterized image is drawn on the new canvas. Negative values are allowed.
