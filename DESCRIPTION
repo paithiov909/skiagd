@@ -1,6 +1,6 @@
 Package: skiagd
 Title: Creative Coding Pipeline for R
-Version: 0.1.6.9000
+Version: 0.1.7
 Authors@R: c(
     person("Akiru", "Kato", , "paithiov909@gmail.com", role = c("aut", "cre")),
     person("Jeroen", "Ooms", role = "cph")
