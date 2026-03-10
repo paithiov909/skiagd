@@ -102,7 +102,6 @@ add_rect <- function(
   sk_draw_rounded_rect(
     props[["canvas_size"]],
     img,
-    props[["transform"]],
     as_paint_attrs(props),
     t(ltrb[, 1:4, drop = TRUE]),
     radii[, 1, drop = TRUE],
@@ -233,7 +232,6 @@ add_diff_rect <- function(
   sk_draw_diff_rect(
     props[["canvas_size"]],
     img,
-    props[["transform"]],
     as_paint_attrs(props),
     t(outer[, 1:4, drop = TRUE]),
     outer_radii[, 1, drop = TRUE],

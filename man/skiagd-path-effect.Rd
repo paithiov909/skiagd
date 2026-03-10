@@ -34,7 +34,7 @@ or distance (mod advance) along the path for its initial position (for \code{pat
 \item{style}{A string scalar; how to transform path at each point.
 Can be \code{"translate"}, \code{"rotate"}, or \code{"morph"}.}
 
-\item{transform}{Numerics of length 9; transformation matrix.}
+\item{transform}{Numerics of length 9; see \link{transform-matrix}.}
 
 \item{width}{A numeric scalar; width of the path to be stamped.}
 }

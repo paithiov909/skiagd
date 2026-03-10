@@ -2,30 +2,32 @@
 % Please edit documentation in R/aaa.R
 \name{transform-matrix}
 \alias{transform-matrix}
-\title{Applying affine transformations to the previous picture}
+\title{Affine transformation matrix}
 \description{
-When loading a picture into a canvas,
-you can apply an affine transformation to it
-by providing a numeric vector of length 9 to \code{\link[=paint]{paint()}} as \code{transform}.
+Several skiagd APIs accept \code{transform} as numerics of length 9.
+This value is interpreted as a 3x3 affine transformation matrix.
+
+Typical uses include transforming:
+\itemize{
+\item shader coordinate systems such as gradients and image shaders,
+\item path effect patterns such as \code{PathEffect$path_2d()} and \code{PathEffect$line_2d()},
+\item SVG path data via \code{\link[=svg_transform]{svg_transform()}}.
+}
 }
 \details{
-This vector defines a transformation matrix that modifies a picture
-before rendering it onto the canvas.
-
-The \code{transform} vector represents a 3x3 matrix
-used for affine transformations, following the format:
+The matrix is read in the following layout:
 
 \deqn{\begin{bmatrix}
-\text{scale}_x & \text{skew}_y & \text{pers}_0 \\
-\text{skew}_x & \text{scale}_y & \text{pers}_1 \\
-\text{trans}_x & \text{trans}_y & \text{pers}_2
+\text{scale}_x & \text{skew}_y & \text{persp}_0 \\
+\text{skew}_x & \text{scale}_y & \text{persp}_1 \\
+\text{trans}_x & \text{trans}_y & \text{persp}_2
 \end{bmatrix}}
 
-The first two columns define standard affine transformations,
-including scaling, skewing, and translation.
-The third column (\code{pers_0}, \code{pers_1}, and \code{pers_2}) is
-typically used for perspective transformations,
-though in most affine transformations, it remains as \code{c(0, 0, 1)}.
+For ordinary affine transforms, the last column is typically \code{c(0, 0, 1)},
+while the other entries control scaling, skewing, and translation.
+
+skiagd passes this matrix through to the corresponding Skia API, so the exact
+effect depends on where \code{transform} is used.
 }
 \seealso{
 \href{https://rust-skia.github.io/doc/skia_safe/matrix/struct.Matrix.html}{Matrix in skia_safe::matrix - Rust}

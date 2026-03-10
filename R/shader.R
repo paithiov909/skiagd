@@ -39,7 +39,7 @@ c.Shader <- function(..., mode = paint()[["blend_mode"]]) {
 #' @param img A raw vector of picture.
 #' @param mode For `blend()`, [BlendMode]. For others, [TileMode].
 #' @param tile_size Numerics of length 2; tile size (width, height).
-#' @param transform Numerics of length 9; transformation matrix.
+#' @param transform Numerics of length 9; see [transform-matrix].
 #' @param png A raw vector of PNG image.
 #' @param source A [RuntimeEffect] object.
 #' @param uniforms A named list of numerics to be assigned to uniforms in `source`.

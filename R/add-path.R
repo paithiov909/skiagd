@@ -77,7 +77,6 @@ add_path <- function(
   sk_draw_path(
     props[["canvas_size"]],
     img,
-    props[["transform"]],
     as_paint_attrs(props),
     path,
     t(rsx_trans[, 1:6, drop = TRUE]),

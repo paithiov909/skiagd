@@ -2,8 +2,8 @@ skip_on_cran()
 skip_on_ci()
 
 # to prevent opening default graphics device
-dev <- grDevices::png(nullfile(), width = 720, height = 576)
-on.exit(dev.off())
+dev <- grDevices::png(tempfile(), width = 720, height = 576)
+on.exit(dev.off(), add = TRUE)
 
 test_that("ImageFilter$color_matrix works", {
   vdiffr::expect_doppelganger(
@@ -70,7 +70,7 @@ test_that("ImageFilter$displacement_map works", {
             scale = 30,
             displacement = ImageFilter$from_picture(
               pict,
-              matrix(crop_rect, ncol = 4)
+              crop_rect
             ),
             crop_rect = crop_rect
           )

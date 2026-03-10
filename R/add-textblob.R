@@ -82,7 +82,6 @@ add_text <- function(
   sk_draw_text(
     props[["canvas_size"]],
     img,
-    props[["transform"]],
     as_paint_attrs(props),
     text,
     freeze,

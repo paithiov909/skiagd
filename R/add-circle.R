@@ -57,7 +57,6 @@ add_circle <- function(img, center, radius, ..., props = paint()) {
   sk_draw_circle(
     props[["canvas_size"]],
     img,
-    props[["transform"]],
     as_paint_attrs(props),
     center[, 1, drop = TRUE],
     center[, 2, drop = TRUE],

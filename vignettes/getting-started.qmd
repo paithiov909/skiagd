@@ -267,7 +267,7 @@ canvas("gray20") |>
   draw_img()
 ```
 
-Some drawing functions accept an `rsx_trans` data that specifies how each shape should be transformed. Each row corresponds to one shape and controls:
+Some drawing functions accept an `rsx_trans` that specifies how each shape should be transformed. Each row corresponds to one shape and controls:
 
 * scaling (`sc`),
 * rotation (`rot`),
@@ -332,7 +332,7 @@ canvas("gray20") |>
 2. places it onto a new blank canvas as a single PNG with `add_png()`,
 3. returns a new picture you can continue drawing on.
 
-A single picture can contain only a limited number of drawing operations (around 100). One operation corresponds to a single `add_*()` call, regardless of the number of shapes within it. In the example above, the pipeline freezes the picture every 50th iteration to stay below this limit.
+This is useful when you want to flatten the current picture before continuing, for example to keep replay cost predictable or to rasterize the current state at a specific point in the pipeline.
 
 # Conclusion
 

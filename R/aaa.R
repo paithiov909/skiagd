@@ -51,10 +51,6 @@ NULL
 #' with the [Skia debugger](https://skia.org/docs/dev/tools/debugger/)
 #' if they are compatible with the version.
 #'
-#' @note
-#' * A serialized picture can hold only up to 100 drawing operations.
-#' If you need more, you can save the capacity by using [freeze()] as needed.
-#'
 #' @seealso
 #' [Pictures | React Native Skia](https://shopify.github.io/react-native-skia/docs/shapes/pictures)
 #' @rdname pictures
@@ -62,31 +58,32 @@ NULL
 #' @aliases picture
 NULL
 
-#' Applying affine transformations to the previous picture
+#' Affine transformation matrix
 #'
 #' @description
-#' When loading a picture into a canvas,
-#' you can apply an affine transformation to it
-#' by providing a numeric vector of length 9 to [paint()] as `transform`.
+#' Several skiagd APIs accept `transform` as numerics of length 9.
+#' This value is interpreted as a 3x3 affine transformation matrix.
+#'
+#' Typical uses include transforming:
+#'
+#' * shader coordinate systems such as gradients and image shaders,
+#' * path effect patterns such as `PathEffect$path_2d()` and `PathEffect$line_2d()`,
+#' * SVG path data via [svg_transform()].
 #'
 #' @details
-#' This vector defines a transformation matrix that modifies a picture
-#' before rendering it onto the canvas.
-#'
-#' The `transform` vector represents a 3x3 matrix
-#' used for affine transformations, following the format:
+#' The matrix is read in the following layout:
 #'
 #' \deqn{\begin{bmatrix}
-#' \text{scale}_x & \text{skew}_y & \text{pers}_0 \\
-#' \text{skew}_x & \text{scale}_y & \text{pers}_1 \\
-#' \text{trans}_x & \text{trans}_y & \text{pers}_2
+#' \text{scale}_x & \text{skew}_y & \text{persp}_0 \\
+#' \text{skew}_x & \text{scale}_y & \text{persp}_1 \\
+#' \text{trans}_x & \text{trans}_y & \text{persp}_2
 #' \end{bmatrix}}
 #'
-#' The first two columns define standard affine transformations,
-#' including scaling, skewing, and translation.
-#' The third column (`pers_0`, `pers_1`, and `pers_2`) is
-#' typically used for perspective transformations,
-#' though in most affine transformations, it remains as `c(0, 0, 1)`.
+#' For ordinary affine transforms, the last column is typically `c(0, 0, 1)`,
+#' while the other entries control scaling, skewing, and translation.
+#'
+#' skiagd passes this matrix through to the corresponding Skia API, so the exact
+#' effect depends on where `transform` is used.
 #'
 #' @seealso
 #' [Matrix in skia_safe::matrix - Rust](https://rust-skia.github.io/doc/skia_safe/matrix/struct.Matrix.html)

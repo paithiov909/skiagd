@@ -2,8 +2,8 @@ skip_on_cran()
 skip_on_ci()
 
 # to prevent opening default graphics device
-dev <- grDevices::png(nullfile(), width = 720, height = 576)
-on.exit(dev.off())
+dev <- grDevices::png(tempfile(), width = 720, height = 576)
+on.exit(dev.off(), add = TRUE)
 
 test_that("add_rect works", {
   vdiffr::expect_doppelganger(
@@ -84,23 +84,21 @@ test_that("add_line works", {
         props = paint(color = "steelblue", width = 16, cap = Cap$Round)
       ) |>
       add_line(
-        matrix(c(20, 20), ncol = 2),
-        matrix(c(320, 320), ncol = 2),
+        matrix(c(140, 20), ncol = 2),
+        matrix(c(440, 320), ncol = 2),
         props = paint(
           color = "purple",
           width = 16,
-          cap = Cap$Butt,
-          transform = c(1, 0, 120, 0, 1, 0, 0, 0, 1)
+          cap = Cap$Butt
         )
       ) |>
       add_line(
-        matrix(c(20, 20), ncol = 2),
-        matrix(c(320, 320), ncol = 2),
+        matrix(c(140, 20), ncol = 2),
+        matrix(c(440, 320), ncol = 2),
         props = paint(
           color = "blue",
           width = 16,
-          cap = Cap$Square,
-          transform = c(1, 0, 120, 0, 1, 0, 0, 0, 1)
+          cap = Cap$Square
         )
       ) |>
       as_recordedplot()

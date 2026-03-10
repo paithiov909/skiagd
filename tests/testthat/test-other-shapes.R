@@ -2,8 +2,8 @@ skip_on_cran()
 skip_on_ci()
 
 # to prevent opening default graphics device
-dev <- grDevices::png(nullfile(), width = 720, height = 576)
-on.exit(dev.off())
+dev <- grDevices::png(tempfile(), width = 720, height = 576)
+on.exit(dev.off(), add = TRUE)
 
 test_that("add_atlas works", {
   rect_size <- as.integer(c(24, 11))
@@ -40,11 +40,15 @@ test_that("add_atlas works", {
 })
 
 test_that("add_vertices works", {
+  base_vertices <- matrix(c(64, 0, 128, 256, 0, 256), ncol = 2, byrow = TRUE)
+  shifted_vertices <- base_vertices
+  shifted_vertices[, 1] <- shifted_vertices[, 1] + 256
+
   vdiffr::expect_doppelganger(
     "vertices",
     canvas("snow") |>
       add_vertices(
-        matrix(c(64, 0, 128, 256, 0, 256), ncol = 2, byrow = TRUE),
+        base_vertices,
         color = col2rgba("violetred") |>
           kronecker(matrix(1, 1, 3)),
         props = paint(
@@ -52,10 +56,9 @@ test_that("add_vertices works", {
         )
       ) |>
       add_vertices(
-        matrix(c(64, 0, 128, 256, 0, 256), ncol = 2, byrow = TRUE),
+        shifted_vertices,
         color = col2rgba(c("#61dafb", "#fb61da", "#dafb61")),
         props = paint(
-          transform = c(1, 0, 256, 0, 1, 0, 0, 0, 1),
           shader = Shader$fractal_noise(c(.05, .05), 4, 123, c(16, 16))
         )
       ) |>

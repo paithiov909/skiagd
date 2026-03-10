@@ -116,7 +116,6 @@ add_arc <- function(
   sk_draw_arc(
     props[["canvas_size"]],
     img,
-    props[["transform"]],
     as_paint_attrs(props),
     t(ltrb[, 1:4, drop = TRUE]),
     matrix(0, nrow(ltrb), 2),

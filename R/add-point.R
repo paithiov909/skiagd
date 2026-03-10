@@ -121,7 +121,6 @@ add_point <- function(
   sk_draw_points(
     props[["canvas_size"]],
     img,
-    props[["transform"]],
     as_paint_attrs(props),
     point[, 1, drop = TRUE],
     point[, 2, drop = TRUE],

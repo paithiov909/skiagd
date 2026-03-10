@@ -5,36 +5,27 @@ mod runtime_effect;
 
 use canvas::{read_picture_bytes, SkiaCanvas};
 use paint_attrs::{assert_len, PaintAttrs};
-use path_transform::as_matrix;
 
 use savvy::{savvy, savvy_err, IntegerSexp, LogicalSexp, NumericScalar, NumericSexp, StringSexp};
-use skia_safe::{Data, Image, Paint};
+use skia_safe::{Data, Image};
 
 /// Takes a raw vector of picture and returns a native raster
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
 /// @returns An integer matrix that represents a native raster.
 /// @noRd
 #[savvy]
-fn sk_as_nativeraster(
-    size: IntegerSexp,
-    curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
-) -> savvy::Result<savvy::Sexp> {
+fn sk_as_nativeraster(size: IntegerSexp, curr_bytes: savvy::RawSexp) -> savvy::Result<savvy::Sexp> {
     assert_len("size", 2, size.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let size = size.to_vec();
 
     let mut surface = skia_safe::surfaces::raster_n32_premul((size[0], size[1]))
-        .unwrap_or_else(|| skia_safe::surfaces::raster_n32_premul((720, 576)).unwrap());
+        .unwrap_or_else(|| skia_safe::surfaces::raster_n32_premul((768, 576)).unwrap());
     surface.canvas().clear(skia_safe::Color::TRANSPARENT);
-    surface
-        .canvas()
-        .draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
+    picture.playback(surface.canvas());
 
     let image = surface.image_snapshot();
 
@@ -70,23 +61,16 @@ fn sk_as_nativeraster(
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
 /// @returns A raw vector of PNG data.
 /// @noRd
 #[savvy]
-fn sk_as_png(
-    size: IntegerSexp,
-    curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
-) -> savvy::Result<savvy::Sexp> {
+fn sk_as_png(size: IntegerSexp, curr_bytes: savvy::RawSexp) -> savvy::Result<savvy::Sexp> {
     assert_len("size", 2, size.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let size = size.to_vec();
 
-    let data = canvas::as_png(size, picture, &mat)
-        .ok_or_else(|| return savvy_err!("Failed to encode PNG"))?;
+    let data = canvas::as_png(size, picture).ok_or_else(|| return savvy_err!("Failed to encode PNG"))?;
 
     let mut ret = savvy::OwnedRawSexp::new(data.len())?;
     for (i, b) in data.as_bytes().iter().enumerate() {
@@ -99,7 +83,6 @@ fn sk_as_png(
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
 /// @param png_bytes PNG data to draw.
 /// @param left_top Offset for drawing PNG image.
@@ -109,7 +92,6 @@ fn sk_as_png(
 fn sk_draw_png(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
     props: PaintAttrs,
     png_bytes: savvy::RawSexp,
     left_top: NumericSexp,
@@ -117,11 +99,10 @@ fn sk_draw_png(
     assert_len("left_top", 2, left_top.len())?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let left_top = left_top.as_slice_f64();
 
     let input = Data::new_copy(png_bytes.as_slice());
-    let picture = canvas::put_png(input, size, picture, mat, left_top.to_vec(), props)?;
+    let picture = canvas::put_png(input, size, picture, left_top.to_vec(), props)?;
 
     Ok(picture.into())
 }
@@ -130,7 +111,6 @@ fn sk_draw_png(
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
 /// @param text Text strings.
 /// @param freeze Whether to freeze textblobs.
@@ -143,7 +123,6 @@ fn sk_draw_png(
 fn sk_draw_text(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
     props: PaintAttrs,
     text: StringSexp,
     freeze: LogicalSexp,
@@ -165,12 +144,11 @@ fn sk_draw_text(
         .ok_or_else(|| return savvy_err!("Failed to parse rsx_trans"))?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let mut props = props.clone();
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
-    canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
+    picture.playback(canvas);
 
     let mut trans_offset = 0;
     for (i, t) in text.iter().enumerate() {
@@ -209,9 +187,8 @@ fn sk_draw_text(
         Ok(ret.into())
     } else {
         // otherwise, once encodes the result as PNG and redraws it
-        let data = canvas::as_png(size.to_vec(), result, &mat)
-            .ok_or_else(|| return savvy_err!("Failed to encode PNG"))?;
-        let ret = canvas::put_png(data, size, picture, mat, vec![0.0, 0.0], props)?;
+        let data = canvas::as_png(size.to_vec(), result).ok_or_else(|| return savvy_err!("Failed to encode PNG"))?;
+        let ret = canvas::put_png(data, size, picture, vec![0.0, 0.0], props)?;
         Ok(ret.into())
     }
 }
@@ -220,7 +197,6 @@ fn sk_draw_text(
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
 /// @param svg SVG strings to draw.
 /// @param rsx_trans RSX transform for each path.
@@ -234,7 +210,6 @@ fn sk_draw_text(
 fn sk_draw_path(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
     props: PaintAttrs,
     svg: StringSexp,
     rsx_trans: NumericSexp,
@@ -255,12 +230,11 @@ fn sk_draw_path(
         .ok_or_else(|| return savvy_err!("Failed to parse rsx_trans"))?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let mut props = props.clone();
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
-    canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
+    picture.playback(canvas);
 
     for (i, s) in svg.iter().enumerate() {
         props.reset_blur(sigma[i]);
@@ -280,7 +254,6 @@ fn sk_draw_path(
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
 /// @param x X coordinates of points.
 /// @param y Y coordinates of points.
@@ -295,7 +268,6 @@ fn sk_draw_path(
 fn sk_draw_points(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
     props: PaintAttrs,
     x: NumericSexp,
     y: NumericSexp,
@@ -318,12 +290,11 @@ fn sk_draw_points(
     });
 
     let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let mut props = props.clone();
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
-    canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
+    picture.playback(canvas);
 
     let points = x.iter().zip(y.iter());
     let mut offset = 0;
@@ -349,7 +320,6 @@ fn sk_draw_points(
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
 /// @param from_x X coordinates of start points.
 /// @param from_y Y coordinates of start points.
@@ -365,7 +335,6 @@ fn sk_draw_points(
 fn sk_draw_line(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
     props: PaintAttrs,
     from_x: NumericSexp,
     from_y: NumericSexp,
@@ -387,12 +356,11 @@ fn sk_draw_line(
     });
 
     let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let mut props = props.clone();
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
-    canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
+    picture.playback(canvas);
 
     for (i, (from, to)) in from.iter().zip(to.iter()).enumerate() {
         props.reset_blur(sigma[i]);
@@ -408,7 +376,6 @@ fn sk_draw_line(
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
 /// @param x X coordinates of center.
 /// @param y Y coordinates of center.
@@ -422,7 +389,6 @@ fn sk_draw_line(
 fn sk_draw_circle(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
     props: PaintAttrs,
     x: NumericSexp,
     y: NumericSexp,
@@ -442,12 +408,11 @@ fn sk_draw_circle(
     });
 
     let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let mut props = props.clone();
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
-    canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
+    picture.playback(canvas);
 
     for (i, (center, radius)) in center.iter().zip(radius.iter_f64()).enumerate() {
         props.reset_blur(sigma[i]);
@@ -463,7 +428,6 @@ fn sk_draw_circle(
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
 /// @param ltrb Rectangles.
 /// @param r Corners radius. This actually doesn't affect the result.
@@ -479,7 +443,6 @@ fn sk_draw_circle(
 fn sk_draw_arc(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
     props: PaintAttrs,
     ltrb: NumericSexp,
     r: NumericSexp,
@@ -506,12 +469,11 @@ fn sk_draw_arc(
     let use_center = use_center.to_vec()[0];
 
     let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let mut props = props.clone();
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
-    canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
+    picture.playback(canvas);
 
     for (i, (rect, angle)) in rects.iter().zip(angle.chunks(2)).enumerate() {
         if angle.len() != 2 {
@@ -540,7 +502,6 @@ fn sk_draw_arc(
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
 /// @param ltrb Rectangles.
 /// @param rx Axis lengths on X-axis of oval describing rounded corners.
@@ -555,7 +516,6 @@ fn sk_draw_arc(
 fn sk_draw_rounded_rect(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
     props: PaintAttrs,
     ltrb: NumericSexp,
     rx: NumericSexp,
@@ -579,12 +539,11 @@ fn sk_draw_rounded_rect(
         .ok_or_else(|| return savvy_err!("Failed to parse rsx_trans"))?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let mut props = props.clone();
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
-    canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
+    picture.playback(canvas);
 
     for (i, rect) in rects.iter().enumerate() {
         props.reset_blur(sigma[i]);
@@ -604,7 +563,6 @@ fn sk_draw_rounded_rect(
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
 /// @param outer_ltrb Outer rectangles.
 /// @param outer_rx Axis lengths on X-axis of outer oval describing rounded corners.
@@ -622,7 +580,6 @@ fn sk_draw_rounded_rect(
 fn sk_draw_diff_rect(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
     props: PaintAttrs,
     outer_ltrb: NumericSexp,
     outer_rx: NumericSexp,
@@ -651,12 +608,11 @@ fn sk_draw_diff_rect(
         .ok_or_else(|| return savvy_err!("Failed to parse rsx_trans"))?;
 
     let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let mut props = props.clone();
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
-    canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
+    picture.playback(canvas);
 
     for (i, (outer, inner)) in outer.iter().zip(inner.iter()).enumerate() {
         props.reset_blur(sigma[i]);
@@ -686,7 +642,6 @@ fn sk_draw_diff_rect(
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
 /// @param png_bytes PNG bytes.
 /// @param rsx_trans RSX transforms for each sprite.
@@ -696,7 +651,6 @@ fn sk_draw_diff_rect(
 fn sk_draw_atlas(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
     props: PaintAttrs,
     png_bytes: savvy::RawSexp,
     rsx_trans: NumericSexp,
@@ -714,11 +668,10 @@ fn sk_draw_atlas(
         skia_safe::Rect::new(0.0, 0.0, image.width() as f32, image.height() as f32),
     );
     let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
-    canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
+    picture.playback(canvas);
 
     canvas.draw_atlas(
         &image,
@@ -738,7 +691,6 @@ fn sk_draw_atlas(
 ///
 /// @param size Canvas size.
 /// @param curr_bytes Current canvas state.
-/// @param mat Matrix for transforming picture.
 /// @param props PaintAttrs.
 /// @param x X coordinates of points.
 /// @param y Y coordinates of points.
@@ -751,7 +703,6 @@ fn sk_draw_atlas(
 fn sk_draw_vertices(
     size: IntegerSexp,
     curr_bytes: savvy::RawSexp,
-    mat: NumericSexp,
     props: PaintAttrs,
     x: NumericSexp,
     y: NumericSexp,
@@ -771,12 +722,11 @@ fn sk_draw_vertices(
     let vertices = skia_safe::Vertices::new_copy(mode, &positions, &positions, &color, None);
 
     let picture = read_picture_bytes(&curr_bytes)?;
-    let mat = as_matrix(&mat).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
     let mut props = props.clone();
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
-    canvas.draw_picture(&picture, Some(&mat[0]), Some(&Paint::default()));
+    picture.playback(canvas);
 
     props.reset_blur(sigma);
     canvas.draw_vertices(

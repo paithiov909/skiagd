@@ -12,7 +12,7 @@ TileMode
 }
 \description{
 \code{TileMode} determines how the source is tiled for shaders.
-This is not a paint attribute. To specify \code{TileMode}, directly pass these pointers to shader functions.
+This is not a painting attribute. To specify \code{TileMode}, directly pass these pointers to shader functions.
 }
 \details{
 The following \code{TileMode} are available:

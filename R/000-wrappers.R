@@ -51,29 +51,26 @@ NULL
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
 #' @returns An integer matrix that represents a native raster.
 #' @noRd
-`sk_as_nativeraster` <- function(`size`, `curr_bytes`, `mat`) {
-  .Call(savvy_sk_as_nativeraster__impl, `size`, `curr_bytes`, `mat`)
+`sk_as_nativeraster` <- function(`size`, `curr_bytes`) {
+  .Call(savvy_sk_as_nativeraster__impl, `size`, `curr_bytes`)
 }
 
 #' Takes a raw vector of picture and returns PNG data
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
 #' @returns A raw vector of PNG data.
 #' @noRd
-`sk_as_png` <- function(`size`, `curr_bytes`, `mat`) {
-  .Call(savvy_sk_as_png__impl, `size`, `curr_bytes`, `mat`)
+`sk_as_png` <- function(`size`, `curr_bytes`) {
+  .Call(savvy_sk_as_png__impl, `size`, `curr_bytes`)
 }
 
 #' Draws arcs
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param ltrb Rectangles.
 #' @param r Corners radius. This actually doesn't affect the result.
@@ -85,9 +82,9 @@ NULL
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_arc` <- function(`size`, `curr_bytes`, `mat`, `props`, `ltrb`, `r`, `use_center`, `angle`, `rsx_trans`, `sigma`, `width`, `color`) {
+`sk_draw_arc` <- function(`size`, `curr_bytes`, `props`, `ltrb`, `r`, `use_center`, `angle`, `rsx_trans`, `sigma`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
-  .Call(savvy_sk_draw_arc__impl, `size`, `curr_bytes`, `mat`, `props`, `ltrb`, `r`, `use_center`, `angle`, `rsx_trans`, `sigma`, `width`, `color`)
+  .Call(savvy_sk_draw_arc__impl, `size`, `curr_bytes`, `props`, `ltrb`, `r`, `use_center`, `angle`, `rsx_trans`, `sigma`, `width`, `color`)
 }
 
 #' Draws atlas
@@ -97,22 +94,20 @@ NULL
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param png_bytes PNG bytes.
 #' @param rsx_trans RSX transforms for each sprite.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_atlas` <- function(`size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `rsx_trans`) {
+`sk_draw_atlas` <- function(`size`, `curr_bytes`, `props`, `png_bytes`, `rsx_trans`) {
   `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
-  .Call(savvy_sk_draw_atlas__impl, `size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `rsx_trans`)
+  .Call(savvy_sk_draw_atlas__impl, `size`, `curr_bytes`, `props`, `png_bytes`, `rsx_trans`)
 }
 
 #' Draws circles
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param x X coordinates of center.
 #' @param y Y coordinates of center.
@@ -122,16 +117,15 @@ NULL
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_circle` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`, `sigma`, `width`, `color`) {
+`sk_draw_circle` <- function(`size`, `curr_bytes`, `props`, `x`, `y`, `radius`, `sigma`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
-  .Call(savvy_sk_draw_circle__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `radius`, `sigma`, `width`, `color`)
+  .Call(savvy_sk_draw_circle__impl, `size`, `curr_bytes`, `props`, `x`, `y`, `radius`, `sigma`, `width`, `color`)
 }
 
 #' Draws outer and inner rounded rectangles
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param outer_ltrb Outer rectangles.
 #' @param outer_rx Axis lengths on X-axis of outer oval describing rounded corners.
@@ -145,16 +139,15 @@ NULL
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_diff_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `outer_ltrb`, `outer_rx`, `outer_ry`, `inner_ltrb`, `inner_rx`, `inner_ry`, `rsx_trans`, `sigma`, `width`, `color`) {
+`sk_draw_diff_rect` <- function(`size`, `curr_bytes`, `props`, `outer_ltrb`, `outer_rx`, `outer_ry`, `inner_ltrb`, `inner_rx`, `inner_ry`, `rsx_trans`, `sigma`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
-  .Call(savvy_sk_draw_diff_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `outer_ltrb`, `outer_rx`, `outer_ry`, `inner_ltrb`, `inner_rx`, `inner_ry`, `rsx_trans`, `sigma`, `width`, `color`)
+  .Call(savvy_sk_draw_diff_rect__impl, `size`, `curr_bytes`, `props`, `outer_ltrb`, `outer_rx`, `outer_ry`, `inner_ltrb`, `inner_rx`, `inner_ry`, `rsx_trans`, `sigma`, `width`, `color`)
 }
 
 #' Draws lines
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param from_x X coordinates of start points.
 #' @param from_y Y coordinates of start points.
@@ -165,16 +158,15 @@ NULL
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_line` <- function(`size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`, `sigma`, `width`, `color`) {
+`sk_draw_line` <- function(`size`, `curr_bytes`, `props`, `from_x`, `from_y`, `to_x`, `to_y`, `sigma`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
-  .Call(savvy_sk_draw_line__impl, `size`, `curr_bytes`, `mat`, `props`, `from_x`, `from_y`, `to_x`, `to_y`, `sigma`, `width`, `color`)
+  .Call(savvy_sk_draw_line__impl, `size`, `curr_bytes`, `props`, `from_x`, `from_y`, `to_x`, `to_y`, `sigma`, `width`, `color`)
 }
 
 #' Draws SVG paths
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param svg SVG strings to draw.
 #' @param rsx_trans RSX transform for each path.
@@ -184,32 +176,30 @@ NULL
 #' @param fill_type FillType.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_path` <- function(`size`, `curr_bytes`, `mat`, `props`, `svg`, `rsx_trans`, `sigma`, `width`, `color`, `fill_type`) {
+`sk_draw_path` <- function(`size`, `curr_bytes`, `props`, `svg`, `rsx_trans`, `sigma`, `width`, `color`, `fill_type`) {
   `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
   `fill_type` <- .savvy_extract_ptr(`fill_type`, "skiagd::FillType")
-  .Call(savvy_sk_draw_path__impl, `size`, `curr_bytes`, `mat`, `props`, `svg`, `rsx_trans`, `sigma`, `width`, `color`, `fill_type`)
+  .Call(savvy_sk_draw_path__impl, `size`, `curr_bytes`, `props`, `svg`, `rsx_trans`, `sigma`, `width`, `color`, `fill_type`)
 }
 
 #' Draws PNG data as an image on canvas
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param png_bytes PNG data to draw.
 #' @param left_top Offset for drawing PNG image.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_png` <- function(`size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `left_top`) {
+`sk_draw_png` <- function(`size`, `curr_bytes`, `props`, `png_bytes`, `left_top`) {
   `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
-  .Call(savvy_sk_draw_png__impl, `size`, `curr_bytes`, `mat`, `props`, `png_bytes`, `left_top`)
+  .Call(savvy_sk_draw_png__impl, `size`, `curr_bytes`, `props`, `png_bytes`, `left_top`)
 }
 
 #' Draws points with specified mode
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param x X coordinates of points.
 #' @param y Y coordinates of points.
@@ -220,17 +210,16 @@ NULL
 #' @param mode PointMode.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_points` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `group`, `sigma`, `width`, `color`, `mode`) {
+`sk_draw_points` <- function(`size`, `curr_bytes`, `props`, `x`, `y`, `group`, `sigma`, `width`, `color`, `mode`) {
   `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
   `mode` <- .savvy_extract_ptr(`mode`, "skiagd::PointMode")
-  .Call(savvy_sk_draw_points__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `group`, `sigma`, `width`, `color`, `mode`)
+  .Call(savvy_sk_draw_points__impl, `size`, `curr_bytes`, `props`, `x`, `y`, `group`, `sigma`, `width`, `color`, `mode`)
 }
 
 #' Draws rounded rectangles
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param ltrb Rectangles.
 #' @param rx Axis lengths on X-axis of oval describing rounded corners.
@@ -241,16 +230,15 @@ NULL
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_rounded_rect` <- function(`size`, `curr_bytes`, `mat`, `props`, `ltrb`, `rx`, `ry`, `rsx_trans`, `sigma`, `width`, `color`) {
+`sk_draw_rounded_rect` <- function(`size`, `curr_bytes`, `props`, `ltrb`, `rx`, `ry`, `rsx_trans`, `sigma`, `width`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
-  .Call(savvy_sk_draw_rounded_rect__impl, `size`, `curr_bytes`, `mat`, `props`, `ltrb`, `rx`, `ry`, `rsx_trans`, `sigma`, `width`, `color`)
+  .Call(savvy_sk_draw_rounded_rect__impl, `size`, `curr_bytes`, `props`, `ltrb`, `rx`, `ry`, `rsx_trans`, `sigma`, `width`, `color`)
 }
 
 #' Draws text as textblobs
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param text Text strings.
 #' @param freeze Whether to freeze textblobs.
@@ -259,16 +247,15 @@ NULL
 #' @param color Colors.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_text` <- function(`size`, `curr_bytes`, `mat`, `props`, `text`, `freeze`, `rsx_trans`, `sigma`, `color`) {
+`sk_draw_text` <- function(`size`, `curr_bytes`, `props`, `text`, `freeze`, `rsx_trans`, `sigma`, `color`) {
   `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
-  .Call(savvy_sk_draw_text__impl, `size`, `curr_bytes`, `mat`, `props`, `text`, `freeze`, `rsx_trans`, `sigma`, `color`)
+  .Call(savvy_sk_draw_text__impl, `size`, `curr_bytes`, `props`, `text`, `freeze`, `rsx_trans`, `sigma`, `color`)
 }
 
 #' Draws vertices
 #'
 #' @param size Canvas size.
 #' @param curr_bytes Current canvas state.
-#' @param mat Matrix for transforming picture.
 #' @param props PaintAttrs.
 #' @param x X coordinates of points.
 #' @param y Y coordinates of points.
@@ -277,10 +264,10 @@ NULL
 #' @param mode VertexMode.
 #' @returns A raw vector of picture.
 #' @noRd
-`sk_draw_vertices` <- function(`size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `sigma`, `color`, `mode`) {
+`sk_draw_vertices` <- function(`size`, `curr_bytes`, `props`, `x`, `y`, `sigma`, `color`, `mode`) {
   `props` <- .savvy_extract_ptr(`props`, "skiagd::PaintAttrs")
   `mode` <- .savvy_extract_ptr(`mode`, "skiagd::VertexMode")
-  .Call(savvy_sk_draw_vertices__impl, `size`, `curr_bytes`, `mat`, `props`, `x`, `y`, `sigma`, `color`, `mode`)
+  .Call(savvy_sk_draw_vertices__impl, `size`, `curr_bytes`, `props`, `x`, `y`, `sigma`, `color`, `mode`)
 }
 
 #' Get width, bbox and number of characters
@@ -1395,7 +1382,7 @@ class(`Style`) <- c("skiagd::Style__bundle", "savvy_skiagd__sealed")
 #' TileMode (0-3)
 #'
 #' `TileMode` determines how the source is tiled for shaders.
-#' This is not a paint attribute. To specify `TileMode`, directly pass these pointers to shader functions.
+#' This is not a painting attribute. To specify `TileMode`, directly pass these pointers to shader functions.
 #'
 #' @details
 #' The following `TileMode` are available:
