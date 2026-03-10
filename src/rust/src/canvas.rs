@@ -56,7 +56,7 @@ impl SkiaCanvas {
 /// Encodes a skia_safe::Picture into PNG, returning an Option<skia_safe::Data>
 pub fn as_png(size: Vec<i32>, picture: skia_safe::Picture) -> Option<skia_safe::Data> {
     let mut surface = skia_safe::surfaces::raster_n32_premul((size[0], size[1]))
-        .unwrap_or_else(|| skia_safe::surfaces::raster_n32_premul((720, 576)).unwrap());
+        .unwrap_or_else(|| skia_safe::surfaces::raster_n32_premul((768, 576)).unwrap());
     surface.canvas().clear(skia_safe::Color::TRANSPARENT);
     picture.playback(surface.canvas());
 

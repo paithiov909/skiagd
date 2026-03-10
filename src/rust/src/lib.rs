@@ -23,7 +23,7 @@ fn sk_as_nativeraster(size: IntegerSexp, curr_bytes: savvy::RawSexp) -> savvy::R
     let size = size.to_vec();
 
     let mut surface = skia_safe::surfaces::raster_n32_premul((size[0], size[1]))
-        .unwrap_or_else(|| skia_safe::surfaces::raster_n32_premul((720, 576)).unwrap());
+        .unwrap_or_else(|| skia_safe::surfaces::raster_n32_premul((768, 576)).unwrap());
     surface.canvas().clear(skia_safe::Color::TRANSPARENT);
     picture.playback(surface.canvas());
 
