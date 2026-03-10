@@ -1,3 +1,19 @@
+# https://github.com/pola-rs/r-polars/blob/fe51f1985d851eab1cd09b8689d3feaaf4ebda27/configure#L71-L81
+check_emscripten() {
+  if [ "$(uname)" = "Emscripten" ]; then
+    cat <<EOF
+---------------------- [WASM BUILD DISABLED] ----------------------
+skiagd does not support building for Emscripten/WASM.
+Exiting with an error to avoid confusion.
+-------------------------------------------------------------------
+EOF
+    exit 1
+  fi
+}
+
+check_emscripten
+
+
 # Even when `cargo` is on `PATH`, `rustc` might not in some cases. This adds
 # ~/.cargo/bin to PATH to address such cases. Note that is not always available
 # (e.g. or on Ubuntu with Rust installed via APT).
