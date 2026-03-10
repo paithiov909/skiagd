@@ -18,17 +18,21 @@ test_that("picture can be replayed after many add calls", {
   )
 
   img <- canvas("navy", canvas_size = size) |>
-    purrr::reduce(seq_len(180), \(cv, i) {
-      x <- 20 + ((i * 11) %% 280)
-      y <- 20 + ((i * 7) %% 200)
+    purrr::reduce(
+      seq_len(180),
+      \(cv, i) {
+        x <- 20 + ((i * 11) %% 280)
+        y <- 20 + ((i * 7) %% 200)
 
-      cv |>
-        add_circle(
-          matrix(c(x, y), ncol = 2),
-          radius = 6 + (i %% 10),
-          props = props
-        )
-    }, .init = _)
+        cv |>
+          add_circle(
+            matrix(c(x, y), ncol = 2),
+            radius = 6 + (i %% 10),
+            props = props
+          )
+      },
+      .init = _
+    )
 
   png <- as_png(img, props = paint(canvas_size = size))
   expect_type(png, "raw")
