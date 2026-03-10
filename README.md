@@ -37,7 +37,7 @@ three main steps to draw an image:
 
 1.  **Create a canvas** with a background colour. The call `canvas()`
     returns a new
-    [picture](https://shopify.github.io/react-native-skia/docs/shapes/pictures/)
+    [picture](https://paithiov909.r-universe.dev/skiagd/doc/manual.html#pictures)
     object that represents the drawing state.
 2.  **Compose shapes** by piping calls to `add_*()` functions. Each
     `add_*()` call takes the previous picture, adds shapes to it, and
