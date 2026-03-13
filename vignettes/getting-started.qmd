@@ -278,7 +278,7 @@ Note that Skia does not fully support rotating shapes defined by rectangles, so 
 
 ## Freezing Pictures
 
-We have drawn several shapes, but what if we want to continue drawing without hitting operation limits? Consider this example using `add_rect()` repeatedly:
+We have drawn several shapes, but what if we want to flatten the current picture before continuing? Consider this example using `add_rect()` repeatedly:
 
 ```{r}
 #| label: trifolium_draw_4
