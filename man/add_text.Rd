@@ -71,12 +71,15 @@ if ("Noto Sans Mono" \%in\% list_font_families()[["family"]]) {
     "Hello, skiagd!",
     props = paint(family = "Noto Sans Mono", fontsize = 36)
   )
-  offset <- seq(0, info$n_chars * (info$width / info$n_chars)
+  offset <- seq(
+    0, info$n_chars * (info$width / info$n_chars),
+    length.out = info$n_chars
+  )
   rsx_trans <-
     dplyr::tibble(
       sc = 1,
       rot = 0,
-      x = (dev_size()[1] - info$width) / 2 + offset, length.out = info$n_chars),
+      x = (dev_size()[1] - info$width) / 2 + offset,
       y = dev_size()[2] / 2,
       ax = 0,
       ay = 0

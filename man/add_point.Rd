@@ -68,7 +68,7 @@ rose <-
     id = i,
     x = r * cos(rad(360 * i / 360)) + cv_size[1] / 2,
     y = r * sin(rad(360 * i / 360)) + cv_size[2] / 2,
-    .by = id
+    .by = i
   )
 
 # Points (color per group; here, one point per group => color per point)
