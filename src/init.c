@@ -1,7 +1,12 @@
 
+// clang-format sorts includes unless SortIncludes: Never. However, the ordering
+// does matter here. So, we need to disable clang-format for safety.
+
+// clang-format off
 #include <stdint.h>
 #include <Rinternals.h>
 #include <R_ext/Parse.h>
+// clang-format on
 
 #include "rust/api.h"
 
@@ -32,6 +37,11 @@ SEXP handle_result(SEXP res_) {
     }
 
     return (SEXP)res;
+}
+
+SEXP savvy_op_count__impl(SEXP c_arg__picture, SEXP c_arg__nested) {
+    SEXP res = savvy_op_count__ffi(c_arg__picture, c_arg__nested);
+    return handle_result(res);
 }
 
 SEXP savvy_sk_absolute_fill__impl(SEXP c_arg__size, SEXP c_arg__fill) {
@@ -351,6 +361,7 @@ SEXP savvy_Shader_turbulence__impl(SEXP c_arg__freq, SEXP c_arg__octaves, SEXP c
 
 
 static const R_CallMethodDef CallEntries[] = {
+    {"savvy_op_count__impl", (DL_FUNC) &savvy_op_count__impl, 2},
     {"savvy_sk_absolute_fill__impl", (DL_FUNC) &savvy_sk_absolute_fill__impl, 2},
     {"savvy_sk_as_nativeraster__impl", (DL_FUNC) &savvy_sk_as_nativeraster__impl, 2},
     {"savvy_sk_as_png__impl", (DL_FUNC) &savvy_sk_as_png__impl, 2},
@@ -429,6 +440,6 @@ void R_init_skiagd(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 
-    // Functions for initialzation, if any.
+    // Functions for initialization, if any.
 
 }

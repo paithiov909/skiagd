@@ -1,3 +1,4 @@
+SEXP savvy_op_count__ffi(SEXP c_arg__picture, SEXP c_arg__nested);
 SEXP savvy_sk_absolute_fill__ffi(SEXP c_arg__size, SEXP c_arg__fill);
 SEXP savvy_sk_as_nativeraster__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes);
 SEXP savvy_sk_as_png__ffi(SEXP c_arg__size, SEXP c_arg__curr_bytes);

@@ -37,6 +37,16 @@ NULL
   stop(class, " cannot be modified", call. = FALSE)
 }
 
+#' Returns the approximate number of operations in the picture
+#'
+#' @param picture A raw vector of picture.
+#' @param nested A logcial scalar; if `TRUE`, counts nested operations.
+#' @export
+#' @keywords internal
+`op_count` <- function(`picture`, `nested`) {
+  .Call(savvy_op_count__impl, `picture`, `nested`)
+}
+
 #' Fills canvas with the specified color
 #'
 #' @param size Canvas size.
