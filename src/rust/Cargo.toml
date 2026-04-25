@@ -8,8 +8,8 @@ edition = "2021"
 crate-type = ["staticlib", "lib"]
 
 [dependencies]
-anyhow = "1.0.97"
-savvy = "0.9.2"
+anyhow = "1.0"
+savvy = "0.10"
 skia-safe = { version = "=0.91.1", features = ["textlayout"] }
 
 [profile.release]
