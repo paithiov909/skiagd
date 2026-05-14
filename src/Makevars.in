@@ -25,7 +25,6 @@ $(STATLIB):
 		export CC="$(CC)" && \
 		export CFLAGS="$(CFLAGS)" && \
 		export RUSTFLAGS="$(RUSTFLAGS)" && \
-		# export SKIA_USE_SYSTEM_LIBRARIES=1 && \
 		cargo build $(CARGO_BUILD_ARGS);
 
 clean_intermediate: $(SHLIB)
