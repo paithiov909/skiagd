@@ -35,7 +35,7 @@ skiagd takes a pipeline‑oriented philosophy similar to
 graphics rather than data visualisation. In a skiagd pipeline, there are
 three main steps to draw an image:
 
-1.  **Create a canvas** with a background colour. The call `canvas()`
+1.  **Create a canvas** with a background color. The call `canvas()`
     returns a new
     [picture](https://paithiov909.r-universe.dev/skiagd/doc/manual.html#pictures)
     object that represents the drawing state.
@@ -103,7 +103,7 @@ data-fig-alt="A white rose curve drawn with skiagd, in violetred background" />
 
 Here we first generate coordinates for a simple rose curve and then draw
 it with a single call to `add_point()`. We supply the points as a matrix
-and specify painting attributes via `paint()`. Here we set the colour to
+and specify painting attributes via `paint()`. Here we set the color to
 `"white"`, the line width to `3` pixels and use `PointMode$Polygon` to
 connect successive points. And finally, we call `draw_img()` to render
 the picture on the current graphics device.
@@ -117,7 +117,8 @@ demonstrates how skiagd can be used to create a more practical artwork.
 ``` r
 cv_size <- dev_size()
 cv_size
-#> [1] 768 576
+#>  width height 
+#>    768    576
 
 n_frames <- 720
 n_circles <- 50
@@ -137,14 +138,14 @@ imgs <- purrr::imap_chr(seq(0, 4 * pi, length.out = n_frames + 1)[-1], \(a, i) {
     circle(l / 2 - 1, ceiling((-a + (7 / 2)) %% 7) - 7, -7 * cos(a) + 1)
 
   hue <- (a + (Re(z / pi))) %% 1
-  colours <- grDevices::hsv(hue, .66, .75, alpha = 1)
+  colors <- grDevices::hsv(hue, .66, .75, alpha = 1)
 
   # Build one frame
   png <- canvas("#04010F") |>
     add_circle(
       cbind(Re(z), Im(z), 1) %*% trans,
       radius = log(max(cv_size), exp(.5)) * radius,
-      color = col2rgba(colours),
+      color = col2rgba(colors),
       props = paint(
         style = Style$Fill,
         blend_mode = BlendMode$Plus,
@@ -185,8 +186,8 @@ data-fig-alt="Frames of the mystery-circles GIF animation. Each frame consists o
 
 - [Rediscover Fragment Shaders in R, with
   skiagd](https://paithiov909.github.io/shiryo/rediscover-shaders-in-r/)
-- [R言語でのアート制作・Rtistryを考える
-  (Japanese)](https://zenn.dev/paithiov909/articles/skiagd-rtistry)
+- [Exploring Rtistry: Art Creation with
+  R](https://zenn.dev/paithiov909/articles/skiagd-rtistry?locale=en)
 
 ## License
 

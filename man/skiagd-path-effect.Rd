@@ -65,7 +65,7 @@ The following effects are available:
 \seealso{
 \href{https://shopify.github.io/react-native-skia/docs/path-effects/}{Path Effects | React Native Skia}
 
-Other paint-attributes: 
+Other paint-attributes:
 \code{\link{BlendMode}},
 \code{\link{BlurStyle}},
 \code{\link{Cap}},

@@ -24,7 +24,7 @@ If the function does not matter them,  \code{...} is simply ignored.}
 }
 \value{
 A \code{recordedplot} object is invisibly returned.
-See \code{\link[grDevices:recordplot]{grDevices::recordPlot()}} for details.
+See \code{\link[grDevices:recordPlot]{grDevices::recordPlot()}} for details.
 }
 \description{
 This function exists for testing purposes.

@@ -20,21 +20,6 @@ SEXP savvy_sk_path_bounds__ffi(SEXP c_arg__svg);
 SEXP savvy_sk_path_interpolate__ffi(SEXP c_arg__value, SEXP c_arg__first, SEXP c_arg__second);
 SEXP savvy_sk_path_transform__ffi(SEXP c_arg__svg, SEXP c_arg__mat);
 
-// methods and associated functions for BlendMode
-
-
-// methods and associated functions for BlurStyle
-
-
-// methods and associated functions for Cap
-
-
-// methods and associated functions for FillType
-
-
-// methods and associated functions for FontStyle
-
-
 // methods and associated functions for ImageFilter
 SEXP savvy_ImageFilter_arithmetic__ffi(SEXP c_arg__dst, SEXP c_arg__src, SEXP c_arg__coef, SEXP c_arg__crop_rect);
 SEXP savvy_ImageFilter_blend__ffi(SEXP c_arg__dst, SEXP c_arg__src, SEXP c_arg__mode, SEXP c_arg__crop_rect);
@@ -52,9 +37,6 @@ SEXP savvy_ImageFilter_no_filter__ffi(void);
 SEXP savvy_ImageFilter_offset__ffi(SEXP c_arg__offset, SEXP c_arg__crop_rect);
 SEXP savvy_ImageFilter_runtime_shader__ffi(SEXP c_arg__source, SEXP c_arg__uniforms);
 
-// methods and associated functions for Join
-
-
 // methods and associated functions for PaintAttrs
 SEXP savvy_PaintAttrs_set_attrs__ffi(SEXP c_arg__color, SEXP c_arg__style, SEXP c_arg__join, SEXP c_arg__cap, SEXP c_arg__width, SEXP c_arg__miter, SEXP c_arg__fontsize, SEXP c_arg__family, SEXP c_arg__fontface, SEXP c_arg__blend_mode, SEXP c_arg__blur_style, SEXP c_arg__path_effect, SEXP c_arg__shader, SEXP c_arg__image_filter);
 
@@ -69,9 +51,6 @@ SEXP savvy_PathEffect_path_1d__ffi(SEXP c_arg__path, SEXP c_arg__advance, SEXP c
 SEXP savvy_PathEffect_path_2d__ffi(SEXP c_arg__path, SEXP c_arg__transform);
 SEXP savvy_PathEffect_sum__ffi(SEXP c_arg__first, SEXP c_arg__second);
 SEXP savvy_PathEffect_trim__ffi(SEXP c_arg__start, SEXP c_arg__end);
-
-// methods and associated functions for PointMode
-
 
 // methods and associated functions for RuntimeEffect
 SEXP savvy_RuntimeEffect_make__ffi(SEXP c_arg__sksl);
@@ -91,12 +70,3 @@ SEXP savvy_Shader_no_shader__ffi(void);
 SEXP savvy_Shader_radial_gradient__ffi(SEXP c_arg__center, SEXP c_arg__radius, SEXP c_arg__color, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform);
 SEXP savvy_Shader_sweep_gradient__ffi(SEXP c_arg__center, SEXP c_arg__start_angle, SEXP c_arg__end_angle, SEXP c_arg__color, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform);
 SEXP savvy_Shader_turbulence__ffi(SEXP c_arg__freq, SEXP c_arg__octaves, SEXP c_arg__seed, SEXP c_arg__tile_size);
-
-// methods and associated functions for Style
-
-
-// methods and associated functions for TileMode
-
-
-// methods and associated functions for VertexMode
-

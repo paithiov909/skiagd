@@ -76,7 +76,7 @@ The following filters are available:
 \item \href{https://rust-skia.github.io/doc/skia_safe/image_filters/index.html}{skia_safe::image_filters - Rust}
 }
 
-Other paint-attributes: 
+Other paint-attributes:
 \code{\link{BlendMode}},
 \code{\link{BlurStyle}},
 \code{\link{Cap}},

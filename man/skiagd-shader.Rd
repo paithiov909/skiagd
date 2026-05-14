@@ -84,7 +84,7 @@ The following shaders are available:
 \item \href{https://shopify.github.io/react-native-skia/docs/shaders/colors}{Blending and Colors | React Native Skia}
 }
 
-Other paint-attributes: 
+Other paint-attributes:
 \code{\link{BlendMode}},
 \code{\link{BlurStyle}},
 \code{\link{Cap}},

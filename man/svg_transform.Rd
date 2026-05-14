@@ -26,8 +26,8 @@ trans <- matrix(c(1, 0, -50, 0, 1, -50, 0, 0, 1), 3, 3)
 svg_transform("M45 10 H55 V45 H90 V55 H55 V90 H45 V55 H10 V45 H45 Z", trans)
 }
 \seealso{
-Other path-utils: 
-\code{\link{svg_bounds}()},
-\code{\link{svg_interpolate}()}
+Other path-utils:
+\code{\link[=svg_bounds]{svg_bounds()}},
+\code{\link[=svg_interpolate]{svg_interpolate()}}
 }
 \concept{path-utils}

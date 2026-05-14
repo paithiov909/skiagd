@@ -42,8 +42,8 @@ second <- svg_transform(R"(
 svg_interpolate(seq(-2, 2, length.out = 10), first, second)
 }
 \seealso{
-Other path-utils: 
-\code{\link{svg_bounds}()},
-\code{\link{svg_transform}()}
+Other path-utils:
+\code{\link[=svg_bounds]{svg_bounds()}},
+\code{\link[=svg_transform]{svg_transform()}}
 }
 \concept{path-utils}

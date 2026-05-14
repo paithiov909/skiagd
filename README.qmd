@@ -38,7 +38,7 @@ remotes::install_github("paithiov909/skiagd")
 skiagd takes a pipeline‑oriented philosophy similar to [ggplot2](https://ggplot2.tidyverse.org/) but directs it at pure graphics rather than data visualisation.
 In a skiagd pipeline, there are three main steps to draw an image:
 
-1. **Create a canvas** with a background colour. The call `canvas()` returns a new [picture](https://paithiov909.r-universe.dev/skiagd/doc/manual.html#pictures) object that represents the drawing state.
+1. **Create a canvas** with a background color. The call `canvas()` returns a new [picture](https://paithiov909.r-universe.dev/skiagd/doc/manual.html#pictures) object that represents the drawing state.
 2. **Compose shapes** by piping calls to `add_*()` functions. Each `add_*()` call takes the previous picture, adds shapes to it, and returns a new picture. The picture object always remains a recipe of drawing commands, no pixels are produced at this stage.
 3. **Render the picture**. To convert a picture into pixels you can call:
    1. `draw_img()` to draw to the current graphics device
@@ -88,7 +88,7 @@ canvas("violetred") |>
   draw_img()
 ```
 
-Here we first generate coordinates for a simple rose curve and then draw it with a single call to `add_point()`. We supply the points as a matrix and specify painting attributes via `paint()`. Here we set the colour to `"white"`, the line width to `3` pixels and use `PointMode$Polygon` to connect successive points. And finally, we call `draw_img()` to render the picture on the current graphics device.
+Here we first generate coordinates for a simple rose curve and then draw it with a single call to `add_point()`. We supply the points as a matrix and specify painting attributes via `paint()`. Here we set the color to `"white"`, the line width to `3` pixels and use `PointMode$Polygon` to connect successive points. And finally, we call `draw_img()` to render the picture on the current graphics device.
 
 ### Showcase
 
@@ -119,14 +119,14 @@ imgs <- purrr::imap_chr(seq(0, 4 * pi, length.out = n_frames + 1)[-1], \(a, i) {
     circle(l / 2 - 1, ceiling((-a + (7 / 2)) %% 7) - 7, -7 * cos(a) + 1)
 
   hue <- (a + (Re(z / pi))) %% 1
-  colours <- grDevices::hsv(hue, .66, .75, alpha = 1)
+  colors <- grDevices::hsv(hue, .66, .75, alpha = 1)
 
   # Build one frame
   png <- canvas("#04010F") |>
     add_circle(
       cbind(Re(z), Im(z), 1) %*% trans,
       radius = log(max(cv_size), exp(.5)) * radius,
-      color = col2rgba(colours),
+      color = col2rgba(colors),
       props = paint(
         style = Style$Fill,
         blend_mode = BlendMode$Plus,
@@ -177,7 +177,7 @@ print(showcase)
 ## Further Readings
 
 * [Rediscover Fragment Shaders in R, with skiagd](https://paithiov909.github.io/shiryo/rediscover-shaders-in-r/)
-* [R言語でのアート制作・Rtistryを考える (Japanese)](https://zenn.dev/paithiov909/articles/skiagd-rtistry)
+* [Exploring Rtistry: Art Creation with R](https://zenn.dev/paithiov909/articles/skiagd-rtistry?locale=en)
 
 ## License
 

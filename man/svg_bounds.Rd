@@ -21,8 +21,8 @@ Computes axis-aligned bounding boxes for one or more SVG paths.
 svg_bounds("M45 10 H55 V45 H90 V55 H55 V90 H45 V55 H10 V45 H45 Z")
 }
 \seealso{
-Other path-utils: 
-\code{\link{svg_interpolate}()},
-\code{\link{svg_transform}()}
+Other path-utils:
+\code{\link[=svg_interpolate]{svg_interpolate()}},
+\code{\link[=svg_transform]{svg_transform()}}
 }
 \concept{path-utils}
