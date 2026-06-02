@@ -1,3 +1,19 @@
+# https://github.com/pola-rs/r-polars/blob/fe51f1985d851eab1cd09b8689d3feaaf4ebda27/configure#L71-L81
+check_emscripten() {
+  if [ "$(uname)" = "Emscripten" ]; then
+    cat <<EOF
+---------------------- [WASM BUILD DISABLED] ----------------------
+skiagd does not support building for Emscripten/WASM.
+Exiting with an error to avoid confusion.
+-------------------------------------------------------------------
+EOF
+    exit 1
+  fi
+}
+
+check_emscripten
+
+
 # Even when `cargo` is on `PATH`, `rustc` might not in some cases. This adds
 # ~/.cargo/bin to PATH to address such cases. Note that is not always available
 # (e.g. or on Ubuntu with Rust installed via APT).
@@ -28,15 +44,37 @@ RUSTC_VERSION="$(rustc --version || true)"
 echo "using Rust package manager: '${CARGO_VERSION}'"
 echo "using Rust compiler: '${RUSTC_VERSION}'"
 
-if [ "$(uname)" = "Emscripten" ]; then
-  TARGET="wasm32-unknown-emscripten"
-fi
-
+# allow overriding profile externally (e.g. on CI)
+if [ -n "${SAVVY_PROFILE}" ]; then
+  PROFILE="${SAVVY_PROFILE}"
 # catch DEBUG envvar, which is passed from pkgbuild::compile_dll()
-if [ "${DEBUG}" = "true" ]; then
+elif [ "${DEBUG}" = "true" ]; then
   PROFILE=dev
 else
   PROFILE=release
+fi
+
+# e.g. SAVVY_FEATURES="a b"  -->  "--features 'a b'"
+if [ -n "${SAVVY_FEATURES}" ]; then
+  FEATURE_FLAGS="--features '${SAVVY_FEATURES}'"
+fi
+
+# Set macOS deployment target for the Rust cc crate.
+#
+# The cc crate (used by savvy's build.rs to compile unwind_protect_wrapper.c)
+# does not derive the deployment target from CC/CFLAGS. Instead, it looks up
+# MACOSX_DEPLOYMENT_TARGET, falling back to `xcrun --show-sdk-version`, and
+# passes the result as -mmacosx-version-min=<value>. When the env var is unset,
+# the fallback SDK version (e.g. 26.2) can be newer than the version R's
+# compiler targets, producing an ld warning about version mismatch.
+#
+# We default to 11.0, the minimum deployment target for arm64 macOS. This
+# should be safe because unwind_protect_wrapper.c is a fairly simple C code
+# and uses no version-specific APIs.
+if [ "$(uname)" = "Darwin" ]; then
+  MACOSX_DEPLOYMENT_TARGET="${MACOSX_DEPLOYMENT_TARGET:-11.0}"
+  echo "using macOS deployment target: ${MACOSX_DEPLOYMENT_TARGET}"
+  BEFORE_CARGO_BUILD="${BEFORE_CARGO_BUILD}"' export MACOSX_DEPLOYMENT_TARGET="'"${MACOSX_DEPLOYMENT_TARGET}"'" \&\&'
 fi
 
 # The following section is taken from
@@ -123,6 +161,8 @@ sed \
   -e "s|@SYS@|$SYS|g" \
   -e "s/@TARGET@/${TARGET}/" \
   -e "s/@PROFILE@/${PROFILE}/" \
+  -e "s/@FEATURE_FLAGS@/${FEATURE_FLAGS}/" \
+  -e "s|@BEFORE_CARGO_BUILD@|${BEFORE_CARGO_BUILD}|" \
   src/Makevars.in > src/Makevars
 
 exit 0

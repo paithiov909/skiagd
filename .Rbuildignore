@@ -17,3 +17,6 @@
 ^src/rust/\.cargo$
 ^src/Makevars$
 ^src/Makevars\.win$
+
+^vignettes/\.quarto$
+^vignettes/*_files$

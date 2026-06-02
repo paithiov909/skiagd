@@ -1,6 +1,6 @@
 use crate::paint_attrs::{assert_len, PaintAttrs};
 
-use savvy::savvy_err;
+use savvy::{savvy, savvy_err};
 use skia_safe::{Picture, PictureRecorder};
 
 /// Returns a skia_safe::Picture
@@ -33,8 +33,7 @@ impl SkiaCanvas {
     pub fn start_recording(&mut self) -> &skia_safe::Canvas {
         let canvas = self
             .recorder
-            .begin_recording(skia_safe::Rect::from_isize((self.width, self.height)), None);
-        canvas.clear(skia_safe::Color::TRANSPARENT);
+            .begin_recording(skia_safe::Rect::from_isize((self.width, self.height)), false);
         canvas
     }
 
@@ -53,18 +52,11 @@ impl SkiaCanvas {
     }
 }
 
-/// Encodes a skia_safe::Picture into PNG, returning a Option<skia_safe::Data>
-pub fn as_png(
-    size: Vec<i32>,
-    picture: skia_safe::Picture,
-    mat: &Vec<skia_safe::Matrix>,
-) -> Option<skia_safe::Data> {
+/// Encodes a skia_safe::Picture into PNG, returning an Option<skia_safe::Data>
+pub fn as_png(size: Vec<i32>, picture: skia_safe::Picture) -> Option<skia_safe::Data> {
     let mut surface = skia_safe::surfaces::raster_n32_premul((size[0], size[1]))
-        .unwrap_or_else(|| skia_safe::surfaces::raster_n32_premul((720, 576)).unwrap());
-    surface.canvas().clear(skia_safe::Color::TRANSPARENT);
-    surface
-        .canvas()
-        .draw_picture(&picture, Some(&mat[0]), Some(&skia_safe::Paint::default()));
+        .unwrap_or_else(|| skia_safe::surfaces::raster_n32_premul((768, 576)).unwrap());
+    picture.playback(surface.canvas());
 
     let image = surface.image_snapshot();
     let mut context = surface.direct_context();
@@ -78,7 +70,6 @@ pub fn put_png(
     input: skia_safe::Data,
     size: savvy::IntegerSexp,
     picture: skia_safe::Picture,
-    mat: Vec<skia_safe::Matrix>,
     left_top: Vec<f64>,
     props: PaintAttrs,
 ) -> anyhow::Result<savvy::OwnedRawSexp, savvy::Error> {
@@ -87,7 +78,7 @@ pub fn put_png(
 
     let mut recorder = SkiaCanvas::setup(&size)?;
     let canvas = recorder.start_recording();
-    canvas.draw_picture(&picture, Some(&mat[0]), Some(&skia_safe::Paint::default()));
+    picture.playback(canvas);
     canvas.draw_image(
         &image,
         (left_top[0] as f32, left_top[1] as f32),
@@ -96,4 +87,19 @@ pub fn put_png(
     let picture = recorder.finish_recording()?;
 
     Ok(picture)
+}
+
+/// Returns the approximate number of operations in the picture
+///
+/// @param picture A raw vector of picture.
+/// @param nested A logcial scalar; if `TRUE`, counts nested operations.
+/// @export
+/// @keywords internal
+#[savvy]
+fn op_count(picture: savvy::RawSexp, nested: savvy::LogicalSexp) -> savvy::Result<savvy::Sexp> {
+    let picture = read_picture_bytes(&picture)?;
+    let nested = nested.to_vec()[0];
+    let count = picture.approximate_op_count_nested(nested);
+    let ret = savvy::OwnedIntegerSexp::try_from_slice(&[count as i32])?;
+    Ok(ret.into())
 }

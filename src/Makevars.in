@@ -1,21 +1,18 @@
 TARGET = @TARGET@
 
 PROFILE = @PROFILE@
+FEATURE_FLAGS = @FEATURE_FLAGS@
 
 # Add flags if necessary
-RUSTFLAGS =
-
-# This is passed fine to wasm-ld called by rwasm.
-# However, the build is failing with the current configuration.
-WASM_LDFLAGS = -fPIC -sERROR_ON_UNDEFINED_SYMBOLS=0 -sMAX_WEBGL_VERSION=2
-SDKTARGETSYSROOT = $(EMSDK)/upstream/emscripten/cache/sysroot
+RUSTFLAGS += --print=native-static-libs
 
 TARGET_DIR = $(CURDIR)/rust/target
 LIBDIR = $(TARGET_DIR)/$(TARGET)/$(subst dev,debug,$(PROFILE))
 STATLIB = $(LIBDIR)/libskiagd.a
-PKG_LIBS = -L$(LIBDIR) -lskiagd @libs@ $(@SYS@_LIBS)
+PKG_CPPFLAGS = -pthread
+PKG_LIBS = -L$(LIBDIR) -lskiagd @libs@ $(@SYS@_LIBS) -pthread
 
-CARGO_BUILD_ARGS = --lib --profile $(PROFILE) --manifest-path=./rust/Cargo.toml --target-dir $(TARGET_DIR)
+CARGO_BUILD_ARGS = --lib --profile $(PROFILE) $(FEATURE_FLAGS) --manifest-path=./rust/Cargo.toml --target-dir $(TARGET_DIR)
 
 all: $(SHLIB) clean_intermediate
 
@@ -29,21 +26,13 @@ $(STATLIB):
 		export CC="$(CC)" && \
 		export CFLAGS="$(CFLAGS)" && \
 		export RUSTFLAGS="$(RUSTFLAGS)" && \
-		if [ "$(TARGET)" != "wasm32-unknown-emscripten" ]; then \
-			cargo build $(CARGO_BUILD_ARGS); \
-		else \
-			export CARGO_PROFILE_DEV_PANIC="abort" && \
-			export CARGO_PROFILE_RELEASE_PANIC="abort" && \
-			export RUSTFLAGS="$(RUSTFLAGS) -Zdefault-visibility=hidden" && \
-			export SDKTARGETSYSROOT=$(SDKTARGETSYSROOT) && \
-			export FORCE_SKIA_BUILD=1 && \
-			export SKIA_USE_SYSTEM_LIBRARIES=1 && \
-			export SKIA_GN_ARGS='cc="$(EMSDK)/upstream/bin/clang" cxx="$(EMSDK)/upstream/bin/clang++" extra_cflags=[] extra_cflags=["--target=$(TARGET)", "-I$(WEBR_ROOT)/wasm/include", "-I$(SDKTARGETSYSROOT)/include/c++/v1", "-I$(SDKTARGETSYSROOT)/include/compat", "-I$(SDKTARGETSYSROOT)/include", "-I$(EMSDK)/upstream/lib/clang/21/include"] extra_ldflags=["-L/opt/webr/wasm/lib"]' && \
-			cargo +nightly build $(CARGO_BUILD_ARGS) --target $(TARGET) -Zbuild-std=panic_abort,std; \
-		fi
+		@BEFORE_CARGO_BUILD@ \
+		cargo build $(CARGO_BUILD_ARGS);
 
 clean_intermediate: $(SHLIB)
 	rm -f $(STATLIB)
 
 clean:
 	rm -Rf $(SHLIB) $(OBJECTS) $(STATLIB) ./rust/target
+
+.PHONY: all clean_intermediate clean

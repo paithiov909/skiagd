@@ -8,28 +8,28 @@
 #' A quick overview of their differences
 #' can be found [here](https://github.com/google/skia/tree/main/src/sksl#readme).
 #'
-#' You can compile a SkSL source into a `RuntimeEffect`
+#' You can compile an SkSL source into a `RuntimeEffect`
 #' using `RuntimeEffect$make()`,
 #' and apply it as an [ImageFilter] or a [Shader].
 #'
 #' @details
 #' `RuntimeEffect` as an R environment exposes the following method:
 #'
-#' * `make(sksl)`: Takes a SkSL source and compiles it into a `RuntimeEffect`.
+#' * `make(sksl)`: Takes an SkSL source and compiles it into a `RuntimeEffect`.
 #'
 #' A `RuntimeEffect` object has the following method:
 #'
 #' * `source()`: Returns the original SkSL source as a string scalar.
 #'
-#' @param sksl A string scalar of SkSL source.
-#' For [ImageFilter], the fragment shader must receive
-#' the currently filtered image as `shader` uniform.
+#' @param sksl A string scalar of an SkSL source.
+#'  For [ImageFilter], the fragment shader must receive
+#'  the currently filtered image as `shader` uniform.
 #' @returns For `make()`, a `RuntimeEffect` object is returned
-#' if the SkSL source is successfully compiled.
-#' Otherwise, an error is thrown with the compilation error message.
+#'  if the SkSL source is successfully compiled.
+#'  Otherwise, an error is thrown with the compilation error message.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' effect <-
 #'   RuntimeEffect$make(R"{
 #'     uniform shader image;
@@ -40,15 +40,15 @@
 #'     }
 #'  }")
 #'
-#' canvas_size <- dev_size()
+#' cv_size <- dev_size()
 #' imgf <-
 #'   ImageFilter$runtime_shader(
 #'     effect,
-#'     list(resolution = as.double(canvas_size))
+#'     list(resolution = as.double(cv_size))
 #'   )
 #' canvas() |>
 #'   add_rect(
-#'     matrix(c(0, 0, canvas_size), ncol = 4),
+#'     matrix(c(0, 0, cv_size), ncol = 4),
 #'     props = paint(image_filter = imgf)
 #'   ) |>
 #'   draw_img()

@@ -1,7 +1,12 @@
 
+// clang-format sorts includes unless SortIncludes: Never. However, the ordering
+// does matter here. So, we need to disable clang-format for safety.
+
+// clang-format off
 #include <stdint.h>
 #include <Rinternals.h>
 #include <R_ext/Parse.h>
+// clang-format on
 
 #include "rust/api.h"
 
@@ -34,73 +39,78 @@ SEXP handle_result(SEXP res_) {
     return (SEXP)res;
 }
 
+SEXP savvy_op_count__impl(SEXP c_arg__picture, SEXP c_arg__nested) {
+    SEXP res = savvy_op_count__ffi(c_arg__picture, c_arg__nested);
+    return handle_result(res);
+}
+
 SEXP savvy_sk_absolute_fill__impl(SEXP c_arg__size, SEXP c_arg__fill) {
     SEXP res = savvy_sk_absolute_fill__ffi(c_arg__size, c_arg__fill);
     return handle_result(res);
 }
 
-SEXP savvy_sk_as_nativeraster__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat) {
-    SEXP res = savvy_sk_as_nativeraster__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat);
+SEXP savvy_sk_as_nativeraster__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes) {
+    SEXP res = savvy_sk_as_nativeraster__ffi(c_arg__size, c_arg__curr_bytes);
     return handle_result(res);
 }
 
-SEXP savvy_sk_as_png__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat) {
-    SEXP res = savvy_sk_as_png__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat);
+SEXP savvy_sk_as_png__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes) {
+    SEXP res = savvy_sk_as_png__ffi(c_arg__size, c_arg__curr_bytes);
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_arc__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__ltrb, SEXP c_arg__r, SEXP c_arg__use_center, SEXP c_arg__angle, SEXP c_arg__rsx_trans, SEXP c_arg__sigma, SEXP c_arg__width, SEXP c_arg__color) {
-    SEXP res = savvy_sk_draw_arc__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__ltrb, c_arg__r, c_arg__use_center, c_arg__angle, c_arg__rsx_trans, c_arg__sigma, c_arg__width, c_arg__color);
+SEXP savvy_sk_draw_arc__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__props, SEXP c_arg__ltrb, SEXP c_arg__r, SEXP c_arg__use_center, SEXP c_arg__angle, SEXP c_arg__rsx_trans, SEXP c_arg__sigma, SEXP c_arg__width, SEXP c_arg__color) {
+    SEXP res = savvy_sk_draw_arc__ffi(c_arg__size, c_arg__curr_bytes, c_arg__props, c_arg__ltrb, c_arg__r, c_arg__use_center, c_arg__angle, c_arg__rsx_trans, c_arg__sigma, c_arg__width, c_arg__color);
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_atlas__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__png_bytes, SEXP c_arg__rsx_trans) {
-    SEXP res = savvy_sk_draw_atlas__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__png_bytes, c_arg__rsx_trans);
+SEXP savvy_sk_draw_atlas__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__props, SEXP c_arg__png_bytes, SEXP c_arg__rsx_trans) {
+    SEXP res = savvy_sk_draw_atlas__ffi(c_arg__size, c_arg__curr_bytes, c_arg__props, c_arg__png_bytes, c_arg__rsx_trans);
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_circle__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__x, SEXP c_arg__y, SEXP c_arg__radius, SEXP c_arg__sigma, SEXP c_arg__width, SEXP c_arg__color) {
-    SEXP res = savvy_sk_draw_circle__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__x, c_arg__y, c_arg__radius, c_arg__sigma, c_arg__width, c_arg__color);
+SEXP savvy_sk_draw_circle__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__props, SEXP c_arg__x, SEXP c_arg__y, SEXP c_arg__radius, SEXP c_arg__sigma, SEXP c_arg__width, SEXP c_arg__color) {
+    SEXP res = savvy_sk_draw_circle__ffi(c_arg__size, c_arg__curr_bytes, c_arg__props, c_arg__x, c_arg__y, c_arg__radius, c_arg__sigma, c_arg__width, c_arg__color);
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_diff_rect__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__outer_ltrb, SEXP c_arg__outer_rx, SEXP c_arg__outer_ry, SEXP c_arg__inner_ltrb, SEXP c_arg__inner_rx, SEXP c_arg__inner_ry, SEXP c_arg__rsx_trans, SEXP c_arg__sigma, SEXP c_arg__width, SEXP c_arg__color) {
-    SEXP res = savvy_sk_draw_diff_rect__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__outer_ltrb, c_arg__outer_rx, c_arg__outer_ry, c_arg__inner_ltrb, c_arg__inner_rx, c_arg__inner_ry, c_arg__rsx_trans, c_arg__sigma, c_arg__width, c_arg__color);
+SEXP savvy_sk_draw_diff_rect__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__props, SEXP c_arg__outer_ltrb, SEXP c_arg__outer_rx, SEXP c_arg__outer_ry, SEXP c_arg__inner_ltrb, SEXP c_arg__inner_rx, SEXP c_arg__inner_ry, SEXP c_arg__rsx_trans, SEXP c_arg__sigma, SEXP c_arg__width, SEXP c_arg__color) {
+    SEXP res = savvy_sk_draw_diff_rect__ffi(c_arg__size, c_arg__curr_bytes, c_arg__props, c_arg__outer_ltrb, c_arg__outer_rx, c_arg__outer_ry, c_arg__inner_ltrb, c_arg__inner_rx, c_arg__inner_ry, c_arg__rsx_trans, c_arg__sigma, c_arg__width, c_arg__color);
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_line__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__from_x, SEXP c_arg__from_y, SEXP c_arg__to_x, SEXP c_arg__to_y, SEXP c_arg__sigma, SEXP c_arg__width, SEXP c_arg__color) {
-    SEXP res = savvy_sk_draw_line__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__from_x, c_arg__from_y, c_arg__to_x, c_arg__to_y, c_arg__sigma, c_arg__width, c_arg__color);
+SEXP savvy_sk_draw_line__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__props, SEXP c_arg__from_x, SEXP c_arg__from_y, SEXP c_arg__to_x, SEXP c_arg__to_y, SEXP c_arg__sigma, SEXP c_arg__width, SEXP c_arg__color) {
+    SEXP res = savvy_sk_draw_line__ffi(c_arg__size, c_arg__curr_bytes, c_arg__props, c_arg__from_x, c_arg__from_y, c_arg__to_x, c_arg__to_y, c_arg__sigma, c_arg__width, c_arg__color);
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_path__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__svg, SEXP c_arg__rsx_trans, SEXP c_arg__sigma, SEXP c_arg__width, SEXP c_arg__color, SEXP c_arg__fill_type) {
-    SEXP res = savvy_sk_draw_path__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__svg, c_arg__rsx_trans, c_arg__sigma, c_arg__width, c_arg__color, c_arg__fill_type);
+SEXP savvy_sk_draw_path__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__props, SEXP c_arg__svg, SEXP c_arg__rsx_trans, SEXP c_arg__sigma, SEXP c_arg__width, SEXP c_arg__color, SEXP c_arg__fill_type) {
+    SEXP res = savvy_sk_draw_path__ffi(c_arg__size, c_arg__curr_bytes, c_arg__props, c_arg__svg, c_arg__rsx_trans, c_arg__sigma, c_arg__width, c_arg__color, c_arg__fill_type);
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_png__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__png_bytes, SEXP c_arg__left_top) {
-    SEXP res = savvy_sk_draw_png__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__png_bytes, c_arg__left_top);
+SEXP savvy_sk_draw_png__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__props, SEXP c_arg__png_bytes, SEXP c_arg__left_top) {
+    SEXP res = savvy_sk_draw_png__ffi(c_arg__size, c_arg__curr_bytes, c_arg__props, c_arg__png_bytes, c_arg__left_top);
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_points__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__x, SEXP c_arg__y, SEXP c_arg__group, SEXP c_arg__sigma, SEXP c_arg__width, SEXP c_arg__color, SEXP c_arg__mode) {
-    SEXP res = savvy_sk_draw_points__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__x, c_arg__y, c_arg__group, c_arg__sigma, c_arg__width, c_arg__color, c_arg__mode);
+SEXP savvy_sk_draw_points__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__props, SEXP c_arg__x, SEXP c_arg__y, SEXP c_arg__group, SEXP c_arg__sigma, SEXP c_arg__width, SEXP c_arg__color, SEXP c_arg__mode) {
+    SEXP res = savvy_sk_draw_points__ffi(c_arg__size, c_arg__curr_bytes, c_arg__props, c_arg__x, c_arg__y, c_arg__group, c_arg__sigma, c_arg__width, c_arg__color, c_arg__mode);
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_rounded_rect__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__ltrb, SEXP c_arg__rx, SEXP c_arg__ry, SEXP c_arg__rsx_trans, SEXP c_arg__sigma, SEXP c_arg__width, SEXP c_arg__color) {
-    SEXP res = savvy_sk_draw_rounded_rect__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__ltrb, c_arg__rx, c_arg__ry, c_arg__rsx_trans, c_arg__sigma, c_arg__width, c_arg__color);
+SEXP savvy_sk_draw_rounded_rect__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__props, SEXP c_arg__ltrb, SEXP c_arg__rx, SEXP c_arg__ry, SEXP c_arg__rsx_trans, SEXP c_arg__sigma, SEXP c_arg__width, SEXP c_arg__color) {
+    SEXP res = savvy_sk_draw_rounded_rect__ffi(c_arg__size, c_arg__curr_bytes, c_arg__props, c_arg__ltrb, c_arg__rx, c_arg__ry, c_arg__rsx_trans, c_arg__sigma, c_arg__width, c_arg__color);
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_text__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__text, SEXP c_arg__freeze, SEXP c_arg__rsx_trans, SEXP c_arg__sigma, SEXP c_arg__color) {
-    SEXP res = savvy_sk_draw_text__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__text, c_arg__freeze, c_arg__rsx_trans, c_arg__sigma, c_arg__color);
+SEXP savvy_sk_draw_text__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__props, SEXP c_arg__text, SEXP c_arg__freeze, SEXP c_arg__rsx_trans, SEXP c_arg__sigma, SEXP c_arg__color) {
+    SEXP res = savvy_sk_draw_text__ffi(c_arg__size, c_arg__curr_bytes, c_arg__props, c_arg__text, c_arg__freeze, c_arg__rsx_trans, c_arg__sigma, c_arg__color);
     return handle_result(res);
 }
 
-SEXP savvy_sk_draw_vertices__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__mat, SEXP c_arg__props, SEXP c_arg__x, SEXP c_arg__y, SEXP c_arg__sigma, SEXP c_arg__color, SEXP c_arg__mode) {
-    SEXP res = savvy_sk_draw_vertices__ffi(c_arg__size, c_arg__curr_bytes, c_arg__mat, c_arg__props, c_arg__x, c_arg__y, c_arg__sigma, c_arg__color, c_arg__mode);
+SEXP savvy_sk_draw_vertices__impl(SEXP c_arg__size, SEXP c_arg__curr_bytes, SEXP c_arg__props, SEXP c_arg__x, SEXP c_arg__y, SEXP c_arg__sigma, SEXP c_arg__color, SEXP c_arg__mode) {
+    SEXP res = savvy_sk_draw_vertices__ffi(c_arg__size, c_arg__curr_bytes, c_arg__props, c_arg__x, c_arg__y, c_arg__sigma, c_arg__color, c_arg__mode);
     return handle_result(res);
 }
 
@@ -139,6 +149,61 @@ SEXP savvy_sk_path_transform__impl(SEXP c_arg__svg, SEXP c_arg__mat) {
 
 
 
+SEXP savvy_ImageFilter_arithmetic__impl(SEXP c_arg__dst, SEXP c_arg__src, SEXP c_arg__coef, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_arithmetic__ffi(c_arg__dst, c_arg__src, c_arg__coef, c_arg__crop_rect);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_blend__impl(SEXP c_arg__dst, SEXP c_arg__src, SEXP c_arg__mode, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_blend__ffi(c_arg__dst, c_arg__src, c_arg__mode, c_arg__crop_rect);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_blur__impl(SEXP c_arg__sigma, SEXP c_arg__tile_mode, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_blur__ffi(c_arg__sigma, c_arg__tile_mode, c_arg__crop_rect);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_color_matrix__impl(SEXP c_arg__color_mat) {
+    SEXP res = savvy_ImageFilter_color_matrix__ffi(c_arg__color_mat);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_compose__impl(SEXP c_arg__outer, SEXP c_arg__inner) {
+    SEXP res = savvy_ImageFilter_compose__ffi(c_arg__outer, c_arg__inner);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_crop__impl(SEXP c_arg__crop_rect, SEXP c_arg__tile_mode) {
+    SEXP res = savvy_ImageFilter_crop__ffi(c_arg__crop_rect, c_arg__tile_mode);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_dilate__impl(SEXP c_arg__radius, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_dilate__ffi(c_arg__radius, c_arg__crop_rect);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_displacement_map__impl(SEXP c_arg__channels, SEXP c_arg__scale, SEXP c_arg__displacement, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_displacement_map__ffi(c_arg__channels, c_arg__scale, c_arg__displacement, c_arg__crop_rect);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_drop_shadow__impl(SEXP c_arg__offset, SEXP c_arg__sigma, SEXP c_arg__color, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_drop_shadow__ffi(c_arg__offset, c_arg__sigma, c_arg__color, c_arg__crop_rect);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_erode__impl(SEXP c_arg__raidus, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_erode__ffi(c_arg__raidus, c_arg__crop_rect);
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_from_picture__impl(SEXP c_arg__img, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_from_picture__ffi(c_arg__img, c_arg__crop_rect);
+    return handle_result(res);
+}
+
 SEXP savvy_ImageFilter_get_label__impl(SEXP self__) {
     SEXP res = savvy_ImageFilter_get_label__ffi(self__);
     return handle_result(res);
@@ -146,6 +211,11 @@ SEXP savvy_ImageFilter_get_label__impl(SEXP self__) {
 
 SEXP savvy_ImageFilter_no_filter__impl(void) {
     SEXP res = savvy_ImageFilter_no_filter__ffi();
+    return handle_result(res);
+}
+
+SEXP savvy_ImageFilter_offset__impl(SEXP c_arg__offset, SEXP c_arg__crop_rect) {
+    SEXP res = savvy_ImageFilter_offset__ffi(c_arg__offset, c_arg__crop_rect);
     return handle_result(res);
 }
 
@@ -226,13 +296,13 @@ SEXP savvy_Shader_blend__impl(SEXP c_arg__mode, SEXP c_arg__dst, SEXP c_arg__src
     return handle_result(res);
 }
 
-SEXP savvy_Shader_color__impl(SEXP c_arg__rgba) {
-    SEXP res = savvy_Shader_color__ffi(c_arg__rgba);
+SEXP savvy_Shader_color__impl(SEXP c_arg__color) {
+    SEXP res = savvy_Shader_color__ffi(c_arg__color);
     return handle_result(res);
 }
 
-SEXP savvy_Shader_conical_gradient__impl(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__radii, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
-    SEXP res = savvy_Shader_conical_gradient__ffi(c_arg__start, c_arg__end, c_arg__radii, c_arg__from, c_arg__to, c_arg__mode, c_arg__flags, c_arg__transform);
+SEXP savvy_Shader_conical_gradient__impl(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__radii, SEXP c_arg__color, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
+    SEXP res = savvy_Shader_conical_gradient__ffi(c_arg__start, c_arg__end, c_arg__radii, c_arg__color, c_arg__mode, c_arg__flags, c_arg__transform);
     return handle_result(res);
 }
 
@@ -261,8 +331,8 @@ SEXP savvy_Shader_get_label__impl(SEXP self__) {
     return handle_result(res);
 }
 
-SEXP savvy_Shader_linear_gradient__impl(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
-    SEXP res = savvy_Shader_linear_gradient__ffi(c_arg__start, c_arg__end, c_arg__from, c_arg__to, c_arg__mode, c_arg__flags, c_arg__transform);
+SEXP savvy_Shader_linear_gradient__impl(SEXP c_arg__start, SEXP c_arg__end, SEXP c_arg__color, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
+    SEXP res = savvy_Shader_linear_gradient__ffi(c_arg__start, c_arg__end, c_arg__color, c_arg__mode, c_arg__flags, c_arg__transform);
     return handle_result(res);
 }
 
@@ -271,13 +341,13 @@ SEXP savvy_Shader_no_shader__impl(void) {
     return handle_result(res);
 }
 
-SEXP savvy_Shader_radial_gradient__impl(SEXP c_arg__center, SEXP c_arg__radius, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
-    SEXP res = savvy_Shader_radial_gradient__ffi(c_arg__center, c_arg__radius, c_arg__from, c_arg__to, c_arg__mode, c_arg__flags, c_arg__transform);
+SEXP savvy_Shader_radial_gradient__impl(SEXP c_arg__center, SEXP c_arg__radius, SEXP c_arg__color, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
+    SEXP res = savvy_Shader_radial_gradient__ffi(c_arg__center, c_arg__radius, c_arg__color, c_arg__mode, c_arg__flags, c_arg__transform);
     return handle_result(res);
 }
 
-SEXP savvy_Shader_sweep_gradient__impl(SEXP c_arg__center, SEXP c_arg__start_angle, SEXP c_arg__end_angle, SEXP c_arg__from, SEXP c_arg__to, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
-    SEXP res = savvy_Shader_sweep_gradient__ffi(c_arg__center, c_arg__start_angle, c_arg__end_angle, c_arg__from, c_arg__to, c_arg__mode, c_arg__flags, c_arg__transform);
+SEXP savvy_Shader_sweep_gradient__impl(SEXP c_arg__center, SEXP c_arg__start_angle, SEXP c_arg__end_angle, SEXP c_arg__color, SEXP c_arg__mode, SEXP c_arg__flags, SEXP c_arg__transform) {
+    SEXP res = savvy_Shader_sweep_gradient__ffi(c_arg__center, c_arg__start_angle, c_arg__end_angle, c_arg__color, c_arg__mode, c_arg__flags, c_arg__transform);
     return handle_result(res);
 }
 
@@ -291,20 +361,21 @@ SEXP savvy_Shader_turbulence__impl(SEXP c_arg__freq, SEXP c_arg__octaves, SEXP c
 
 
 static const R_CallMethodDef CallEntries[] = {
+    {"savvy_op_count__impl", (DL_FUNC) &savvy_op_count__impl, 2},
     {"savvy_sk_absolute_fill__impl", (DL_FUNC) &savvy_sk_absolute_fill__impl, 2},
-    {"savvy_sk_as_nativeraster__impl", (DL_FUNC) &savvy_sk_as_nativeraster__impl, 3},
-    {"savvy_sk_as_png__impl", (DL_FUNC) &savvy_sk_as_png__impl, 3},
-    {"savvy_sk_draw_arc__impl", (DL_FUNC) &savvy_sk_draw_arc__impl, 12},
-    {"savvy_sk_draw_atlas__impl", (DL_FUNC) &savvy_sk_draw_atlas__impl, 6},
-    {"savvy_sk_draw_circle__impl", (DL_FUNC) &savvy_sk_draw_circle__impl, 10},
-    {"savvy_sk_draw_diff_rect__impl", (DL_FUNC) &savvy_sk_draw_diff_rect__impl, 14},
-    {"savvy_sk_draw_line__impl", (DL_FUNC) &savvy_sk_draw_line__impl, 11},
-    {"savvy_sk_draw_path__impl", (DL_FUNC) &savvy_sk_draw_path__impl, 10},
-    {"savvy_sk_draw_png__impl", (DL_FUNC) &savvy_sk_draw_png__impl, 6},
-    {"savvy_sk_draw_points__impl", (DL_FUNC) &savvy_sk_draw_points__impl, 11},
-    {"savvy_sk_draw_rounded_rect__impl", (DL_FUNC) &savvy_sk_draw_rounded_rect__impl, 11},
-    {"savvy_sk_draw_text__impl", (DL_FUNC) &savvy_sk_draw_text__impl, 9},
-    {"savvy_sk_draw_vertices__impl", (DL_FUNC) &savvy_sk_draw_vertices__impl, 9},
+    {"savvy_sk_as_nativeraster__impl", (DL_FUNC) &savvy_sk_as_nativeraster__impl, 2},
+    {"savvy_sk_as_png__impl", (DL_FUNC) &savvy_sk_as_png__impl, 2},
+    {"savvy_sk_draw_arc__impl", (DL_FUNC) &savvy_sk_draw_arc__impl, 11},
+    {"savvy_sk_draw_atlas__impl", (DL_FUNC) &savvy_sk_draw_atlas__impl, 5},
+    {"savvy_sk_draw_circle__impl", (DL_FUNC) &savvy_sk_draw_circle__impl, 9},
+    {"savvy_sk_draw_diff_rect__impl", (DL_FUNC) &savvy_sk_draw_diff_rect__impl, 13},
+    {"savvy_sk_draw_line__impl", (DL_FUNC) &savvy_sk_draw_line__impl, 10},
+    {"savvy_sk_draw_path__impl", (DL_FUNC) &savvy_sk_draw_path__impl, 9},
+    {"savvy_sk_draw_png__impl", (DL_FUNC) &savvy_sk_draw_png__impl, 5},
+    {"savvy_sk_draw_points__impl", (DL_FUNC) &savvy_sk_draw_points__impl, 10},
+    {"savvy_sk_draw_rounded_rect__impl", (DL_FUNC) &savvy_sk_draw_rounded_rect__impl, 10},
+    {"savvy_sk_draw_text__impl", (DL_FUNC) &savvy_sk_draw_text__impl, 8},
+    {"savvy_sk_draw_vertices__impl", (DL_FUNC) &savvy_sk_draw_vertices__impl, 8},
     {"savvy_sk_get_text_info__impl", (DL_FUNC) &savvy_sk_get_text_info__impl, 2},
     {"savvy_sk_list_families__impl", (DL_FUNC) &savvy_sk_list_families__impl, 0},
     {"savvy_sk_matrix_map_point__impl", (DL_FUNC) &savvy_sk_matrix_map_point__impl, 4},
@@ -316,8 +387,20 @@ static const R_CallMethodDef CallEntries[] = {
 
 
 
+    {"savvy_ImageFilter_arithmetic__impl", (DL_FUNC) &savvy_ImageFilter_arithmetic__impl, 4},
+    {"savvy_ImageFilter_blend__impl", (DL_FUNC) &savvy_ImageFilter_blend__impl, 4},
+    {"savvy_ImageFilter_blur__impl", (DL_FUNC) &savvy_ImageFilter_blur__impl, 3},
+    {"savvy_ImageFilter_color_matrix__impl", (DL_FUNC) &savvy_ImageFilter_color_matrix__impl, 1},
+    {"savvy_ImageFilter_compose__impl", (DL_FUNC) &savvy_ImageFilter_compose__impl, 2},
+    {"savvy_ImageFilter_crop__impl", (DL_FUNC) &savvy_ImageFilter_crop__impl, 2},
+    {"savvy_ImageFilter_dilate__impl", (DL_FUNC) &savvy_ImageFilter_dilate__impl, 2},
+    {"savvy_ImageFilter_displacement_map__impl", (DL_FUNC) &savvy_ImageFilter_displacement_map__impl, 4},
+    {"savvy_ImageFilter_drop_shadow__impl", (DL_FUNC) &savvy_ImageFilter_drop_shadow__impl, 4},
+    {"savvy_ImageFilter_erode__impl", (DL_FUNC) &savvy_ImageFilter_erode__impl, 2},
+    {"savvy_ImageFilter_from_picture__impl", (DL_FUNC) &savvy_ImageFilter_from_picture__impl, 2},
     {"savvy_ImageFilter_get_label__impl", (DL_FUNC) &savvy_ImageFilter_get_label__impl, 1},
     {"savvy_ImageFilter_no_filter__impl", (DL_FUNC) &savvy_ImageFilter_no_filter__impl, 0},
+    {"savvy_ImageFilter_offset__impl", (DL_FUNC) &savvy_ImageFilter_offset__impl, 2},
     {"savvy_ImageFilter_runtime_shader__impl", (DL_FUNC) &savvy_ImageFilter_runtime_shader__impl, 2},
 
     {"savvy_PaintAttrs_set_attrs__impl", (DL_FUNC) &savvy_PaintAttrs_set_attrs__impl, 14},
@@ -336,16 +419,16 @@ static const R_CallMethodDef CallEntries[] = {
     {"savvy_RuntimeEffect_source__impl", (DL_FUNC) &savvy_RuntimeEffect_source__impl, 1},
     {"savvy_Shader_blend__impl", (DL_FUNC) &savvy_Shader_blend__impl, 3},
     {"savvy_Shader_color__impl", (DL_FUNC) &savvy_Shader_color__impl, 1},
-    {"savvy_Shader_conical_gradient__impl", (DL_FUNC) &savvy_Shader_conical_gradient__impl, 8},
+    {"savvy_Shader_conical_gradient__impl", (DL_FUNC) &savvy_Shader_conical_gradient__impl, 7},
     {"savvy_Shader_fractal_noise__impl", (DL_FUNC) &savvy_Shader_fractal_noise__impl, 4},
     {"savvy_Shader_from_picture__impl", (DL_FUNC) &savvy_Shader_from_picture__impl, 4},
     {"savvy_Shader_from_png__impl", (DL_FUNC) &savvy_Shader_from_png__impl, 3},
     {"savvy_Shader_from_runtime_effect__impl", (DL_FUNC) &savvy_Shader_from_runtime_effect__impl, 2},
     {"savvy_Shader_get_label__impl", (DL_FUNC) &savvy_Shader_get_label__impl, 1},
-    {"savvy_Shader_linear_gradient__impl", (DL_FUNC) &savvy_Shader_linear_gradient__impl, 7},
+    {"savvy_Shader_linear_gradient__impl", (DL_FUNC) &savvy_Shader_linear_gradient__impl, 6},
     {"savvy_Shader_no_shader__impl", (DL_FUNC) &savvy_Shader_no_shader__impl, 0},
-    {"savvy_Shader_radial_gradient__impl", (DL_FUNC) &savvy_Shader_radial_gradient__impl, 7},
-    {"savvy_Shader_sweep_gradient__impl", (DL_FUNC) &savvy_Shader_sweep_gradient__impl, 8},
+    {"savvy_Shader_radial_gradient__impl", (DL_FUNC) &savvy_Shader_radial_gradient__impl, 6},
+    {"savvy_Shader_sweep_gradient__impl", (DL_FUNC) &savvy_Shader_sweep_gradient__impl, 7},
     {"savvy_Shader_turbulence__impl", (DL_FUNC) &savvy_Shader_turbulence__impl, 4},
 
 
@@ -357,6 +440,6 @@ void R_init_skiagd(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 
-    // Functions for initialzation, if any.
+    // Functions for initialization, if any.
 
 }

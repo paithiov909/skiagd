@@ -8,7 +8,7 @@
 #' while logging its execution time for debugging.
 #'
 #' @details
-#' `lhs %timer% rhs` evaluates `rhs` inside a [system.time] call,
+#' `lhs %timer% rhs` evaluates `rhs` inside a [system.time()] call,
 #' assigns the execution time to the variable `time`,
 #' and tries to evaluate `lhs` in an environment where `time` exists.
 #' In doing so, failure to evaluate the left-hand side
@@ -17,6 +17,7 @@
 #' @param lhs An expression.
 #' @param rhs An expression.
 #' @returns Values from evaluated `rhs` is returned invisibly.
+#' @keywords internal
 #' @export
 #' @examples
 #' print(time) %timer% {
@@ -31,7 +32,7 @@
   rlang::try_fetch(
     rlang::eval_tidy(lhs, data = list(time = time)),
     error = function(e) {
-      rlang::warn("Failed to evaluate lhs.", parent = e)
+      cli::cli_warn("Failed to evaluate lhs.", parent = e)
     }
   )
   invisible(ret)
@@ -46,7 +47,10 @@
 validate_length <- function(expected, ...) {
   len <- c(...)
   if (!all(len == expected)) {
-    rlang::abort("Some arguments have different lengths than others.")
+    cli::cli_abort(
+      "Some arguments have different lengths than others.",
+      call = rlang::caller_env()
+    )
   }
   TRUE
 }
@@ -59,7 +63,10 @@ validate_length <- function(expected, ...) {
 is_color_mat <- function(x) {
   ret <- is.matrix(x) && nrow(x) == 4
   if (!ret) {
-    rlang::warn("`color` does not seem to be a color matrix. Falling back to the default color of `paint()`.")
+    cli::cli_warn(
+      "`color` does not seem to be a color matrix. Falling back to the default color of `paint()`.",
+      call = rlang::caller_env()
+    )
   }
   ret
 }

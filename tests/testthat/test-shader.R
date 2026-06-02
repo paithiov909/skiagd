@@ -2,15 +2,16 @@ skip_on_cran()
 skip_on_ci()
 
 # to prevent opening default graphics device
-dev <- grDevices::png(tempfile(fileext = ".png"), width = 720, height = 576)
-on.exit(dev.off())
+dev <- grDevices::png(tempfile(), width = 720, height = 576)
+on.exit(dev.off(), add = TRUE)
 
 test_that("Shader$from_picture works", {
   props <- list(color = "skyblue", style = Style$StrokeAndFill)
   pict <-
     canvas("pink") |>
     add_circle(
-      matrix(c(48, 48), ncol = 2), 24,
+      matrix(c(48, 48), ncol = 2),
+      24,
       props = paint(!!!props)
     )
   vdiffr::expect_doppelganger(
@@ -28,5 +29,18 @@ test_that("Shader$from_picture works", {
         )
       ) |>
       as_recordedplot()
+  )
+})
+
+test_that("Shader$from_png works", {
+  png_bytes <-
+    canvas("white") |>
+    add_circle(
+      matrix(c(48, 48), ncol = 2),
+      24
+    ) |>
+    as_png()
+  expect_no_error(
+    Shader$from_png(png_bytes, TileMode$Repeat, diag(3))
   )
 })

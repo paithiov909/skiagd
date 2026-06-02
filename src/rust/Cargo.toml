@@ -1,16 +1,15 @@
 [package]
 name = "skiagd"
 version = "0.1.0"
-edition = "2021"
-# build = "build.rs"
+edition = "2024"
 
 [lib]
 crate-type = ["staticlib", "lib"]
 
 [dependencies]
-anyhow = "1.0.97"
-savvy = "0.8.11"
-skia-safe = { version = "0.87.0", features = ["textlayout"] }
+anyhow = "1.0"
+savvy = "0.10"
+skia-safe = { version = "=0.91.1", features = ["textlayout"] }
 
 [profile.release]
 # By default, on release build, savvy terminates the R session when a panic

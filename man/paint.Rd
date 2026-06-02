@@ -17,22 +17,22 @@ merged with default values.
 \description{
 The \code{paint()} function allows users to specify
 various painting attributes for drawing shapes on the canvas,
-such as color, stroke width, and transformations.
+such as color and stroke width.
 }
 \details{
 The following painting attributes can be specified:
 \itemize{
 \item \code{canvas_size}: Integers of length 2 (width, height).
-\item \code{color}: RGBA representation of a color. This can be specified using named colors or hexadecimal color codes, which are converted internally using \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.
+\item \code{color}: An RGBA color specification (integers of length 4). This can be also specified using named colors or hexadecimal color codes, which are converted using \code{\link[=col2rgba]{col2rgba()}}.
 \item \code{style}: Paint style. See \link{Style}.
 \item \code{join}: Stroke join. See \link{Join}.
 \item \code{cap}: Stroke cap. See \link{Cap}.
 \item \code{width}: A numeric scalar (stroke width).
 \item \code{miter}: A numeric scalar (stroke miter).
 \item \code{fontsize}: A numeric scalar (font size).
-\item \code{family}: Font family name.
+\item \code{family}: Font family name. You can list available font families using \code{\link[=list_font_families]{list_font_families()}}.
 \item \code{fontface}: Font face. See \link{FontStyle}.
-\item \code{sigma}: Default value for blur sigma.
+\item \code{sigma}: A numeric scalar. Default value for blur sigma.
 \item \code{blur_style}: \link{BlurStyle} for a blur mask filter applied to the shape.
 \item \code{blend_mode}: See \link{BlendMode}.
 \item \code{path_effect}: See \link{PathEffect}.
@@ -41,6 +41,5 @@ The following painting attributes can be specified:
 \item \code{point_mode}: \link{PointMode} for \code{\link[=add_point]{add_point()}}.
 \item \code{vertex_mode}: \link{VertexMode} for \code{\link[=add_vertices]{add_vertices()}}.
 \item \code{fill_type}: \link{FillType} for \code{\link[=add_path]{add_path()}}.
-\item \code{transform}: Numerics of length 9. See \link{transform-matrix} for affine transformations.
 }
 }

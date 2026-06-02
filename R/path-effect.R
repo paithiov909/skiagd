@@ -40,16 +40,16 @@ c.PathEffect <- function(...) {
 #' @param deviation A numeric scalar; limit of the movement of the endpoints.
 #' @param seed An integer scalar; random seed.
 #' @param intervals A numeric vector; even number of entries with even indices
-#' specifying the length of the "on" intervals,
-#' and the odd index specifying the length of "off".
+#'  specifying the length of the "on" intervals,
+#'  and the odd index specifying the length of "off".
 #' @param phase A numeric scalar; offset into the intervals array (for `dash()`),
-#' or distance (mod advance) along the path for its initial position (for `path_1d()`).
+#'  or distance (mod advance) along the path for its initial position (for `path_1d()`).
 #' @param radius A numeric scalar; radius of the rounded corners.
 #' @param path A string scalar of SVG notation to replicate.
 #' @param advance A numeric scalar; space between instances of path.
 #' @param style A string scalar; how to transform path at each point.
-#' Can be `"translate"`, `"rotate"`, or `"morph"`.
-#' @param transform Numerics of length 9; transformation matrix.
+#'  Can be `"translate"`, `"rotate"`, or `"morph"`.
+#' @param transform Numerics of length 9; see [transform-matrix].
 #' @param width A numeric scalar; width of the path to be stamped.
 #'
 #' @returns A `PathEffect` object.
