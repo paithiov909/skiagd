@@ -30,6 +30,8 @@ cv_size <- dev_size()
 create_mapping(
   src = matrix(
     c(0, 0, 768, 0, 768, 576, 0, 576),
+    ncol = 2,
+    byrow = TRUE
   ),
   dst = matrix(
     c(0, 0, cv_size[1], 0, cv_size[1], cv_size[2], 0, cv_size[2]),

@@ -19,6 +19,8 @@
 #' create_mapping(
 #'   src = matrix(
 #'     c(0, 0, 768, 0, 768, 576, 0, 576),
+#'     ncol = 2,
+#'     byrow = TRUE
 #'   ),
 #'   dst = matrix(
 #'     c(0, 0, cv_size[1], 0, cv_size[1], cv_size[2], 0, cv_size[2]),
@@ -35,7 +37,7 @@ create_mapping <- function(src, dst) {
       dst[1:4, 1, drop = TRUE],
       dst[1:4, 2, drop = TRUE]
     ) |>
-    matrix(, ncol = 3)
+    matrix(ncol = 3, byrow = TRUE)
   # for compatibility with 'affiner' package
   class(ret) <- c("transform2d", "at_matrix", class(ret))
   ret
