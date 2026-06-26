@@ -26,8 +26,10 @@
 #' img <- canvas("navy") |>
 #'  as_nativeraster()
 #'
+#' dev.hold(2)
 #' grid::grid.newpage()
 #' grid::grid.raster(img, interpolate = FALSE)
+#' dev.flush(2)
 #' }
 as_nativeraster <- function(img, ..., props = paint()) {
   sk_as_nativeraster(props[["canvas_size"]], img)
@@ -45,9 +47,10 @@ as_nativeraster <- function(img, ..., props = paint()) {
 #' @export
 #' @keywords internal
 as_recordedplot <- function(img, ..., props = paint()) {
-  rast <- as_nativeraster(img, props = props)
+  dev.hold(2)
   grid::grid.newpage(recording = FALSE)
-  grid::grid.raster(rast, interpolate = TRUE)
+  grid::grid.raster(as_nativeraster(img, props = props), interpolate = TRUE)
+  dev.flush(2)
   invisible(grDevices::recordPlot())
 }
 
@@ -69,8 +72,9 @@ as_recordedplot <- function(img, ..., props = paint()) {
 #' @returns `img` is returned invisibly.
 #' @export
 draw_img <- function(img, ..., props = paint()) {
-  rast <- as_nativeraster(img, props = props)
+  dev.hold(2)
   grid::grid.newpage(recording = FALSE)
-  grid::grid.raster(rast, interpolate = TRUE)
+  grid::grid.raster(as_nativeraster(img, props = props), interpolate = TRUE)
+  dev.flush(2)
   invisible(img)
 }

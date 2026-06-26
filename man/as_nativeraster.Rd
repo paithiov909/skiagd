@@ -48,7 +48,9 @@ with what you would expect from the output of \code{\link[=as_png]{as_png()}}.
 img <- canvas("navy") |>
  as_nativeraster()
 
+dev.hold(2)
 grid::grid.newpage()
 grid::grid.raster(img, interpolate = FALSE)
+dev.flush(2)
 }
 }
