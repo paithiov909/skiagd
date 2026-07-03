@@ -59,6 +59,15 @@ if [ -n "${SAVVY_FEATURES}" ]; then
   FEATURE_FLAGS="--features '${SAVVY_FEATURES}'"
 fi
 
+ENABLE_X11=false
+# Check if features include "skiagd-x11".
+# Note that this ignores comma-separated form, though Cargo actually supports it.
+for feature in ${SAVVY_FEATURES}; do
+  if [ "${feature}" = "skiagd-x11" ]; then
+    ENABLE_X11=true
+  fi
+done
+
 # Set macOS deployment target for the Rust cc crate.
 #
 # The cc crate (used by savvy's build.rs to compile unwind_protect_wrapper.c)
@@ -156,8 +165,35 @@ fi
 
 # --- End -----
 
+X11_LIBS=""
+if [ "${ENABLE_X11}" = "true" ]; then
+  if ! command -v pkg-config >/dev/null 2>&1; then
+    echo "-------------- ERROR: CONFIGURATION FAILED --------------------"
+    echo ""
+    echo "SAVVY_FEATURES includes 'skiagd-x11', but pkg-config is not available."
+    echo "Install pkg-config and the OpenGL development packages, then retry."
+    echo ""
+    echo "---------------------------------------------------------------"
+    exit 1
+  fi
+
+  X11_LIBS=`pkg-config --libs --silence-errors gl`
+  if [ $? -ne 0 ] || [ -z "${X11_LIBS}" ]; then
+    echo "-------------- ERROR: CONFIGURATION FAILED --------------------"
+    echo ""
+    echo "SAVVY_FEATURES includes 'skiagd-x11', but pkg-config could not find OpenGL."
+    echo "Install the OpenGL development packages or set PKG_CONFIG_PATH."
+    echo ""
+    echo "---------------------------------------------------------------"
+    exit 1
+  fi
+
+  echo "Using X11_LIBS=${X11_LIBS}"
+fi
+
 sed \
   -e "s|@libs@|$PKG_LIBS|" \
+  -e "s|@x11_libs@|$X11_LIBS|" \
   -e "s|@SYS@|$SYS|g" \
   -e "s/@TARGET@/${TARGET}/" \
   -e "s/@PROFILE@/${PROFILE}/" \

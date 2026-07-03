@@ -6,10 +6,13 @@ edition = "2024"
 [lib]
 crate-type = ["staticlib", "lib"]
 
+[features]
+skiagd-x11 = ["skia-safe/x11"]
+
 [dependencies]
 anyhow = "1.0"
 savvy = "0.10"
-skia-safe = { version = "=0.91.1", features = ["textlayout"] }
+skia-safe = { version = "=0.91.1" }
 
 [profile.release]
 # By default, on release build, savvy terminates the R session when a panic
