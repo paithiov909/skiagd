@@ -10,7 +10,7 @@ TARGET_DIR = $(CURDIR)/rust/target
 LIBDIR = $(TARGET_DIR)/$(TARGET)/$(subst dev,debug,$(PROFILE))
 STATLIB = $(LIBDIR)/libskiagd.a
 PKG_CPPFLAGS = -pthread
-PKG_LIBS = -L$(LIBDIR) -lskiagd @libs@ $(@SYS@_LIBS) -pthread
+PKG_LIBS = -L$(LIBDIR) -lskiagd @libs@ $(@SYS@_LIBS) @x11_libs@ -pthread
 
 CARGO_BUILD_ARGS = --lib --profile $(PROFILE) $(FEATURE_FLAGS) --manifest-path=./rust/Cargo.toml --target-dir $(TARGET_DIR)
 
