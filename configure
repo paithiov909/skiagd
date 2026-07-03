@@ -60,6 +60,8 @@ if [ -n "${SAVVY_FEATURES}" ]; then
 fi
 
 ENABLE_X11=false
+# Check if features include "skiagd-x11".
+# Note that this ignores comma-separated form, though Cargo actually supports it.
 for feature in ${SAVVY_FEATURES}; do
   if [ "${feature}" = "skiagd-x11" ]; then
     ENABLE_X11=true
