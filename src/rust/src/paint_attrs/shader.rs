@@ -115,7 +115,7 @@ impl Shader {
         let mat =
             as_matrix(&transform).ok_or_else(|| return savvy_err!("Failed to parse transform"))?;
         let input = Data::new_copy(png_bytes.as_slice());
-        let image = Image::from_encoded_with_alpha_type(input, skia_safe::AlphaType::Premul)
+        let image = Image::from_encoded(input)
             .ok_or_else(|| return savvy_err!("Failed to read PNG as image"))?;
         Ok(Shader {
             label: "image".to_string(),
